@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Napoleon Technique — Postpone to Increase Productivity</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1831;
+      --panel2:#101c3a;
+      --text:#e9eefc;
+      --muted:#b8c4e6;
+      --muted2:#8fa3d8;
+      --accent:#ffb454;
+      --accent2:#ff7a59;
+      --good:#74f3a0;
+      --warn:#ffd36a;
+      --bad:#ff6b6b;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1000px 700px at 20% 0%, rgba(255,180,84,.12), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(255,122,89,.10), transparent 60%),
+                  linear-gradient(180deg, #070a14, var(--bg) 25%, #070a14 120%);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 80px}
+
+    header.hero{
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap:18px;
+      align-items:stretch;
+      margin:10px 0 18px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .heroMain{padding:22px 22px 18px}
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .dot{width:8px; height:8px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent2))}
+
+    h1{margin:10px 0 10px; font-size:40px; line-height:1.1}
+    .sub{color:var(--muted); font-size:16px; max-width:65ch; margin:0}
+
+    .pillRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      padding:8px 10px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex; gap:8px; align-items:center;
+    }
+    .pill b{color:var(--text); font-weight:600}
+
+    .heroSide{padding:18px}
+    .sideTitle{font-weight:700; font-size:14px; letter-spacing:.02em; color:var(--text); margin-bottom:10px}
+
+    .tldr{
+      display:grid;
+      gap:10px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(16,28,58,.45);
+    }
+    .tldr .row{display:flex; gap:10px; align-items:flex-start}
+    .badge{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color:var(--accent);
+      flex:0 0 auto;
+    }
+    .tldr p{margin:0; color:var(--muted); font-size:14px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .section{padding:18px 20px}
+    .section h2{margin:0 0 6px; font-size:18px}
+    .section p{margin:8px 0; color:var(--muted)}
+
+    .quote{
+      margin:14px 0 0;
+      border-left:3px solid rgba(255,180,84,.65);
+      padding:10px 12px;
+      background: rgba(0,0,0,.18);
+      border-radius:12px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    details{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 12px;
+      background: rgba(0,0,0,.16);
+    }
+    details + details{margin-top:10px}
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:650;
+      color:var(--text);
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{opacity:.7}
+
+    .mini{
+      color:var(--muted2);
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .rules{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .rule{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(16,28,58,.35);
+    }
+
+    .ic{
+      width:34px; height:34px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: radial-gradient(12px 12px at 30% 30%, rgba(255,180,84,.35), transparent 70%),
+                  rgba(0,0,0,.25);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      font-size:16px;
+    }
+
+    .rule b{display:block; margin-bottom:2px}
+    .rule span{color:var(--muted); font-size:14px}
+
+    .divider{height:1px; background:var(--line); margin:14px 0}
+
+    .tool{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      margin-top:12px;
+    }
+
+    .form{
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.16);
+    }
+
+    label{display:block; font-size:12px; color:var(--muted2); letter-spacing:.03em; margin:10px 0 6px}
+
+    select, input[type="range"], textarea, input[type="text"]{
+      width:100%;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(16,28,58,.35);
+      color:var(--text);
+      padding:10px 10px;
+      outline:none;
+    }
+
+    input[type="range"]{padding:10px}
+
+    textarea{min-height:92px; resize:vertical; font-family:var(--sans)}
+
+    .row2{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+
+    .result{
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,180,84,.10), rgba(0,0,0,.16));
+    }
+
+    .rec{
+      font-weight:800;
+      font-size:18px;
+      margin:0 0 6px;
+    }
+
+    .meter{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .bar{height:100%; width:45%; background: linear-gradient(90deg, var(--good), var(--warn), var(--bad))}
+
+    .why{margin:0; color:var(--muted); font-size:14px}
+
+    .btns{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    button{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color:var(--text);
+      padding:9px 10px;
+      border-radius:12px;
+      font-weight:650;
+    }
+    button:hover{border-color:rgba(255,180,84,.45)}
+
+    .kbd{font-family:var(--mono); font-size:12px; color:var(--muted2)}
+
+    .footer{
+      margin-top:18px;
+      padding:14px 18px;
+      color:var(--muted2);
+      font-size:13px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .switch{
+      width:46px; height:28px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      position:relative;
+    }
+
+    .knob{
+      width:22px; height:22px;
+      border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      position:absolute;
+      top:2px; left:2px;
+      transition: all .18s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,.35);
+    }
+
+    .switch.on .knob{left:22px}
+
+    .compact body{}
+
+    @media (max-width: 940px){
+      header.hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .tool{grid-template-columns:1fr}
+      h1{font-size:34px}
+    }
+
+    /* print */
+    @media print{
+      body{background:#fff; color:#111}
+      .card{box-shadow:none}
+      .pill, .switch, button{display:none !important}
+      a{color:#111; text-decoration:underline}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="hero">
+      <section class="card heroMain">
+        <div class="kicker"><span class="dot"></span> productivity pattern • “let time solve it”</div>
+        <h1>The Napoleon Technique</h1>
+        <p class="sub">A simple strategy: <b>delay dealing with minor, non‑urgent matters</b> when there’s a good chance they’ll resolve without your input—saving time, attention, and unnecessary coordination.</p>
+
+        <div class="pillRow">
+          <div class="pill"><b>Core move</b> wait on low-urgency requests</div>
+          <div class="pill"><b>Goal</b> conserve attention + reduce noise</div>
+          <div class="pill"><b>Works best</b> routine, repeatable issues</div>
+          <div class="pill"><b>Risk</b> ignoring what actually matters</div>
+        </div>
+      </section>
+
+      <aside class="card heroSide">
+        <div class="sideTitle">TL;DR in 30 seconds</div>
+        <div class="tldr">
+          <div class="row"><span class="badge">1</span><p><b>Don’t rush.</b> Many “needs your input” items fix themselves when people try once more.</p></div>
+          <div class="row"><span class="badge">2</span><p><b>Delay intentionally.</b> Set a short delay window (hours → days) based on risk.</p></div>
+          <div class="row"><span class="badge">3</span><p><b>Use safeguards.</b> Clear exceptions (urgent, safety, deadlines) + a maximum response SLA.</p></div>
+        </div>
+        <div class="divider"></div>
+        <div class="mini">Inspired by a story about Napoleon leaving non-urgent letters unopened for weeks—then finding most no longer needed a reply.</div>
+      </aside>
+    </header>
+
+    <div class="grid">
+      <section class="card section">
+        <h2>What it is (in one sentence)</h2>
+        <p><b>Postpone</b> action on a request or issue when it’s likely to become irrelevant or get solved without you—and when delaying doesn’t create unacceptable downside.</p>
+
+        <div class="rules">
+          <div class="rule"><div class="ic">⏳</div><div><b>Delay on purpose</b><span>Not “I forgot”—but “I will re-check in X time.”</span></div></div>
+          <div class="rule"><div class="ic">🧹</div><div><b>Let noise evaporate</b><span>Many small problems, questions, and complaints vanish once people iterate.</span></div></div>
+          <div class="rule"><div class="ic">🧠</div><div><b>Protect cognitive bandwidth</b><span>Fewer interruptions means better deep work and better decisions.</span></div></div>
+        </div>
+
+        <div class="divider"></div>
+        <details>
+          <summary>Why it works <span class="chev">▾</span></summary>
+          <p class="mini">A lot of “urgent” messages are actually: confusion, lack of initiative, incomplete context, or premature optimization. Time forces the sender to clarify, self-serve, or realize it’s not important.</p>
+          <p class="mini">This is especially powerful when you’re a bottleneck: leader, specialist, or the person everyone asks “just a quick question.”</p>
+        </details>
+
+        <details>
+          <summary>What it’s not <span class="chev">▾</span></summary>
+          <p class="mini"><b>Not</b> procrastination. Procrastination is delaying because you’re avoiding. Napoleon technique is delaying because the expected value is positive and the risk is controlled.</p>
+          <p class="mini"><b>Not</b> ignoring people. You can be transparent (“I’ll review tomorrow unless it’s urgent—tag it URGENT”).</p>
+        </details>
+      </section>
+
+      <section class="card section">
+        <h2>The origin story (short + memorable)</h2>
+        <p>In the popular retelling, Napoleon had aides hold most letters for weeks. After the wait, a large fraction no longer required an answer—because time had already solved them.</p>
+
+        <div class="quote">
+          <b>Key takeaway:</b> <i>Time can be a filter.</i> If a request is minor and delay won’t cause harm, waiting can eliminate work.
+        </div>
+
+        <div class="divider"></div>
+        <details>
+          <summary>Modern translation <span class="chev">▾</span></summary>
+          <p class="mini"><b>Email/DM:</b> wait a day before answering non-urgent “what do you think?” pings.</p>
+          <p class="mini"><b>Engineering:</b> don’t fix tiny issues instantly; batch them, or wait to see if they vanish with the next deploy.</p>
+          <p class="mini"><b>Management:</b> let people attempt a solution before you step in (with a clear safety net).</p>
+        </details>
+
+        <details>
+          <summary>When it backfires <span class="chev">▾</span></summary>
+          <p class="mini">It fails when the downside of delay is high: safety issues, customer-impacting incidents, hard deadlines, legal/compliance, or situations where silence creates escalation/conflict.</p>
+        </details>
+      </section>
+    </div>
+
+    <section class="card section" style="margin-top:18px">
+      <h2>Decision rule: should you delay this?</h2>
+      <p>Think in expected value. Delay when the <b>chance of self-resolution</b> is decent, the issue is <b>low urgency</b>, and the <b>downside of waiting</b> is small.</p>
+
+      <div class="tool">
+        <div class="form">
+          <div class="row2">
+            <div>
+              <label for="urgency">Urgency</label>
+              <select id="urgency">
+                <option value="0">Low (nice-to-have)</option>
+                <option value="1">Medium (should happen soon)</option>
+                <option value="2">High (time-sensitive)</option>
+                <option value="3">Critical (incident / safety / deadline)</option>
+              </select>
+            </div>
+            <div>
+              <label for="domain">Domain</label>
+              <select id="domain">
+                <option value="work">Work (email/slack/tasks)</option>
+                <option value="manager">Manager/leadership</option>
+                <option value="engineering">Engineering/bugs</option>
+                <option value="personal">Personal life</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="resolve">Probability it resolves without you (0–100)</label>
+          <input id="resolve" type="range" min="0" max="100" value="65" />
+          <div class="mini"><span class="kbd">p(resolve)=</span> <span id="resolveVal">65</span>%</div>
+
+          <label for="downside">Downside severity if you wait (0–100)</label>
+          <input id="downside" type="range" min="0" max="100" value="25" />
+          <div class="mini"><span class="kbd">severity=</span> <span id="downsideVal">25</span>/100</div>
+
+          <label for="notes">Optional: what is the item?</label>
+          <textarea id="notes" placeholder="e.g., 'Reply to teammate asking for review on a non-urgent idea'…"></textarea>
+
+          <div class="btns">
+            <button id="presetEmail" type="button">Preset: Non-urgent email</button>
+            <button id="presetBug" type="button">Preset: Minor tech issue</button>
+            <button id="presetMgr" type="button">Preset: Employee question</button>
+            <button id="save" type="button">Save notes</button>
+            <button id="clear" type="button">Clear</button>
+          </div>
+          <div class="mini">Tip: set a maximum SLA (e.g., “reply within 3 days”) so delay doesn’t become avoidance.</div>
+        </div>
+
+        <div class="result" id="result">
+          <p class="rec" id="rec">Recommendation: —</p>
+          <div class="meter"><div class="bar" id="bar"></div></div>
+          <p class="why" id="why">Adjust the sliders to get a suggested delay window and rationale.</p>
+
+          <div class="divider"></div>
+          <details open>
+            <summary>Safeguards checklist <span class="chev">▾</span></summary>
+            <div class="rules">
+              <div class="rule"><div class="ic">🚨</div><div><b>Hard exceptions</b><span>Anything labeled urgent, safety/compliance, customer-impacting, or deadline-driven.</span></div></div>
+              <div class="rule"><div class="ic">📌</div><div><b>Max delay SLA</b><span>Pick a ceiling (e.g., 24h / 72h). If still relevant, act then.</span></div></div>
+              <div class="rule"><div class="ic">🔁</div><div><b>Escalation path</b><span>Tell people how to override the delay (“use URGENT” / call / open incident).</span></div></div>
+              <div class="rule"><div class="ic">📝</div><div><b>Lightweight triage</b><span>Tag items: <span class="kbd">ignore / wait / batch / act</span>.</span></div></div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid" style="margin-top:18px">
+      <section class="card section">
+        <h2>How to implement (practical)</h2>
+        <details open>
+          <summary>Step-by-step <span class="chev">▾</span></summary>
+          <ol style="margin:10px 0 0; padding-left:18px; color:var(--muted)">
+            <li><b>Define categories</b>: urgent vs non-urgent (write down what qualifies).</li>
+            <li><b>Choose a delay window</b>: e.g., 2h, 24h, 72h, 1 week—depending on risk.</li>
+            <li><b>Batch review</b>: check delayed items at a fixed time (e.g., 11:30 and 16:30).</li>
+            <li><b>Set an SLA ceiling</b>: “If still relevant by day 3, I respond.”</li>
+            <li><b>Teach the interface</b>: tell others how to escalate and how to self-serve first.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Simple scripts you can use <span class="chev">▾</span></summary>
+          <p class="mini"><b>Asynchronous:</b> “I check non-urgent messages once a day. If you need it sooner, mark it URGENT with a deadline.”</p>
+          <p class="mini"><b>Manager:</b> “Try one approach and tell me what you tried + what you recommend. I’ll review after lunch.”</p>
+          <p class="mini"><b>Engineering:</b> “If it’s not an incident, file a ticket. We’ll batch minor fixes on Friday.”</p>
+        </details>
+      </section>
+
+      <section class="card section">
+        <h2>Common pitfalls (and how to avoid them)</h2>
+        <details open>
+          <summary>Pitfall map <span class="chev">▾</span></summary>
+          <div class="rules">
+            <div class="rule"><div class="ic">🦤</div><div><b>Ostrich mode</b><span>Delaying to avoid unpleasant info. Fix: define “must-open-now” triggers.</span></div></div>
+            <div class="rule"><div class="ic">🐌</div><div><b>Procrastination disguise</b><span>Delay without an analysis. Fix: use the decision tool + SLA ceiling.</span></div></div>
+            <div class="rule"><div class="ic">⏱️</div><div><b>Work expands</b><span>Waiting can inflate timelines. Fix: delay only where the risk is low and the pay-off is high.</span></div></div>
+            <div class="rule"><div class="ic">😤</div><div><b>Social friction</b><span>People may feel ignored. Fix: be explicit about your cadence and escalation.</span></div></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Quick “do / don’t” <span class="chev">▾</span></summary>
+          <p class="mini"><b>Do</b> delay to reduce noise and force clarity. <b>Don’t</b> delay when it increases harm, uncertainty, or trust damage.</p>
+          <p class="mini"><b>Do</b> choose repeatable rules. <b>Don’t</b> improvise every time.</p>
+        </details>
+      </section>
+    </div>
+
+    <section class="card footer">
+      <div>
+        <b>Reading mode</b> <span class="mini">toggle a slightly more compact layout for scanning</span>
+      </div>
+      <div class="toggle">
+        <span class="kbd">compact</span>
+        <div class="switch" id="switch" role="switch" aria-checked="false" tabindex="0"><div class="knob"></div></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const urgency = $("urgency");
+    const domain = $("domain");
+    const resolve = $("resolve");
+    const downside = $("downside");
+    const notes = $("notes");
+
+    const resolveVal = $("resolveVal");
+    const downsideVal = $("downsideVal");
+    const rec = $("rec");
+    const why = $("why");
+    const bar = $("bar");
+
+    // Load saved
+    const saved = JSON.parse(localStorage.getItem("napoleonTechniqueState") || "{}" );
+    if(saved.urgency != null) urgency.value = saved.urgency;
+    if(saved.domain != null) domain.value = saved.domain;
+    if(saved.resolve != null) resolve.value = saved.resolve;
+    if(saved.downside != null) downside.value = saved.downside;
+    if(saved.notes != null) notes.value = saved.notes;
+
+    function clamp(n,min,max){return Math.max(min, Math.min(max,n));}
+
+    function compute(){
+      const u = Number(urgency.value);        // 0..3
+      const p = Number(resolve.value);        // 0..100
+      const s = Number(downside.value);       // 0..100
+
+      resolveVal.textContent = p;
+      downsideVal.textContent = s;
+
+      // A simple score: higher = more suitable to delay
+      // Favor high self-resolution, penalize urgency and downside.
+      const scoreRaw = (p * 1.0) - (u * 22) - (s * 0.55);
+      const score = clamp(scoreRaw, -60, 60);
+      const norm = (score + 60) / 120; // 0..1
+
+      // Pick a delay window
+      let delay = "";
+      let tag = "";
+
+      if(u >= 3){
+        delay = "Act now";
+        tag = "critical";
+      } else if(norm >= 0.78){
+        delay = "Delay 48–72 hours";
+        tag = "strong";
+      } else if(norm >= 0.62){
+        delay = "Delay ~24 hours";
+        tag = "good";
+      } else if(norm >= 0.48){
+        delay = "Delay 2–6 hours (short cooldown)";
+        tag = "maybe";
+      } else if(norm >= 0.34){
+        delay = "Batch later today";
+        tag = "weak";
+      } else {
+        delay = "Respond soon";
+        tag = "no";
+      }
+
+      const domainHint = {
+        work: "Consider a simple escalation rule: ‘URGENT + deadline’ overrides the delay.",
+        manager: "If you delay, ask for ‘what you tried + your recommended next step’ to build initiative.",
+        engineering: "If it’s minor, file it and batch it; if it impacts users, don’t delay.",
+        personal: "Use delay to reduce impulse decisions—set a check-in time and revisit calmly."
+      }[domain.value];
+
+      const reasons = [];
+      reasons.push(`Self-resolution is <b>${p}%</b>.`);
+      reasons.push(`Urgency is <b>${["low","medium","high","critical"][u]}</b>.`);
+      reasons.push(`Downside severity is <b>${s}/100</b>.`);
+
+      if(u >= 3) reasons.push("This category should bypass the technique.");
+      else {
+        if(p >= 60) reasons.push("There’s a decent chance time will filter it out.");
+        if(s >= 60) reasons.push("But the downside of waiting is meaningful—limit the delay.");
+        if(u === 2) reasons.push("Because it’s time-sensitive, keep the window short.");
+      }
+
+      const headline = {
+        critical: `Recommendation: <span style="color:var(--bad)">Act immediately</span>`,
+        strong:   `Recommendation: <span style="color:var(--good)">${delay}</span>`,
+        good:     `Recommendation: <span style="color:var(--good)">${delay}</span>`,
+        maybe:    `Recommendation: <span style="color:var(--warn)">${delay}</span>`,
+        weak:     `Recommendation: <span style="color:var(--warn)">${delay}</span>`,
+        no:       `Recommendation: <span style="color:var(--accent2)">${delay}</span>`
+      }[tag];
+
+      rec.innerHTML = headline;
+      why.innerHTML = `${reasons.join(" ")}<br><br><span class="kbd">Hint:</span> ${domainHint}`;
+
+      bar.style.width = `${Math.round(15 + norm * 85)}%`;
+
+      // Save
+      localStorage.setItem("napoleonTechniqueState", JSON.stringify({
+        urgency: urgency.value,
+        domain: domain.value,
+        resolve: resolve.value,
+        downside: downside.value,
+        notes: notes.value
+      }));
+    }
+
+    [urgency, domain, resolve, downside, notes].forEach(el => el.addEventListener("input", compute));
+    compute();
+
+    // Presets
+    $("presetEmail").addEventListener("click", () => {
+      urgency.value = "0";
+      domain.value = "work";
+      resolve.value = "70";
+      downside.value = "20";
+      notes.value = "Non-urgent request for advice / FYI email";
+      compute();
+    });
+
+    $("presetBug").addEventListener("click", () => {
+      urgency.value = "1";
+      domain.value = "engineering";
+      resolve.value = "55";
+      downside.value = "30";
+      notes.value = "Minor technical issue that might disappear after restart/deploy";
+      compute();
+    });
+
+    $("presetMgr").addEventListener("click", () => {
+      urgency.value = "1";
+      domain.value = "manager";
+      resolve.value = "65";
+      downside.value = "35";
+      notes.value = "Employee asking for direction before attempting a solution";
+      compute();
+    });
+
+    $("save").addEventListener("click", () => {
+      compute();
+      alert("Saved locally in your browser (localStorage).\nYou can refresh without losing the values.");
+    });
+
+    $("clear").addEventListener("click", () => {
+      localStorage.removeItem("napoleonTechniqueState");
+      urgency.value = "0";
+      domain.value = "work";
+      resolve.value = "65";
+      downside.value = "25";
+      notes.value = "";
+      compute();
+    });
+
+    // Compact mode toggle
+    const sw = $("switch");
+    const compactKey = "napoleonCompactMode";
+
+    function setCompact(on){
+      document.documentElement.style.setProperty("--radius", on ? "14px" : "18px");
+      document.body.style.lineHeight = on ? "1.45" : "1.55";
+      document.querySelectorAll(".section").forEach(s => s.style.padding = on ? "16px 16px" : "18px 20px");
+      sw.classList.toggle("on", on);
+      sw.setAttribute("aria-checked", on ? "true" : "false");
+      localStorage.setItem(compactKey, on ? "1" : "0");
+    }
+
+    const initialCompact = localStorage.getItem(compactKey) === "1";
+    setCompact(initialCompact);
+
+    function toggleCompact(){
+      const on = !sw.classList.contains("on");
+      setCompact(on);
+    }
+
+    sw.addEventListener("click", toggleCompact);
+    sw.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleCompact();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Graphics Hub</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --radius: 8px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --text: #f1f5f9;
+                --text-muted: #94a3b8;
+                --border: #334155;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        /* Search & Filter Bar */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.875rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Category Sections */
+        .category {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .category-icon {
+            font-size: 1.25rem;
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .category-count {
+            background: var(--border);
+            padding: 0.125rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Page Cards Grid */
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .page-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .page-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-card p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .page-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .tag {
+            background: var(--bg);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                justify-content: center;
+            }
+
+            .pages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Info Graphics Hub</h1>
+            <p>Navigate and explore all available pages</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search pages..." autocomplete="off">
+            </div>
+            <div class="filter-group" id="filters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <!-- Filter buttons generated dynamically -->
+            </div>
+        </div>
+
+        <main id="content">
+            <!-- Categories and pages rendered here -->
+        </main>
+    </div>
+
+    <script>
+        /**
+         * PAGE REGISTRY
+         * Add new pages here. Each page needs:
+         * - id: unique identifier
+         * - title: display name
+         * - description: short description
+         * - href: relative path to the HTML file
+         * - category: grouping category
+         * - tags: array of searchable tags
+         * - icon: emoji or icon character
+         */
+        const pages = [
+            {
+                id: "claude-guidelines",
+                title: "Claude Guidelines",
+                description: "Documentation standards and content structure guidelines",
+                href: "claude.html",
+                category: "Documentation",
+                tags: ["docs", "guidelines", "standards", "meta"],
+                icon: "📘"
+            }
+            // Add more pages here following this structure
+        ];
+
+        /**
+         * CATEGORY DEFINITIONS
+         * Define categories with icons and display order
+         */
+        const categoryMeta = {
+            "Documentation": { icon: "📚", order: 1 },
+            "Data Visualization": { icon: "📊", order: 2 },
+            "Reports": { icon: "📈", order: 3 },
+            "Tools": { icon: "🛠️", order: 4 },
+            "Reference": { icon: "📖", order: 5 },
+            "Archive": { icon: "🗃️", order: 99 }
+        };
+
+        // State
+        let activeCategory = "all";
+        let searchQuery = "";
+
+        // Get unique categories from pages
+        function getCategories() {
+            const cats = [...new Set(pages.map(p => p.category))];
+            return cats.sort((a, b) => {
+                const orderA = categoryMeta[a]?.order || 50;
+                const orderB = categoryMeta[b]?.order || 50;
+                return orderA - orderB;
+            });
+        }
+
+        // Initialize filter buttons
+        function initFilters() {
+            const container = document.getElementById("filters");
+            const categories = getCategories();
+
+            categories.forEach(cat => {
+                const btn = document.createElement("button");
+                btn.className = "filter-btn";
+                btn.dataset.category = cat;
+                btn.textContent = cat;
+                container.appendChild(btn);
+            });
+        }
+
+        // Filter pages based on search and category
+        function filterPages() {
+            const query = searchQuery.toLowerCase().trim();
+
+            return pages.filter(page => {
+                // Category filter
+                if (activeCategory !== "all" && page.category !== activeCategory) {
+                    return false;
+                }
+
+                // Search filter
+                if (query) {
+                    const searchable = [
+                        page.title,
+                        page.description,
+                        page.category,
+                        ...page.tags
+                    ].join(" ").toLowerCase();
+
+                    return searchable.includes(query);
+                }
+
+                return true;
+            });
+        }
+
+        // Group pages by category
+        function groupByCategory(pageList) {
+            const groups = {};
+            pageList.forEach(page => {
+                if (!groups[page.category]) {
+                    groups[page.category] = [];
+                }
+                groups[page.category].push(page);
+            });
+            return groups;
+        }
+
+        // Render page card
+        function renderCard(page) {
+            return `
+                <a href="${page.href}" class="page-card" data-id="${page.id}">
+                    <h3><span>${page.icon}</span> ${page.title}</h3>
+                    <p>${page.description}</p>
+                    <div class="tags">
+                        ${page.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+                    </div>
+                </a>
+            `;
+        }
+
+        // Render category section
+        function renderCategory(name, pages) {
+            const meta = categoryMeta[name] || { icon: "📁" };
+            return `
+                <section class="category" data-category="${name}">
+                    <div class="category-header">
+                        <span class="category-icon">${meta.icon}</span>
+                        <h2 class="category-title">${name}</h2>
+                        <span class="category-count">${pages.length}</span>
+                    </div>
+                    <div class="pages-grid">
+                        ${pages.map(renderCard).join("")}
+                    </div>
+                </section>
+            `;
+        }
+
+        // Main render function
+        function render() {
+            const content = document.getElementById("content");
+            const filtered = filterPages();
+
+            if (filtered.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No pages found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const grouped = groupByCategory(filtered);
+            const categories = Object.keys(grouped).sort((a, b) => {
+                const orderA = categoryMeta[a]?.order || 50;
+                const orderB = categoryMeta[b]?.order || 50;
+                return orderA - orderB;
+            });
+
+            content.innerHTML = categories
+                .map(cat => renderCategory(cat, grouped[cat]))
+                .join("");
+        }
+
+        // Event handlers
+        document.getElementById("search").addEventListener("input", (e) => {
+            searchQuery = e.target.value;
+            render();
+        });
+
+        document.getElementById("filters").addEventListener("click", (e) => {
+            if (e.target.classList.contains("filter-btn")) {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                e.target.classList.add("active");
+                activeCategory = e.target.dataset.category;
+                render();
+            }
+        });
+
+        // Keyboard shortcut: focus search with /
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+                e.preventDefault();
+                document.getElementById("search").focus();
+            }
+        });
+
+        // Initialize
+        initFilters();
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Guidelines | Info Graphics Hub</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --text: #f1f5f9;
+                --text-muted: #94a3b8;
+                --border: #334155;
+                --code-bg: #0f172a;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Navigation */
+        .nav {
+            margin-bottom: 2rem;
+        }
+
+        .nav a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .subtitle {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .toc ol {
+            padding-left: 1.5rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-muted);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+            font-size: 0.875em;
+        }
+
+        :not(pre) > code {
+            background: var(--border);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+        }
+
+        /* Syntax highlighting hints */
+        .code-comment { color: #6b7280; }
+        .code-keyword { color: #c084fc; }
+        .code-string { color: #34d399; }
+        .code-property { color: #60a5fa; }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .info-box.tip {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+        }
+
+        .info-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+        }
+
+        .info-box.important {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error);
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--card-bg);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--card-bg);
+        }
+
+        /* Example Card */
+        .example {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .example-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            pre {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="index.html">← Back to Hub</a>
+        </nav>
+
+        <header>
+            <h1>📘 Content Guidelines</h1>
+            <p class="subtitle">Standards for structuring, rendering, and maintaining pages in the Info Graphics Hub</p>
+        </header>
+
+        <nav class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#page-structure">Page Structure</a></li>
+                <li><a href="#registry">Adding Pages to the Registry</a></li>
+                <li><a href="#html-standards">HTML Standards</a></li>
+                <li><a href="#css-guidelines">CSS Guidelines</a></li>
+                <li><a href="#accessibility">Accessibility Requirements</a></li>
+                <li><a href="#file-naming">File Naming Conventions</a></li>
+                <li><a href="#components">Reusable Components</a></li>
+                <li><a href="#responsive">Responsive Design</a></li>
+                <li><a href="#performance">Performance Best Practices</a></li>
+            </ol>
+        </nav>
+
+        <section id="page-structure">
+            <h2>1. Page Structure</h2>
+            <p>Every page in the Info Graphics Hub should follow a consistent structure for maintainability and user experience.</p>
+
+            <h3>Required Elements</h3>
+            <ul>
+                <li><strong>DOCTYPE and HTML5:</strong> All pages must use <code>&lt;!DOCTYPE html&gt;</code></li>
+                <li><strong>Viewport meta tag:</strong> Essential for responsive design</li>
+                <li><strong>Title:</strong> Descriptive title with site suffix</li>
+                <li><strong>Navigation:</strong> Link back to the hub</li>
+                <li><strong>Main content area:</strong> Semantic <code>&lt;main&gt;</code> element</li>
+            </ul>
+
+            <div class="example">
+                <div class="example-header">Basic Page Template</div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Page Title | Info Graphics Hub&lt;/title&gt;
+    &lt;style&gt;
+        /* Include shared CSS variables */
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 8px;
+        }
+        /* Page-specific styles... */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav class="nav"&gt;
+        &lt;a href="index.html"&gt;← Back to Hub&lt;/a&gt;
+    &lt;/nav&gt;
+
+    &lt;main class="container"&gt;
+        &lt;!-- Page content here --&gt;
+    &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+        </section>
+
+        <section id="registry">
+            <h2>2. Adding Pages to the Registry</h2>
+            <p>All pages must be registered in the <code>index.html</code> file's <code>pages</code> array to appear in the navigation hub.</p>
+
+            <h3>Page Object Schema</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>id</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Unique identifier (kebab-case)</td>
+                    </tr>
+                    <tr>
+                        <td><code>title</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Display name (max 50 chars)</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Brief description (max 100 chars)</td>
+                    </tr>
+                    <tr>
+                        <td><code>href</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Relative path to HTML file</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Grouping category</td>
+                    </tr>
+                    <tr>
+                        <td><code>tags</code></td>
+                        <td>array</td>
+                        <td>Yes</td>
+                        <td>Searchable keywords</td>
+                    </tr>
+                    <tr>
+                        <td><code>icon</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Emoji or character icon</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example">
+                <div class="example-header">Example Registration</div>
+<pre>{
+    id: "sales-report-q4",
+    title: "Q4 Sales Report",
+    description: "Quarterly sales performance and analysis",
+    href: "reports/sales-q4-2024.html",
+    category: "Reports",
+    tags: ["sales", "quarterly", "2024", "revenue"],
+    icon: "📈"
+}</pre>
+            </div>
+
+            <h3>Available Categories</h3>
+            <p>Use existing categories when possible. To add a new category, update the <code>categoryMeta</code> object in <code>index.html</code>.</p>
+            <ul>
+                <li><strong>Documentation</strong> – Guides, standards, meta-documentation</li>
+                <li><strong>Data Visualization</strong> – Charts, graphs, interactive visualizations</li>
+                <li><strong>Reports</strong> – Business reports, summaries, analyses</li>
+                <li><strong>Tools</strong> – Utilities, calculators, interactive tools</li>
+                <li><strong>Reference</strong> – Lookup tables, specifications, static data</li>
+                <li><strong>Archive</strong> – Historical or deprecated content</li>
+            </ul>
+        </section>
+
+        <section id="html-standards">
+            <h2>3. HTML Standards</h2>
+
+            <h3>Semantic Markup</h3>
+            <p>Use semantic HTML5 elements to improve accessibility and SEO:</p>
+            <ul>
+                <li><code>&lt;header&gt;</code> – Page or section headers</li>
+                <li><code>&lt;nav&gt;</code> – Navigation blocks</li>
+                <li><code>&lt;main&gt;</code> – Primary page content</li>
+                <li><code>&lt;section&gt;</code> – Thematic groupings</li>
+                <li><code>&lt;article&gt;</code> – Self-contained content</li>
+                <li><code>&lt;aside&gt;</code> – Supplementary content</li>
+                <li><code>&lt;footer&gt;</code> – Page or section footers</li>
+            </ul>
+
+            <h3>Heading Hierarchy</h3>
+            <p>Maintain proper heading structure for accessibility:</p>
+            <ul>
+                <li>One <code>&lt;h1&gt;</code> per page (the main title)</li>
+                <li>Use headings in order: h1 → h2 → h3</li>
+                <li>Don't skip levels (e.g., h2 → h4)</li>
+            </ul>
+
+            <div class="info-box tip">
+                <strong>💡 Tip</strong>
+                Use heading elements for structure, not for styling. Use CSS classes to control visual appearance.
+            </div>
+        </section>
+
+        <section id="css-guidelines">
+            <h2>4. CSS Guidelines</h2>
+
+            <h3>CSS Variables</h3>
+            <p>All pages should use the shared CSS custom properties (variables) for consistency:</p>
+
+<pre>:root {
+    /* Colors */
+    --primary: #2563eb;        /* Primary brand color */
+    --primary-dark: #1d4ed8;   /* Darker primary for hover */
+    --bg: #f8fafc;             /* Page background */
+    --card-bg: #ffffff;        /* Card/panel background */
+    --text: #1e293b;           /* Primary text */
+    --text-muted: #64748b;     /* Secondary/muted text */
+    --border: #e2e8f0;         /* Border color */
+
+    /* Feedback colors */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+
+    /* Layout */
+    --radius: 8px;             /* Border radius */
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+}</pre>
+
+            <h3>Dark Mode Support</h3>
+            <p>Include dark mode variants using the <code>prefers-color-scheme</code> media query:</p>
+
+<pre>@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #334155;
+    }
+}</pre>
+
+            <h3>CSS Organization</h3>
+            <ol>
+                <li>CSS variables (`:root`)</li>
+                <li>Reset/base styles</li>
+                <li>Layout (containers, grids)</li>
+                <li>Component styles (cards, buttons)</li>
+                <li>Utility classes</li>
+                <li>Media queries (mobile-first or desktop-first, be consistent)</li>
+            </ol>
+        </section>
+
+        <section id="accessibility">
+            <h2>5. Accessibility Requirements</h2>
+
+            <div class="info-box important">
+                <strong>⚠️ Important</strong>
+                Accessibility is not optional. All pages must meet WCAG 2.1 Level AA standards.
+            </div>
+
+            <h3>Required Practices</h3>
+            <ul>
+                <li><strong>Language attribute:</strong> Always set <code>lang="en"</code> on the <code>&lt;html&gt;</code> element</li>
+                <li><strong>Alt text:</strong> All <code>&lt;img&gt;</code> elements must have descriptive <code>alt</code> attributes</li>
+                <li><strong>Form labels:</strong> All form inputs must have associated <code>&lt;label&gt;</code> elements</li>
+                <li><strong>Focus indicators:</strong> Never remove focus outlines without providing alternatives</li>
+                <li><strong>Color contrast:</strong> Text must have 4.5:1 contrast ratio minimum</li>
+                <li><strong>Keyboard navigation:</strong> All interactive elements must be keyboard accessible</li>
+            </ul>
+
+            <h3>ARIA Guidelines</h3>
+            <ul>
+                <li>Use native HTML elements before ARIA (e.g., <code>&lt;button&gt;</code> over <code>role="button"</code>)</li>
+                <li>Add <code>aria-label</code> for icon-only buttons</li>
+                <li>Use <code>aria-live</code> for dynamic content updates</li>
+            </ul>
+        </section>
+
+        <section id="file-naming">
+            <h2>6. File Naming Conventions</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rule</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Use kebab-case</td>
+                        <td><code>sales-report.html</code> ✓</td>
+                    </tr>
+                    <tr>
+                        <td>No spaces or special characters</td>
+                        <td><code>sales_report.html</code> ✗</td>
+                    </tr>
+                    <tr>
+                        <td>Lowercase only</td>
+                        <td><code>SalesReport.html</code> ✗</td>
+                    </tr>
+                    <tr>
+                        <td>Descriptive but concise</td>
+                        <td><code>q4-2024-revenue-analysis.html</code> ✓</td>
+                    </tr>
+                    <tr>
+                        <td>Use subdirectories for grouping</td>
+                        <td><code>reports/q4-sales.html</code> ✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Directory Structure</h3>
+<pre>info-graphics/
+├── index.html          # Main navigation hub
+├── claude.html         # This guidelines document
+├── reports/            # Report pages
+│   ├── sales-q4.html
+│   └── performance.html
+├── visualizations/     # Data visualization pages
+│   ├── charts/
+│   └── dashboards/
+├── tools/              # Interactive tools
+└── assets/             # Shared assets (if needed)
+    ├── images/
+    └── data/</pre>
+        </section>
+
+        <section id="components">
+            <h2>7. Reusable Components</h2>
+            <p>Use these standard component patterns for consistency.</p>
+
+            <h3>Info Boxes</h3>
+            <div class="info-box tip">
+                <strong>💡 Tip</strong>
+                Green box for helpful tips and best practices.
+            </div>
+
+            <div class="info-box warning">
+                <strong>⚠️ Warning</strong>
+                Yellow box for important warnings and caveats.
+            </div>
+
+            <div class="info-box important">
+                <strong>🚨 Critical</strong>
+                Red box for critical information that must not be ignored.
+            </div>
+
+<pre>&lt;div class="info-box tip"&gt;
+    &lt;strong&gt;💡 Tip&lt;/strong&gt;
+    Your tip text here.
+&lt;/div&gt;
+
+&lt;div class="info-box warning"&gt;
+    &lt;strong&gt;⚠️ Warning&lt;/strong&gt;
+    Your warning text here.
+&lt;/div&gt;
+
+&lt;div class="info-box important"&gt;
+    &lt;strong&gt;🚨 Critical&lt;/strong&gt;
+    Your critical notice here.
+&lt;/div&gt;</pre>
+
+            <h3>Cards</h3>
+<pre>&lt;div class="card"&gt;
+    &lt;h3&gt;Card Title&lt;/h3&gt;
+    &lt;p&gt;Card content goes here.&lt;/p&gt;
+&lt;/div&gt;
+
+/* CSS */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}</pre>
+
+            <h3>Tables</h3>
+<pre>&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Header 1&lt;/th&gt;
+            &lt;th&gt;Header 2&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Data 1&lt;/td&gt;
+            &lt;td&gt;Data 2&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+        </section>
+
+        <section id="responsive">
+            <h2>8. Responsive Design</h2>
+
+            <h3>Breakpoints</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Width</th>
+                        <th>Target Devices</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mobile</td>
+                        <td>&lt; 640px</td>
+                        <td>Phones</td>
+                    </tr>
+                    <tr>
+                        <td>Tablet</td>
+                        <td>640px – 1024px</td>
+                        <td>Tablets, small laptops</td>
+                    </tr>
+                    <tr>
+                        <td>Desktop</td>
+                        <td>&gt; 1024px</td>
+                        <td>Laptops, desktops</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Best Practices</h3>
+            <ul>
+                <li>Use relative units (<code>rem</code>, <code>em</code>, <code>%</code>) over fixed pixels</li>
+                <li>Set <code>max-width</code> on containers, not fixed widths</li>
+                <li>Use CSS Grid or Flexbox for layouts</li>
+                <li>Test on real devices when possible</li>
+                <li>Use <code>min-width</code> in media queries for mobile-first approach</li>
+            </ul>
+
+<pre>/* Mobile-first approach */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}</pre>
+        </section>
+
+        <section id="performance">
+            <h2>9. Performance Best Practices</h2>
+
+            <h3>General Guidelines</h3>
+            <ul>
+                <li><strong>Keep pages lightweight:</strong> Target under 100KB total (HTML + CSS + JS)</li>
+                <li><strong>Minimize dependencies:</strong> Avoid external libraries when vanilla JS suffices</li>
+                <li><strong>Inline critical CSS:</strong> Include essential styles in the <code>&lt;style&gt;</code> tag</li>
+                <li><strong>Lazy load images:</strong> Use <code>loading="lazy"</code> on images below the fold</li>
+                <li><strong>Optimize images:</strong> Use WebP format, appropriate dimensions</li>
+            </ul>
+
+            <h3>JavaScript Guidelines</h3>
+            <ul>
+                <li>Place scripts at the end of <code>&lt;body&gt;</code> or use <code>defer</code> attribute</li>
+                <li>Use event delegation for better performance</li>
+                <li>Debounce search input and scroll handlers</li>
+                <li>Avoid blocking the main thread with heavy computations</li>
+            </ul>
+
+            <div class="info-box tip">
+                <strong>💡 Performance Testing</strong>
+                Use Chrome DevTools Lighthouse to audit pages. Aim for 90+ scores in Performance and Accessibility.
+            </div>
+        </section>
+
+        <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); text-align: center;">
+            <p>Info Graphics Hub Documentation</p>
+            <p style="font-size: 0.875rem;">Last updated: January 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How Google Edged Ahead of OpenAI — Explained (WSJ Jan 2026)</title>
+  <style>
+    :root{
+      --bg: #0b0d12;
+      --panel:#101522;
+      --panel2:#0f1320;
+      --text:#e9eefc;
+      --muted:#a9b4d6;
+      --faint:#6f7aa3;
+      --line: rgba(233,238,252,.12);
+      --accent:#8aa7ff;
+      --accent2:#6ef3c5;
+      --warn:#ffcf6e;
+      --bad:#ff6e8a;
+      --good:#6ef3c5;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(138,167,255,.22), transparent 55%),
+        radial-gradient(1000px 520px at 80% 15%, rgba(110,243,197,.14), transparent 55%),
+        radial-gradient(900px 480px at 50% 90%, rgba(255,207,110,.10), transparent 55%),
+        linear-gradient(180deg, #070912, #0b0d12 35%, #060812);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+
+    .wrap{max-width:1100px; margin:0 auto; padding:32px 18px 64px;}
+
+    .hero{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(16,21,34,.88), rgba(12,15,24,.72));
+      box-shadow: var(--shadow);
+      padding:26px 22px;
+      overflow:hidden;
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(800px 220px at 30% 0%, rgba(138,167,255,.25), transparent 60%),
+                  radial-gradient(900px 260px at 90% 20%, rgba(110,243,197,.18), transparent 65%);
+      pointer-events:none;
+      filter: blur(0px);
+    }
+
+    .hero h1{margin:0 0 10px; font-size: 30px; letter-spacing:.2px; line-height:1.15; position:relative;}
+    .hero p{margin:0; color: var(--muted); max-width: 70ch; position:relative;}
+
+    .meta{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 14px;
+      position:relative;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(15,19,32,.75);
+      padding:8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pill b{color:var(--text); font-weight:600}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 920px){
+      .grid{grid-template-columns: 1fr;}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(16,21,34,.82), rgba(12,15,24,.62));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+
+    .card h2{margin:0 0 10px; font-size: 16px; letter-spacing:.2px;}
+    .card p{margin: 0 0 10px; color: var(--muted); line-height:1.55;}
+
+    .kpi-row{display:flex; flex-wrap:wrap; gap:10px; margin-top: 8px;}
+    .kpi{
+      flex: 1 1 160px;
+      min-width: 160px;
+      border:1px solid var(--line);
+      background: rgba(11,13,18,.55);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .kpi .label{color: var(--faint); font-size: 12px;}
+    .kpi .value{font-size: 18px; margin-top:4px;}
+    .kpi .note{color: var(--muted); font-size: 12px; margin-top:4px;}
+
+    .section-title{
+      display:flex; align-items:center; gap:10px;
+      margin-top: 18px;
+    }
+    .dot{width:10px; height:10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(138,167,255,.12)}
+
+    .timeline{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+    .titem{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(11,13,18,.45);
+    }
+    .titem .when{
+      font-family: var(--mono);
+      color: var(--faint);
+      font-size: 12px;
+      padding-top:2px;
+    }
+    .titem .what{color: var(--muted); line-height:1.45;}
+    .titem .what b{color: var(--text);}
+    @media (max-width: 520px){
+      .titem{grid-template-columns: 1fr;}
+    }
+
+    .list{margin:0; padding-left: 18px; color: var(--muted); line-height:1.6}
+    .list li{margin: 6px 0;}
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 920px){
+      .split{grid-template-columns: 1fr;}
+    }
+
+    table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow:hidden;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(11,13,18,.45);
+    }
+    th,td{padding:10px 12px; text-align:left; vertical-align:top;}
+    th{
+      color: var(--text);
+      font-weight: 650;
+      border-bottom: 1px solid var(--line);
+      background: rgba(16,21,34,.50);
+      font-size: 13px;
+    }
+    td{color: var(--muted); border-bottom:1px solid rgba(233,238,252,.08); font-size: 13px;}
+    tr:last-child td{border-bottom:none;}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(15,19,32,.65);
+    }
+
+    .b{width:9px; height:9px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 0 6px rgba(110,243,197,.12)}
+    .w{background: var(--warn); box-shadow: 0 0 0 6px rgba(255,207,110,.12)}
+    .r{background: var(--bad); box-shadow: 0 0 0 6px rgba(255,110,138,.12)}
+
+    details{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(11,13,18,.45);
+      padding: 10px 12px;
+    }
+    details summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 650;
+    }
+    details summary::-webkit-details-marker{display:none;}
+    details .content{margin-top:8px; color: var(--muted); line-height:1.55}
+
+    .footer{
+      margin-top: 18px;
+      color: var(--faint);
+      font-size: 12px;
+      border-top: 1px solid rgba(233,238,252,.10);
+      padding-top: 14px;
+    }
+
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top: 14px;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--line);
+      background: rgba(15,19,32,.75);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 650;
+      font-size: 12px;
+    }
+    .btn:active{transform: translateY(1px)}
+
+    .search{
+      flex: 1 1 240px;
+      border: 1px solid var(--line);
+      background: rgba(11,13,18,.55);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      outline:none;
+    }
+
+    .hl{background: rgba(255,207,110,.18); border: 1px solid rgba(255,207,110,.22); padding: 0 .25em; border-radius: .35em;}
+
+    .mini{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(11,13,18,.55);
+      color: var(--muted);
+      overflow:auto;
+      white-space:pre-wrap;
+      line-height:1.45;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="hero">
+      <h1>How Google “Got Its Groove Back” and Edged Ahead of OpenAI — an explanation</h1>
+      <p>
+        This page explains the main story arc and claims from a Wall Street Journal article (Jan 6–7, 2026, per the provided archive capture):
+        Google stumbled after ChatGPT, reorganized + scaled hard, then shipped a set of product and infrastructure moves that (per the article) put Gemini in front on capability and momentum.
+      </p>
+      <div class="meta">
+        <span class="pill"><b>Source</b>: Provided excerpt (archive.today capture of WSJ)</span>
+        <span class="pill"><b>Context</b>: AI chatbots, search overhaul, chips, org changes</span>
+        <span class="pill"><b>Theme</b>: Speed × scale × vertical integration</span>
+      </div>
+
+      <div class="toolbar" aria-label="tools">
+        <input id="search" class="search" placeholder="Search this page (e.g., Nano Banana, Bard, TPUs, AI Mode…)" />
+        <button class="btn" id="copySummary" title="Copy the 10-line recap">Copy recap</button>
+        <button class="btn" id="toggleAll" title="Expand/collapse all details">Toggle all details</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main class="card" id="main">
+        <div class="section-title"><span class="dot"></span><h2 style="margin:0">What the article is saying (in plain English)</h2></div>
+        <p>
+          The WSJ piece frames Google’s AI story as a comeback:
+          after a cautious, research-heavy approach and an early chatbot stumble (<span class="hl">Bard</span>),
+          Google reorganized, doubled down on shipping, and used its biggest advantages—massive distribution, custom AI chips, and deep research roots—to push <span class="hl">Gemini</span> ahead in model rankings and user growth.
+        </p>
+        <p>
+          The key twist is that Google didn’t just build a better chatbot. It (1) rebuilt its <span class="hl">search</span> experience around generative answers,
+          (2) launched a viral image feature internally nicknamed <span class="hl">“Nano Banana”</span> that boosted attention and usage,
+          and (3) leaned on its custom hardware (TPUs and the newer <span class="hl">Ironwood</span> chip) to reduce the cost of serving models at scale.
+        </p>
+
+        <div class="kpi-row" aria-label="key numbers">
+          <div class="kpi">
+            <div class="label">Gemini monthly users (claimed)</div>
+            <div class="value">650M+</div>
+            <div class="note">By Oct (corrected in the article)</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Earlier figure (article says was wrong)</div>
+            <div class="value">“650 users”</div>
+            <div class="note">Correction posted Jan 7</div>
+          </div>
+          <div class="kpi">
+            <div class="label">User growth in 2024 window (claimed)</div>
+            <div class="value">450M → 650M</div>
+            <div class="note">July to October</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Apple default search deal mentioned</div>
+            <div class="value">$20B/yr</div>
+            <div class="note">Paid by Google (per article)</div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:18px"><span class="dot" style="background:var(--accent2)"></span><h2 style="margin:0">Timeline (the “movie plot”)</h2></div>
+        <div class="timeline" id="timeline">
+          <div class="titem">
+            <div class="when">2011–2016</div>
+            <div class="what"><b>Foundation era.</b> Google Brain forms; DeepMind acquired; Pichai declares an “AI-first” future; Google begins building TPUs.</div>
+          </div>
+          <div class="titem">
+            <div class="when">Aug 2022</div>
+            <div class="what"><b>Cautious chatbot testing.</b> LaMDA appears in “AI Test Kitchen” with constrained demo features (incl. dogs-only mode).</div>
+          </div>
+          <div class="titem">
+            <div class="when">Nov 2022</div>
+            <div class="what"><b>ChatGPT shock.</b> OpenAI releases ChatGPT broadly; rapid adoption creates “we’re behind” panic inside Google.</div>
+          </div>
+          <div class="titem">
+            <div class="when">Feb 2023</div>
+            <div class="what"><b>Bard stumble.</b> Launch promo includes a factual error; Alphabet shares drop (article notes ~8%).</div>
+          </div>
+          <div class="titem">
+            <div class="when">Jan 2023 → 2024</div>
+            <div class="what"><b>Org merge + rebuild.</b> DeepMind + Brain alignment; board plan for a stronger model; Brin returns and becomes hands-on.</div>
+          </div>
+          <div class="titem">
+            <div class="when">May 2024</div>
+            <div class="what"><b>Search overhaul starts.</b> AI Overviews roll out; then “AI Mode” aims for chatbot-style search while preserving speed/quality.</div>
+          </div>
+          <div class="titem">
+            <div class="when">Aug (year in article)</div>
+            <div class="what"><b>Nano Banana goes viral.</b> A fast image generator tops LM Arena, trends on X, and spikes usage ("success disaster" capacity crunch).</div>
+          </div>
+          <div class="titem">
+            <div class="when">Nov (year in article)</div>
+            <div class="what"><b>Gemini leap.</b> A new flagship Gemini release outperforms competitors on multiple measures; OpenAI reacts (“Code Red”).</div>
+          </div>
+          <div class="titem">
+            <div class="when">Late 2025</div>
+            <div class="what"><b>Serving advantage.</b> Ironwood chip reduces run-cost; Google explores selling chips to others (Meta talks mentioned).</div>
+          </div>
+        </div>
+
+        <div class="section-title"><span class="dot" style="background:var(--warn)"></span><h2 style="margin:0">Why Google’s comeback works (according to the article)</h2></div>
+
+        <div class="split">
+          <div class="card" style="margin:0; box-shadow:none; background:rgba(11,13,18,.45)">
+            <h2 style="margin:0 0 10px">1) A product flywheel, not just a model</h2>
+            <ul class="list">
+              <li><b>Search is the distribution engine.</b> Overviews + AI Mode move generative answers into a habit users already have.</li>
+              <li><b>Gemini app becomes a consumer product</b> (downloads, daily usage), not a research demo.</li>
+              <li><b>Viral features (Nano Banana)</b> create spikes that force infrastructure scaling and improve iteration speed.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="margin:0; box-shadow:none; background:rgba(11,13,18,.45)">
+            <h2 style="margin:0 0 10px">2) Vertical integration as a moat</h2>
+            <ul class="list">
+              <li><b>Custom chips (TPUs → Ironwood)</b> lower serving costs and reduce dependence on Nvidia-style supply constraints.</li>
+              <li><b>Billions in profit</b> fund R&D without the same investor pressure as OpenAI (as framed by the piece).</li>
+              <li><b>Hardware + software co-design</b> makes “scale” feel like a product feature.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="card" style="margin:0; box-shadow:none; background:rgba(11,13,18,.45)">
+            <h2 style="margin:0 0 10px">3) Leadership + org changes that unlock speed</h2>
+            <ul class="list">
+              <li><b>Merge/align research + product cultures</b> (Brain vs DeepMind) to reduce internal friction.</li>
+              <li><b>Brin’s return</b> adds pressure for technical quality and rapid fixes.</li>
+              <li><b>Hiring/returning talent</b> (startup acquisition bringing back key researchers) boosts execution.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="margin:0; box-shadow:none; background:rgba(11,13,18,.45)">
+            <h2 style="margin:0 0 10px">4) Safety posture, then acceleration</h2>
+            <ul class="list">
+              <li><b>Earlier caution</b> around biased/unsafe outputs slowed public release (LaMDA constraints).</li>
+              <li><b>ChatGPT forces urgency</b>, flipping the org toward shipping and iteration.</li>
+              <li><b>Still needs guardrails</b> because search answers are high-stakes (the “if you screw up…” quote theme).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-title"><span class="dot" style="background:var(--bad)"></span><h2 style="margin:0">The competitive comparison (as implied)</h2></div>
+        <p>
+          The article’s framing isn’t “OpenAI is done.” It’s more like:
+          <span class="hl">Google finally brought its scale to the generative AI fight</span>.
+          Gemini may lead on some technical benchmarks and cost, while ChatGPT still leads on mindshare and overall user count (per the article).
+        </p>
+
+        <table aria-label="Google vs OpenAI comparison">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Google (Gemini) — framed advantage</th>
+              <th>OpenAI (ChatGPT) — framed advantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Distribution</td>
+              <td>Search + Android + ecosystem can push features to billions</td>
+              <td>Standalone product with massive brand recognition</td>
+            </tr>
+            <tr>
+              <td>Compute & cost</td>
+              <td>Custom chips (TPUs/Ironwood) + datacenter scale</td>
+              <td>Large-scale compute, but more dependent on external GPU supply</td>
+            </tr>
+            <tr>
+              <td>Speed of iteration</td>
+              <td>Org changes + “productizing” DeepMind research</td>
+              <td>Early-mover momentum; faster public experimentation culture</td>
+            </tr>
+            <tr>
+              <td>Business model</td>
+              <td>Ads + paid Gemini + enterprise + chips (multiple revenue lanes)</td>
+              <td>Subscriptions + API + partnerships; still scaling costs fast (article tone)</td>
+            </tr>
+            <tr>
+              <td>Risk surface</td>
+              <td>Search quality is fragile; wrong answers hit trust instantly</td>
+              <td>Hallucinations too, but less tied to a single “golden goose”</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-title"><span class="dot"></span><h2 style="margin:0">What to watch next (practical signals)</h2></div>
+        <ul class="list">
+          <li><b>Search behavior shift:</b> do AI Overviews / AI Mode increase complex queries without killing ad economics?</li>
+          <li><b>Serving cost curves:</b> can Google keep reducing $/token and $/image with Ironwood-class chips?</li>
+          <li><b>Capacity crunches:</b> viral features stress-test infra; how quickly does Google add compute without quality regressions?</li>
+          <li><b>Benchmark vs reality:</b> does “wins on measures” translate to user preference and retention?</li>
+          <li><b>Regulatory chess:</b> antitrust remedies + default search deals + “chatbots are new search” argument.</li>
+        </ul>
+
+        <div class="section-title"><span class="dot" style="background:var(--accent2)"></span><h2 style="margin:0">A 10-line recap (copyable)</h2></div>
+        <div class="mini" id="recap">1) Google built early AI foundations (Brain, DeepMind, TPUs) but moved cautiously on chatbots.
+2) ChatGPT’s 2022 launch forced urgency and exposed Google’s slow productization.
+3) Bard launched fast and stumbled publicly, adding pressure to reorganize.
+4) Google aligned Brain + DeepMind and pushed faster experimentation.
+5) Gemini was built multimodal from the start (text+code+audio+images+video), trading time for ambition.
+6) Search overhaul (AI Overviews → AI Mode) brought generative answers into core search.
+7) “Nano Banana” (fast image gen) went viral, driving adoption and infrastructure scaling.
+8) New Gemini flagship releases topped certain rankings and sparked an internal “Code Red” at OpenAI.
+9) Custom chips (Ironwood) reduced serving cost and became a strategic advantage.
+10) OpenAI still leads in users, but the article claims Google has regained the technical/momentum lead.</div>
+
+        <div class="section-title"><span class="dot" style="background:var(--warn)"></span><h2 style="margin:0">Critical reading notes</h2></div>
+        <div class="split">
+          <details open>
+            <summary>Benchmarks vs “real” quality <span class="badge"><span class="w"></span> interpret carefully</span></summary>
+            <div class="content">
+              The article references platforms/rankings (e.g., LM Arena) and “outperformed on measures.”
+              Useful signal—but not the whole story. User preference, reliability, latency, and price often matter more than a single leaderboard.
+            </div>
+          </details>
+          <details open>
+            <summary>Numbers and corrections <span class="badge"><span class="w"></span> check definitions</span></summary>
+            <div class="content">
+              “Monthly users” can mean many things (logged-in actives vs app installs vs unique visitors).
+              The article itself includes a correction (650 <i>million</i> vs 650), which is a reminder to treat viral stats carefully.
+            </div>
+          </details>
+          <details>
+            <summary>Search economics risk <span class="badge"><span class="r"></span> fragile flywheel</span></summary>
+            <div class="content">
+              If AI answers reduce clicks to websites, ads and publisher ecosystem dynamics change.
+              The piece suggests Google is protecting search “for now,” which implies this remains the biggest strategic threat.
+            </div>
+          </details>
+          <details>
+            <summary>Hardware claims <span class="badge"><span class="w"></span> strategic but nuanced</span></summary>
+            <div class="content">
+              Chip advantage matters—but only if utilization, software stack, supply, and reliability align.
+              Also note the comments section in the excerpt flags a possible image mismatch (“Tensor” phone chip vs datacenter TPUs).
+            </div>
+          </details>
+        </div>
+
+        <div class="section-title"><span class="dot" style="background:var(--accent2)"></span><h2 style="margin:0">Glossary</h2></div>
+        <div class="split">
+          <details>
+            <summary>Gemini <span class="badge"><span class="b"></span> model family</span></summary>
+            <div class="content">Google’s AI model/app brand in the excerpt. The article describes multiple iterations and a flagship model that surged in capability rankings.</div>
+          </details>
+          <details>
+            <summary>TPU / Ironwood <span class="badge"><span class="b"></span> compute</span></summary>
+            <div class="content">Google’s custom AI chips. The excerpt presents Ironwood as a newer chip that reduces the cost of running models.</div>
+          </details>
+          <details>
+            <summary>AI Overviews / AI Mode <span class="badge"><span class="b"></span> search UX</span></summary>
+            <div class="content">Search features that show AI-generated answers at the top (Overviews) and a more chatbot-like conversational search (AI Mode).</div>
+          </details>
+          <details>
+            <summary>LM Arena <span class="badge"><span class="b"></span> ranking platform</span></summary>
+            <div class="content">A model comparison/ranking venue referenced in the excerpt, where “Nano Banana” allegedly hit #1.</div>
+          </details>
+        </div>
+
+        <div class="footer">
+          <div><b>Note:</b> This is a structured explanation of the excerpt you provided; it does not reproduce the full WSJ article.</div>
+          <div style="margin-top:6px">Tip: Use the search box to jump to terms. The highlight is lightweight and works offline.</div>
+        </div>
+      </main>
+
+      <aside class="card" id="sidebar">
+        <div class="section-title"><span class="dot" style="background:var(--accent2)"></span><h2 style="margin:0">The core thesis (one sentence)</h2></div>
+        <p>
+          Google went from “cautious research org” to “shipping machine” by pairing better models with search distribution and cheaper serving—making scale the differentiator.
+        </p>
+
+        <div class="section-title"><span class="dot"></span><h2 style="margin:0">A simple mental model</h2></div>
+        <div class="mini" aria-label="flywheel">
+[Better models]
+     ↓
+[More compelling features]
+     ↓
+[More users + more queries]
+     ↓
+[More data + more revenue]
+     ↓
+[More compute + cheaper compute (TPUs/Ironwood)]
+     ↓
+[Even better models]
+        </div>
+
+        <div class="section-title"><span class="dot" style="background:var(--warn)"></span><h2 style="margin:0">Key characters mentioned</h2></div>
+        <ul class="list" style="padding-left: 18px">
+          <li><b>Sundar Pichai</b> — CEO; pushes “AI-first” narrative and launches at Google scale.</li>
+          <li><b>Demis Hassabis</b> — DeepMind leader; research → product pipeline.</li>
+          <li><b>Jeff Dean</b> — early neural network era; foundational org role.</li>
+          <li><b>Sergey Brin</b> — returns, deeply technical, focuses on Gemini issues.</li>
+          <li><b>Liz Reid</b> — search leader; Project Magi, Overviews/AI Mode.</li>
+          <li><b>Josh Woodward</b> — Gemini app/Labs; calls Nano Banana a “success disaster.”</li>
+        </ul>
+
+        <div class="section-title"><span class="dot" style="background:var(--bad)"></span><h2 style="margin:0">Where the story could be overconfident</h2></div>
+        <ul class="list">
+          <li>“Edged ahead” depends on which metric you care about (benchmarks vs users vs revenue vs trust).</li>
+          <li>Search + AI is still economically unproven at full scale (ads, publishers, regulation).</li>
+          <li>Hardware advantage is real only if software stack + utilization stays ahead.</li>
+        </ul>
+
+        <div class="section-title"><span class="dot"></span><h2 style="margin:0">If you want: turn into slides</h2></div>
+        <p style="margin-bottom:0">
+          This structure is already slide-shaped: thesis → timeline → flywheel → comparison → watchlist.
+          Tell me “make slides” and I’ll convert it.
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Lightweight search + highlight (offline, no deps)
+    const search = document.getElementById('search');
+    const main = document.getElementById('main');
+
+    function clearHighlights(){
+      // remove spans with class hl (but preserve original highlights we used intentionally)
+      // We'll only clear the dynamic ones we add via data-dyn="1".
+      main.querySelectorAll('span.hl[data-dyn="1"]').forEach(s => {
+        const text = document.createTextNode(s.textContent);
+        s.replaceWith(text);
+      });
+    }
+
+    function highlight(term){
+      if(!term) return;
+      const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, {
+        acceptNode(node){
+          if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = node.parentElement;
+          if(!p) return NodeFilter.FILTER_REJECT;
+          if(['SCRIPT','STYLE','NOSCRIPT'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+          // Avoid breaking our intentional highlights
+          if(p.closest('span.hl') && !p.closest('span.hl')?.dataset?.dyn) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+
+      const nodes = [];
+      while(walker.nextNode()) nodes.push(walker.currentNode);
+
+      const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig');
+      let firstHit = null;
+
+      nodes.forEach(node => {
+        const txt = node.nodeValue;
+        if(!re.test(txt)) return;
+        re.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        let m;
+        while((m = re.exec(txt))){
+          const before = txt.slice(last, m.index);
+          if(before) frag.appendChild(document.createTextNode(before));
+          const span = document.createElement('span');
+          span.className = 'hl';
+          span.dataset.dyn = '1';
+          span.textContent = txt.slice(m.index, m.index + m[0].length);
+          frag.appendChild(span);
+          if(!firstHit) firstHit = span;
+          last = m.index + m[0].length;
+        }
+        const after = txt.slice(last);
+        if(after) frag.appendChild(document.createTextNode(after));
+        node.parentNode.replaceChild(frag, node);
+      });
+
+      if(firstHit){
+        firstHit.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    }
+
+    let searchTimer;
+    search.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        clearHighlights();
+        const term = search.value.trim();
+        if(term.length >= 2) highlight(term);
+      }, 140);
+    });
+
+    // Copy recap
+    document.getElementById('copySummary').addEventListener('click', async () => {
+      const text = document.getElementById('recap').textContent.trim();
+      try{
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copySummary');
+        const old = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = old, 900);
+      }catch(e){
+        alert('Clipboard blocked by browser. You can manually copy the recap block.');
+      }
+    });
+
+    // Toggle all details
+    let expanded = true;
+    document.getElementById('toggleAll').addEventListener('click', () => {
+      const details = document.querySelectorAll('details');
+      expanded = !expanded;
+      details.forEach(d => d.open = expanded);
+    });
+  </script>
+</body>
+</html>
