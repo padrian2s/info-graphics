@@ -214,6 +214,13 @@
             color: var(--text-muted);
         }
 
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -268,43 +275,28 @@
             </div>
             <div class="filter-group" id="filters">
                 <button class="filter-btn active" data-category="all">All</button>
-                <!-- Filter buttons generated dynamically -->
             </div>
         </div>
 
         <main id="content">
-            <!-- Categories and pages rendered here -->
+            <div class="loading">Loading pages...</div>
         </main>
     </div>
 
     <script>
         /**
-         * PAGE REGISTRY
-         * Add new pages here. Each page needs:
-         * - id: unique identifier
-         * - title: display name
-         * - description: short description
-         * - href: relative path to the HTML file
-         * - category: grouping category
-         * - tags: array of searchable tags
-         * - icon: emoji or icon character
+         * HTML FILES LIST
+         * Add new HTML files here - metadata is extracted automatically from each file
+         * (Browser security prevents automatic directory listing)
          */
-        const pages = [
-            {
-                id: "claude-guidelines",
-                title: "Claude Guidelines",
-                description: "Documentation standards and content structure guidelines",
-                href: "claude.html",
-                category: "Documentation",
-                tags: ["docs", "guidelines", "standards", "meta"],
-                icon: "📘"
-            }
-            // Add more pages here following this structure
+        const htmlFiles = [
+            "claude.html",
+            "google-vs-openai.html",
+            "napoleon-technique.html"
         ];
 
         /**
          * CATEGORY DEFINITIONS
-         * Define categories with icons and display order
          */
         const categoryMeta = {
             "Documentation": { icon: "📚", order: 1 },
@@ -312,14 +304,60 @@
             "Reports": { icon: "📈", order: 3 },
             "Tools": { icon: "🛠️", order: 4 },
             "Reference": { icon: "📖", order: 5 },
+            "Uncategorized": { icon: "📁", order: 50 },
             "Archive": { icon: "🗃️", order: 99 }
         };
 
         // State
+        let pages = [];
         let activeCategory = "all";
         let searchQuery = "";
 
-        // Get unique categories from pages
+        // Extract metadata from HTML content
+        function extractMeta(html, name) {
+            const match = html.match(new RegExp(`<meta\\s+name="${name}"\\s+content="([^"]*)"`, 'i'));
+            return match ? match[1] : "";
+        }
+
+        function extractTitle(html) {
+            const match = html.match(/<title>([^<]*)<\/title>/i);
+            return match ? match[1] : "Untitled";
+        }
+
+        // Fetch and parse HTML file metadata
+        async function fetchPageMeta(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) return null;
+
+                const html = await response.text();
+                const id = filename.replace('.html', '').toLowerCase();
+                const tags = extractMeta(html, 'tags');
+
+                return {
+                    id,
+                    title: extractTitle(html),
+                    description: extractMeta(html, 'description'),
+                    href: filename,
+                    category: extractMeta(html, 'category') || "Uncategorized",
+                    tags: tags ? tags.split(',').map(t => t.trim()) : [],
+                    icon: extractMeta(html, 'icon') || "📄"
+                };
+            } catch (e) {
+                console.error(`Failed to load ${filename}:`, e);
+                return null;
+            }
+        }
+
+        // Load all pages
+        async function loadPages() {
+            const results = await Promise.all(htmlFiles.map(fetchPageMeta));
+            pages = results.filter(p => p !== null);
+            initFilters();
+            render();
+        }
+
+        // Get unique categories
         function getCategories() {
             const cats = [...new Set(pages.map(p => p.category))];
             return cats.sort((a, b) => {
@@ -332,9 +370,11 @@
         // Initialize filter buttons
         function initFilters() {
             const container = document.getElementById("filters");
-            const categories = getCategories();
+            const allBtn = container.querySelector('[data-category="all"]');
+            container.innerHTML = '';
+            container.appendChild(allBtn);
 
-            categories.forEach(cat => {
+            getCategories().forEach(cat => {
                 const btn = document.createElement("button");
                 btn.className = "filter-btn";
                 btn.dataset.category = cat;
@@ -343,17 +383,15 @@
             });
         }
 
-        // Filter pages based on search and category
+        // Filter pages
         function filterPages() {
             const query = searchQuery.toLowerCase().trim();
 
             return pages.filter(page => {
-                // Category filter
                 if (activeCategory !== "all" && page.category !== activeCategory) {
                     return false;
                 }
 
-                // Search filter
                 if (query) {
                     const searchable = [
                         page.title,
@@ -361,7 +399,6 @@
                         page.category,
                         ...page.tags
                     ].join(" ").toLowerCase();
-
                     return searchable.includes(query);
                 }
 
@@ -369,22 +406,20 @@
             });
         }
 
-        // Group pages by category
+        // Group by category
         function groupByCategory(pageList) {
             const groups = {};
             pageList.forEach(page => {
-                if (!groups[page.category]) {
-                    groups[page.category] = [];
-                }
+                if (!groups[page.category]) groups[page.category] = [];
                 groups[page.category].push(page);
             });
             return groups;
         }
 
-        // Render page card
+        // Render card
         function renderCard(page) {
             return `
-                <a href="${page.href}" class="page-card" data-id="${page.id}">
+                <a href="${page.href}" class="page-card">
                     <h3><span>${page.icon}</span> ${page.title}</h3>
                     <p>${page.description}</p>
                     <div class="tags">
@@ -394,11 +429,11 @@
             `;
         }
 
-        // Render category section
+        // Render category
         function renderCategory(name, pages) {
             const meta = categoryMeta[name] || { icon: "📁" };
             return `
-                <section class="category" data-category="${name}">
+                <section class="category">
                     <div class="category-header">
                         <span class="category-icon">${meta.icon}</span>
                         <h2 class="category-title">${name}</h2>
@@ -411,7 +446,7 @@
             `;
         }
 
-        // Main render function
+        // Main render
         function render() {
             const content = document.getElementById("content");
             const filtered = filterPages();
@@ -433,9 +468,7 @@
                 return orderA - orderB;
             });
 
-            content.innerHTML = categories
-                .map(cat => renderCategory(cat, grouped[cat]))
-                .join("");
+            content.innerHTML = categories.map(cat => renderCategory(cat, grouped[cat])).join("");
         }
 
         // Event handlers
@@ -453,7 +486,6 @@
             }
         });
 
-        // Keyboard shortcut: focus search with /
         document.addEventListener("keydown", (e) => {
             if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
                 e.preventDefault();
@@ -462,8 +494,7 @@
         });
 
         // Initialize
-        initFilters();
-        render();
+        loadPages();
     </script>
 </body>
 </html>

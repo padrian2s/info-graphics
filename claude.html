@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Documentation standards and content structure guidelines" />
+    <meta name="category" content="Documentation" />
+    <meta name="tags" content="docs, guidelines, standards, meta" />
+    <meta name="icon" content="📘" />
     <title>Content Guidelines | Info Graphics Hub</title>
     <style>
         :root {
@@ -361,76 +365,62 @@
         </section>
 
         <section id="registry">
-            <h2>2. Adding Pages to the Registry</h2>
-            <p>All pages must be registered in the <code>index.html</code> file's <code>pages</code> array to appear in the navigation hub.</p>
+            <h2>2. Adding Pages to the Index</h2>
+            <p>Adding a new page to the hub requires two simple steps:</p>
 
-            <h3>Page Object Schema</h3>
+            <h3>Step 1: Add Meta Tags to Your HTML File</h3>
+            <p>Include these meta tags in the <code>&lt;head&gt;</code> section of your HTML file:</p>
+
+<pre>&lt;meta name="description" content="Brief description of the page" /&gt;
+&lt;meta name="category" content="Reports" /&gt;
+&lt;meta name="tags" content="tag1, tag2, tag3" /&gt;
+&lt;meta name="icon" content="📊" /&gt;</pre>
+
             <table>
                 <thead>
                     <tr>
-                        <th>Property</th>
-                        <th>Type</th>
+                        <th>Meta Tag</th>
                         <th>Required</th>
                         <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>id</code></td>
-                        <td>string</td>
-                        <td>Yes</td>
-                        <td>Unique identifier (kebab-case)</td>
-                    </tr>
-                    <tr>
-                        <td><code>title</code></td>
-                        <td>string</td>
-                        <td>Yes</td>
-                        <td>Display name (max 50 chars)</td>
-                    </tr>
-                    <tr>
                         <td><code>description</code></td>
-                        <td>string</td>
                         <td>Yes</td>
-                        <td>Brief description (max 100 chars)</td>
-                    </tr>
-                    <tr>
-                        <td><code>href</code></td>
-                        <td>string</td>
-                        <td>Yes</td>
-                        <td>Relative path to HTML file</td>
+                        <td>Brief description shown on card (max 100 chars)</td>
                     </tr>
                     <tr>
                         <td><code>category</code></td>
-                        <td>string</td>
                         <td>Yes</td>
-                        <td>Grouping category</td>
+                        <td>Grouping category (see list below)</td>
                     </tr>
                     <tr>
                         <td><code>tags</code></td>
-                        <td>array</td>
                         <td>Yes</td>
-                        <td>Searchable keywords</td>
+                        <td>Comma-separated keywords for search</td>
                     </tr>
                     <tr>
                         <td><code>icon</code></td>
-                        <td>string</td>
-                        <td>Yes</td>
-                        <td>Emoji or character icon</td>
+                        <td>No</td>
+                        <td>Emoji icon (defaults to 📄)</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="example">
-                <div class="example-header">Example Registration</div>
-<pre>{
-    id: "sales-report-q4",
-    title: "Q4 Sales Report",
-    description: "Quarterly sales performance and analysis",
-    href: "reports/sales-q4-2024.html",
-    category: "Reports",
-    tags: ["sales", "quarterly", "2024", "revenue"],
-    icon: "📈"
-}</pre>
+            <h3>Step 2: Register the Filename</h3>
+            <p>Add your filename to the <code>htmlFiles</code> array in <code>index.html</code>:</p>
+
+<pre>const htmlFiles = [
+    "claude.html",
+    "google-vs-openai.html",
+    "napoleon-technique.html",
+    "your-new-page.html"  // ← Add new files here
+];</pre>
+
+            <div class="info-box tip">
+                <strong>💡 How It Works</strong>
+                The index automatically fetches each HTML file and extracts metadata from the meta tags. The title is read from the <code>&lt;title&gt;</code> tag. No build step required!
             </div>
 
             <h3>Available Categories</h3>
@@ -443,6 +433,22 @@
                 <li><strong>Reference</strong> – Lookup tables, specifications, static data</li>
                 <li><strong>Archive</strong> – Historical or deprecated content</li>
             </ul>
+
+            <div class="example">
+                <div class="example-header">Complete Example</div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta name="description" content="Q4 sales performance analysis" /&gt;
+    &lt;meta name="category" content="Reports" /&gt;
+    &lt;meta name="tags" content="sales, quarterly, 2024, revenue" /&gt;
+    &lt;meta name="icon" content="📈" /&gt;
+    &lt;title&gt;Q4 Sales Report | Info Graphics Hub&lt;/title&gt;
+    ...
+&lt;/head&gt;</pre>
+            </div>
         </section>
 
         <section id="html-standards">
