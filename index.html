@@ -7,41 +7,42 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
-            --radius: 8px;
+            --bg0: #070A12;
+            --bg1: #0B1222;
+            --card: rgba(15,26,51,.65);
+            --card-hover: rgba(15,26,51,.85);
+            --stroke: #1f2b4d;
+            --text: #EAF0FF;
+            --muted: #A8B3D6;
+            --muted2: #7E8BB5;
+            --good: #2EE59D;
+            --warn: #FFCC66;
+            --blue: #66A3FF;
+            --vio: #B38CFF;
+            --teal: #37D6FF;
+            --shadow: 0 18px 60px rgba(0,0,0,.35);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0f172a;
-                --card-bg: #1e293b;
-                --text: #f1f5f9;
-                --text-muted: #94a3b8;
-                --border: #334155;
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg);
+            font-family: var(--sans);
             color: var(--text);
-            line-height: 1.6;
+            background:
+                radial-gradient(1100px 700px at 20% 12%, rgba(102,163,255,.18), transparent 55%),
+                radial-gradient(1000px 700px at 80% 20%, rgba(179,140,255,.14), transparent 60%),
+                radial-gradient(1100px 800px at 50% 90%, rgba(46,229,157,.10), transparent 60%),
+                linear-gradient(180deg, var(--bg0), var(--bg1) 55%, #070A12);
+            background-attachment: fixed;
             min-height: 100vh;
+            line-height: 1.5;
         }
+
+        a { color: inherit; text-decoration: none; }
 
         .material-symbols-rounded {
             font-family: 'Material Symbols Rounded';
@@ -49,215 +50,380 @@
             font-style: normal;
             font-size: 1.25rem;
             line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
             display: inline-flex;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-feature-settings: 'liga';
+            vertical-align: middle;
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1180px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 28px 18px 80px;
         }
 
+        /* Header */
         header {
             text-align: center;
-            margin-bottom: 2rem;
+            padding: 40px 20px 30px;
+        }
+
+        .logo-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: conic-gradient(from 200deg, var(--blue), var(--vio), var(--good), var(--teal), var(--blue));
+            box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset, 0 12px 30px rgba(0,0,0,.28);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .logo-wrap::after {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border-radius: 10px;
+            background: rgba(7,10,18,.8);
+        }
+
+        .logo-wrap .material-symbols-rounded {
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         header h1 {
             font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-weight: 780;
+            letter-spacing: -.5px;
+            margin-bottom: 8px;
         }
 
         header p {
-            color: var(--text-muted);
+            color: var(--muted);
+            font-size: 1rem;
         }
 
-        /* Search & Filter Bar */
-        .controls {
+        /* Top Bar / Controls */
+        .topbar {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 1px solid var(--stroke);
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(15,26,51,.75), rgba(15,26,51,.35));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 18px 60px rgba(0,0,0,.22);
+            position: sticky;
+            top: 12px;
+            z-index: 20;
+            margin-bottom: 28px;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
         }
 
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 200px;
             position: relative;
         }
 
         .search-box .material-symbols-rounded {
             position: absolute;
-            left: 0.75rem;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1rem;
+            color: var(--muted2);
+            font-size: 1.1rem;
         }
 
         .search-box input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            background: var(--card-bg);
+            padding: 10px 14px 10px 42px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 999px;
+            font-size: 0.9rem;
+            background: rgba(7,10,18,.4);
             color: var(--text);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .search-box input::placeholder {
+            color: var(--muted2);
         }
 
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(102,163,255,.15);
+        }
+
+        .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* View Switcher */
+        .view-switcher {
+            display: flex;
+            gap: 2px;
+            background: rgba(7,10,18,.4);
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .view-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            color: var(--text);
+        }
+
+        .view-btn.active {
+            background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+        }
+
+        .view-btn .material-symbols-rounded {
+            font-size: 1.1rem;
+        }
+
+        /* Filter Pills */
         .filter-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 8px;
+            padding: 8px 0;
         }
 
         .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--card-bg);
-            color: var(--text);
+            padding: 8px 14px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 999px;
+            background: rgba(7,10,18,.3);
+            color: var(--muted);
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
+            font-weight: 500;
             transition: all 0.2s;
         }
 
         .filter-btn:hover {
-            border-color: var(--primary);
+            border-color: rgba(255,255,255,.2);
+            color: var(--text);
         }
 
         .filter-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
+            background: linear-gradient(180deg, rgba(102,163,255,.25), rgba(102,163,255,.1));
+            border-color: var(--blue);
+            color: var(--text);
         }
 
         /* Category Sections */
         .category {
-            margin-bottom: 2.5rem;
+            margin-bottom: 36px;
         }
 
         .category-header {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border);
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--stroke);
+        }
+
+        .category-header .material-symbols-rounded {
+            color: var(--blue);
         }
 
         .category-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 650;
         }
 
         .category-count {
-            background: var(--border);
-            padding: 0.125rem 0.5rem;
+            background: rgba(255,255,255,.08);
+            padding: 2px 10px;
             border-radius: 999px;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--muted2);
         }
 
         /* Page Cards Grid */
         .pages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
         }
 
         .page-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
+            background: var(--card);
+            border: 1px solid var(--stroke);
             border-radius: var(--radius);
-            padding: 1.25rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            color: inherit;
+            padding: 20px;
+            transition: all 0.25s ease;
             display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(300px 150px at 10% 10%, rgba(102,163,255,.08), transparent 50%),
+                radial-gradient(250px 150px at 90% 80%, rgba(179,140,255,.06), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
         .page-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
+            transform: translateY(-3px);
+            border-color: rgba(102,163,255,.4);
+            background: var(--card-hover);
+            box-shadow: var(--shadow);
+        }
+
+        .page-card:hover::before {
+            opacity: 1;
+        }
+
+        .page-card > * {
+            position: relative;
         }
 
         .page-card h3 {
             font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-weight: 620;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
+            line-height: 1.3;
+        }
+
+        .page-card h3 .material-symbols-rounded {
+            color: var(--good);
+            font-size: 1.2rem;
         }
 
         .page-card p {
-            color: var(--text-muted);
+            color: var(--muted);
             font-size: 0.875rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
 
         .page-card .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.25rem;
+            gap: 6px;
         }
 
         .tag {
-            background: var(--bg);
-            padding: 0.125rem 0.5rem;
-            border-radius: 4px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            color: var(--muted2);
+        }
+
+        .page-card .date {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--muted2);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-card .date .material-symbols-rounded {
+            font-size: 0.9rem;
+            color: var(--teal);
+        }
+
+        .page-card .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            color: var(--vio);
+            background: rgba(179,140,255,.12);
+            border: 1px solid rgba(179,140,255,.2);
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 10px;
         }
 
         /* Loading State */
         .loading {
             text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-muted);
+            padding: 80px 20px;
+            color: var(--muted);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-muted);
+            padding: 80px 20px;
+            color: var(--muted);
         }
 
         .empty-state h3 {
             font-size: 1.25rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
+            color: var(--text);
         }
 
         /* Responsive */
-        @media (max-width: 640px) {
+        @media (max-width: 700px) {
             .container {
-                padding: 1rem;
+                padding: 16px 12px 60px;
+            }
+
+            header {
+                padding: 24px 16px 20px;
             }
 
             header h1 {
                 font-size: 1.5rem;
             }
 
-            .controls {
+            .topbar {
+                padding: 10px 12px;
+                border-radius: 20px;
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .controls-right {
+                width: 100%;
+                justify-content: center;
             }
 
             .filter-group {
@@ -269,7 +435,6 @@
             }
         }
 
-        /* Utility */
         .hidden {
             display: none !important;
         }
@@ -278,18 +443,35 @@
 <body>
     <div class="container">
         <header>
-            <h1><span class="material-symbols-rounded" aria-hidden="true">bar_chart</span> Info Graphics Hub</h1>
+            <div class="logo-wrap">
+                <span class="material-symbols-rounded" aria-hidden="true">bar_chart</span>
+            </div>
+            <h1>Info Graphics Hub</h1>
             <p>Navigate and explore all available pages</p>
         </header>
 
-        <div class="controls">
+        <div class="topbar">
             <div class="search-box">
                 <span class="material-symbols-rounded" aria-hidden="true">search</span>
                 <input type="text" id="search" placeholder="Search pages..." autocomplete="off">
             </div>
-            <div class="filter-group" id="filters">
-                <button class="filter-btn active" data-category="all">All</button>
+            <div class="controls-right">
+                <div class="view-switcher" id="viewSwitcher">
+                    <button class="view-btn active" data-view="category" title="By Category">
+                        <span class="material-symbols-rounded">folder</span>
+                    </button>
+                    <button class="view-btn" data-view="date" title="By Date">
+                        <span class="material-symbols-rounded">calendar_month</span>
+                    </button>
+                    <button class="view-btn" data-view="grid" title="Grid View">
+                        <span class="material-symbols-rounded">grid_view</span>
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <div class="filter-group" id="filters">
+            <button class="filter-btn active" data-category="all">All</button>
         </div>
 
         <main id="content">
@@ -300,8 +482,6 @@
     <script>
         /**
          * HTML FILES LIST
-         * Add new HTML files here - metadata is extracted automatically from each file
-         * (Browser security prevents automatic directory listing)
          */
         const htmlFiles = [
             "2026-brain2.html",
@@ -319,9 +499,6 @@
             "engineering-mode-trigger-levels.html"
         ];
 
-        /**
-         * CATEGORY DEFINITIONS
-         */
         const categoryMeta = {
             "AI Strategy": { icon: "architecture", order: 1 },
             "AI Agents": { icon: "smart_toy", order: 2 },
@@ -358,8 +535,8 @@
         let pages = [];
         let activeCategory = "all";
         let searchQuery = "";
+        let currentView = "category";
 
-        // Extract metadata from HTML content
         function extractMeta(html, name) {
             const match = html.match(new RegExp(`<meta\\s+name="${name}"\\s+content="([^"]*)"`, 'i'));
             return match ? match[1] : "";
@@ -370,7 +547,13 @@
             return match ? match[1] : "Untitled";
         }
 
-        // Fetch and parse HTML file metadata
+        function extractTextContent(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            doc.querySelectorAll('script, style').forEach(el => el.remove());
+            return doc.body ? doc.body.textContent.replace(/\s+/g, ' ').trim() : "";
+        }
+
         async function fetchPageMeta(filename, order) {
             try {
                 const response = await fetch(filename);
@@ -382,6 +565,9 @@
                 const rawIcon = extractMeta(html, 'icon');
                 const resolvedIcon = iconMap[rawIcon] || "description";
 
+                const dateStr = extractMeta(html, 'created');
+                const createdDate = dateStr ? new Date(dateStr) : null;
+
                 return {
                     id,
                     title: extractTitle(html),
@@ -390,7 +576,10 @@
                     category: extractMeta(html, 'category') || "Uncategorized",
                     tags: tags ? tags.split(',').map(t => t.trim()) : [],
                     icon: resolvedIcon,
-                    order
+                    order,
+                    textContent: extractTextContent(html),
+                    created: createdDate,
+                    createdStr: dateStr || null
                 };
             } catch (e) {
                 console.error(`Failed to load ${filename}:`, e);
@@ -398,7 +587,6 @@
             }
         }
 
-        // Load all pages
         async function loadPages() {
             const results = await Promise.all(htmlFiles.map((filename, index) => fetchPageMeta(filename, index)));
             pages = results.filter(p => p !== null).sort((a, b) => a.order - b.order);
@@ -406,7 +594,6 @@
             render();
         }
 
-        // Get unique categories
         function getCategories() {
             const cats = [...new Set(pages.map(p => p.category))];
             return cats.sort((a, b) => {
@@ -416,7 +603,6 @@
             });
         }
 
-        // Initialize filter buttons
         function initFilters() {
             const container = document.getElementById("filters");
             const allBtn = container.querySelector('[data-category="all"]');
@@ -432,7 +618,6 @@
             });
         }
 
-        // Filter pages
         function filterPages() {
             const query = searchQuery.toLowerCase().trim();
 
@@ -446,7 +631,8 @@
                         page.title,
                         page.description,
                         page.category,
-                        ...page.tags
+                        ...page.tags,
+                        page.textContent
                     ].join(" ").toLowerCase();
                     return searchable.includes(query);
                 }
@@ -455,7 +641,6 @@
             });
         }
 
-        // Group by category
         function groupByCategory(pageList) {
             const groups = {};
             pageList.forEach(page => {
@@ -465,11 +650,29 @@
             return groups;
         }
 
-        // Render card
-        function renderCard(page) {
+        function formatDate(date) {
+            if (!date) return null;
+            return date.toLocaleDateString('ro-RO', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function renderCard(page, options = {}) {
+            const { showDate = false, showCategoryBadge = false } = options;
+            const dateHtml = showDate && page.created
+                ? `<div class="date"><span class="material-symbols-rounded">calendar_month</span>${formatDate(page.created)}</div>`
+                : '';
+            const categoryBadgeHtml = showCategoryBadge
+                ? `<span class="category-badge">${page.category}</span>`
+                : '';
+
             return `
                 <a href="${page.href}" class="page-card">
                     <h3><span class="material-symbols-rounded" aria-hidden="true">${page.icon}</span> ${page.title}</h3>
+                    ${dateHtml}
+                    ${categoryBadgeHtml}
                     <p>${page.description}</p>
                     <div class="tags">
                         ${page.tags.map(t => `<span class="tag">${t}</span>`).join("")}
@@ -478,24 +681,55 @@
             `;
         }
 
-        // Render category
-        function renderCategory(name, pages) {
-            const meta = categoryMeta[name] || { icon: "folder" };
+        function renderCategoryView(filtered) {
+            const grouped = groupByCategory(filtered);
+            const categories = Object.keys(grouped).sort((a, b) => {
+                const orderA = categoryMeta[a]?.order || 50;
+                const orderB = categoryMeta[b]?.order || 50;
+                return orderA - orderB;
+            });
+
+            return categories.map(cat => {
+                const meta = categoryMeta[cat] || { icon: "folder" };
+                return `
+                    <section class="category">
+                        <div class="category-header">
+                            <span class="material-symbols-rounded" aria-hidden="true">${meta.icon}</span>
+                            <h2 class="category-title">${cat}</h2>
+                            <span class="category-count">${grouped[cat].length}</span>
+                        </div>
+                        <div class="pages-grid">
+                            ${grouped[cat].map(p => renderCard(p)).join("")}
+                        </div>
+                    </section>
+                `;
+            }).join("");
+        }
+
+        function renderDateView(filtered) {
+            const sorted = [...filtered].sort((a, b) => {
+                if (a.created && b.created) return b.created - a.created;
+                if (a.created) return -1;
+                if (b.created) return 1;
+                return a.order - b.order;
+            });
+
             return `
-                <section class="category">
-                    <div class="category-header">
-                        <span class="material-symbols-rounded" aria-hidden="true">${meta.icon}</span>
-                        <h2 class="category-title">${name}</h2>
-                        <span class="category-count">${pages.length}</span>
-                    </div>
-                    <div class="pages-grid">
-                        ${pages.map(renderCard).join("")}
-                    </div>
-                </section>
+                <div class="pages-grid">
+                    ${sorted.map(p => renderCard(p, { showDate: true, showCategoryBadge: true })).join("")}
+                </div>
             `;
         }
 
-        // Main render
+        function renderGridView(filtered) {
+            const sorted = [...filtered].sort((a, b) => a.order - b.order);
+            return `
+                <div class="pages-grid">
+                    ${sorted.map(p => renderCard(p, { showCategoryBadge: true })).join("")}
+                </div>
+            `;
+        }
+
         function render() {
             const content = document.getElementById("content");
             const filtered = filterPages();
@@ -510,14 +744,18 @@
                 return;
             }
 
-            const grouped = groupByCategory(filtered);
-            const categories = Object.keys(grouped).sort((a, b) => {
-                const orderA = categoryMeta[a]?.order || 50;
-                const orderB = categoryMeta[b]?.order || 50;
-                return orderA - orderB;
-            });
-
-            content.innerHTML = categories.map(cat => renderCategory(cat, grouped[cat])).join("");
+            switch (currentView) {
+                case "date":
+                    content.innerHTML = renderDateView(filtered);
+                    break;
+                case "grid":
+                    content.innerHTML = renderGridView(filtered);
+                    break;
+                case "category":
+                default:
+                    content.innerHTML = renderCategoryView(filtered);
+                    break;
+            }
         }
 
         // Event handlers
@@ -539,6 +777,16 @@
             if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
                 e.preventDefault();
                 document.getElementById("search").focus();
+            }
+        });
+
+        document.getElementById("viewSwitcher").addEventListener("click", (e) => {
+            const btn = e.target.closest(".view-btn");
+            if (btn) {
+                document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentView = btn.dataset.view;
+                render();
             }
         });
 
