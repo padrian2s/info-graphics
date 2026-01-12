@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Readiness for Prompt Engineering and AI Coding Agents</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-color: #1f2937;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: #fff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 3px solid var(--primary-color);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--secondary-color);
+            margin: 2.5rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+        }
+
+        h4 {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .intro {
+            font-size: 1.1rem;
+            color: #4b5563;
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: var(--secondary-color);
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.875rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        tr:hover {
+            background: #e0e7ff;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .region-section {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .country-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .country-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .ranking-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .ranking-item {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ranking-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 2rem;
+        }
+
+        .top-tier .ranking-item {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #fff 0%, #eff6ff 100%);
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .conclusion-box h3 {
+            color: white;
+        }
+
+        .conclusion-box ul {
+            margin-left: 1.5rem;
+        }
+
+        .references {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 3rem;
+        }
+
+        .references h2 {
+            margin-top: 0;
+        }
+
+        .references ol {
+            font-size: 0.9rem;
+        }
+
+        .references a {
+            color: var(--primary-color);
+            word-break: break-all;
+        }
+
+        .toc {
+            background: var(--light-bg);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            padding: 0.25rem 0;
+        }
+
+        .toc a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .ranking-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Global Readiness for Prompt Engineering and AI Coding Agents in Software Development</h1>
+        <p style="color: #6b7280; font-size: 1.1rem;">A Comparative Analysis of Countries and Regions</p>
+    </header>
+
+    <nav class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#key-factors">Key Factors Shaping AI-Driven Software Development</a></li>
+            <li><a href="#data-table">Data Table: Selected Indicators</a></li>
+            <li><a href="#regional-analysis">Regional Analysis</a></li>
+            <li><a href="#conclusion">Conclusion: Countries Best Positioned to Benefit</a></li>
+            <li><a href="#references">References</a></li>
+        </ul>
+    </nav>
+
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <div class="intro">
+            <p>The rise of prompt engineering and AI coding agents (LLM-based coding assistants like GitHub Copilot or ChatGPT) is reshaping software development worldwide. These tools can significantly boost developer productivity, but the extent of their impact will vary by country.</p>
+            <p>Key cultural and structural factors&mdash;such as the strength of local software industries, education systems, openness to automation, English proficiency, digital infrastructure, innovation culture, government AI policy, and startup ecosystems&mdash;determine which countries are best positioned to benefit.</p>
+        </div>
+    </section>
+
+    <section id="key-factors">
+        <h2>Key Factors Shaping AI-Driven Software Development</h2>
+
+        <div class="country-card">
+            <h4>1. Strength of Software Development Industry</h4>
+            <p>The size and quality of a country's developer workforce and tech industry. The three largest developer populations:</p>
+            <ul>
+                <li><strong>China:</strong> <span class="stat">~3.9 million</span> developers</li>
+                <li><strong>United States:</strong> <span class="stat">~2.9 million</span> developers</li>
+                <li><strong>India:</strong> <span class="stat">~2.6 million</span> developers</li>
+            </ul>
+        </div>
+
+        <div class="country-card">
+            <h4>2. Education and Training Ecosystem</h4>
+            <p>Quality of computer science education, coding bootcamps, and continuous training. World-class institutions include:</p>
+            <ul>
+                <li>MIT, Stanford (US)</li>
+                <li>Tsinghua (China)</li>
+                <li>Oxford (UK)</li>
+                <li>Canada's Vector Institute</li>
+            </ul>
+        </div>
+
+        <div class="country-card">
+            <h4>3. Openness to Automation and AI</h4>
+            <p>AI adoption rates in tech-forward nations:</p>
+            <ul>
+                <li><strong>UAE:</strong> <span class="stat">~59%</span></li>
+                <li><strong>Singapore:</strong> <span class="stat">~58%</span></li>
+                <li><strong>Norway:</strong> <span class="stat">~45%</span></li>
+                <li><strong>Ireland:</strong> <span class="stat">~42%</span></li>
+            </ul>
+            <p>Many developing countries show &lt;10% AI adoption.</p>
+        </div>
+
+        <div class="country-card">
+            <h4>4. English Proficiency</h4>
+            <p>Most prompt-engineering resources and AI models are English-based. Leaders in English proficiency:</p>
+            <ul>
+                <li><strong>Netherlands:</strong> EF EPI score ~647 (#1 worldwide)</li>
+                <li>Austria, Denmark, Norway: "Very High" proficiency</li>
+                <li><strong>Singapore:</strong> Top in Asia</li>
+            </ul>
+            <p>Lower scores: India (~490), Brazil (~482)</p>
+        </div>
+
+        <div class="country-card">
+            <h4>5. Digital Infrastructure & Internet Access</h4>
+            <p>Internet usage rates (2024):</p>
+            <ul>
+                <li><strong>High-income nations:</strong> <span class="stat">93%</span></li>
+                <li><strong>Low-income countries:</strong> <span class="stat">27%</span></li>
+            </ul>
+            <p>By country: US (~92%), China (~72%), India (~60%)</p>
+        </div>
+
+        <div class="country-card">
+            <h4>6. Cultural Attitudes toward Innovation</h4>
+            <p>Cultures that encourage innovation and tolerate failure (e.g., Silicon Valley mindset, Israeli startup culture) tend to adopt new tools more rapidly.</p>
+        </div>
+
+        <div class="country-card">
+            <h4>7. AI Policy and Government Investment</h4>
+            <ul>
+                <li><strong>United States:</strong> Leads global AI readiness rankings</li>
+                <li><strong>China:</strong> ~$140+ billion invested in domestic AI and semiconductors</li>
+                <li>12+ new national AI plans launched in 2024</li>
+            </ul>
+        </div>
+
+        <div class="country-card">
+            <h4>8. Entrepreneurial and Startup Ecosystem</h4>
+            <p>Global startup activity distribution:</p>
+            <ul>
+                <li><strong>United States:</strong> <span class="stat">~46.6%</span></li>
+                <li><strong>China:</strong> <span class="stat">~9%</span></li>
+                <li><strong>United Kingdom:</strong> <span class="stat">~5.6%</span></li>
+                <li><strong>India:</strong> <span class="stat">~5%</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="data-table">
+        <h2>Table 1: Selected Indicators for AI-Ready Software Development</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Pro Software Developers</th>
+                    <th>English Proficiency (EF EPI)</th>
+                    <th>Internet Use (%)</th>
+                    <th>GII 2025 Rank</th>
+                    <th>AI Adoption Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>United States</strong></td>
+                    <td>~2.9 million</td>
+                    <td>N/A (Native English)</td>
+                    <td>~92%</td>
+                    <td>#3</td>
+                    <td>~50% (very high)</td>
+                </tr>
+                <tr>
+                    <td><strong>China</strong></td>
+                    <td>~3.9 million</td>
+                    <td>Low</td>
+                    <td>~72%</td>
+                    <td>#10</td>
+                    <td>High (enterprise)</td>
+                </tr>
+                <tr>
+                    <td><strong>India</strong></td>
+                    <td>~2.6 million</td>
+                    <td>Low (~490)</td>
+                    <td>~60%</td>
+                    <td>#38</td>
+                    <td>Moderate, growing</td>
+                </tr>
+                <tr>
+                    <td><strong>United Kingdom</strong></td>
+                    <td>~0.5 million</td>
+                    <td>Very High (~600+)</td>
+                    <td>~94%</td>
+                    <td>#6</td>
+                    <td>~30-40%</td>
+                </tr>
+                <tr>
+                    <td><strong>Germany</strong></td>
+                    <td>~0.6 million</td>
+                    <td>Very High (~615)</td>
+                    <td>~87%</td>
+                    <td>#8</td>
+                    <td>~25%</td>
+                </tr>
+                <tr>
+                    <td><strong>Canada</strong></td>
+                    <td>~0.4 million</td>
+                    <td>Very High (Native-level)</td>
+                    <td>~94%</td>
+                    <td>#15</td>
+                    <td>~40%</td>
+                </tr>
+                <tr>
+                    <td><strong>Israel</strong></td>
+                    <td>~0.2 million</td>
+                    <td>Moderate (~524)</td>
+                    <td>~88%</td>
+                    <td>#16</td>
+                    <td>~35%</td>
+                </tr>
+                <tr>
+                    <td><strong>Singapore</strong></td>
+                    <td>~0.2 million</td>
+                    <td>Very High</td>
+                    <td>~92%</td>
+                    <td>#5</td>
+                    <td>58.6% (leader)</td>
+                </tr>
+                <tr>
+                    <td><strong>Brazil</strong></td>
+                    <td>~0.5 million</td>
+                    <td>Low (~482)</td>
+                    <td>~84%</td>
+                    <td>#49</td>
+                    <td>~15%</td>
+                </tr>
+                <tr>
+                    <td><strong>UAE</strong></td>
+                    <td>Small, growing</td>
+                    <td>Low (~487)</td>
+                    <td>~99%</td>
+                    <td>N/A</td>
+                    <td>59.4% (leader)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Notes: Pro developer counts are 2024 estimates. GII = Global Innovation Index (lower = more innovative).</em></p>
+    </section>
+
+    <section id="regional-analysis">
+        <h2>Regional Analysis</h2>
+
+        <div class="region-section">
+            <h3>North America</h3>
+
+            <div class="country-card">
+                <h4>United States - #1 in AI and Software</h4>
+                <p>The U.S. is widely regarded as the best positioned country to leverage prompt engineering:</p>
+                <ul>
+                    <li>World's largest tech economy and unparalleled developer ecosystem</li>
+                    <li>Virtually all major AI coding tools originate here</li>
+                    <li>~46% of global startup activity</li>
+                    <li>Top-notch universities and coding bootcamps</li>
+                    <li>Strong government support (NSF, DARPA)</li>
+                    <li>Ranks #1 on Stanford AI Index and Oxford Government AI Readiness Index</li>
+                </ul>
+            </div>
+
+            <div class="country-card">
+                <h4>Canada - Friendly Policies and Strong Talent</h4>
+                <ul>
+                    <li>Home of AI pioneers (Yoshua Bengio, Geoffrey Hinton)</li>
+                    <li>Immigration-friendly tech policies</li>
+                    <li>#4 in AI talent concentration</li>
+                    <li>Government support through Pan-Canadian AI Strategy</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>Europe</h3>
+
+            <div class="country-card">
+                <h4>United Kingdom - Europe's AI Hub</h4>
+                <ul>
+                    <li>Large, densely concentrated AI developer pool</li>
+                    <li>London: global tech hub with numerous AI startups</li>
+                    <li>Top universities (Oxford, Cambridge, Imperial)</li>
+                    <li>Native English advantage</li>
+                    <li>#2 worldwide for startup output</li>
+                    <li>#6 on Global Innovation Index</li>
+                </ul>
+            </div>
+
+            <div class="country-card">
+                <h4>Germany, France, and the Nordics</h4>
+                <p><strong>Germany:</strong> Industry 4.0 leader, AI hubs in Berlin/Munich, EF EPI 615</p>
+                <p><strong>France:</strong> AI research hub in Paris, strong STEM education</p>
+                <p><strong>Nordics:</strong> Very high English fluency, excellent infrastructure, &gt;25% AI adoption in firms. Sweden: GII #2; Finland: GII #7; Netherlands: #1 in English proficiency worldwide</p>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>Eastern Europe</h3>
+            <div class="country-card">
+                <p>Powerhouse of software talent serving as outsourcing and R&D base globally.</p>
+                <ul>
+                    <li><strong>Poland:</strong> 400,000+ developers, #7 for AI talent availability</li>
+                    <li><strong>Estonia:</strong> Tech-forward policies, home to Skype</li>
+                    <li><strong>Ukraine:</strong> Large IT outsourcing sector despite challenges</li>
+                    <li>High English proficiency (Poland, Romania: Very High)</li>
+                    <li>70-90% internet penetration</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>Asia</h3>
+
+            <div class="country-card">
+                <h4>China - Enormous Scale, Rapid AI Adoption</h4>
+                <ul>
+                    <li>World's largest developer population (3.9M)</li>
+                    <li>National agenda to be global AI leader by 2030</li>
+                    <li>AI research output matched US+UK+EU combined (2024)</li>
+                    <li>Tech giants: Baidu, Alibaba, Tencent</li>
+                    <li>84% 5G coverage in high-income areas</li>
+                    <li>Developing own AI models (Alibaba's Qwen)</li>
+                </ul>
+                <p><em>Challenge: Low English proficiency, leading to domestic AI platform development</em></p>
+            </div>
+
+            <div class="country-card">
+                <h4>Japan and South Korea</h4>
+                <p><strong>South Korea:</strong> #4 in innovation, #1 in internet speed, leads in researchers per capita</p>
+                <p><strong>Japan:</strong> #12 on innovation index, near-100% internet usage, investing in local LLMs</p>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>South Asia and Oceania</h3>
+
+            <div class="country-card">
+                <h4>India - Vast Talent Pool</h4>
+                <ul>
+                    <li>Massive IT services industry</li>
+                    <li>2nd-3rd most developers worldwide</li>
+                    <li>English as lingua franca among educated</li>
+                    <li>#4 globally in startup ecosystem</li>
+                    <li>#1 in ICT services exports</li>
+                </ul>
+                <p><em>Challenge: Uneven infrastructure (~60% overall internet penetration)</em></p>
+            </div>
+
+            <div class="country-card">
+                <h4>Australia and New Zealand</h4>
+                <p>High-quality software industries, very high English proficiency, government investment in AI hubs</p>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>Middle East and Africa</h3>
+
+            <div class="country-card">
+                <h4>Israel - Startup Nation</h4>
+                <ul>
+                    <li>Highest concentration of tech startups per capita</li>
+                    <li>Strong military-to-startup tech pipeline</li>
+                    <li>#1 per capita in AI talent density</li>
+                </ul>
+            </div>
+
+            <div class="country-card">
+                <h4>Gulf States (UAE, Saudi Arabia)</h4>
+                <p><strong>UAE:</strong> Minister of AI appointed, ~59% AI adoption (world leader), attracting global AI talent</p>
+                <p><strong>Saudi Arabia:</strong> Vision 2030 investments, NEOM high-tech hub</p>
+            </div>
+
+            <div class="country-card">
+                <h4>Africa</h4>
+                <ul>
+                    <li><strong>Nigeria:</strong> English official language, fintech boom in Lagos, AI strategy launched</li>
+                    <li><strong>South Africa:</strong> Most established software industry, EF EPI 602 (Very High)</li>
+                    <li><strong>Kenya:</strong> Mobile tech innovations (M-Pesa), Nairobi as tech hub</li>
+                </ul>
+                <p><em>Challenge: ~35% average internet penetration</em></p>
+            </div>
+        </div>
+
+        <div class="region-section">
+            <h3>Latin America</h3>
+
+            <div class="country-card">
+                <h4>Brazil - Regional Leader</h4>
+                <ul>
+                    <li>Largest developer population in Latin America (~500,000)</li>
+                    <li>Several unicorn startups</li>
+                    <li>~84% internet penetration</li>
+                    <li>National AI Strategy (2021)</li>
+                </ul>
+                <p><em>Challenge: Low English proficiency (EF ~482)</em></p>
+            </div>
+
+            <div class="country-card">
+                <h4>Other Notable Countries</h4>
+                <p><strong>Mexico:</strong> IT industry integrated with US, ~81% internet</p>
+                <p><strong>Argentina:</strong> High English proficiency (~575), vibrant Buenos Aires startup scene</p>
+                <p><strong>Chile:</strong> Growing tech sector, moderate English</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="conclusion">
+        <h2>Conclusion: Countries Best Positioned to Benefit</h2>
+
+        <h3>Top Tier Rankings</h3>
+        <div class="ranking-list top-tier">
+            <div class="ranking-item">
+                <span class="ranking-number">1</span>
+                <div>
+                    <strong>United States</strong>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Unparalleled tech industry, talent, innovation culture</p>
+                </div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">2</span>
+                <div>
+                    <strong>United Kingdom</strong>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Europe's AI hub, native English, top research</p>
+                </div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">3</span>
+                <div>
+                    <strong>China</strong>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Massive investment, self-sufficient AI ecosystem</p>
+                </div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">4</span>
+                <div>
+                    <strong>Canada</strong>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Strong AI research, pro-automation policies</p>
+                </div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">5</span>
+                <div>
+                    <strong>Israel</strong>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Startup nation, highest AI talent per capita</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Strong Performers (6-10)</h3>
+        <div class="ranking-list">
+            <div class="ranking-item">
+                <span class="ranking-number">6</span>
+                <div><strong>Germany</strong></div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">7</span>
+                <div><strong>India</strong></div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">8</span>
+                <div><strong>Sweden (Nordics)</strong></div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">9</span>
+                <div><strong>Singapore</strong></div>
+            </div>
+            <div class="ranking-item">
+                <span class="ranking-number">10</span>
+                <div><strong>France</strong></div>
+            </div>
+        </div>
+
+        <p><em>With South Korea, Japan, Netherlands, and Australia closely trailing.</em></p>
+
+        <div class="conclusion-box">
+            <h3>Key Takeaways</h3>
+            <ul>
+                <li><strong>English proficiency and digital infrastructure</strong> are "must-haves" for prompt engineering</li>
+                <li>Countries strong in those areas are already moving faster</li>
+                <li>Nations currently lagging can invest to catch up through localized AI models, improved internet access, and skills development</li>
+                <li>The uneven global distribution of AI benefits is both a concern and an opportunity</li>
+                <li>Governments and industry should collaborate on training developers in prompt engineering</li>
+                <li>The advantage will go to economies that marry <strong>human creativity with AI power</strong> most effectively</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="references" class="references">
+        <h2>References</h2>
+        <ol>
+            <li>Software Development Statistics for 2025: Trends & Insights - <a href="https://www.itransition.com/software-development/statistics">itransition.com</a></li>
+            <li>10 Best Countries for AI Developers and Talent Pools 2025-26 - <a href="https://www.index.dev/blog/top-countries-ai-developer-talent-pools">index.dev</a></li>
+            <li>AI Diffusion Report: Mapping Global AI Adoption and Innovation - <a href="https://news.microsoft.com/source/emea/features/ai-diffusion-report-mapping-global-ai-adoption-and-innovation/">Microsoft News</a></li>
+            <li>The 2025 AI Index Report - <a href="https://hai.stanford.edu/ai-index/2025-ai-index-report">Stanford HAI</a></li>
+            <li>EF English Proficiency Index - <a href="https://worldpopulationreview.com/country-rankings/ef-english-proficiency-index-by-country">World Population Review</a></li>
+            <li>Global Internet Use Statistics - <a href="https://social.desa.un.org/sdn/global-internet-use-continues-to-rise-but-disparities-remain">UN DESA</a></li>
+            <li>Internet Penetration by Country 2025 - <a href="https://worldpopulationreview.com/country-rankings/internet-penetration-by-country">World Population Review</a></li>
+            <li>Government AI Readiness Index 2025 - <a href="https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/">Oxford Insights</a></li>
+            <li>Top Countries by Total Startup Output - <a href="https://www.startupblink.com/blog/top-countries-by-total-startup-output/">StartupBlink</a></li>
+            <li>Global Innovation Index 2025 - <a href="https://www.wipo.int/web-publications/global-innovation-index-2025/en/gii-2025-results.html">WIPO</a></li>
+            <li>7 Best Countries to Hire LLM Developers Worldwide - <a href="https://www.secondtalent.com/resources/best-countries-to-hire-llm-developers-worldwide/">Second Talent</a></li>
+        </ol>
+    </section>
+
+    <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid var(--border-color); color: #6b7280;">
+        <p>Report generated from Gemini analysis &bull; Latest available data as of 2025</p>
+    </footer>
+</body>
+</html>

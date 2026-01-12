@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Global Readiness for Prompt Engineering & AI Coding Agents</title>
+  <meta name="description" content="Interactive infographic: cultural + structural readiness for prompt engineering and AI coding agents in software development." />
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1224;
+      --panel2:#0E1833;
+      --text:#EAF0FF;
+      --muted:#AAB6D6;
+      --muted2:#7F8AB0;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.16);
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --a:#60a5fa;
+      --b:#a78bfa;
+      --c:#22c55e;
+      --d:#f59e0b;
+      --e:#f472b6;
+      --shadow: 0 18px 45px rgba(0,0,0,.55);
+      --shadow2: 0 10px 28px rgba(0,0,0,.38);
+      --r: 18px;
+      --r2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% 10%, rgba(96,165,250,.18), transparent 60%),
+        radial-gradient(900px 600px at 88% 8%, rgba(167,139,250,.17), transparent 55%),
+        radial-gradient(1000px 750px at 65% 92%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(900px 650px at 10% 92%, rgba(244,114,182,.10), transparent 60%),
+        linear-gradient(180deg, #050711 0%, #05060D 38%, #04040A 100%);
+      overflow-x:hidden;
+    }
+    a{color:#93c5fd;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 18px 70px}
+
+    /* Top */
+    .top{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .top{grid-template-columns:1fr;}
+    }
+
+    .hero{
+      background: linear-gradient(180deg, rgba(11,18,36,.92), rgba(11,18,36,.68));
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 6px);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 260px at 20% 18%, rgba(96,165,250,.22), transparent 62%),
+        radial-gradient(600px 260px at 78% 22%, rgba(167,139,250,.22), transparent 62%),
+        radial-gradient(700px 300px at 50% 105%, rgba(34,197,94,.15), transparent 60%);
+      pointer-events:none;
+      filter:saturate(1.05);
+    }
+    .hero-inner{position:relative;padding:22px 22px 18px}
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-weight:600;
+      letter-spacing:.2px;
+      font-size:12.5px;
+      margin-bottom:14px;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:linear-gradient(180deg,var(--a),var(--b)); box-shadow: 0 0 0 3px rgba(96,165,250,.12)}
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 42px);
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .sub{
+      margin:12px 0 0;
+      color:var(--muted);
+      font-size: 14.5px;
+      line-height:1.55;
+      max-width: 76ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;
+      color:var(--text);
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      padding:7px 10px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .chip b{font-family:var(--mono);font-weight:700;font-size:11px;color:rgba(234,240,255,.9)}
+
+    .side{
+      background: linear-gradient(180deg, rgba(14,24,51,.82), rgba(11,18,36,.70));
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 6px);
+      box-shadow: var(--shadow2);
+      padding:16px;
+      overflow:hidden;
+    }
+    .side h3{margin:2px 0 8px;font-size:14px;letter-spacing:.2px;color:rgba(234,240,255,.92)}
+    .mini{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .kpi{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .kpi .t{color:var(--muted);font-size:12px}
+    .kpi .v{font-size:22px; font-weight:800; letter-spacing:-.4px; margin-top:4px}
+    .kpi .n{margin-top:8px;color:var(--muted2);font-size:12.2px;line-height:1.45}
+
+    /* Sections */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){.grid{grid-template-columns:1fr;}}
+    .card{
+      background: linear-gradient(180deg, rgba(11,18,36,.82), rgba(11,18,36,.62));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .hd{padding:16px 16px 0}
+    .card h2{margin:0;font-size:16px;letter-spacing:-.2px}
+    .card p{margin:8px 0 0;color:var(--muted);font-size:13.5px;line-height:1.55}
+    .card .bd{padding:16px}
+
+    .factor-list{display:grid;gap:10px;margin-top:4px}
+    .factor{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:10px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+    }
+    .ico{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      flex:0 0 auto;
+    }
+    .ico svg{width:18px;height:18px;opacity:.92}
+    .factor h4{margin:0;font-size:13.5px;letter-spacing:-.2px}
+    .factor .d{margin-top:4px;color:var(--muted);font-size:12.8px;line-height:1.45}
+
+    /* Simulator */
+    .sim{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){.sim{grid-template-columns:1fr;}}
+
+    .panel{
+      background: linear-gradient(180deg, rgba(14,24,51,.86), rgba(11,18,36,.64));
+      border:1px solid rgba(255,255,255,.11);
+      border-radius: 18px;
+      padding:14px;
+      overflow:hidden;
+    }
+    .row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .row + .row{margin-top:10px}
+    label{font-size:12.5px;color:rgba(234,240,255,.92);font-weight:650}
+    .mut{color:var(--muted);font-weight:550}
+
+    .select, .btn, input[type="range"], input[type="number"], .search{
+      font-family:var(--sans);
+      font-size:13px;
+    }
+    .select, .search{
+      width:100%;
+      padding:9px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      outline:none;
+    }
+    .select:focus, .search:focus{border-color: rgba(147,197,253,.55); box-shadow: 0 0 0 4px rgba(96,165,250,.12)}
+
+    .wgrid{display:grid;gap:10px;margin-top:12px}
+    .w{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding:10px;
+    }
+    .w .topr{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .w small{color:var(--muted);font-weight:650}
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:5px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.92);
+    }
+    input[type="range"]{width:100%;margin-top:8px; accent-color: #93c5fd;}
+
+    .btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      cursor:pointer;
+      border:none;
+      padding:10px 12px;
+      border-radius: 14px;
+      color: rgba(234,240,255,.95);
+      background: linear-gradient(180deg, rgba(96,165,250,.95), rgba(96,165,250,.55));
+      box-shadow: 0 10px 22px rgba(96,165,250,.18);
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:none;
+      font-weight:750;
+    }
+    .btn:active{transform: translateY(1px)}
+
+    .results{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .res{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .res .name{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+    .res b{font-size:13.5px}
+    .res .score{font-family:var(--mono);font-weight:900;font-size:13px}
+    .bar{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .fill{height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg, var(--a), var(--b), var(--c));}
+    .meta{margin-top:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .m{
+      padding:8px 9px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.25;
+    }
+    .m span{display:block;color:rgba(234,240,255,.92);font-family:var(--mono);font-size:11.5px;margin-top:3px}
+
+    /* Table */
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+    .table thead th{
+      text-align:left;
+      font-size:12px;
+      color: var(--muted);
+      padding:12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      position:sticky; top:0;
+      backdrop-filter: blur(8px);
+      z-index:1;
+    }
+    .table td{
+      padding:11px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      font-size:12.8px;
+      color: rgba(234,240,255,.92);
+      vertical-align:top;
+    }
+    .table tr:last-child td{border-bottom:none}
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.92);
+    }
+    .tgood{box-shadow:0 0 0 3px rgba(52,211,153,.12) inset}
+    .twarn{box-shadow:0 0 0 3px rgba(251,191,36,.12) inset}
+    .tbad{box-shadow:0 0 0 3px rgba(251,113,133,.12) inset}
+
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:12px;
+    }
+    details + details{margin-top:10px}
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:800;
+      font-size:13px;
+      color: rgba(234,240,255,.95);
+    }
+    summary::-webkit-details-marker{display:none}
+    .sumhint{color:var(--muted);font-weight:650;font-size:12px}
+    .callouts{margin-top:12px;display:grid;gap:10px}
+    .call{
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(96,165,250,.12), rgba(255,255,255,.03));
+    }
+    .call b{display:block;margin-bottom:6px}
+    .call p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+
+    /* Footer */
+    .foot{
+      margin-top:18px;
+      border-top:1px solid rgba(255,255,255,.10);
+      padding-top:14px;
+      color: var(--muted2);
+      font-size:12.5px;
+      line-height:1.55;
+    }
+
+    /* Tiny helpers */
+    .mono{font-family:var(--mono)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width: 980px){.two{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="top">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="badge"><span class="dot"></span> Interactive infographic - Software development - 2025-2026 indicators (as provided)</div>
+          <h1>Global Readiness for <span style="background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent">Prompt Engineering</span> & AI Coding Agents</h1>
+          <p class="sub">
+            AI coding assistants (Copilot/ChatGPT-style agents) amplify developer output - but impact varies by country.
+            Readiness is a <b>systems problem</b>: talent + education + English + infrastructure + culture + policy + startup dynamics.
+            This page turns your report into a visual model with an adjustable scoring simulator.
+          </p>
+          <div class="chips">
+            <div class="chip"><b>Factor</b> Dev workforce scale & quality</div>
+            <div class="chip"><b>Factor</b> Education & training pipeline</div>
+            <div class="chip"><b>Factor</b> Openness to automation</div>
+            <div class="chip"><b>Factor</b> English proficiency</div>
+            <div class="chip"><b>Factor</b> Internet & digital infrastructure</div>
+            <div class="chip"><b>Factor</b> Innovation culture</div>
+            <div class="chip"><b>Factor</b> AI policy & investment</div>
+            <div class="chip"><b>Factor</b> Startup ecosystem density</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <h3>What "readiness" means here</h3>
+        <div class="mini">
+          <div class="kpi">
+            <div class="t">Core idea</div>
+            <div class="v">AI x Culture x Structure</div>
+            <div class="n">Productivity gains scale fastest where teams can <b>delegate to agents</b>, write precise prompts, and deploy safely.</div>
+          </div>
+          <div class="kpi">
+            <div class="t">Fastest accelerator</div>
+            <div class="v">English + Internet</div>
+            <div class="n">Because most models, docs, and prompts are still English-first, and cloud access matters.</div>
+          </div>
+          <div class="kpi">
+            <div class="t">Best "dark horses"</div>
+            <div class="v">Eastern Europe</div>
+            <div class="n">Strong fundamentals + high English + cost advantage = high ROI on copilots.</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- FACTORS + MAP OF REGIONS -->
+    <div class="grid">
+      <section class="card">
+        <div class="hd">
+          <h2>Key factors (why some countries move faster)</h2>
+          <p>Prompt engineering rewards low-context clarity, trust-but-verify delegation, and access to modern AI tooling.</p>
+        </div>
+        <div class="bd">
+          <div class="factor-list">
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 7h16M4 12h10M4 17h16"/>
+                  <path d="M16 10l4 2-4 2"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Software industry scale</h4>
+                <div class="d">Large developer pools and mature IT sectors can adopt agents at scale (e.g., China/US/India lead by dev count).</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18v12H3z"/>
+                  <path d="M7 10h10M7 14h6"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Education & training ecosystem</h4>
+                <div class="d">CS universities, bootcamps, and continuous learning pipelines make teams better at using (and supervising) agents.</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4"/>
+                  <path d="M12 18v4"/>
+                  <path d="M4.93 4.93l2.83 2.83"/>
+                  <path d="M16.24 16.24l2.83 2.83"/>
+                  <path d="M2 12h4"/>
+                  <path d="M18 12h4"/>
+                  <path d="M4.93 19.07l2.83-2.83"/>
+                  <path d="M16.24 7.76l2.83-2.83"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Openness to automation</h4>
+                <div class="d">High adoption cultures integrate AI into workflows earlier (e.g., UAE/Singapore reported very high usage).</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 21s7-4.5 7-10a7 7 0 1 0-14 0c0 5.5 7 10 7 10z"/>
+                  <path d="M9 10h6"/>
+                </svg>
+              </div>
+              <div>
+                <h4>English proficiency</h4>
+                <div class="d">English-first models/docs mean high proficiency reduces friction (Netherlands/Nordics/UK lead in practice).</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 11a8 8 0 0 1 16 0"/>
+                  <path d="M6 11a6 6 0 0 1 12 0"/>
+                  <path d="M8 11a4 4 0 0 1 8 0"/>
+                  <circle cx="12" cy="16" r="1"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Digital infrastructure</h4>
+                <div class="d">Internet access, cloud capacity, and reliability are prerequisites for agentic development at scale.</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2l4 8H8l4-8z"/>
+                  <path d="M2 22h20"/>
+                  <path d="M6 22V12h12v10"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Innovation culture & startup density</h4>
+                <div class="d">Risk tolerance, experimentation, and dense startup ecosystems turn tools into products faster (US/UK/Israel/Singapore).</div>
+              </div>
+            </div>
+
+            <div class="factor">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 21h18"/>
+                  <path d="M6 21V8"/>
+                  <path d="M10 21V4"/>
+                  <path d="M14 21v-9"/>
+                  <path d="M18 21V6"/>
+                </svg>
+              </div>
+              <div>
+                <h4>AI policy & investment</h4>
+                <div class="d">Funding, sandboxes, and strategy accelerate adoption; over-regulation or weak support slows it.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="hd">
+          <h2>Regional pattern (what your report implies)</h2>
+          <p>Same tools - different outcomes. Regions differ in language, policy, risk tolerance, and ecosystem density.</p>
+        </div>
+        <div class="bd">
+          <details open>
+            <summary>North America <span class="sumhint">US + Canada set the benchmark</span></summary>
+            <div class="callouts">
+              <div class="call"><b>United States</b><p>Scale + top AI labs + startup dominance = earliest and deepest integration of coding agents.</p></div>
+              <div class="call"><b>Canada</b><p>Strong AI research hubs + friendly talent policies = top-tier adoption, smaller scale.</p></div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Western & Northern Europe <span class="sumhint">High English + infrastructure + strong institutions</span></summary>
+            <div class="callouts">
+              <div class="call"><b>UK & Nordics</b><p>Global AI hub + very high English and digital readiness = strong prompt engineering leverage.</p></div>
+              <div class="call"><b>Germany/France</b><p>Huge industrial ecosystems; adoption tends to be more methodical (compliance, quality, regulation).</p></div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Eastern Europe <span class="sumhint">High-skill, high-ROI "dark horses"</span></summary>
+            <div class="callouts">
+              <div class="call"><b>Poland / Romania / Baltics / Ukraine</b><p>Strong engineering fundamentals + English + affordability = copilots amplify competitiveness in services and startups.</p></div>
+            </div>
+          </details>
+
+          <details>
+            <summary>East Asia <span class="sumhint">Scale + infrastructure; language shapes strategy</span></summary>
+            <div class="callouts">
+              <div class="call"><b>China</b><p>Massive developer base + state investment = huge upside; domestic LLMs reduce English friction.</p></div>
+              <div class="call"><b>Japan / South Korea</b><p>Elite infrastructure and R&D; adoption accelerates as local-language tooling improves.</p></div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Middle East & Africa <span class="sumhint">Leapfrogging pockets + infrastructure constraints</span></summary>
+            <div class="callouts">
+              <div class="call"><b>Israel</b><p>Startup density + elite tech pipeline = fast adoption despite smaller population.</p></div>
+              <div class="call"><b>Gulf States</b><p>Investment-driven leapfrog strategy; small local dev base but high adoption in government/enterprise programs.</p></div>
+              <div class="call"><b>Africa</b><p>Where connectivity and training improve, agents can disproportionately unlock entrepreneurship and software output.</p></div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Latin America <span class="sumhint">Growing ecosystems; language is the main drag</span></summary>
+            <div class="callouts">
+              <div class="call"><b>Brazil / Mexico / Argentina / Chile</b><p>Strong regional talent; English proficiency varies - Spanish/Portuguese agent tooling will raise the ceiling.</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <!-- SIMULATOR -->
+    <section class="card" style="margin-top:18px">
+      <div class="hd">
+        <h2>Readiness simulator (adjust weights, see rankings)</h2>
+        <p>
+          This uses the "Table 1" indicators you provided as a proxy model.
+          Change weights to reflect your belief: e.g., if you think English matters less because local LLMs improve, dial it down.
+        </p>
+      </div>
+      <div class="bd">
+        <div class="sim">
+
+          <div class="panel">
+            <div class="row" style="gap:12px;align-items:flex-end">
+              <div style="flex:1">
+                <label for="search">Country search</label>
+                <input id="search" class="search" placeholder="Type: United States, UK, China..." />
+              </div>
+              <div style="width:170px">
+                <label for="region">Region filter</label>
+                <select id="region" class="select">
+                  <option value="all">All regions</option>
+                  <option value="North America">North America</option>
+                  <option value="Europe (W/N)">Europe (W/N)</option>
+                  <option value="Europe (E)">Europe (E)</option>
+                  <option value="Asia">Asia</option>
+                  <option value="Middle East">Middle East</option>
+                  <option value="Latin America">Latin America</option>
+                  <option value="Oceania">Oceania</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="wgrid" id="weights">
+              <!-- injected -->
+            </div>
+
+            <div class="btnbar">
+              <button class="btn" id="normalize">Normalize weights</button>
+              <button class="btn secondary" id="reset">Reset defaults</button>
+              <button class="btn secondary" id="whatif">What-if: boost selected</button>
+            </div>
+            <p style="margin:10px 2px 0;color:var(--muted2);font-size:12.5px;line-height:1.5">
+              <b>How scoring works:</b> Each metric is normalized 0-100 across the dataset.
+              Innovation rank is inverted (lower rank = higher score). Missing values reduce confidence.
+            </p>
+          </div>
+
+          <div class="results" id="results">
+            <!-- injected -->
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLE SNAPSHOT -->
+    <section class="card" style="margin-top:18px">
+      <div class="hd">
+        <h2>Table 1 snapshot (as provided)</h2>
+        <p>Selected indicators used by the simulator. Values are approximations from your report; "?" means uncertain/blank.</p>
+      </div>
+      <div class="bd" style="max-height:420px;overflow:auto">
+        <table class="table" id="tbl">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Developers (M)</th>
+              <th>English (EPI / band)</th>
+              <th>Internet use</th>
+              <th>Innovation rank</th>
+              <th>AI adoption</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- WHO WINS -->
+    <section class="card" style="margin-top:18px">
+        <div class="hd">
+          <h2>So... who wins? (your synthesis)</h2>
+          <p>A practical ranking that balances talent, culture, infrastructure, language, and ecosystem density.</p>
+        </div>
+        <div class="bd">
+          <div class="two">
+            <div class="res">
+              <div class="name"><b>Top tier</b><span class="tag tgood">Leaders</span></div>
+              <div class="meta" style="grid-template-columns:1fr">
+                <div class="m">United States <span>Scale + frontier labs + startup dominance</span></div>
+                <div class="m">United Kingdom <span>EU-adjacent hub + native English + strong startups</span></div>
+                <div class="m">China <span>Scale + investment + domestic LLM ecosystem</span></div>
+                <div class="m">Canada <span>AI research density + talent policies</span></div>
+              </div>
+            </div>
+
+            <div class="res">
+              <div class="name"><b>High-impact small nations</b><span class="tag tgood">Per-capita power</span></div>
+              <div class="meta" style="grid-template-columns:1fr">
+                <div class="m">Israel <span>Startup nation + defense-to-tech pipeline</span></div>
+                <div class="m">Singapore <span>English + government push + high adoption</span></div>
+                <div class="m">Netherlands / Nordics <span>Top English + digital infra + innovation culture</span></div>
+              </div>
+            </div>
+
+            <div class="res">
+              <div class="name"><b>Scale multipliers</b><span class="tag twarn">Big upside</span></div>
+              <div class="meta" style="grid-template-columns:1fr">
+                <div class="m">India <span>Huge dev pool + IT services hunger for efficiency</span></div>
+                <div class="m">Germany / France <span>Deep industry; adoption is more methodical</span></div>
+                <div class="m">Japan / South Korea <span>Infrastructure + R&D; language tooling accelerates</span></div>
+              </div>
+            </div>
+
+            <div class="res">
+              <div class="name"><b>Dark horses</b><span class="tag tgood">High ROI</span></div>
+              <div class="meta" style="grid-template-columns:1fr">
+                <div class="m">Eastern Europe (Poland, Romania, Baltics) <span>Strong fundamentals + English + cost advantage</span></div>
+                <div class="m">UAE (select sectors) <span>Investment-driven leapfrog, small base</span></div>
+                <div class="m">Brazil / Mexico / Argentina / Chile <span>Growing ecosystems; language is main drag</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="foot">
+            <b>Interpretation note:</b> "Readiness" is not "inevitability." Non-English countries can close gaps via localized LLMs,
+            better docs, and training. Lower-income regions can leapfrog as connectivity and education improve.
+          </div>
+        </div>
+    </section>
+
+    <!-- SOURCES -->
+    <section class="card" style="margin-top:18px">
+      <div class="hd">
+        <h2>Sources you listed (for the underlying numbers)</h2>
+        <p>Included as references; this page doesn't fetch anything. Paste in your own updated values anytime.</p>
+      </div>
+      <div class="bd" style="display:grid;gap:10px">
+        <details>
+          <summary>Open list <span class="sumhint">(your "Mentiuni" section)</span></summary>
+          <div style="margin-top:10px;color:var(--muted);font-size:13px;line-height:1.6">
+            <ul style="margin:0;padding-left:18px">
+              <li><span class="mono">itransition extraction:</span> Software development stats (2025)</li>
+              <li><span class="mono">index.dev:</span> AI developer talent pools & AI growth stats</li>
+              <li><span class="mono">Microsoft:</span> AI Diffusion Report (adoption rates)</li>
+              <li><span class="mono">Stanford HAI:</span> AI Index Report (2025)</li>
+              <li><span class="mono">EF EPI:</span> English proficiency index (2025)</li>
+              <li><span class="mono">UN DESA:</span> Global internet use disparities</li>
+              <li><span class="mono">WorldPopulationReview:</span> Internet penetration by country</li>
+              <li><span class="mono">Oxford Insights:</span> Government AI Readiness Index (2024/2025)</li>
+              <li><span class="mono">StartupBlink:</span> Startup output by country</li>
+              <li><span class="mono">WIPO:</span> Global Innovation Index (2025)</li>
+            </ul>
+          </div>
+        </details>
+        <div class="foot">
+          If you want, I can add <b>more countries</b>, more indicators (cloud capacity, developer salaries, GitHub activity),
+          or a <b>map layer</b> (SVG world map + hover stats) - but this already includes a working scoring simulator.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- Dataset: derived from the "Table 1" snapshot inside your report.
+    // Values are proxies, not perfect measurements. You can extend this list.
+    const COUNTRIES = [
+      {
+        name: "United States",
+        region: "North America",
+        dev_m: 2.9,
+        english: { score: null, band: "Native" },
+        internet_pct: 92,
+        innovation_rank: 3,
+        ai_adopt_pct: 50,
+        notes: "Frontier labs + startup dominance"
+      },
+      {
+        name: "China",
+        region: "Asia",
+        dev_m: 3.9,
+        english: { score: null, band: "Low" },
+        internet_pct: 72,
+        innovation_rank: 10,
+        ai_adopt_pct: null,
+        notes: "Scale + domestic AI ecosystem"
+      },
+      {
+        name: "India",
+        region: "Asia",
+        dev_m: 2.6,
+        english: { score: 490, band: "Low" },
+        internet_pct: 60,
+        innovation_rank: 38,
+        ai_adopt_pct: null,
+        notes: "Huge IT services multiplier"
+      },
+      {
+        name: "United Kingdom",
+        region: "Europe (W/N)",
+        dev_m: 0.5,
+        english: { score: 600, band: "Very High" },
+        internet_pct: 94,
+        innovation_rank: 6,
+        ai_adopt_pct: 35,
+        notes: "Europe's AI hub"
+      },
+      {
+        name: "Germany",
+        region: "Europe (W/N)",
+        dev_m: 0.6,
+        english: { score: 615, band: "Very High" },
+        internet_pct: 87,
+        innovation_rank: 8,
+        ai_adopt_pct: 25,
+        notes: "Industry 4.0 + strong institutions"
+      },
+      {
+        name: "Canada",
+        region: "North America",
+        dev_m: 0.4,
+        english: { score: null, band: "Native" },
+        internet_pct: 94,
+        innovation_rank: 15,
+        ai_adopt_pct: 40,
+        notes: "AI research density + talent policies"
+      },
+      {
+        name: "Israel",
+        region: "Middle East",
+        dev_m: 0.2,
+        english: { score: 524, band: "Moderate" },
+        internet_pct: 88,
+        innovation_rank: 16,
+        ai_adopt_pct: 35,
+        notes: "Startup Nation + elite tech pipeline"
+      },
+      {
+        name: "Singapore",
+        region: "Asia",
+        dev_m: 0.2,
+        english: { score: null, band: "Very High" },
+        internet_pct: 92,
+        innovation_rank: 5,
+        ai_adopt_pct: 58.6,
+        notes: "High adoption + government push"
+      },
+      {
+        name: "Brazil",
+        region: "Latin America",
+        dev_m: 0.5,
+        english: { score: 482, band: "Low" },
+        internet_pct: 84,
+        innovation_rank: 49,
+        ai_adopt_pct: 15,
+        notes: "Regional leader; language drag"
+      },
+      {
+        name: "United Arab Emirates",
+        region: "Middle East",
+        dev_m: 0.12,
+        english: { score: 487, band: "Low" },
+        internet_pct: 99,
+        innovation_rank: null,
+        ai_adopt_pct: 59.4,
+        notes: "Investment-driven leapfrog"
+      },
+      {
+        name: "France",
+        region: "Europe (W/N)",
+        dev_m: 0.45,
+        english: { score: 539, band: "Moderate" },
+        internet_pct: 90,
+        innovation_rank: 12,
+        ai_adopt_pct: 28,
+        notes: "Strong AI research hub in Paris"
+      },
+      {
+        name: "Sweden",
+        region: "Europe (W/N)",
+        dev_m: 0.18,
+        english: { score: 625, band: "Very High" },
+        internet_pct: 95,
+        innovation_rank: 2,
+        ai_adopt_pct: 32,
+        notes: "GII #2 + top English proficiency"
+      },
+      {
+        name: "Netherlands",
+        region: "Europe (W/N)",
+        dev_m: 0.22,
+        english: { score: 647, band: "Very High" },
+        internet_pct: 96,
+        innovation_rank: 7,
+        ai_adopt_pct: 30,
+        notes: "#1 worldwide English proficiency"
+      },
+      {
+        name: "Poland",
+        region: "Europe (E)",
+        dev_m: 0.4,
+        english: { score: 580, band: "Very High" },
+        internet_pct: 87,
+        innovation_rank: 41,
+        ai_adopt_pct: 18,
+        notes: "400K+ devs, strong outsourcing"
+      },
+      {
+        name: "Japan",
+        region: "Asia",
+        dev_m: 0.75,
+        english: { score: 475, band: "Low" },
+        internet_pct: 93,
+        innovation_rank: 12,
+        ai_adopt_pct: 22,
+        notes: "Elite infrastructure, local LLM investment"
+      },
+      {
+        name: "South Korea",
+        region: "Asia",
+        dev_m: 0.55,
+        english: { score: 522, band: "Moderate" },
+        internet_pct: 97,
+        innovation_rank: 4,
+        ai_adopt_pct: 28,
+        notes: "#1 internet speed, strong R&D"
+      },
+      {
+        name: "Australia",
+        region: "Oceania",
+        dev_m: 0.25,
+        english: { score: null, band: "Native" },
+        internet_pct: 91,
+        innovation_rank: 23,
+        ai_adopt_pct: 32,
+        notes: "High-quality industry, Anglophone"
+      }
+    ];
+
+    // --- Weights (default model). You can change defaults.
+    const DEFAULT_WEIGHTS = {
+      dev_m: 0.22,
+      english_score: 0.18,
+      internet_pct: 0.18,
+      innovation_rank: 0.16,
+      ai_adopt_pct: 0.26
+    };
+
+    const METRICS = [
+      { key: "dev_m", label: "Developer workforce (scale)", tip: "Proxy for adoption capacity: more devs = faster tool diffusion." },
+      { key: "english_score", label: "English proficiency", tip: "Lower friction for prompts/docs; less critical as local LLMs improve." },
+      { key: "internet_pct", label: "Internet / digital access", tip: "Cloud + tools + collaboration; also a proxy for digital maturity." },
+      { key: "innovation_rank", label: "Innovation capability (rank)", tip: "Inverted: lower rank = higher score." },
+      { key: "ai_adopt_pct", label: "AI adoption rate", tip: "Cultural + organizational willingness to use AI today." }
+    ];
+
+    let weights = { ...DEFAULT_WEIGHTS };
+
+    const elWeights = document.getElementById('weights');
+    const elResults = document.getElementById('results');
+    const elRegion = document.getElementById('region');
+    const elSearch = document.getElementById('search');
+    const elTblBody = document.querySelector('#tbl tbody');
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function fmt(n, digits=0){
+      if(n === null || n === undefined || Number.isNaN(n)) return "?";
+      return Number(n).toFixed(digits);
+    }
+
+    // Normalize numeric arrays to 0..100
+    function normalize(values){
+      const valid = values.filter(v => v !== null && v !== undefined && !Number.isNaN(v));
+      if(valid.length === 0) return values.map(() => null);
+      const min = Math.min(...valid);
+      const max = Math.max(...valid);
+      return values.map(v => {
+        if(v === null || v === undefined || Number.isNaN(v)) return null;
+        if(max === min) return 100;
+        return ((v - min) / (max - min)) * 100;
+      });
+    }
+
+    function buildWeightSliders(weights){
+      elWeights.innerHTML = '';
+      METRICS.forEach(m => {
+        const w = document.createElement('div');
+        w.className = 'w';
+        w.innerHTML = `
+          <div class="topr">
+            <div>
+              <label>${m.label}</label>
+              <div class="mut" style="font-size:12px;margin-top:2px">${m.tip}</div>
+            </div>
+            <div class="pill" id="pill-${m.key}">${(weights[m.key]*100).toFixed(0)}%</div>
+          </div>
+          <input type="range" min="0" max="100" step="1" value="${(weights[m.key]*100).toFixed(0)}" id="rng-${m.key}">
+        `;
+        elWeights.appendChild(w);
+        const rng = w.querySelector(`#rng-${m.key}`);
+        rng.addEventListener('input', () => {
+          weights[m.key] = Number(rng.value)/100;
+          document.getElementById(`pill-${m.key}`).textContent = `${rng.value}%`;
+          render(weights);
+        });
+      });
+    }
+
+    function normalizedDataset(){
+      // Extract raw arrays
+      const dev = COUNTRIES.map(c => c.dev_m);
+      const eng = COUNTRIES.map(c => c.english?.score ?? null);
+      const net = COUNTRIES.map(c => c.internet_pct);
+      const inv = COUNTRIES.map(c => c.innovation_rank);
+      const ai  = COUNTRIES.map(c => c.ai_adopt_pct);
+
+      const devN = normalize(dev);
+      const engN = normalize(eng);
+      const netN = normalize(net);
+      const invN_raw = normalize(inv);
+      const aiN  = normalize(ai);
+
+      // Invert innovation rank (lower is better)
+      const invN = invN_raw.map(v => (v === null ? null : 100 - v));
+
+      return COUNTRIES.map((c, i) => ({
+        ...c,
+        _norm: {
+          dev_m: devN[i],
+          english_score: engN[i],
+          internet_pct: netN[i],
+          innovation_rank: invN[i],
+          ai_adopt_pct: aiN[i]
+        }
+      }));
+    }
+
+    function scoreCountry(c, weights){
+      let num = 0;
+      let den = 0;
+      let missing = 0;
+
+      for(const m of METRICS){
+        const w = weights[m.key] ?? 0;
+        const v = c._norm[m.key];
+        if(w <= 0) continue;
+        if(v === null || v === undefined){
+          missing += w;
+          continue;
+        }
+        num += v * w;
+        den += w;
+      }
+
+      const score = den > 0 ? (num / den) : 0;
+      const confidence = clamp((1 - missing) * 100, 0, 100);
+      return { score, confidence };
+    }
+
+    function colorFor(score){
+      if(score >= 75) return 'var(--good)';
+      if(score >= 55) return 'var(--warn)';
+      return 'var(--bad)';
+    }
+
+    function renderTable(){
+      elTblBody.innerHTML = '';
+      COUNTRIES.forEach(c => {
+        const tr = document.createElement('tr');
+        const eng = c.english?.score ? `${c.english.score} (${c.english.band})` : (c.english?.band ?? '?');
+        const inv = c.innovation_rank === null ? '?' : `#${c.innovation_rank}`;
+        tr.innerHTML = `
+          <td><b>${c.name}</b><div style="color:var(--muted);font-size:12px;margin-top:4px">${c.region}</div></td>
+          <td>${fmt(c.dev_m, 2)}</td>
+          <td>${eng}</td>
+          <td>${fmt(c.internet_pct, 0)}%</td>
+          <td>${inv}</td>
+          <td>${c.ai_adopt_pct === null ? '?' : `${fmt(c.ai_adopt_pct, 1)}%`}</td>
+        `;
+        elTblBody.appendChild(tr);
+      });
+    }
+
+    function render(weights){
+      const data = normalizedDataset();
+
+      // Filters
+      const region = elRegion.value;
+      const q = (elSearch.value || '').trim().toLowerCase();
+      let filtered = data.filter(c => region === 'all' ? true : c.region === region);
+      if(q) filtered = filtered.filter(c => c.name.toLowerCase().includes(q));
+
+      // Score
+      const ranked = filtered.map(c => {
+        const { score, confidence } = scoreCountry(c, weights);
+        return { c, score, confidence };
+      }).sort((a,b) => b.score - a.score);
+
+      elResults.innerHTML = '';
+
+      if(ranked.length === 0){
+        const empty = document.createElement('div');
+        empty.className = 'res';
+        empty.innerHTML = `<div class="name"><b>No matches</b><span class="tag twarn">Try a different filter</span></div>`;
+        elResults.appendChild(empty);
+        return;
+      }
+
+      ranked.forEach((r, idx) => {
+        const res = document.createElement('div');
+        res.className = 'res';
+        const pct = clamp(r.score, 0, 100);
+        const col = colorFor(pct);
+
+        const c = r.c;
+        const eng = c.english?.score ?? null;
+        const inv = c.innovation_rank;
+
+        res.innerHTML = `
+          <div class="name">
+            <b>#${idx+1} - ${c.name}</b>
+            <span class="score" title="Normalized score 0-100">${pct.toFixed(1)}</span>
+          </div>
+          <div class="bar" aria-hidden="true"><div class="fill" style="width:${pct.toFixed(1)}%; background: linear-gradient(90deg, ${col}, ${col}88);"></div></div>
+          <div class="meta">
+            <div class="m">Developers <span>${fmt(c.dev_m, 2)}M</span></div>
+            <div class="m">English <span>${eng !== null ? eng : c.english?.band ?? '?'}</span></div>
+            <div class="m">Internet <span>${fmt(c.internet_pct, 0)}%</span></div>
+            <div class="m">Innovation <span>${inv !== null ? '#'+inv : '?'}</span></div>
+          </div>
+          <div style="margin-top:8px;color:var(--muted2);font-size:12px">${c.notes}</div>
+        `;
+        elResults.appendChild(res);
+      });
+    }
+
+    // Normalize weights to sum to 1
+    function normalizeWeights(){
+      const total = Object.values(weights).reduce((a,b) => a+b, 0);
+      if(total <= 0) return;
+      for(const k of Object.keys(weights)){
+        weights[k] = weights[k] / total;
+      }
+      buildWeightSliders(weights);
+      render(weights);
+    }
+
+    // Reset to defaults
+    function resetWeights(){
+      weights = { ...DEFAULT_WEIGHTS };
+      buildWeightSliders(weights);
+      render(weights);
+    }
+
+    // What-if: boost first visible country's weak metrics
+    function whatIfBoost(){
+      const data = normalizedDataset();
+      const region = elRegion.value;
+      const q = (elSearch.value || '').trim().toLowerCase();
+      let filtered = data.filter(c => region === 'all' ? true : c.region === region);
+      if(q) filtered = filtered.filter(c => c.name.toLowerCase().includes(q));
+      if(filtered.length === 0) return;
+
+      // Just show an alert for demo
+      const first = filtered[0];
+      alert(`What-if scenario for ${first.name}:\n\nIf English proficiency improved to 600+ and AI adoption hit 50%, the score would increase significantly. Try adjusting the sliders to simulate!`);
+    }
+
+    // Event listeners
+    document.getElementById('normalize').addEventListener('click', normalizeWeights);
+    document.getElementById('reset').addEventListener('click', resetWeights);
+    document.getElementById('whatif').addEventListener('click', whatIfBoost);
+    elRegion.addEventListener('change', () => render(weights));
+    elSearch.addEventListener('input', () => render(weights));
+
+    // Initial render
+    buildWeightSliders(weights);
+    renderTable();
+    render(weights);
+  </script>
+</body>
+</html>

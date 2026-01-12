@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Romania — AI Coding Agents & Prompt Engineering Readiness (Infographic)</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.55);
+      --good:#35E6B8;
+      --warn:#FFB020;
+      --bad:#FF4D6D;
+      --info:#63B3FF;
+      --violet:#A78BFA;
+      --cyan:#22D3EE;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --r: 18px;
+      --r2: 28px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 10% 0%, rgba(0,43,127,.22), transparent 55%),
+        radial-gradient(900px 650px at 95% 10%, rgba(252,209,22,.14), transparent 55%),
+        radial-gradient(1200px 800px at 55% 115%, rgba(206,17,38,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 64px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    }
+    .badge{
+      display:flex; align-items:center; gap:10px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.04);
+      font-weight:650;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: conic-gradient(from 180deg, #002B7F, #FCD115, #CE1126, #002B7F);
+      box-shadow: 0 0 0 4px rgba(0,43,127,.15);
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      color:var(--muted2);
+      font-size:13px;
+      padding-right:6px;
+    }
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+
+    .hero{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background:
+        radial-gradient(800px 500px at 20% 20%, rgba(0,43,127,.22), transparent 60%),
+        radial-gradient(700px 500px at 75% 35%, rgba(252,209,22,.15), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 600px at 10% 0%, rgba(206,17,38,.10), transparent 55%),
+        radial-gradient(700px 450px at 105% 30%, rgba(252,209,22,.08), transparent 55%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .hgrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 920px){
+      .hgrid{grid-template-columns:1fr}
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:70ch;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 560px){
+      .kpis{grid-template-columns:1fr}
+      h1{font-size:30px}
+    }
+    .kpi{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius:14px;
+      padding:12px 12px 10px;
+      backdrop-filter: blur(8px);
+    }
+    .kpi .big{
+      font-size:18px; font-weight:800;
+      letter-spacing:.2px;
+      display:flex; align-items:baseline; gap:8px;
+    }
+    .kpi .label{color:var(--muted2); font-size:12px; margin-top:6px; line-height:1.35}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+      width:fit-content;
+    }
+    .pill b{color:var(--text)}
+    .pill .mini{
+      width:9px;height:9px;border-radius:50%;
+      background: var(--good);
+      box-shadow: 0 0 0 4px rgba(53,230,184,.12);
+    }
+
+    .section{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .section{grid-template-columns:1fr} }
+
+    .card{
+      border:1px solid var(--stroke);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .items{display:grid; gap:10px; margin-top:8px}
+    .item{
+      display:grid;
+      grid-template-columns: auto 1fr;
+      gap:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .icon{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      font-weight:900;
+    }
+    .icon.good{color:var(--good); box-shadow:0 0 0 4px rgba(53,230,184,.10)}
+    .icon.warn{color:var(--warn); box-shadow:0 0 0 4px rgba(255,176,32,.10)}
+    .icon.bad{color:var(--bad); box-shadow:0 0 0 4px rgba(255,77,109,.10)}
+    .icon.info{color:var(--info); box-shadow:0 0 0 4px rgba(99,179,255,.10)}
+    .item h3{margin:0; font-size:14px; letter-spacing:.1px}
+    .item p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.5}
+
+    .grid3{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){ .grid3{grid-template-columns:1fr} }
+
+    .bigcard{
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:18px;
+      margin-top:14px;
+    }
+    .bigcard h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .split{grid-template-columns:1fr} }
+
+    .track{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+    }
+    .track::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(700px 320px at 20% 0%, rgba(0,43,127,.12), transparent 60%);
+      pointer-events:none;
+    }
+    .track .head{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      position:relative;
+    }
+    .track .name{
+      font-weight:850;
+      letter-spacing:.2px;
+      display:flex; align-items:center; gap:10px;
+      margin:0;
+    }
+    .bubble{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.15);
+      font-size:12px;
+      color:var(--muted);
+      font-family: var(--mono);
+      white-space:nowrap;
+    }
+    .track ul{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+      position:relative;
+    }
+    .emph{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      color:rgba(255,255,255,.86);
+      position:relative;
+    }
+    .emph b{font-family:var(--mono)}
+    .gain{color:var(--good)}
+    .risk{color:var(--bad)}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.02);
+    }
+    th,td{
+      text-align:left;
+      padding:10px 12px;
+      font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    th{
+      color:rgba(255,255,255,.86);
+      font-weight:750;
+      background: rgba(255,255,255,.04);
+    }
+    tr:last-child td{border-bottom:none}
+    td{color:var(--muted)}
+    .fit-strong{color:rgba(255,255,255,.92); font-weight:700}
+    .fit-strong .s{color:var(--good)}
+    .fit-med .m{color:var(--warn)}
+    .fit-dev .d{color:var(--info)}
+    .region{
+      font-weight:750; color:rgba(255,255,255,.88)
+    }
+
+    .bars{
+      display:grid;
+      gap:10px;
+    }
+    .bar{
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .bar .row{
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      font-size:13px;
+      color:rgba(255,255,255,.86);
+      margin-bottom:8px;
+    }
+    .bar .row span{color:var(--muted)}
+    .meter{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .meter > i{
+      display:block;
+      height:100%;
+      width:var(--w,60%);
+      background: linear-gradient(90deg, rgba(0,43,127,.9), rgba(252,209,22,.9), rgba(206,17,38,.8));
+      border-radius:999px;
+      box-shadow: 0 10px 30px rgba(0,43,127,.25);
+    }
+    .meter.warn > i{
+      background: linear-gradient(90deg, rgba(255,176,32,.95), rgba(167,139,250,.75));
+      box-shadow: 0 10px 30px rgba(255,176,32,.18);
+    }
+    .meter.bad > i{
+      background: linear-gradient(90deg, rgba(255,77,109,.95), rgba(255,176,32,.75));
+      box-shadow: 0 10px 30px rgba(255,77,109,.18);
+    }
+
+    .timeline{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .phase{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+    }
+    @media (max-width: 600px){
+      .phase{grid-template-columns:1fr}
+    }
+    .when{
+      font-family: var(--mono);
+      color: rgba(255,255,255,.86);
+      font-size:12px;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .when .label{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.15);
+      width:fit-content;
+    }
+    .when .label i{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--info);
+      box-shadow: 0 0 0 4px rgba(99,179,255,.10);
+      display:inline-block;
+    }
+    .phase h3{margin:0; font-size:14px}
+    .phase p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .footer{
+      margin-top:16px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+      color:rgba(255,255,255,.9);
+      font-size:13px;
+      transition: transform .12s ease, background .12s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .btn:active{transform: translateY(0px)}
+    .kbd{font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,.14); padding:2px 6px; border-radius:8px; background: rgba(0,0,0,.18)}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">
+        <span class="dot"></span>
+        <span>Romania — AI Coding Agents & Prompt Engineering Readiness</span>
+      </div>
+      <div class="meta">
+        <span class="chip">Infographic</span>
+        <span class="chip">Architect-to-Agents Lens</span>
+        <span class="chip">EU Advantage Thesis</span>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hgrid">
+        <div>
+          <h1>Romania's AI-Agent Readiness is <span style="color:var(--good)">surprisingly strong</span>.</h1>
+          <p class="subtitle">
+            Strong structural advantages (mathematical education, direct communication culture, Western integration, IC mentality)
+            combine with manageable frictions (small talent pool, brain drain, language nuance gaps). Result: well-positioned
+            for the architect-to-agent transition, but scale remains the constraint.
+          </p>
+          <div class="pill" title="Core thesis">
+            <span class="mini"></span>
+            <div><b>The thesis:</b> quality over quantity → <span class="muted">premium positioning in AI era</span>.</div>
+          </div>
+        </div>
+
+        <div class="kpis" aria-label="Key signals">
+          <div class="kpi">
+            <div class="big">~15K <span class="tag">/year</span></div>
+            <div class="label">CS/IT graduates. Small but high-quality; strong math/algorithmic foundations from education.</div>
+          </div>
+          <div class="kpi">
+            <div class="big">Direct Culture <span class="tag">trait</span></div>
+            <div class="label">Romanians challenge, question, push back — essential for effective AI agent orchestration.</div>
+          </div>
+          <div class="kpi">
+            <div class="big">EU + Western <span class="tag">integration</span></div>
+            <div class="label">Decades of Western outsourcing → familiar with US/EU workflows, expectations, standards.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>
+          Structural Advantages
+          <span class="tag">Why Romania can win</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon good">A1</div>
+            <div>
+              <h3>Mathematical & algorithmic education tradition</h3>
+              <p>Strong olympiad culture, rigorous CS programs → systems thinking, not just pattern copying.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A2</div>
+            <div>
+              <h3>Direct communication culture</h3>
+              <p>Romanians naturally question, challenge, and push back. Perfect for debugging AI outputs and demanding clarity.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A3</div>
+            <div>
+              <h3>Western integration & IC mindset</h3>
+              <p>Long history of working with US/EU clients → independent contributor culture, ownership mentality, quality focus.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A4</div>
+            <div>
+              <h3>EU timezone & regulatory alignment</h3>
+              <p>Same timezone as major EU markets, GDPR-native, EU work permits → friction-free collaboration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>
+          Structural Challenges
+          <span class="tag">Where it breaks</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon warn">C1</div>
+            <div>
+              <h3>Small talent pool</h3>
+              <p>19M population, ~200K IT workers total. Scale is the constraint — can't compete on volume.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon bad">C2</div>
+            <div>
+              <h3>Brain drain to Western Europe</h3>
+              <p>Top talent often relocates to Germany, UK, Netherlands. Diaspora is large and growing.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C3</div>
+            <div>
+              <h3>English as second language nuances</h3>
+              <p>Good technical English, but subtle prompt engineering requires native-level precision in edge cases.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon info">C4</div>
+            <div>
+              <h3>Bucharest concentration</h3>
+              <p>Most opportunities in capital + Cluj/Timișoara/Iași. Smaller cities have limited tech ecosystems.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3">
+      <div class="card">
+        <h2>Agent Fit — Quick Signal Bars <span class="tag">intuition</span></h2>
+        <div class="bars">
+          <div class="bar">
+            <div class="row"><b>Systems thinking</b> <span>High</span></div>
+            <div class="meter" style="--w:82%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Pushback / confrontation</b> <span>High</span></div>
+            <div class="meter" style="--w:85%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>English precision</b> <span>Good</span></div>
+            <div class="meter" style="--w:72%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Scale / volume</b> <span>Limited</span></div>
+            <div class="meter warn" style="--w:35%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Retention of top talent</b> <span>Challenged</span></div>
+            <div class="meter bad" style="--w:48%"><i></i></div>
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Bars are a visual summary of the text (not measured stats).
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Direct Culture Advantages <span class="tag">agent asset</span></h2>
+        <table aria-label="Direct culture table">
+          <thead>
+            <tr>
+              <th>Behavior</th>
+              <th>Benefit with AI Agents</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Questioning requirements</td>
+              <td>Catches ambiguity before prompting</td>
+            </tr>
+            <tr>
+              <td>Challenging outputs</td>
+              <td>Catches hallucinations early</td>
+            </tr>
+            <tr>
+              <td>Saying "this won't work"</td>
+              <td>Prevents bad code from shipping</td>
+            </tr>
+            <tr>
+              <td>Debugging mindset</td>
+              <td>Systematic AI output verification</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          The "difficult to work with" stereotype becomes an AI-era superpower.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Regional Tech Hubs <span class="tag">Romania's clusters</span></h2>
+        <table aria-label="Regional fit">
+          <thead>
+            <tr>
+              <th>City</th>
+              <th>Characteristics</th>
+              <th>AI Agent Fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">Cluj-Napoca</td>
+              <td>Startup culture, product mindset, strong UBB CS</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Bucharest</td>
+              <td>Scale, multinationals, diverse opportunities</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Timișoara</td>
+              <td>Western influence, German companies, engineering</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Iași</td>
+              <td>Academic strength, growing ecosystem</td>
+              <td class="fit-med"><span class="m">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="region">Others</td>
+              <td>Emerging hubs, remote work growing</td>
+              <td class="fit-dev"><span class="d">Developing</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>The Stratification Reality</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">A</span> Track A: AI-Native Architects</p>
+            <span class="bubble">Top 25–30%</span>
+          </div>
+          <ul>
+            <li>Senior devs with systems design experience</li>
+            <li>Strong English + Western client exposure</li>
+            <li>Already experimenting with Claude/GPT/Cursor workflows</li>
+            <li>Transition to "architect + AI agents" delivery model</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b class="gain">2–4× productivity, global competitiveness</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon warn" style="width:28px;height:28px;border-radius:10px">B</span> Track B: Adaptation Required</p>
+            <span class="bubble">Middle 40–50%</span>
+          </div>
+          <ul>
+            <li>Solid implementers, good technical skills</li>
+            <li>Need to develop prompting & orchestration abilities</li>
+            <li>Outcome depends on upskilling investment</li>
+            <li>Companies that train will retain; others will lose</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b style="color:rgba(255,255,255,.92)">Trainable → valuable assets</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="track" style="margin-top:14px;">
+        <div class="head">
+          <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">C</span> Track C: Displacement Risk</p>
+          <span class="bubble">Bottom 20–25%</span>
+        </div>
+        <ul>
+          <li>Junior roles focused on routine implementation</li>
+          <li>Limited systems thinking or architectural exposure</li>
+          <li>Lower risk than India due to smaller absolute numbers, but still significant</li>
+        </ul>
+        <div class="emph">
+          <span>Key factor</span>
+          <b class="risk">Entry-level compression across industry</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Competitive Positioning <span class="tag">vs other markets</span></h2>
+        <table aria-label="Competitors">
+          <thead>
+            <tr>
+              <th>Competitor</th>
+              <th>Romania's Advantage</th>
+              <th>Romania's Disadvantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">India</td>
+              <td>Quality density, direct culture, EU alignment</td>
+              <td>India: massive scale, lower costs</td>
+            </tr>
+            <tr>
+              <td class="region">Poland</td>
+              <td>Similar quality, slightly lower costs</td>
+              <td>Poland: larger talent pool, stronger ecosystem</td>
+            </tr>
+            <tr>
+              <td class="region">Ukraine</td>
+              <td>Stability, EU membership, regulatory clarity</td>
+              <td>Ukraine: larger pool, lower costs (pre-war)</td>
+            </tr>
+            <tr>
+              <td class="region">Portugal</td>
+              <td>Technical depth, cost advantage</td>
+              <td>Portugal: native English-adjacent, US timezone</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Romania's play: quality premium positioning, not volume competition.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Strategic Recommendations <span class="tag">how to win</span></h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon info">I</div>
+            <div>
+              <h3>Individuals</h3>
+              <p>
+                Double down on systems design • leverage direct communication as AI-debugging skill • build prompt engineering portfolios • stay in Romania (remote for global).
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C</div>
+            <div>
+              <h3>Companies</h3>
+              <p>
+                Position as "quality architects + AI" not "cheap labor" • invest in AI tooling training • smaller teams, higher margins • compete on outcomes not hours.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">E</div>
+            <div>
+              <h3>Ecosystem</h3>
+              <p>
+                Retain talent with competitive remote salaries • strengthen Cluj/Bucharest/Timișoara hubs • AI-first education updates • diaspora engagement programs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Two Futures</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">+</span> Optimistic Case</p>
+            <span class="bubble">Upside</span>
+          </div>
+          <ul>
+            <li>Premium positioning as "AI-native architects"</li>
+            <li>Quality density attracts high-value work</li>
+            <li>Remote work reduces brain drain pressure</li>
+            <li>EU integration becomes a feature, not limitation</li>
+          </ul>
+          <div class="emph">
+            <span>Formula</span>
+            <b>Quality × AI leverage × EU access</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">–</span> Pessimistic Case</p>
+            <span class="bubble">Downside</span>
+          </div>
+          <ul>
+            <li>Scale constraints limit growth</li>
+            <li>Brain drain accelerates as AI raises global competition</li>
+            <li>Junior pipeline collapses without entry-level roles</li>
+            <li>Caught between cheap (India) and premium (Western)</li>
+          </ul>
+          <div class="emph">
+            <span>Core risk</span>
+            <b class="risk">Squeezed middle positioning</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Timeline Prediction</h2>
+      <div class="timeline" role="list">
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Current State</div>
+            <span>2024–2025</span>
+          </div>
+          <div>
+            <h3>Early adopters lead, mainstream experiments</h3>
+            <p>Senior developers integrate AI tools; companies begin evaluating productivity gains.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Rapid Adoption</div>
+            <span>2025–2026</span>
+          </div>
+          <div>
+            <h3>AI-native workflows become standard</h3>
+            <p>Leading companies restructure around architect + AI model; hiring patterns shift.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Market Adjustment</div>
+            <span>2026–2028</span>
+          </div>
+          <div>
+            <h3>Premium positioning crystallizes</h3>
+            <p>Romania either captures quality niche or faces positioning squeeze; junior market transforms.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> New Equilibrium</div>
+            <span>2028+</span>
+          </div>
+          <div>
+            <h3>Smaller, highly skilled workforce stabilizes</h3>
+            <p>AI-native delivery is default; Romania's role defined by quality density and EU integration.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>
+          <div><b>One-line takeaway:</b> Romania wins by doubling down on <span style="color:var(--good)">quality</span>, <span style="color:var(--info)">direct culture</span>, and <span style="color:var(--violet)">architect density</span> — not volume.</div>
+          <div style="margin-top:6px;">Tip: print-friendly via <span class="kbd">Cmd</span> + <span class="kbd">P</span> (choose "Save as PDF").</div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="#"
+             onclick="navigator.clipboard?.writeText(document.documentElement.outerHTML).then(()=>alert('HTML copied to clipboard.')) .catch(()=>alert('Copy failed — you can still copy from view source.')); return false;">
+            Copy HTML
+            <span class="kbd">clipboard</span>
+          </a>
+          <a class="btn" href="#"
+             onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">
+            Back to top
+            <span class="kbd">↑</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer" style="margin-top:18px;">
+      <div>
+        <span class="muted">Key insight:</span>
+        Romania's "difficult" directness is an AI-era feature — agents need humans who question, challenge, and verify.
+      </div>
+      <div class="muted">Designed for clarity — responsive — no external assets</div>
+    </div>
+  </div>
+</body>
+</html>

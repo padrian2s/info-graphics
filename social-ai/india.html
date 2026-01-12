@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>India — AI Coding Agents & Prompt Engineering Readiness (Infographic)</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.55);
+      --good:#35E6B8;
+      --warn:#FFB020;
+      --bad:#FF4D6D;
+      --info:#63B3FF;
+      --violet:#A78BFA;
+      --cyan:#22D3EE;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --r: 18px;
+      --r2: 28px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 10% 0%, rgba(99,179,255,.18), transparent 55%),
+        radial-gradient(900px 650px at 95% 10%, rgba(167,139,250,.16), transparent 55%),
+        radial-gradient(1200px 800px at 55% 115%, rgba(34,211,238,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 64px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    }
+    .badge{
+      display:flex; align-items:center; gap:10px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.04);
+      font-weight:650;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: conic-gradient(from 180deg, var(--info), var(--violet), var(--cyan), var(--info));
+      box-shadow: 0 0 0 4px rgba(99,179,255,.10);
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      color:var(--muted2);
+      font-size:13px;
+      padding-right:6px;
+    }
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+
+    .hero{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background:
+        radial-gradient(800px 500px at 20% 20%, rgba(99,179,255,.22), transparent 60%),
+        radial-gradient(700px 500px at 75% 35%, rgba(167,139,250,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 600px at 10% 0%, rgba(34,211,238,.12), transparent 55%),
+        radial-gradient(700px 450px at 105% 30%, rgba(255,176,32,.08), transparent 55%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .hgrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 920px){
+      .hgrid{grid-template-columns:1fr}
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:70ch;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 560px){
+      .kpis{grid-template-columns:1fr}
+      h1{font-size:30px}
+    }
+    .kpi{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius:14px;
+      padding:12px 12px 10px;
+      backdrop-filter: blur(8px);
+    }
+    .kpi .big{
+      font-size:18px; font-weight:800;
+      letter-spacing:.2px;
+      display:flex; align-items:baseline; gap:8px;
+    }
+    .kpi .label{color:var(--muted2); font-size:12px; margin-top:6px; line-height:1.35}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+      width:fit-content;
+    }
+    .pill b{color:var(--text)}
+    .pill .mini{
+      width:9px;height:9px;border-radius:50%;
+      background: var(--warn);
+      box-shadow: 0 0 0 4px rgba(255,176,32,.12);
+    }
+
+    .section{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .section{grid-template-columns:1fr} }
+
+    .card{
+      border:1px solid var(--stroke);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .items{display:grid; gap:10px; margin-top:8px}
+    .item{
+      display:grid;
+      grid-template-columns: auto 1fr;
+      gap:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .icon{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      font-weight:900;
+    }
+    .icon.good{color:var(--good); box-shadow:0 0 0 4px rgba(53,230,184,.10)}
+    .icon.warn{color:var(--warn); box-shadow:0 0 0 4px rgba(255,176,32,.10)}
+    .icon.bad{color:var(--bad); box-shadow:0 0 0 4px rgba(255,77,109,.10)}
+    .icon.info{color:var(--info); box-shadow:0 0 0 4px rgba(99,179,255,.10)}
+    .item h3{margin:0; font-size:14px; letter-spacing:.1px}
+    .item p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.5}
+
+    .grid3{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){ .grid3{grid-template-columns:1fr} }
+
+    .bigcard{
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:18px;
+      margin-top:14px;
+    }
+    .bigcard h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .split{grid-template-columns:1fr} }
+
+    .track{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+    }
+    .track::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(700px 320px at 20% 0%, rgba(99,179,255,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .track .head{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      position:relative;
+    }
+    .track .name{
+      font-weight:850;
+      letter-spacing:.2px;
+      display:flex; align-items:center; gap:10px;
+      margin:0;
+    }
+    .bubble{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.15);
+      font-size:12px;
+      color:var(--muted);
+      font-family: var(--mono);
+      white-space:nowrap;
+    }
+    .track ul{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+      position:relative;
+    }
+    .emph{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      color:rgba(255,255,255,.86);
+      position:relative;
+    }
+    .emph b{font-family:var(--mono)}
+    .gain{color:var(--good)}
+    .risk{color:var(--bad)}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.02);
+    }
+    th,td{
+      text-align:left;
+      padding:10px 12px;
+      font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    th{
+      color:rgba(255,255,255,.86);
+      font-weight:750;
+      background: rgba(255,255,255,.04);
+    }
+    tr:last-child td{border-bottom:none}
+    td{color:var(--muted)}
+    .fit-strong{color:rgba(255,255,255,.92); font-weight:700}
+    .fit-strong .s{color:var(--good)}
+    .fit-med .m{color:var(--warn)}
+    .fit-dev .d{color:var(--info)}
+    .region{
+      font-weight:750; color:rgba(255,255,255,.88)
+    }
+
+    .bars{
+      display:grid;
+      gap:10px;
+    }
+    .bar{
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .bar .row{
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      font-size:13px;
+      color:rgba(255,255,255,.86);
+      margin-bottom:8px;
+    }
+    .bar .row span{color:var(--muted)}
+    .meter{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .meter > i{
+      display:block;
+      height:100%;
+      width:var(--w,60%);
+      background: linear-gradient(90deg, rgba(99,179,255,.9), rgba(167,139,250,.9), rgba(34,211,238,.9));
+      border-radius:999px;
+      box-shadow: 0 10px 30px rgba(99,179,255,.25);
+    }
+    .meter.warn > i{
+      background: linear-gradient(90deg, rgba(255,176,32,.95), rgba(167,139,250,.75));
+      box-shadow: 0 10px 30px rgba(255,176,32,.18);
+    }
+    .meter.bad > i{
+      background: linear-gradient(90deg, rgba(255,77,109,.95), rgba(255,176,32,.75));
+      box-shadow: 0 10px 30px rgba(255,77,109,.18);
+    }
+
+    .timeline{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .phase{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+    }
+    @media (max-width: 600px){
+      .phase{grid-template-columns:1fr}
+    }
+    .when{
+      font-family: var(--mono);
+      color: rgba(255,255,255,.86);
+      font-size:12px;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .when .label{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.15);
+      width:fit-content;
+    }
+    .when .label i{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--info);
+      box-shadow: 0 0 0 4px rgba(99,179,255,.10);
+      display:inline-block;
+    }
+    .phase h3{margin:0; font-size:14px}
+    .phase p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .footer{
+      margin-top:16px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+      color:rgba(255,255,255,.9);
+      font-size:13px;
+      transition: transform .12s ease, background .12s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .btn:active{transform: translateY(0px)}
+    .kbd{font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,.14); padding:2px 6px; border-radius:8px; background: rgba(0,0,0,.18)}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">
+        <span class="dot"></span>
+        <span>India • AI Coding Agents & Prompt Engineering Readiness</span>
+      </div>
+      <div class="meta">
+        <span class="chip">Infographic</span>
+        <span class="chip">Architect-to-Agents Lens</span>
+        <span class="chip">Bifurcation Thesis</span>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hgrid">
+        <div>
+          <h1>India’s AI-Agent Readiness is <span style="color:var(--warn)">highly bifurcated</span>.</h1>
+          <p class="subtitle">
+            Massive structural advantages (scale, specification English, services muscle memory) collide with deep frictions
+            (yes-culture, rote learning, uneven English precision, infrastructure gaps). Result: some segments leap forward,
+            others face displacement.
+          </p>
+          <div class="pill" title="Core paradox">
+            <span class="mini"></span>
+            <div><b>The paradox:</b> huge upside + huge fragility → <span class="muted">two-speed outcomes</span>.</div>
+          </div>
+        </div>
+
+        <div class="kpis" aria-label="Key signals">
+          <div class="kpi">
+            <div class="big">~1.5M <span class="tag">/year</span></div>
+            <div class="label">Engineering graduates. Even 10–15% “global-competitive” is a huge annual inflow.</div>
+          </div>
+          <div class="kpi">
+            <div class="big">“Spec English” <span class="tag">skill</span></div>
+            <div class="label">Decades of IT services → precise requirement writing (a prompt-engineering superpower).</div>
+          </div>
+          <div class="kpi">
+            <div class="big">3-track split <span class="tag">thesis</span></div>
+            <div class="label">Elite adapts fast, bottom displaced, middle depends on upskilling + access + initiative.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>
+          Structural Advantages
+          <span class="tag">Why India can win</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon good">A1</div>
+            <div>
+              <h3>Scale of English-proficient technical talent</h3>
+              <p>Large annual talent inflow + long exposure to precise technical specs → strong baseline for prompting.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A2</div>
+            <div>
+              <h3>“Jugaad” iteration culture</h3>
+              <p>Comfort with constraints, quick workarounds, iterative refinement → matches agentic prompting workflows.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A3</div>
+            <div>
+              <h3>Specification-driven work muscle memory</h3>
+              <p>Services giants trained millions to execute detailed specs → “pretraining” for architect → AI-agent delivery.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">A4</div>
+            <div>
+              <h3>Hierarchical comfort (double-edged)</h3>
+              <p>Clear separation of “architect decides” and “executor builds” maps cleanly to human architect → AI agents.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>
+          Structural Challenges
+          <span class="tag">Where it breaks</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon bad">C1</div>
+            <div>
+              <h3>“Yes culture” → weak confrontation</h3>
+              <p>Vague prompts + unchallenged outputs = hallucinations and brittle systems. Agents require aggressive questioning.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C2</div>
+            <div>
+              <h3>Rote learning vs conceptual depth</h3>
+              <p>Pattern implementation scales—until novelty appears. Agent orchestration needs systems thinking & debugging skills.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C3</div>
+            <div>
+              <h3>Bimodal English precision</h3>
+              <p>Elite tier prompts sharply; mass tier phrasing is noisier. Models are sensitive to subtle wording differences.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon info">C4</div>
+            <div>
+              <h3>Infrastructure & access gaps</h3>
+              <p>Tier-2/3 connectivity + cost sensitivity limit experimentation → metro acceleration, smaller-city lag.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3">
+      <div class="card">
+        <h2>Agent Fit — Quick Signal Bars <span class="tag">intuition</span></h2>
+        <div class="bars">
+          <div class="bar">
+            <div class="row"><b>Spec-writing ability</b> <span>High</span></div>
+            <div class="meter" style="--w:86%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Iteration culture</b> <span>High</span></div>
+            <div class="meter" style="--w:78%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Pushback / confrontation</b> <span>Mixed</span></div>
+            <div class="meter warn" style="--w:52%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Infrastructure access</b> <span>Uneven</span></div>
+            <div class="meter warn" style="--w:58%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Systems-thinking density</b> <span>Skewed</span></div>
+            <div class="meter bad" style="--w:44%"><i></i></div>
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Bars are a visual summary of the text (not measured stats).
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>“Yes Culture” Failure Modes <span class="tag">agent risk</span></h2>
+        <table aria-label="Yes culture table">
+          <thead>
+            <tr>
+              <th>Behavior</th>
+              <th>Problem with AI Agents</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Accepting unclear requirements</td>
+              <td>Vague prompts → garbage outputs</td>
+            </tr>
+            <tr>
+              <td>Not questioning outputs</td>
+              <td>Hallucinations slip into production</td>
+            </tr>
+            <tr>
+              <td>Avoiding “I don’t know”</td>
+              <td>Missing constraints/specs → brittle code</td>
+            </tr>
+            <tr>
+              <td>Pleasing the asker</td>
+              <td>Optimizes for perceived wants, not correctness</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Effective prompting is often “intellectual confrontation”: demand clarity, test, iterate, verify.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Regional Variation <span class="tag">India ≠ monolith</span></h2>
+        <table aria-label="Regional fit">
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Cultural Traits</th>
+              <th>AI Agent Fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">South India</td>
+              <td>Engineering tradition, systematic thinking</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Maharashtra</td>
+              <td>Commercial pragmatism, entrepreneurial iteration</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">NCR</td>
+              <td>Process-oriented, services-dominant, hierarchical</td>
+              <td class="fit-med"><span class="m">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="region">West Bengal</td>
+              <td>Strong fundamentals, less commercial drive</td>
+              <td class="fit-med"><span class="m">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="region">Rest</td>
+              <td>Variable infra, fewer opportunities, brain drain</td>
+              <td class="fit-dev"><span class="d">Developing</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>The Bifurcation Thesis</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">A</span> Track A: Elite Adaptation</p>
+            <span class="bubble">Top 10–15%</span>
+          </div>
+          <ul>
+            <li>Senior devs + architects who understand systems</li>
+            <li>Fluent English + Western client exposure</li>
+            <li>Already using agents (Claude/GPT/Cursor-style workflows)</li>
+            <li>Becomes “AI-augmented architects” with global leverage</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b class="gain">3–5× earning potential</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">B</span> Track B: Displacement Risk</p>
+            <span class="bubble">Bottom 50–60%</span>
+          </div>
+          <ul>
+            <li>Routine CRUD & template-driven work</li>
+            <li>Limited English precision</li>
+            <li>Tutorial-following vs principle-understanding</li>
+            <li>Directly replaceable by well-scoped AI agent execution</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b class="risk">High replacement pressure</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="track" style="margin-top:14px;">
+        <div class="head">
+          <p class="name"><span class="icon warn" style="width:28px;height:28px;border-radius:10px">C</span> Track C: The Middle</p>
+          <span class="bubble">25–30%</span>
+        </div>
+        <ul>
+          <li>Competent developers who could tip either direction</li>
+          <li>Depends on: company upskilling, individual initiative, tool access, and experimentation time</li>
+        </ul>
+        <div class="emph">
+          <span>Key lever</span>
+          <b style="color:rgba(255,255,255,.92)">Upskill + access + reps</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Competitive Dynamics <span class="tag">outsourcing pressure</span></h2>
+        <table aria-label="Competitors">
+          <thead>
+            <tr>
+              <th>Competitor</th>
+              <th>India’s Advantage</th>
+              <th>India’s Disadvantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">Philippines</td>
+              <td>Deeper engineering scale</td>
+              <td>PH: stronger spoken English & US cultural affinity</td>
+            </tr>
+            <tr>
+              <td class="region">Eastern Europe</td>
+              <td>Scale + cost</td>
+              <td>EE: stronger IC culture, closer to EU clients</td>
+            </tr>
+            <tr>
+              <td class="region">Vietnam</td>
+              <td>Established IT ecosystem</td>
+              <td>VN: younger workforce, fast growth, lower costs</td>
+            </tr>
+            <tr>
+              <td class="region">Latin America</td>
+              <td>Time-zone flexibility for Asian clients</td>
+              <td>LatAm: US time-zone advantage + cultural fit</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Key question: if agents execute specs cheaply, the classic “cheap skilled labor executing specs” arbitrage shrinks.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Strategic Recommendations <span class="tag">how to win</span></h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon info">I</div>
+            <div>
+              <h3>Individuals</h3>
+              <p>
+                System design & architecture • practice pushback • upgrade English precision (technical writing) • experiment with agents • specialize deeply.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C</div>
+            <div>
+              <h3>Companies</h3>
+              <p>
+                Fewer devs, more architects + AI tools • formal prompt training • reward efficiency, not headcount • accept lower revenue, higher margins.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">E</div>
+            <div>
+              <h3>Ecosystem</h3>
+              <p>
+                Education reform (conceptual) • earlier precision English • tier-2 connectivity • shift from services to product/startups.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Two Futures</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">+</span> Optimistic Case</p>
+            <span class="bubble">Upside</span>
+          </div>
+          <ul>
+            <li>Largest global supply of “AI-augmented architects”</li>
+            <li>Deep domain knowledge + spec-writing + cost-effectiveness</li>
+            <li>Scale advantage is unmatched</li>
+          </ul>
+          <div class="emph">
+            <span>Formula</span>
+            <b>Architectural expertise × AI execution</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">–</span> Pessimistic Case</p>
+            <span class="bubble">Downside</span>
+          </div>
+          <ul>
+            <li>Multi-million IT jobs at risk over a decade</li>
+            <li>Services consolidation / collapse</li>
+            <li>Accelerating brain drain</li>
+            <li>Economic stress in tech-dependent cities</li>
+          </ul>
+          <div class="emph">
+            <span>Core failure</span>
+            <b class="risk">No shift from implementers → architects</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Timeline Prediction</h2>
+      <div class="timeline" role="list">
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Awareness</div>
+            <span>2024–2025</span>
+          </div>
+          <div>
+            <h3>Elite experiments, most ignore</h3>
+            <p>Early adopters build agent workflows; broad workforce continues classic services delivery.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Early Adoption</div>
+            <span>2025–2027</span>
+          </div>
+          <div>
+            <h3>Restructures begin, layoffs appear</h3>
+            <p>Top orgs shift to architect + agent stacks; productivity gains reduce headcount requirements.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Mass Disruption</div>
+            <span>2027–2030</span>
+          </div>
+          <div>
+            <h3>Services model visibly fails</h3>
+            <p>Arbitrage erosion becomes obvious; aggressive retraining and consolidation accelerate.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> New Equilibrium</div>
+            <span>2030+</span>
+          </div>
+          <div>
+            <h3>Smaller, higher-skilled workforce stabilizes</h3>
+            <p>More architects, fewer routine implementers; agent-native delivery becomes default.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>
+          <div><b>One-line takeaway:</b> India wins if it converts scale into <span style="color:var(--good)">architect density</span> and <span style="color:var(--info)">prompt precision</span>.</div>
+          <div style="margin-top:6px;">Tip: print-friendly via <span class="kbd">Cmd</span> + <span class="kbd">P</span> (choose “Save as PDF”).</div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="#"
+             onclick="navigator.clipboard?.writeText(document.documentElement.outerHTML).then(()=>alert('HTML copied to clipboard.')) .catch(()=>alert('Copy failed — you can still copy from view source.')); return false;">
+            Copy HTML
+            <span class="kbd">clipboard</span>
+          </a>
+          <a class="btn" href="#"
+             onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">
+            Back to top
+            <span class="kbd">↑</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer" style="margin-top:18px;">
+      <div>
+        <span class="muted">Prompt:</span>
+        “Vrei să discutăm despre structurarea colaborării cu echipe din India (architect-to-agents) sau implicațiile pentru Europa de Est?”
+      </div>
+      <div class="muted">Designed for clarity • responsive • no external assets</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Coding Agents & Prompt Engineering — Global Readiness Infographic + Simulators</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#111a33;
+      --card2:#0f1630;
+      --text:#e9ecff;
+      --muted:#aab3d6;
+      --line:rgba(255,255,255,.10);
+      --good:#6ee7b7;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --accent:#7c3aed;
+      --accent2:#22d3ee;
+      --shadow: 0 16px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(124,58,237,.22), transparent 55%),
+                  radial-gradient(900px 700px at 80% 10%, rgba(34,211,238,.18), transparent 50%),
+                  radial-gradient(900px 900px at 50% 90%, rgba(110,231,183,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 18px 60px}
+    header{
+      display:flex; gap:18px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .title{
+      flex:1 1 520px;
+      padding:18px 18px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .title h1{
+      margin:0 0 8px;
+      font-size:22px;
+      letter-spacing:.2px;
+    }
+    .title p{margin:0;color:var(--muted)}
+    .pillrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:8px 10px;
+      border-radius:999px;
+      color:var(--muted);
+      display:flex; gap:8px; align-items:center;
+      user-select:none;
+    }
+    .dot{width:9px;height:9px;border-radius:50%;}
+    .dot.a{background:var(--accent)}
+    .dot.b{background:var(--accent2)}
+    .dot.c{background:var(--good)}
+    .rightbox{
+      flex: 0 1 330px;
+      display:grid;
+      gap:12px;
+    }
+    .stat{
+      padding:14px 14px 12px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .stat .k{color:var(--muted); font-size:12px}
+    .stat .v{font-size:18px; margin-top:6px}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+      min-height: 60px;
+    }
+    .span-12{grid-column: span 12;}
+    .span-8{grid-column: span 8;}
+    .span-7{grid-column: span 7;}
+    .span-6{grid-column: span 6;}
+    .span-5{grid-column: span 5;}
+    .span-4{grid-column: span 4;}
+    .span-3{grid-column: span 3;}
+    @media (max-width: 980px){
+      .span-8,.span-7,.span-6,.span-5,.span-4,.span-3{grid-column: span 12;}
+      header{gap:12px}
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .sub{margin:0 0 10px; color:var(--muted)}
+    .divider{height:1px;background:var(--line); margin:14px 0}
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* factor tiles */
+    .factors{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){ .factors{grid-template-columns: 1fr;} }
+    .ftile{
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .icon{
+      width:40px; height:40px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: radial-gradient(60% 70% at 30% 30%, rgba(124,58,237,.35), rgba(34,211,238,.10));
+      display:grid; place-items:center;
+      flex:0 0 auto;
+    }
+    .ftile b{display:block; margin-bottom:4px}
+    .ftile p{margin:0; color:var(--muted); font-size:12.5px}
+
+    /* simulator controls */
+    .row{display:flex; gap:12px; flex-wrap:wrap}
+    .col{flex:1 1 240px}
+    label{display:block; color:var(--muted); font-size:12px; margin:10px 0 6px}
+    select, input[type="text"], textarea{
+      width:100%;
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height:90px; resize: vertical}
+    .slider{
+      display:grid;
+      grid-template-columns: 1fr 60px;
+      gap:10px;
+      align-items:center;
+    }
+    input[type="range"]{width:100%}
+    .val{
+      text-align:right;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      opacity:.95;
+    }
+
+    .scorebox{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){ .scorebox{grid-template-columns: 1fr;} }
+    .badge{
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+    .badge .k{color:var(--muted); font-size:12px}
+    .badge .v{font-size:20px; margin-top:6px}
+    .meter{
+      height:10px; border-radius:999px; background: rgba(255,255,255,.08);
+      overflow:hidden; border:1px solid var(--line); margin-top:10px;
+    }
+    .fill{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, var(--bad), var(--warn), var(--good));
+      border-radius:999px;
+    }
+
+    .two{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){ .two{grid-template-columns: 1fr;} }
+    canvas{
+      width:100%;
+      height:260px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+    .hint{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+      font-size:12.5px;
+      margin-top:12px;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      padding:2px 6px;
+      border-radius:8px;
+      color: var(--text);
+      font-size:12px;
+    }
+    .footer{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+      opacity:.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Which countries will best leverage Prompt Engineering & AI Coding Agents?</h1>
+        <p>
+          This infographic turns your brief into a <b>framework</b>: what to measure, how to compare countries,
+          and how to <b>simulate</b> outcomes by changing weights, culture, and constraints.
+        </p>
+        <div class="pillrow">
+          <div class="pill"><span class="dot a"></span> Digital infra</div>
+          <div class="pill"><span class="dot b"></span> Developer education</div>
+          <div class="pill"><span class="dot c"></span> Adoption + ecosystem</div>
+        </div>
+      </div>
+      <div class="rightbox">
+        <div class="stat">
+          <div class="k">What you’re really predicting</div>
+          <div class="v"><b>Speed × Depth</b> of integration into software delivery</div>
+        </div>
+        <div class="stat">
+          <div class="k">Key idea</div>
+          <div class="v">AI agents amplify <b>existing</b> strengths (and weaknesses)</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card span-12">
+        <h2>
+          <span class="icon" aria-hidden="true">
+            <!-- globe-ish -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="rgba(233,236,255,.9)" stroke-width="1.6"/>
+              <path d="M3.6 9.5c3.4 1.7 13.4 1.7 16.8 0" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M3.6 14.5c3.4-1.7 13.4-1.7 16.8 0" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M12 3c2.8 2.7 2.8 15.3 0 18" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          The dimensions you said you’ll examine
+        </h2>
+        <p class="sub">
+          These are the “inputs” that determine whether a country can turn AI coding agents into real software delivery throughput.
+        </p>
+
+        <div class="factors">
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- network -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="rgba(233,236,255,.9)"/>
+                <path d="M18 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="rgba(233,236,255,.9)"/>
+                <path d="M7.7 5.8 16.3 10.2" stroke="rgba(233,236,255,.7)" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M6 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="rgba(233,236,255,.9)"/>
+                <path d="M7.2 18.2 16.8 12.8" stroke="rgba(233,236,255,.7)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>Digital infrastructure</b>
+              <p>Connectivity, cloud access, device availability, reliable power, modern tooling baseline.</p>
+            </div>
+          </div>
+
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- graduation cap -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 4 3 9l9 5 9-5-9-5Z" stroke="rgba(233,236,255,.85)" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M7 12v5c0 1.2 2.2 3 5 3s5-1.8 5-3v-5" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>Developer education</b>
+              <p>CS fundamentals, engineering rigor, ability to validate outputs, test-driven habits.</p>
+            </div>
+          </div>
+
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- chat bubble -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M7 18l-3 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7Z" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M8 9h8M8 12h6" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>English + “specification language”</b>
+              <p>Ability to express precise requirements, constraints, acceptance criteria, and edge cases.</p>
+            </div>
+          </div>
+
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- gear -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="rgba(233,236,255,.8)" stroke-width="1.6"/>
+                <path d="M19.4 15a7.8 7.8 0 0 0 .1-2l2-1.2-2-3.4-2.3.6a8 8 0 0 0-1.7-1L15.2 5h-3.9l-.3 2a8 8 0 0 0-1.7 1L7 7.4l-2 3.4 2 1.2a7.8 7.8 0 0 0 .1 2l-2 1.2 2 3.4 2.3-.6a8 8 0 0 0 1.7 1l.3 2h3.9l.3-2a8 8 0 0 0 1.7-1l2.3.6 2-3.4-2-1.2Z"
+                      stroke="rgba(233,236,255,.55)" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>Openness to automation</b>
+              <p>Low stigma around tooling changes, high tolerance for iteration, “ship–measure–fix” mindset.</p>
+            </div>
+          </div>
+
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- rocket -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M14 10 9 15l-1 4 4-1 5-5" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 14c-2-2-2-6 1-9 3-3 7-3 9-2 1 2 1 6-2 9-3 3-7 3-9 2Z"
+                      stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M6.5 17.5 5 19" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>Entrepreneurial ecosystem</b>
+              <p>Startups + venture + fast procurement + talent density + strong OSS participation.</p>
+            </div>
+          </div>
+
+          <div class="ftile">
+            <div class="icon" aria-hidden="true">
+              <!-- shield -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3 20 7v6c0 5-3.6 8-8 8s-8-3-8-8V7l8-4Z" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M9.5 12.3 11 13.8l3.8-3.8" stroke="rgba(233,236,255,.65)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <b>AI readiness (governance + data)</b>
+              <p>Regulation clarity, data availability, security posture, and enterprise willingness to deploy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hint">
+          <span class="kbd">Interpretation</span>
+          Countries “win” by combining <b>high-quality specs</b> + <b>fast validation loops</b> + <b>deployment freedom</b>.
+          The rest is acceleration.
+        </div>
+      </section>
+
+      <!-- SIMULATOR 1 -->
+      <section class="card span-7">
+        <h2>
+          <span class="icon" aria-hidden="true">
+            <!-- gauge -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M4 13a8 8 0 1 1 16 0" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M12 13l4-4" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M6 13h12" stroke="rgba(233,236,255,.35)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Simulator A: “AI Agent Leverage Index”
+        </h2>
+        <p class="sub">
+          Pick a country template, tune factors and weights, and see how overall readiness changes. (Templates are illustrative defaults.)
+        </p>
+
+        <div class="two">
+          <div>
+            <label for="preset">Country template</label>
+            <select id="preset"></select>
+
+            <div class="divider"></div>
+
+            <div class="row">
+              <div class="col">
+                <label>Digital infrastructure</label>
+                <div class="slider">
+                  <input id="s_infra" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_infra"></div>
+                </div>
+
+                <label>Developer education</label>
+                <div class="slider">
+                  <input id="s_edu" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_edu"></div>
+                </div>
+
+                <label>English + spec language</label>
+                <div class="slider">
+                  <input id="s_eng" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_eng"></div>
+                </div>
+              </div>
+
+              <div class="col">
+                <label>Openness to automation</label>
+                <div class="slider">
+                  <input id="s_auto" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_auto"></div>
+                </div>
+
+                <label>Entrepreneurial ecosystem</label>
+                <div class="slider">
+                  <input id="s_eco" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_eco"></div>
+                </div>
+
+                <label>AI readiness (gov + data)</label>
+                <div class="slider">
+                  <input id="s_ai" type="range" min="0" max="10" step="0.1" />
+                  <div class="val" id="v_ai"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+            <p class="mini"><b>Weights</b> (what matters most depends on your thesis: startups vs enterprise, export vs domestic, etc.)</p>
+
+            <div class="row">
+              <div class="col">
+                <label>Infra weight</label>
+                <div class="slider">
+                  <input id="w_infra" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_infra"></div>
+                </div>
+                <label>Education weight</label>
+                <div class="slider">
+                  <input id="w_edu" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_edu"></div>
+                </div>
+                <label>English/spec weight</label>
+                <div class="slider">
+                  <input id="w_eng" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_eng"></div>
+                </div>
+              </div>
+              <div class="col">
+                <label>Automation weight</label>
+                <div class="slider">
+                  <input id="w_auto" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_auto"></div>
+                </div>
+                <label>Ecosystem weight</label>
+                <div class="slider">
+                  <input id="w_eco" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_eco"></div>
+                </div>
+                <label>AI readiness weight</label>
+                <div class="slider">
+                  <input id="w_ai" type="range" min="0" max="3" step="0.1" />
+                  <div class="val" id="vw_ai"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="scorebox">
+              <div class="badge">
+                <div class="k">Leverage Index (0–100)</div>
+                <div class="v" id="indexScore"><b>—</b></div>
+                <div class="meter"><div class="fill" id="indexFill"></div></div>
+              </div>
+              <div class="badge">
+                <div class="k">Interpretation</div>
+                <div class="v" id="indexLabel"><b>—</b></div>
+                <div class="mini" id="indexNote" style="margin-top:8px"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <canvas id="radar" width="520" height="420"></canvas>
+            <div class="hint">
+              <span class="kbd">How to use</span>
+              Try setting <b>English/spec</b> low and watch overall readiness drop even with strong infra—agents need good specs.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SIMULATOR 2 -->
+      <section class="card span-5">
+        <h2>
+          <span class="icon" aria-hidden="true">
+            <!-- timeline -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M6 7h12M6 12h12M6 17h12" stroke="rgba(233,236,255,.7)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M8 7v10" stroke="rgba(233,236,255,.35)" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M8 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="rgba(233,236,255,.9)"/>
+              <path d="M8 17a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="rgba(233,236,255,.9)"/>
+            </svg>
+          </span>
+          Simulator B: Adoption speed in the real world
+        </h2>
+        <p class="sub">
+          Even “ready” countries can deploy slowly due to enterprise constraints. Toggle friction and see predicted rollout speed.
+        </p>
+
+        <label>Typical deployment environment</label>
+        <select id="env">
+          <option value="startup">Startup / small teams</option>
+          <option value="mid">Mid-market / mixed stack</option>
+          <option value="enterprise">Enterprise / regulated</option>
+          <option value="gov">Government / critical infrastructure</option>
+        </select>
+
+        <label>Legacy burden</label>
+        <div class="slider">
+          <input id="legacy" type="range" min="0" max="10" step="1" />
+          <div class="val" id="v_legacy"></div>
+        </div>
+
+        <label>Security & compliance strictness</label>
+        <div class="slider">
+          <input id="compliance" type="range" min="0" max="10" step="1" />
+          <div class="val" id="v_compliance"></div>
+        </div>
+
+        <label>Procurement / approval friction</label>
+        <div class="slider">
+          <input id="proc" type="range" min="0" max="10" step="1" />
+          <div class="val" id="v_proc"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="badge">
+          <div class="k">Predicted adoption speed</div>
+          <div class="v" id="adoptSpeed"><b>—</b></div>
+          <div class="mini" id="adoptNote" style="margin-top:8px"></div>
+          <div class="meter"><div class="fill" id="adoptFill"></div></div>
+        </div>
+
+        <div class="hint">
+          <span class="kbd">Rule of thumb</span>
+          Agents roll out fastest where teams can <b>ship</b> and <b>measure</b> without long approvals.
+        </div>
+      </section>
+
+      <!-- SIMULATOR 3 -->
+      <section class="card span-12">
+        <h2>
+          <span class="icon" aria-hidden="true">
+            <!-- pen -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0 0-3L16.5 4.5a2.1 2.1 0 0 0-3 0L3 15v5Z" stroke="rgba(233,236,255,.75)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M13.5 6.5 17.5 10.5" stroke="rgba(233,236,255,.6)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Simulator C: “Specification English” / Prompt clarity tester
+        </h2>
+        <p class="sub">
+          This is a toy analyzer that scores how “agent-friendly” a requirement is (clarity, constraints, testability).
+          Paste any requirement and improve it.
+        </p>
+
+        <div class="row">
+          <div class="col">
+            <label>Your requirement / prompt</label>
+            <textarea id="promptText" placeholder="Example: Build an API that syncs IKEA smart home devices and shows status..."></textarea>
+
+            <div class="hint">
+              <span class="kbd">Try this pattern</span>
+              “Goal + Non-goals + Inputs/Outputs + Constraints + Acceptance tests + Edge cases”
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="scorebox">
+              <div class="badge">
+                <div class="k">Clarity score (0–100)</div>
+                <div class="v" id="clarityScore"><b>—</b></div>
+                <div class="meter"><div class="fill" id="clarityFill"></div></div>
+              </div>
+              <div class="badge">
+                <div class="k">What’s missing</div>
+                <ul class="list" id="missingList"></ul>
+              </div>
+            </div>
+
+            <div class="badge" style="margin-top:12px">
+              <div class="k">Suggested add-ons (copy/paste)</div>
+              <div class="mini" id="suggestions" style="margin-top:8px; white-space:pre-wrap"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPTIONAL: simple “global comparison” framing -->
+      <section class="card span-12">
+        <h2>
+          <span class="icon" aria-hidden="true">
+            <!-- layers -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3 3 8l9 5 9-5-9-5Z" stroke="rgba(233,236,255,.8)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M3 12l9 5 9-5" stroke="rgba(233,236,255,.55)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M3 16l9 5 9-5" stroke="rgba(233,236,255,.35)" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          How to read the world (fast mental model)
+        </h2>
+        <p class="sub">
+          Countries tend to cluster. Use these buckets when you later do the full analysis.
+        </p>
+
+        <div class="row">
+          <div class="col badge">
+            <div class="k">Category 1</div>
+            <div class="v"><b>“Agent-native” builders</b></div>
+            <ul class="list">
+              <li>High spec precision + fast iteration</li>
+              <li>Strong OSS + startup density</li>
+              <li>Low deployment friction</li>
+            </ul>
+          </div>
+          <div class="col badge">
+            <div class="k">Category 2</div>
+            <div class="v"><b>Enterprise accelerators</b></div>
+            <ul class="list">
+              <li>High education + infra</li>
+              <li>Slower rollouts due to compliance</li>
+              <li>Big gains once governance is solved</li>
+            </ul>
+          </div>
+          <div class="col badge">
+            <div class="k">Category 3</div>
+            <div class="v"><b>Bifurcated outcomes</b></div>
+            <ul class="list">
+              <li>Some elite clusters win hard</li>
+              <li>Large variance across regions/tiers</li>
+              <li>Tooling spreads unevenly</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hint">
+          <span class="kbd">Next step</span>
+          When you write the real report, use the simulator’s weights to reflect different theses (startup-led vs enterprise-led).
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      Self-contained infographic + simulators. Templates are illustrative; replace with your real data when you finalize the country analysis.
+    </div>
+  </div>
+
+  <script>
+    // -----------------------------
+    // Country templates (illustrative defaults)
+    // Replace these with real data later.
+    // -----------------------------
+    const PRESETS = {
+      "United States (illustrative)": { infra: 9.5, edu: 8.6, eng: 9.2, auto: 8.4, eco: 9.4, ai: 8.0 },
+      "India (illustrative)":        { infra: 7.2, edu: 7.6, eng: 8.2, auto: 8.0, eco: 7.8, ai: 6.6 },
+      "United Kingdom (illustrative)":{infra: 8.7, edu: 8.2, eng: 9.0, auto: 7.8, eco: 8.2, ai: 7.6 },
+      "Germany (illustrative)":      { infra: 8.5, edu: 8.4, eng: 7.0, auto: 6.6, eco: 7.4, ai: 7.4 },
+      "Israel (illustrative)":       { infra: 8.8, edu: 8.6, eng: 8.2, auto: 8.3, eco: 9.0, ai: 7.6 },
+      "Singapore (illustrative)":    { infra: 9.2, edu: 8.2, eng: 8.8, auto: 8.1, eco: 8.2, ai: 8.2 },
+      "Estonia (illustrative)":      { infra: 8.6, edu: 7.8, eng: 8.4, auto: 8.2, eco: 7.5, ai: 7.2 },
+      "Poland (illustrative)":       { infra: 7.9, edu: 7.8, eng: 7.2, auto: 7.4, eco: 7.0, ai: 6.8 },
+      "Japan (illustrative)":        { infra: 8.8, edu: 8.0, eng: 6.0, auto: 6.8, eco: 7.2, ai: 7.4 },
+      "South Korea (illustrative)":  { infra: 9.0, edu: 8.1, eng: 6.6, auto: 7.2, eco: 7.6, ai: 7.6 },
+      "Brazil (illustrative)":       { infra: 6.8, edu: 6.5, eng: 5.6, auto: 6.8, eco: 6.6, ai: 6.0 },
+      "Nigeria (illustrative)":      { infra: 5.6, edu: 6.1, eng: 7.6, auto: 7.0, eco: 6.0, ai: 5.2 },
+    };
+
+    const DEFAULT_WEIGHTS = { infra: 1.0, edu: 1.0, eng: 1.2, auto: 1.0, eco: 1.0, ai: 1.0 };
+
+    const $ = (id) => document.getElementById(id);
+
+    // UI elements
+    const presetSel = $("preset");
+
+    const sliders = {
+      infra: $("s_infra"),
+      edu: $("s_edu"),
+      eng: $("s_eng"),
+      auto: $("s_auto"),
+      eco: $("s_eco"),
+      ai: $("s_ai"),
+    };
+    const values = {
+      infra: $("v_infra"),
+      edu: $("v_edu"),
+      eng: $("v_eng"),
+      auto: $("v_auto"),
+      eco: $("v_eco"),
+      ai: $("v_ai"),
+    };
+
+    const weights = {
+      infra: $("w_infra"),
+      edu: $("w_edu"),
+      eng: $("w_eng"),
+      auto: $("w_auto"),
+      eco: $("w_eco"),
+      ai: $("w_ai"),
+    };
+    const wvalues = {
+      infra: $("vw_infra"),
+      edu: $("vw_edu"),
+      eng: $("vw_eng"),
+      auto: $("vw_auto"),
+      eco: $("vw_eco"),
+      ai: $("vw_ai"),
+    };
+
+    // Adoption simulator
+    const envSel = $("env");
+    const legacy = $("legacy");
+    const compliance = $("compliance");
+    const proc = $("proc");
+    const vLegacy = $("v_legacy");
+    const vCompliance = $("v_compliance");
+    const vProc = $("v_proc");
+
+    // Prompt tester
+    const promptText = $("promptText");
+
+    // Initialize presets dropdown
+    Object.keys(PRESETS).forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      presetSel.appendChild(opt);
+    });
+
+    // Initialize weights
+    function initWeights(){
+      for(const k of Object.keys(DEFAULT_WEIGHTS)){
+        weights[k].value = DEFAULT_WEIGHTS[k];
+      }
+    }
+
+    // Load a preset into sliders
+    function loadPreset(name){
+      const p = PRESETS[name];
+      for(const k of Object.keys(sliders)){
+        sliders[k].value = p[k];
+      }
+      syncAll();
+    }
+
+    // Calculate index (0-100)
+    function computeIndex(f, w){
+      const keys = Object.keys(f);
+      let num = 0, den = 0;
+      keys.forEach(k=>{
+        const wk = Math.max(0, Number(w[k] ?? 1));
+        num += Number(f[k]) * wk;
+        den += 10 * wk;
+      });
+      if(den === 0) return 0;
+      return (num / den) * 100;
+    }
+
+    function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+    function labelForScore(score){
+      if(score >= 82) return {label:"Leader", note:"Likely to integrate agents deeply and quickly; strong feedback loops + deploy capacity."};
+      if(score >= 68) return {label:"Fast Adopter", note:"Should capture big productivity gains; watch bottlenecks (specs, compliance, or ecosystem)."};
+      if(score >= 52) return {label:"Selective Integrator", note:"Adopts in pockets (elite teams / certain industries). Broader adoption needs structural upgrades."};
+      return {label:"Early Stage", note:"Core constraints dominate (infra, skills, governance, or language). Focus on foundations + pilots."};
+    }
+
+    function fmt(x){ return (Math.round(x*10)/10).toFixed(1); }
+
+    function readFactors(){
+      return {
+        infra: Number(sliders.infra.value),
+        edu: Number(sliders.edu.value),
+        eng: Number(sliders.eng.value),
+        auto: Number(sliders.auto.value),
+        eco: Number(sliders.eco.value),
+        ai: Number(sliders.ai.value),
+      };
+    }
+    function readWeights(){
+      return {
+        infra: Number(weights.infra.value),
+        edu: Number(weights.edu.value),
+        eng: Number(weights.eng.value),
+        auto: Number(weights.auto.value),
+        eco: Number(weights.eco.value),
+        ai: Number(weights.ai.value),
+      };
+    }
+
+    // Radar chart
+    function drawRadar(factors){
+      const canvas = $("radar");
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0,0,W,H);
+
+      // Device pixel ratio fix
+      // (Keep simple; using fixed width/height already.)
+
+      const keys = [
+        ["infra","Infra"],
+        ["edu","Education"],
+        ["eng","English/Spec"],
+        ["auto","Automation"],
+        ["eco","Ecosystem"],
+        ["ai","AI readiness"],
+      ];
+
+      const cx = W/2, cy = H/2 + 10;
+      const R = Math.min(W,H)*0.34;
+
+      // background
+      ctx.fillStyle = "rgba(0,0,0,.08)";
+      ctx.fillRect(0,0,W,H);
+
+      // grid rings
+      for(let ring=1; ring<=4; ring++){
+        const r = (R * ring)/4;
+        ctx.beginPath();
+        for(let i=0;i<keys.length;i++){
+          const ang = (Math.PI*2*i)/keys.length - Math.PI/2;
+          const x = cx + Math.cos(ang)*r;
+          const y = cy + Math.sin(ang)*r;
+          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "rgba(255,255,255,.10)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // axes + labels
+      ctx.font = "12px system-ui";
+      keys.forEach(([,label], i)=>{
+        const ang = (Math.PI*2*i)/keys.length - Math.PI/2;
+        const x2 = cx + Math.cos(ang)*R;
+        const y2 = cy + Math.sin(ang)*R;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.lineTo(x2,y2);
+        ctx.strokeStyle = "rgba(255,255,255,.10)";
+        ctx.stroke();
+
+        const lx = cx + Math.cos(ang)*(R+26);
+        const ly = cy + Math.sin(ang)*(R+26);
+        ctx.fillStyle = "rgba(233,236,255,.85)";
+        ctx.textAlign = Math.abs(Math.cos(ang)) < 0.2 ? "center" : (Math.cos(ang) > 0 ? "left" : "right");
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, lx, ly);
+      });
+
+      // polygon
+      ctx.beginPath();
+      keys.forEach(([k], i)=>{
+        const v = clamp(factors[k],0,10)/10;
+        const ang = (Math.PI*2*i)/keys.length - Math.PI/2;
+        const x = cx + Math.cos(ang)*R*v;
+        const y = cy + Math.sin(ang)*R*v;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(124,58,237,.18)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(34,211,238,.55)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // points
+      keys.forEach(([k], i)=>{
+        const v = clamp(factors[k],0,10)/10;
+        const ang = (Math.PI*2*i)/keys.length - Math.PI/2;
+        const x = cx + Math.cos(ang)*R*v;
+        const y = cy + Math.sin(ang)*R*v;
+        ctx.beginPath();
+        ctx.arc(x,y,3.5,0,Math.PI*2);
+        ctx.fillStyle = "rgba(233,236,255,.9)";
+        ctx.fill();
+      });
+
+      // title-ish
+      ctx.fillStyle = "rgba(233,236,255,.75)";
+      ctx.textAlign = "center";
+      ctx.fillText("Factor profile (0–10)", cx, 22);
+    }
+
+    function syncSliders(){
+      for(const k of Object.keys(sliders)){
+        values[k].textContent = fmt(Number(sliders[k].value));
+      }
+    }
+    function syncWeights(){
+      for(const k of Object.keys(weights)){
+        wvalues[k].textContent = fmt(Number(weights[k].value));
+      }
+    }
+
+    function syncIndex(){
+      const f = readFactors();
+      const w = readWeights();
+      const score = computeIndex(f,w);
+      $("indexScore").innerHTML = "<b>" + Math.round(score) + "</b>";
+      $("indexFill").style.width = clamp(score,0,100) + "%";
+
+      const {label, note} = labelForScore(score);
+      $("indexLabel").innerHTML = "<b>" + label + "</b>";
+      $("indexNote").textContent = note;
+
+      drawRadar(f);
+    }
+
+    function syncAll(){
+      syncSliders();
+      syncWeights();
+      syncIndex();
+    }
+
+    // -----------------------------
+    // Adoption speed simulator
+    // -----------------------------
+    function adoptionSpeed(){
+      const env = envSel.value;
+      const L = Number(legacy.value);
+      const C = Number(compliance.value);
+      const P = Number(proc.value);
+
+      vLegacy.textContent = L + "/10";
+      vCompliance.textContent = C + "/10";
+      vProc.textContent = P + "/10";
+
+      // Base speed by environment (0..100)
+      const base = {
+        startup: 85,
+        mid: 70,
+        enterprise: 55,
+        gov: 40
+      }[env] ?? 65;
+
+      // Friction reduces speed nonlinearly
+      const friction = (L*2.2 + C*2.6 + P*2.4); // max ~72
+      let score = base - friction*0.8;
+
+      // floor/ceil
+      score = clamp(score, 5, 95);
+
+      const label =
+        score >= 75 ? "Fast (weeks)" :
+        score >= 55 ? "Moderate (months)" :
+        score >= 35 ? "Slow (quarters)" :
+                      "Very slow (years)";
+
+      $("adoptSpeed").innerHTML = "<b>" + label + "</b>";
+      $("adoptFill").style.width = score + "%";
+
+      const note =
+        env === "startup" ? "Pilot quickly → expand via developer experience + guardrails." :
+        env === "mid" ? "Standardize tooling + measure ROI team-by-team." :
+        env === "enterprise" ? "Start with low-risk domains (tests, refactors), then move to production changes." :
+        "Expect policy + procurement to dominate; focus on sandboxed, auditable agent workflows.";
+
+      $("adoptNote").textContent = "Speed score: " + Math.round(score) + "/100. " + note;
+    }
+
+    // -----------------------------
+    // Prompt clarity tester (toy heuristic)
+    // -----------------------------
+    function clarityTest(text){
+      const t = (text || "").trim();
+      const len = t.length;
+
+      // Signals
+      const hasGoal = /\b(build|create|implement|design|make|develop)\b/i.test(t);
+      const hasInputs = /\b(input|payload|request|params|schema|data)\b/i.test(t);
+      const hasOutputs = /\b(output|response|returns|result|ui|page|endpoint)\b/i.test(t);
+      const hasConstraints = /\b(must|should|cannot|limit|within|latency|security|privacy|gdpr|rate)\b/i.test(t);
+      const hasAcceptance = /\b(acceptance|test|given|when|then|assert|unit test|e2e)\b/i.test(t);
+      const hasEdge = /\b(edge case|failure|timeout|null|retry|offline|conflict|race)\b/i.test(t);
+
+      const ambiguousWords = (t.match(/\b(some|stuff|things|nice|fast|quick|simple|better|best|etc)\b/gi) || []).length;
+      const questionMarks = (t.match(/\?/g) || []).length;
+
+      // Score components
+      let score = 0;
+      score += hasGoal ? 18 : 0;
+      score += hasInputs ? 12 : 0;
+      score += hasOutputs ? 12 : 0;
+      score += hasConstraints ? 16 : 0;
+      score += hasAcceptance ? 18 : 0;
+      score += hasEdge ? 14 : 0;
+
+      // length sweet spot
+      if(len >= 120) score += 8;
+      if(len >= 280) score += 6;
+      if(len > 1200) score -= 8;
+
+      // penalties
+      score -= ambiguousWords * 3.5;
+      score -= questionMarks * 2;
+
+      score = clamp(score, 0, 100);
+
+      const missing = [];
+      if(!hasGoal) missing.push("Clear goal (what you want built)");
+      if(!hasInputs) missing.push("Inputs (data, triggers, interfaces)");
+      if(!hasOutputs) missing.push("Outputs (API, UI, files, side effects)");
+      if(!hasConstraints) missing.push("Constraints (security, limits, non-goals)");
+      if(!hasAcceptance) missing.push("Acceptance tests (verifiable success)");
+      if(!hasEdge) missing.push("Edge cases + failure modes");
+
+      const suggestions =
+`Add this scaffold:
+
+Goal:
+Non-goals:
+Inputs:
+Outputs:
+Constraints:
+Acceptance tests (Given/When/Then):
+Edge cases:
+Telemetry (what to log/measure):`;
+
+      return {score, missing, suggestions};
+    }
+
+    function syncClarity(){
+      const {score, missing, suggestions} = clarityTest(promptText.value);
+      $("clarityScore").innerHTML = "<b>" + Math.round(score) + "</b>";
+      $("clarityFill").style.width = score + "%";
+
+      const list = $("missingList");
+      list.innerHTML = "";
+      (missing.length ? missing : ["Looks solid — now add concrete examples + test cases."]).forEach(item=>{
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      });
+
+      $("suggestions").textContent = suggestions;
+    }
+
+    // Hook up events
+    presetSel.addEventListener("change", () => loadPreset(presetSel.value));
+    Object.values(sliders).forEach(el => el.addEventListener("input", syncAll));
+    Object.values(weights).forEach(el => el.addEventListener("input", syncAll));
+
+    [envSel, legacy, compliance, proc].forEach(el => el.addEventListener("input", adoptionSpeed));
+    promptText.addEventListener("input", syncClarity);
+
+    // Init defaults
+    initWeights();
+    presetSel.value = "India (illustrative)";
+    loadPreset(presetSel.value);
+
+    legacy.value = 5; compliance.value = 6; proc.value = 5;
+    adoptionSpeed();
+
+    promptText.value = "Build a coding-agent workflow for a SaaS team. The agent must implement features from tickets, write tests, run CI locally, and open a PR with a summary. Constraints: no production credentials, must pass lint+tests, must log every tool action. Acceptance: Given a ticket with API+UI changes, When the agent runs, Then a PR is opened with passing CI and a changelog. Edge cases: flaky tests, ambiguous tickets, missing secrets.";
+    syncClarity();
+  </script>
+</body>
+</html>

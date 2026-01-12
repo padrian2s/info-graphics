@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Spain — AI Coding Agents & Prompt Engineering Readiness (Infographic)</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.55);
+      --good:#35E6B8;
+      --warn:#FFB020;
+      --bad:#FF4D6D;
+      --info:#63B3FF;
+      --violet:#A78BFA;
+      --cyan:#22D3EE;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --r: 18px;
+      --r2: 28px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 10% 0%, rgba(198,11,30,.18), transparent 55%),
+        radial-gradient(900px 650px at 95% 10%, rgba(255,196,0,.16), transparent 55%),
+        radial-gradient(1200px 800px at 55% 115%, rgba(198,11,30,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 64px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    }
+    .badge{
+      display:flex; align-items:center; gap:10px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.04);
+      font-weight:650;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: conic-gradient(from 180deg, #C60B1E, #FFC400, #C60B1E);
+      box-shadow: 0 0 0 4px rgba(198,11,30,.15);
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      color:var(--muted2);
+      font-size:13px;
+      padding-right:6px;
+    }
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+
+    .hero{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background:
+        radial-gradient(800px 500px at 20% 20%, rgba(198,11,30,.20), transparent 60%),
+        radial-gradient(700px 500px at 75% 35%, rgba(255,196,0,.15), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 600px at 10% 0%, rgba(255,196,0,.10), transparent 55%),
+        radial-gradient(700px 450px at 105% 30%, rgba(198,11,30,.08), transparent 55%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .hgrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 920px){
+      .hgrid{grid-template-columns:1fr}
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:70ch;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 560px){
+      .kpis{grid-template-columns:1fr}
+      h1{font-size:30px}
+    }
+    .kpi{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius:14px;
+      padding:12px 12px 10px;
+      backdrop-filter: blur(8px);
+    }
+    .kpi .big{
+      font-size:18px; font-weight:800;
+      letter-spacing:.2px;
+      display:flex; align-items:baseline; gap:8px;
+    }
+    .kpi .label{color:var(--muted2); font-size:12px; margin-top:6px; line-height:1.35}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+      width:fit-content;
+    }
+    .pill b{color:var(--text)}
+    .pill .mini{
+      width:9px;height:9px;border-radius:50%;
+      background: var(--warn);
+      box-shadow: 0 0 0 4px rgba(255,176,32,.12);
+    }
+
+    .section{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .section{grid-template-columns:1fr} }
+
+    .card{
+      border:1px solid var(--stroke);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .items{display:grid; gap:10px; margin-top:8px}
+    .item{
+      display:grid;
+      grid-template-columns: auto 1fr;
+      gap:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .icon{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      font-weight:900;
+    }
+    .icon.good{color:var(--good); box-shadow:0 0 0 4px rgba(53,230,184,.10)}
+    .icon.warn{color:var(--warn); box-shadow:0 0 0 4px rgba(255,176,32,.10)}
+    .icon.bad{color:var(--bad); box-shadow:0 0 0 4px rgba(255,77,109,.10)}
+    .icon.info{color:var(--info); box-shadow:0 0 0 4px rgba(99,179,255,.10)}
+    .item h3{margin:0; font-size:14px; letter-spacing:.1px}
+    .item p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.5}
+
+    .grid3{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){ .grid3{grid-template-columns:1fr} }
+
+    .bigcard{
+      border:1px solid var(--stroke);
+      border-radius:var(--r2);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:18px;
+      margin-top:14px;
+    }
+    .bigcard h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .split{grid-template-columns:1fr} }
+
+    .track{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+    }
+    .track::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(700px 320px at 20% 0%, rgba(198,11,30,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .track .head{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      position:relative;
+    }
+    .track .name{
+      font-weight:850;
+      letter-spacing:.2px;
+      display:flex; align-items:center; gap:10px;
+      margin:0;
+    }
+    .bubble{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.15);
+      font-size:12px;
+      color:var(--muted);
+      font-family: var(--mono);
+      white-space:nowrap;
+    }
+    .track ul{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+      position:relative;
+    }
+    .emph{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      color:rgba(255,255,255,.86);
+      position:relative;
+    }
+    .emph b{font-family:var(--mono)}
+    .gain{color:var(--good)}
+    .risk{color:var(--bad)}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.02);
+    }
+    th,td{
+      text-align:left;
+      padding:10px 12px;
+      font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      vertical-align:top;
+    }
+    th{
+      color:rgba(255,255,255,.86);
+      font-weight:750;
+      background: rgba(255,255,255,.04);
+    }
+    tr:last-child td{border-bottom:none}
+    td{color:var(--muted)}
+    .fit-strong{color:rgba(255,255,255,.92); font-weight:700}
+    .fit-strong .s{color:var(--good)}
+    .fit-med .m{color:var(--warn)}
+    .fit-dev .d{color:var(--info)}
+    .region{
+      font-weight:750; color:rgba(255,255,255,.88)
+    }
+
+    .bars{
+      display:grid;
+      gap:10px;
+    }
+    .bar{
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .bar .row{
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      font-size:13px;
+      color:rgba(255,255,255,.86);
+      margin-bottom:8px;
+    }
+    .bar .row span{color:var(--muted)}
+    .meter{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .meter > i{
+      display:block;
+      height:100%;
+      width:var(--w,60%);
+      background: linear-gradient(90deg, rgba(198,11,30,.9), rgba(255,196,0,.9), rgba(198,11,30,.8));
+      border-radius:999px;
+      box-shadow: 0 10px 30px rgba(198,11,30,.25);
+    }
+    .meter.warn > i{
+      background: linear-gradient(90deg, rgba(255,176,32,.95), rgba(167,139,250,.75));
+      box-shadow: 0 10px 30px rgba(255,176,32,.18);
+    }
+    .meter.bad > i{
+      background: linear-gradient(90deg, rgba(255,77,109,.95), rgba(255,176,32,.75));
+      box-shadow: 0 10px 30px rgba(255,77,109,.18);
+    }
+
+    .timeline{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .phase{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+    }
+    @media (max-width: 600px){
+      .phase{grid-template-columns:1fr}
+    }
+    .when{
+      font-family: var(--mono);
+      color: rgba(255,255,255,.86);
+      font-size:12px;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .when .label{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.15);
+      width:fit-content;
+    }
+    .when .label i{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--info);
+      box-shadow: 0 0 0 4px rgba(99,179,255,.10);
+      display:inline-block;
+    }
+    .phase h3{margin:0; font-size:14px}
+    .phase p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .footer{
+      margin-top:16px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+      color:rgba(255,255,255,.9);
+      font-size:13px;
+      transition: transform .12s ease, background .12s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06)}
+    .btn:active{transform: translateY(0px)}
+    .kbd{font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,.14); padding:2px 6px; border-radius:8px; background: rgba(0,0,0,.18)}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">
+        <span class="dot"></span>
+        <span>Spain — AI Coding Agents & Prompt Engineering Readiness</span>
+      </div>
+      <div class="meta">
+        <span class="chip">Infographic</span>
+        <span class="chip">Architect-to-Agents Lens</span>
+        <span class="chip">LatAm Bridge Thesis</span>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hgrid">
+        <div>
+          <h1>Spain's AI-Agent Readiness is <span style="color:var(--warn)">underestimated but uneven</span>.</h1>
+          <p class="subtitle">
+            Hidden strengths (LatAm bridge, lifestyle-driven talent magnet, strong startup hubs, creative problem-solving)
+            meet real frictions (English gaps, traditional corporate culture, youth unemployment legacy, regional fragmentation).
+            Result: pockets of excellence in a still-maturing ecosystem.
+          </p>
+          <div class="pill" title="Core thesis">
+            <span class="mini"></span>
+            <div><b>The thesis:</b> Spanish-speaking AI architects → <span class="muted">unique global positioning</span>.</div>
+          </div>
+        </div>
+
+        <div class="kpis" aria-label="Key signals">
+          <div class="kpi">
+            <div class="big">~50K <span class="tag">/year</span></div>
+            <div class="label">IT/Engineering graduates. Growing tech sector, especially in Barcelona & Madrid hubs.</div>
+          </div>
+          <div class="kpi">
+            <div class="big">LatAm Bridge <span class="tag">unique</span></div>
+            <div class="label">Native Spanish + EU base = gateway to 500M+ Spanish speakers & Latin American markets.</div>
+          </div>
+          <div class="kpi">
+            <div class="big">Talent Magnet <span class="tag">trend</span></div>
+            <div class="label">Quality of life attracting remote workers & startups relocating from higher-cost EU/US cities.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>
+          Structural Advantages
+          <span class="tag">Why Spain can win</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon good">A1</div>
+            <div>
+              <h3>Spanish language as AI moat</h3>
+              <p>Native access to LatAm markets. Spanish-language AI tools, prompts, and documentation = massive addressable market.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A2</div>
+            <div>
+              <h3>Barcelona & Madrid tech ecosystems</h3>
+              <p>Mature startup scenes, international talent pools, VC presence. Product mindset stronger than pure outsourcing.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">A3</div>
+            <div>
+              <h3>Quality of life talent attraction</h3>
+              <p>Climate, culture, cost vs. Northern Europe → drawing senior talent who work remotely for global companies.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">A4</div>
+            <div>
+              <h3>Creative problem-solving culture</h3>
+              <p>Less rigid than German engineering, more improvisational. Can be strength for novel AI applications.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>
+          Structural Challenges
+          <span class="tag">Where it breaks</span>
+        </h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon bad">C1</div>
+            <div>
+              <h3>English proficiency gaps</h3>
+              <p>Below Nordic/Dutch levels. Technical English OK, but prompt engineering nuance requires precision many lack.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C2</div>
+            <div>
+              <h3>Traditional corporate culture</h3>
+              <p>Large Spanish companies often hierarchical, slow-moving. SME-dominated economy limits enterprise AI adoption.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C3</div>
+            <div>
+              <h3>Youth unemployment legacy</h3>
+              <p>Lost generation effect — gaps in mid-career talent pipeline. Junior oversupply, senior undersupply.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon info">C4</div>
+            <div>
+              <h3>Regional fragmentation</h3>
+              <p>Barcelona vs Madrid rivalry, autonomous communities = fragmented ecosystem. No unified national tech strategy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3">
+      <div class="card">
+        <h2>Agent Fit — Quick Signal Bars <span class="tag">intuition</span></h2>
+        <div class="bars">
+          <div class="bar">
+            <div class="row"><b>Creative adaptation</b> <span>High</span></div>
+            <div class="meter" style="--w:75%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Spanish-market expertise</b> <span>Unique</span></div>
+            <div class="meter" style="--w:92%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>English precision</b> <span>Mixed</span></div>
+            <div class="meter warn" style="--w:55%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Enterprise AI adoption</b> <span>Slow</span></div>
+            <div class="meter warn" style="--w:42%"><i></i></div>
+          </div>
+          <div class="bar">
+            <div class="row"><b>Startup ecosystem maturity</b> <span>Growing</span></div>
+            <div class="meter" style="--w:68%"><i></i></div>
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Bars are a visual summary of the text (not measured stats).
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>The LatAm Bridge Advantage <span class="tag">unique asset</span></h2>
+        <table aria-label="LatAm bridge table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Strategic Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Native Spanish prompting</td>
+              <td>Spanish-first AI products for 500M+ users</td>
+            </tr>
+            <tr>
+              <td>EU regulatory compliance</td>
+              <td>Bridge EU AI Act to LatAm expansion</td>
+            </tr>
+            <tr>
+              <td>Cultural understanding</td>
+              <td>Localize AI for Hispanic markets</td>
+            </tr>
+            <tr>
+              <td>Timezone coverage</td>
+              <td>EU hours + LatAm afternoon overlap</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Spain as the "EU headquarters" for Spanish-speaking AI ventures.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Regional Tech Hubs <span class="tag">Spain's clusters</span></h2>
+        <table aria-label="Regional fit">
+          <thead>
+            <tr>
+              <th>City</th>
+              <th>Characteristics</th>
+              <th>AI Agent Fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">Barcelona</td>
+              <td>Startup culture, international, product focus</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Madrid</td>
+              <td>Corporate HQs, fintech, larger scale</td>
+              <td class="fit-strong"><span class="s">Strong</span></td>
+            </tr>
+            <tr>
+              <td class="region">Valencia</td>
+              <td>Growing hub, gaming, cost-effective</td>
+              <td class="fit-med"><span class="m">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="region">Málaga</td>
+              <td>Emerging tech coast, Google campus</td>
+              <td class="fit-med"><span class="m">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="region">Bilbao</td>
+              <td>Industrial tech, engineering tradition</td>
+              <td class="fit-dev"><span class="d">Developing</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>The Stratification Reality</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">A</span> Track A: Global-Ready Architects</p>
+            <span class="bubble">Top 15–20%</span>
+          </div>
+          <ul>
+            <li>Strong English + Spanish bilingual capability</li>
+            <li>Startup or international company experience</li>
+            <li>Already integrating AI into workflows</li>
+            <li>Can serve both EU and LatAm markets</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b class="gain">Unique bilingual AI architect positioning</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon warn" style="width:28px;height:28px;border-radius:10px">B</span> Track B: Spanish-Market Focus</p>
+            <span class="bubble">Middle 45–50%</span>
+          </div>
+          <ul>
+            <li>Good technical skills, limited English</li>
+            <li>Strong in Spanish-language AI applications</li>
+            <li>Dependent on LatAm/Spain market growth</li>
+            <li>Need to develop English or double-down on Spanish</li>
+          </ul>
+          <div class="emph">
+            <span>Outcome</span>
+            <b style="color:rgba(255,255,255,.92)">Viable if Spanish AI market grows</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="track" style="margin-top:14px;">
+        <div class="head">
+          <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">C</span> Track C: Displacement Risk</p>
+          <span class="bubble">Bottom 30–35%</span>
+        </div>
+        <ul>
+          <li>Junior developers in traditional companies</li>
+          <li>Limited language skills (neither strong English nor positioned for Spanish AI)</li>
+          <li>Higher risk due to youth unemployment history — harder to pivot</li>
+        </ul>
+        <div class="emph">
+          <span>Key factor</span>
+          <b class="risk">Compounded by existing employment challenges</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Competitive Positioning <span class="tag">vs other markets</span></h2>
+        <table aria-label="Competitors">
+          <thead>
+            <tr>
+              <th>Competitor</th>
+              <th>Spain's Advantage</th>
+              <th>Spain's Disadvantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="region">Portugal</td>
+              <td>Larger market, LatAm cultural ties</td>
+              <td>PT: better English, Brazil connection</td>
+            </tr>
+            <tr>
+              <td class="region">Mexico</td>
+              <td>EU base, regulatory stability, infrastructure</td>
+              <td>MX: US timezone, lower costs, scale</td>
+            </tr>
+            <tr>
+              <td class="region">Argentina</td>
+              <td>Stability, EU access, infrastructure</td>
+              <td>AR: deeper tech talent, lower costs</td>
+            </tr>
+            <tr>
+              <td class="region">Eastern Europe</td>
+              <td>Spanish-language unique angle</td>
+              <td>EE: better English, lower costs</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:10px 0 0; font-size:12px;">
+          Spain's unique play: EU-based Spanish-language AI leadership.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Strategic Recommendations <span class="tag">how to win</span></h2>
+        <div class="items">
+          <div class="item">
+            <div class="icon info">I</div>
+            <div>
+              <h3>Individuals</h3>
+              <p>
+                Choose lane: master English for global or own Spanish AI niche • build bilingual prompt portfolios • leverage lifestyle for remote global roles.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon warn">C</div>
+            <div>
+              <h3>Companies</h3>
+              <p>
+                Position for LatAm expansion via AI • build Spanish-language AI products • attract international talent with lifestyle value prop.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="icon good">E</div>
+            <div>
+              <h3>Ecosystem</h3>
+              <p>
+                English education investment • unified national AI strategy • Barcelona-Madrid collaboration not competition • LatAm AI partnerships.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Two Futures</h2>
+      <div class="split">
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon good" style="width:28px;height:28px;border-radius:10px">+</span> Optimistic Case</p>
+            <span class="bubble">Upside</span>
+          </div>
+          <ul>
+            <li>Becomes the "EU gateway to Spanish-speaking AI"</li>
+            <li>Barcelona emerges as top-3 EU AI startup hub</li>
+            <li>Lifestyle advantage attracts senior global talent</li>
+            <li>Spanish-language AI products find massive LatAm market</li>
+          </ul>
+          <div class="emph">
+            <span>Formula</span>
+            <b>Spanish + EU + Lifestyle = Unique Position</b>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="head">
+            <p class="name"><span class="icon bad" style="width:28px;height:28px;border-radius:10px">–</span> Pessimistic Case</p>
+            <span class="bubble">Downside</span>
+          </div>
+          <ul>
+            <li>English gaps limit global competitiveness</li>
+            <li>Traditional companies resist AI transformation</li>
+            <li>LatAm captured by US companies directly</li>
+            <li>Youth unemployment compounds with AI displacement</li>
+          </ul>
+          <div class="emph">
+            <span>Core risk</span>
+            <b class="risk">Stuck between global English & local limits</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bigcard">
+      <h2>Timeline Prediction</h2>
+      <div class="timeline" role="list">
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Current State</div>
+            <span>2024–2025</span>
+          </div>
+          <div>
+            <h3>Startup adoption leads, corporates lag</h3>
+            <p>Barcelona/Madrid startups integrate AI; traditional Spanish companies watch cautiously.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> LatAm Play</div>
+            <span>2025–2026</span>
+          </div>
+          <div>
+            <h3>Spanish-language AI products emerge</h3>
+            <p>First wave of Spain-built AI tools targeting LatAm markets; early winners establish position.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> Market Definition</div>
+            <span>2026–2028</span>
+          </div>
+          <div>
+            <h3>Spain's AI identity crystallizes</h3>
+            <p>Either captures Spanish-language AI leadership or cedes to US companies with Spanish localization.</p>
+          </div>
+        </div>
+
+        <div class="phase" role="listitem">
+          <div class="when">
+            <div class="label"><i></i> New Equilibrium</div>
+            <span>2028+</span>
+          </div>
+          <div>
+            <h3>Role in global AI ecosystem defined</h3>
+            <p>Spain either a key node for Hispanic AI or a secondary market consuming others' AI products.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>
+          <div><b>One-line takeaway:</b> Spain wins by owning <span style="color:var(--good)">Spanish-language AI</span> and leveraging <span style="color:var(--info)">lifestyle as talent strategy</span> — not competing on English.</div>
+          <div style="margin-top:6px;">Tip: print-friendly via <span class="kbd">Cmd</span> + <span class="kbd">P</span> (choose "Save as PDF").</div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="#"
+             onclick="navigator.clipboard?.writeText(document.documentElement.outerHTML).then(()=>alert('HTML copied to clipboard.')) .catch(()=>alert('Copy failed — you can still copy from view source.')); return false;">
+            Copy HTML
+            <span class="kbd">clipboard</span>
+          </a>
+          <a class="btn" href="#"
+             onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">
+            Back to top
+            <span class="kbd">↑</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer" style="margin-top:18px;">
+      <div>
+        <span class="muted">Key insight:</span>
+        Spain's path isn't competing with Eastern Europe on English — it's becoming the EU's Spanish-language AI hub.
+      </div>
+      <div class="muted">Designed for clarity — responsive — no external assets</div>
+    </div>
+  </div>
+</body>
+</html>
