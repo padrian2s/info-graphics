@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agents ≠ Personalities: The Magic is Domain Memory</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0C1222;
+      --panel2:#0A1020;
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.14);
+      --text:rgba(255,255,255,.88);
+      --muted:rgba(255,255,255,.64);
+      --dim:rgba(255,255,255,.44);
+      --good:#33d17a;
+      --warn:#ffb020;
+      --bad:#ff4d6d;
+      --accent:#7c5cff;
+      --accent2:#2ad4ff;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% -10%, rgba(124,92,255,.22), transparent 55%),
+        radial-gradient(900px 700px at 85% 0%, rgba(42,212,255,.18), transparent 60%),
+        radial-gradient(900px 700px at 55% 120%, rgba(51,209,122,.10), transparent 55%),
+        linear-gradient(180deg, #060814, #050714 70%, #040611);
+      overflow-x:hidden;
+    }
+
+    /* subtle grid */
+    .grid{
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity:.28;
+      mask-image: radial-gradient(900px 520px at 50% 12%, black 35%, transparent 70%);
+    }
+
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 60px}
+    header{
+      display:flex; gap:16px; align-items:flex-start; justify-content:space-between;
+      margin:6px 0 18px;
+    }
+    .title{
+      display:flex; flex-direction:column; gap:10px;
+      max-width:860px;
+    }
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--muted);
+    }
+    .pill{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      padding:7px 10px;
+      border-radius:999px;
+      backdrop-filter: blur(8px);
+    }
+    h1{
+      margin:0;
+      font-weight:800;
+      font-size: clamp(28px, 3.6vw, 46px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.45;
+      max-width:70ch;
+    }
+    .rightStat{
+      min-width:260px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius:var(--r);
+      padding:14px 14px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .rightStat::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(420px 220px at 10% 10%, rgba(124,92,255,.28), transparent 60%),
+        radial-gradient(340px 220px at 90% 20%, rgba(42,212,255,.18), transparent 55%);
+      opacity:.45;
+      pointer-events:none;
+    }
+    .rightStat > *{position:relative}
+    .statRow{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+    .big{
+      font-size:30px; font-weight:850; letter-spacing:-.02em;
+    }
+    .small{color:var(--muted); font-size:12px}
+    .divider{height:1px; background:var(--stroke); margin:10px 0}
+    .miniList{display:grid; gap:8px; margin:0; padding:0; list-style:none}
+    .miniList li{display:flex; gap:10px; align-items:flex-start; color:var(--muted); font-size:13px}
+    .dot{width:8px; height:8px; border-radius:50%; margin-top:6px}
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width: 980px){
+      header{flex-direction:column}
+      .rightStat{width:100%}
+      .layout{grid-template-columns: 1fr}
+    }
+
+    .card{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius:var(--r);
+      padding:16px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(700px 280px at 15% 0%, rgba(124,92,255,.10), transparent 50%),
+        radial-gradient(520px 240px at 85% 0%, rgba(42,212,255,.08), transparent 55%);
+      pointer-events:none;
+      opacity:.9;
+      mask-image: linear-gradient(180deg, black 35%, transparent 90%);
+    }
+    .card > *{position:relative}
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:-.01em;
+    }
+    .muted{color:var(--muted)}
+    .hint{color:var(--dim); font-size:12px}
+
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .chip{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      color:var(--muted);
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .chip b{color:var(--text); font-weight:650}
+
+    .twoCol{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 720px){ .twoCol{grid-template-columns:1fr} }
+
+    .callout{
+      border:1px solid var(--stroke2);
+      background: rgba(0,0,0,.22);
+      border-radius:14px;
+      padding:12px;
+      display:flex; gap:10px; align-items:flex-start;
+    }
+    .badge{
+      min-width:34px; height:34px; border-radius:10px;
+      display:grid; place-items:center;
+      font-weight:800; font-size:14px;
+      color:#0b0f1a;
+    }
+    .badge.a{background: linear-gradient(135deg, var(--accent), var(--accent2))}
+    .badge.b{background: linear-gradient(135deg, var(--good), #b9ffde)}
+    .badge.c{background: linear-gradient(135deg, var(--warn), #ffe2a6)}
+    .badge.d{background: linear-gradient(135deg, var(--bad), #ffb8c4)}
+    .callout h3{margin:0 0 4px; font-size:14px}
+    .callout p{margin:0; color:var(--muted); font-size:13px; line-height:1.4}
+
+    /* diagram */
+    .diagram{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background: rgba(0,0,0,.24);
+      padding:12px;
+      overflow:hidden;
+    }
+    svg{width:100%; height:auto; display:block}
+    .legend{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .legend span{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--stroke);
+      padding:6px 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+    }
+
+    /* simulator */
+    .sim{
+      display:grid; gap:12px;
+    }
+    .simControls{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      padding:10px;
+      background: rgba(0,0,0,.22);
+    }
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--stroke2);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:650;
+      letter-spacing:-.01em;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .btn:hover{background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22)}
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      border-color: rgba(124,92,255,.45);
+      background: linear-gradient(180deg, rgba(124,92,255,.25), rgba(124,92,255,.10));
+    }
+    .btn.good{
+      border-color: rgba(51,209,122,.42);
+      background: linear-gradient(180deg, rgba(51,209,122,.18), rgba(51,209,122,.08));
+    }
+    .btn.warn{
+      border-color: rgba(255,176,32,.42);
+      background: linear-gradient(180deg, rgba(255,176,32,.18), rgba(255,176,32,.08));
+    }
+    .btn.ghost{
+      border-color: var(--stroke);
+      background: rgba(0,0,0,.10);
+      color: var(--muted);
+    }
+    .select{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      outline:none;
+      font-family:var(--sans);
+      min-width:220px;
+    }
+    .simGrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 900px){ .simGrid{grid-template-columns:1fr} }
+
+    .terminal{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background: rgba(0,0,0,.35);
+      padding:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      line-height:1.45;
+      color: rgba(255,255,255,.82);
+      min-height:280px;
+      overflow:auto;
+    }
+    .line{white-space:pre-wrap}
+    .tDim{color: rgba(255,255,255,.55)}
+    .tGood{color: var(--good)}
+    .tWarn{color: var(--warn)}
+    .tBad{color: var(--bad)}
+    .tAccent{color: var(--accent2)}
+    .hr{height:1px; background: rgba(255,255,255,.08); margin:10px 0}
+
+    /* memory panel */
+    .memBox{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background: rgba(0,0,0,.26);
+      padding:12px;
+      overflow:hidden;
+    }
+    .memHeader{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:8px;
+    }
+    .memHeader b{font-size:13px}
+    .kv{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap:8px 10px;
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(255,255,255,.78);
+      padding-top:6px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .k{color: rgba(255,255,255,.50)}
+    .v{color: rgba(255,255,255,.82)}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      font-size:11px;
+      color: rgba(255,255,255,.70);
+      margin-right:6px;
+      margin-top:4px;
+    }
+    .tag .dot{width:7px;height:7px;margin:0}
+
+    /* checklist */
+    .checklist{display:grid; gap:10px}
+    .item{
+      display:flex; gap:10px; align-items:flex-start;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+    }
+    .tick{
+      width:22px; height:22px; border-radius:7px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.04);
+      display:grid; place-items:center;
+      font-weight:900;
+      color: rgba(255,255,255,.75);
+      flex:0 0 auto;
+      margin-top:1px;
+    }
+    .item b{display:block; font-size:13px; margin-bottom:2px}
+    .item p{margin:0; color:var(--muted); font-size:13px; line-height:1.35}
+
+    footer{
+      margin-top:16px;
+      color:var(--dim);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding:3px 7px;
+      border-radius:8px;
+      color: rgba(255,255,255,.78);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <div class="kicker">
+          <span class="pill">Agents</span>
+          <span class="pill">Memory</span>
+          <span class="pill">Harness</span>
+          <span class="pill">Domain Schemas</span>
+        </div>
+        <h1>Generalized Agents are Amnesiac Interns.<br/>Long-Running Agents are <span style="color:rgba(42,212,255,.95)">Memory Factories</span>.</h1>
+        <div class="subtitle">
+          The durable pattern isn’t “smarter personality.” It’s a <b>stateful, persistent representation of work</b>:
+          goals → backlog → tests/criteria → progress log → commits → repeat. The agent becomes a policy that transforms one stable state into the next.
+        </div>
+        <div class="chips">
+          <div class="chip"><b>Initializer</b> bootstraps memory artifacts</div>
+          <div class="chip"><b>Worker</b> reads memory, fixes 1 item, updates state</div>
+          <div class="chip"><b>Truth</b> is in tests + logs, not context window</div>
+          <div class="chip"><b>Moat</b> is schema + harness, not model</div>
+        </div>
+      </div>
+
+      <aside class="rightStat">
+        <div class="statRow">
+          <div>
+            <div class="small">Core shift</div>
+            <div class="big">Agent → Harness</div>
+          </div>
+          <div class="small" style="text-align:right">
+            “Magic is in memory.”<br/>
+            “Personality is noise.”
+          </div>
+        </div>
+        <div class="divider"></div>
+        <ul class="miniList">
+          <li><span class="dot bad"></span><span><b>Failure mode:</b> each run re-derives “done”, guesses history, thrashes.</span></li>
+          <li><span class="dot warn"></span><span><b>Fix:</b> shared artifacts the worker must read on boot.</span></li>
+          <li><span class="dot good"></span><span><b>Result:</b> disciplined, incremental engineering behavior.</span></li>
+        </ul>
+      </aside>
+    </header>
+
+    <section class="layout">
+      <div class="card">
+        <h2>1) The Honest Model of Long-Horizon Agents</h2>
+        <div class="muted">
+          A “general agent” with tools + context compaction still starts each session half-blind.
+          Domain memory turns “keep going” into “continue from a grounded state.”
+        </div>
+
+        <div class="diagram" style="margin-top:12px">
+          <svg viewBox="0 0 980 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Initializer/Worker memory harness diagram">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="rgba(124,92,255,.65)"/>
+                <stop offset="1" stop-color="rgba(42,212,255,.55)"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="0" x2="1">
+                <stop offset="0" stop-color="rgba(51,209,122,.60)"/>
+                <stop offset="1" stop-color="rgba(42,212,255,.35)"/>
+              </linearGradient>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="b"/>
+                <feColorMatrix in="b" type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .45 0"/>
+                <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- columns -->
+            <rect x="18" y="24" width="300" height="312" rx="18" fill="rgba(0,0,0,.28)" stroke="rgba(255,255,255,.12)"/>
+            <rect x="340" y="24" width="300" height="312" rx="18" fill="rgba(0,0,0,.28)" stroke="rgba(255,255,255,.12)"/>
+            <rect x="662" y="24" width="300" height="312" rx="18" fill="rgba(0,0,0,.28)" stroke="rgba(255,255,255,.12)"/>
+
+            <!-- headers -->
+            <text x="40" y="62" fill="rgba(255,255,255,.86)" font-family="ui-sans-serif" font-weight="800" font-size="18">Initializer Agent</text>
+            <text x="362" y="62" fill="rgba(255,255,255,.86)" font-family="ui-sans-serif" font-weight="800" font-size="18">Domain Memory (State)</text>
+            <text x="684" y="62" fill="rgba(255,255,255,.86)" font-family="ui-sans-serif" font-weight="800" font-size="18">Worker Agent</text>
+
+            <text x="40" y="86" fill="rgba(255,255,255,.58)" font-family="ui-sans-serif" font-size="13">Transforms user intent → artifacts</text>
+            <text x="362" y="86" fill="rgba(255,255,255,.58)" font-family="ui-sans-serif" font-size="13">Persistent, structured representation</text>
+            <text x="684" y="86" fill="rgba(255,255,255,.58)" font-family="ui-sans-serif" font-size="13">Amnesiac by design; reads state</text>
+
+            <!-- initializer nodes -->
+            <rect x="40" y="112" width="256" height="44" rx="12" fill="rgba(124,92,255,.18)" stroke="rgba(124,92,255,.40)"/>
+            <text x="56" y="140" fill="rgba(255,255,255,.86)" font-family="ui-monospace" font-size="13">Expand prompt → feature backlog</text>
+
+            <rect x="40" y="166" width="256" height="44" rx="12" fill="rgba(124,92,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="56" y="194" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">Define “rules of engagement”</text>
+
+            <rect x="40" y="220" width="256" height="44" rx="12" fill="rgba(124,92,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="56" y="248" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">Create log / tests / scaffolding</text>
+
+            <!-- memory nodes -->
+            <rect x="362" y="112" width="256" height="44" rx="12" fill="rgba(42,212,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="378" y="140" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">requirements.json</text>
+
+            <rect x="362" y="166" width="256" height="44" rx="12" fill="rgba(42,212,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="378" y="194" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">backlog.json (pass/fail)</text>
+
+            <rect x="362" y="220" width="256" height="44" rx="12" fill="rgba(42,212,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="378" y="248" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">progress.log + git history</text>
+
+            <rect x="362" y="274" width="256" height="44" rx="12" fill="rgba(42,212,255,.12)" stroke="rgba(255,255,255,.14)"/>
+            <text x="378" y="302" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">test harness (source of truth)</text>
+
+            <!-- worker nodes -->
+            <rect x="684" y="112" width="256" height="44" rx="12" fill="rgba(51,209,122,.14)" stroke="rgba(51,209,122,.38)"/>
+            <text x="700" y="140" fill="rgba(255,255,255,.86)" font-family="ui-monospace" font-size="13">Boot ritual: read memory</text>
+
+            <rect x="684" y="166" width="256" height="44" rx="12" fill="rgba(51,209,122,.10)" stroke="rgba(255,255,255,.14)"/>
+            <text x="700" y="194" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">Pick ONE failing item</text>
+
+            <rect x="684" y="220" width="256" height="44" rx="12" fill="rgba(51,209,122,.10)" stroke="rgba(255,255,255,.14)"/>
+            <text x="700" y="248" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">Implement → test end-to-end</text>
+
+            <rect x="684" y="274" width="256" height="44" rx="12" fill="rgba(51,209,122,.10)" stroke="rgba(255,255,255,.14)"/>
+            <text x="700" y="302" fill="rgba(255,255,255,.78)" font-family="ui-monospace" font-size="13">Update memory → commit → exit</text>
+
+            <!-- arrows -->
+            <path d="M 296 134 C 330 134, 330 134, 362 134" stroke="url(#g1)" stroke-width="5" fill="none" filter="url(#soft)"/>
+            <path d="M 618 134 C 650 134, 650 134, 684 134" stroke="url(#g2)" stroke-width="5" fill="none" filter="url(#soft)"/>
+
+            <path d="M 684 300 C 650 300, 650 300, 618 300" stroke="url(#g2)" stroke-width="5" fill="none" filter="url(#soft)"/>
+            <path d="M 362 300 C 330 300, 330 300, 296 300" stroke="url(#g1)" stroke-width="5" fill="none" filter="url(#soft)"/>
+
+            <!-- bottom label -->
+            <text x="50" y="338" fill="rgba(255,255,255,.55)" font-family="ui-sans-serif" font-size="12">
+              The agent is “just” a policy: consistent state → improved state. The harness makes progress durable.
+            </text>
+          </svg>
+
+          <div class="legend">
+            <span><b style="color:rgba(124,92,255,.95)">Initializer</b> = stage manager</span>
+            <span><b style="color:rgba(42,212,255,.95)">Memory</b> = set + props + script</span>
+            <span><b style="color:rgba(51,209,122,.95)">Worker</b> = actor that comes & goes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2) What “Domain Memory” Actually Is</h2>
+        <div class="twoCol">
+          <div class="callout">
+            <div class="badge a">≠</div>
+            <div>
+              <h3>Not “just a vector DB”</h3>
+              <p>Retrieval helps, but it’s not a stable, authoritative world state.</p>
+            </div>
+          </div>
+          <div class="callout">
+            <div class="badge b">✓</div>
+            <div>
+              <h3>Persistent structured state</h3>
+              <p>Goals, constraints, backlog, pass/fail, progress log, scaffolding, rituals.</p>
+            </div>
+          </div>
+          <div class="callout">
+            <div class="badge c">⚙</div>
+            <div>
+              <h3>Boot protocol</h3>
+              <p>Every run must re-ground by reading memory + running checks before acting.</p>
+            </div>
+          </div>
+          <div class="callout">
+            <div class="badge d">!</div>
+            <div>
+              <h3>Core failure if missing</h3>
+              <p>Each run invents its own definition of done and misremembers the past.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="memBox" style="margin-top:12px">
+          <div class="memHeader">
+            <b>Minimum viable memory schema (coding example)</b>
+            <span class="hint">…but the pattern generalizes</span>
+          </div>
+          <div style="margin-top:6px">
+            <span class="tag"><span class="dot warn"></span> goals</span>
+            <span class="tag"><span class="dot warn"></span> constraints</span>
+            <span class="tag"><span class="dot bad"></span> failing items</span>
+            <span class="tag"><span class="dot good"></span> passing items</span>
+            <span class="tag"><span class="dot" style="background:var(--accent2)"></span> rituals</span>
+          </div>
+          <div class="kv" id="schemaPreview">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card">
+        <h2>3) Simulator: “Amnesiac Agent” vs “Memory-Factory Worker”</h2>
+        <div class="muted">
+          Run a few “sessions” and watch the difference: without domain memory, each run guesses.
+          With a shared backlog + tests + log, the worker makes small, verifiable progress.
+        </div>
+
+        <div class="sim" style="margin-top:12px">
+          <div class="simControls">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+              <select class="select" id="domainSelect" aria-label="Choose domain">
+                <option value="coding">Software Development</option>
+                <option value="research">Research</option>
+                <option value="ops">Operations</option>
+              </select>
+              <button class="btn ghost" id="resetBtn">Reset</button>
+              <span class="hint">Tip: click <span class="kbd">Run Session</span> 4–6 times.</span>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap">
+              <button class="btn warn" id="runAmnesiac">Run Session (No Memory)</button>
+              <button class="btn good" id="runMemory">Run Session (Domain Memory)</button>
+              <button class="btn primary" id="autoRun">Auto x5</button>
+            </div>
+          </div>
+
+          <div class="simGrid">
+            <div>
+              <div class="hint" style="margin:0 0 8px">Session Transcript</div>
+              <div class="terminal" id="terminal"></div>
+            </div>
+            <div>
+              <div class="hint" style="margin:0 0 8px">Persistent Memory State</div>
+              <div class="memBox">
+                <div class="memHeader">
+                  <b id="memTitle">Domain Memory</b>
+                  <span class="hint" id="memHint">stable artifacts</span>
+                </div>
+                <div class="kv" id="memState"></div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="hint" style="margin:0 0 8px">What gets externalized</div>
+              <div class="checklist" id="externalizeList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>4) Design Principles for “Serious” Agents</h2>
+        <div class="checklist" id="principles"></div>
+
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">5) Where the Moat Really Is</h2>
+        <div class="muted" style="line-height:1.55">
+          Models improve and commoditize. The durable advantage is your <b>domain schemas</b> +
+          <b>harness rituals</b> + <b>testing loops</b> that turn LLM calls into trustworthy progress.
+          “Drop a universal agent into your company” fails because it has no opinionated memory objects to anchor work.
+        </div>
+
+        <div class="chips" style="margin-top:10px">
+          <div class="chip"><b>Schema</b> defines “what exists” in the domain</div>
+          <div class="chip"><b>Ritual</b> defines “how we operate” each run</div>
+          <div class="chip"><b>Tests</b> define “what is true” (pass/fail)</div>
+          <div class="chip"><b>Logs</b> define “what happened” (auditable)</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>Built for: turning “agents hype” into an implementable harness pattern.</div>
+      <div>Keyboard: <span class="kbd">Reset</span> clears state • <span class="kbd">Auto x5</span> shows convergence.</div>
+    </footer>
+  </div>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const terminal = $("#terminal");
+
+    // --- Shared domain templates ---
+    const domains = {
+      coding: {
+        title: "Software Development Memory",
+        hint: "backlog + tests + progress log + git history",
+        goal: "Ship a small feature set with verifiable tests",
+        constraints: ["Keep main branch green", "One item per session", "Update backlog + log every run"],
+        backlog: [
+          {id:"F1", name:"Auth: login form", status:"fail", test:"auth_login_test"},
+          {id:"F2", name:"API: /health endpoint", status:"fail", test:"health_e2e"},
+          {id:"F3", name:"UI: settings page shell", status:"fail", test:"ui_smoke"}
+        ],
+        artifacts: ["requirements.json", "backlog.json (pass/fail)", "progress.log", "tests/ (source of truth)", "git commits"],
+        boot: ["Read backlog + constraints", "Read progress log", "Run tests quickly", "Pick ONE failing item"]
+      },
+      research: {
+        title: "Research Memory",
+        hint: "hypothesis backlog + evidence log + decision journal",
+        goal: "Validate hypotheses with traceable evidence",
+        constraints: ["Register experiments", "One hypothesis per session", "Evidence must link to outcomes"],
+        backlog: [
+          {id:"H1", name:"Hypothesis: X improves Y", status:"fail", test:"replicate_study"},
+          {id:"H2", name:"Experiment: dataset split sanity", status:"fail", test:"data_leak_check"},
+          {id:"H3", name:"Decision: choose metric A vs B", status:"fail", test:"metric_tradeoff_note"}
+        ],
+        artifacts: ["hypotheses.json", "experiment_registry.csv", "evidence.log", "decision_journal.md", "analysis_tests/"],
+        boot: ["Read hypotheses backlog", "Check registry for duplicates", "Review last evidence entry", "Pick ONE hypothesis/experiment"]
+      },
+      ops: {
+        title: "Operations Memory",
+        hint: "runbook + incident timeline + ticket queue + SLA",
+        goal: "Reduce incidents via repeatable procedures",
+        constraints: ["No unlogged changes", "One ticket per session", "Update runbook after fix"],
+        backlog: [
+          {id:"T1", name:"Incident: intermittent DNS", status:"fail", test:"resolver_smoke"},
+          {id:"T2", name:"Runbook: add rollback steps", status:"fail", test:"runbook_checklist"},
+          {id:"T3", name:"SLA: alert tuning", status:"fail", test:"alert_noise_score"}
+        ],
+        artifacts: ["runbook.md", "incident_timeline.log", "tickets.json", "sla.yaml", "checks/ (health probes)"],
+        boot: ["Read ticket queue", "Review last incident timeline", "Run health probes", "Pick ONE ticket"]
+      }
+    };
+
+    // --- State (persistent memory simulation) ---
+    let state = {
+      domain: "coding",
+      session: 0,
+      memory: null,   // will hold artifacts: goals, constraints, backlog statuses, progress
+      amnesiacHistory: [] // used only to show drift; not "read" by the amnesiac agent
+    };
+
+    // --- Helpers ---
+    function nowStamp(){
+      const d = new Date();
+      return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    }
+    function writeLine(text, cls=""){
+      const div = document.createElement("div");
+      div.className = "line " + cls;
+      div.textContent = text;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+    function hr(){
+      const div = document.createElement("div");
+      div.className = "hr";
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+    function pickFailing(backlog){
+      const failing = backlog.filter(x => x.status === "fail");
+      if(!failing.length) return null;
+      // pick first failing for determinism
+      return failing[0];
+    }
+    function randomPick(arr){
+      return arr[Math.floor(Math.random()*arr.length)];
+    }
+    function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+    // --- Render memory schema preview (static panel) ---
+    function renderSchemaPreview(){
+      const d = domains[state.domain];
+      const kv = $("#schemaPreview");
+      kv.innerHTML = "";
+      const pairs = [
+        ["goals", d.goal],
+        ["constraints", d.constraints.join(" • ")],
+        ["backlog", d.backlog.map(x => `${x.id}:${x.status}`).join("  ")],
+        ["scaffolding", d.artifacts.join(" • ")],
+        ["boot ritual", d.boot.join(" → ")]
+      ];
+      for(const [k,v] of pairs){
+        const kEl = document.createElement("div"); kEl.className="k"; kEl.textContent = k;
+        const vEl = document.createElement("div"); vEl.className="v"; vEl.textContent = v;
+        kv.appendChild(kEl); kv.appendChild(vEl);
+      }
+    }
+
+    // --- Render persistent memory state (sim panel) ---
+    function renderMemory(){
+      const d = domains[state.domain];
+      $("#memTitle").textContent = d.title;
+      $("#memHint").textContent = d.hint;
+
+      const kv = $("#memState");
+      kv.innerHTML = "";
+
+      if(!state.memory){
+        const kEl = document.createElement("div"); kEl.className="k"; kEl.textContent = "status";
+        const vEl = document.createElement("div"); vEl.className="v"; vEl.textContent = "No memory initialized yet (run Domain Memory session).";
+        kv.appendChild(kEl); kv.appendChild(vEl);
+        return;
+      }
+
+      const passing = state.memory.backlog.filter(x => x.status==="pass").length;
+      const failing = state.memory.backlog.filter(x => x.status==="fail").length;
+
+      const pairs = [
+        ["session", String(state.session)],
+        ["goal", state.memory.goal],
+        ["constraints", state.memory.constraints.join(" • ")],
+        ["backlog", `${passing} passing • ${failing} failing`],
+        ["next failing", (pickFailing(state.memory.backlog)?.id || "none (done)")],
+        ["latest log", state.memory.progressLog.slice(-1)[0] || "—"]
+      ];
+      for(const [k,v] of pairs){
+        const kEl = document.createElement("div"); kEl.className="k"; kEl.textContent = k;
+        const vEl = document.createElement("div"); vEl.className="v"; vEl.textContent = v;
+        kv.appendChild(kEl); kv.appendChild(vEl);
+      }
+    }
+
+    // --- Render externalize list (domain-specific artifacts) ---
+    function renderExternalize(){
+      const d = domains[state.domain];
+      const box = $("#externalizeList");
+      box.innerHTML = "";
+      const items = [
+        {t:"Externalize the goal", p:"Turn “do X” into a machine-readable backlog with explicit pass/fail criteria."},
+        {t:"Make progress atomic", p:"One item per run. Small, testable, observable changes."},
+        {t:"Force a boot ritual", p:"Every run re-grounds by reading memory + running checks."},
+        {t:"Tie truth to tests", p:"Pass/fail becomes the source of truth, not the context window."},
+        {t:"Write the log", p:"End each run by updating progress notes + state + commit/record."}
+      ];
+      for(const it of items){
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `<div class="tick">✓</div><div><b>${it.t}</b><p>${it.p}</p></div>`;
+        box.appendChild(row);
+      }
+    }
+
+    // --- Render principles (right card) ---
+    function renderPrinciples(){
+      const box = $("#principles");
+      box.innerHTML = "";
+      const items = [
+        {t:"Externalize the goal", p:"Convert intent into a durable backlog with explicit criteria (not vibes)."},
+        {t:"Make progress atomic + observable", p:"One item, one run, measurable outcome; update shared state."},
+        {t:"Leave the campsite cleaner", p:"End with tests passing (or clearly recorded failure) + docs/log updates."},
+        {t:"Standardize bootup ritual", p:"Read memory → run checks → act. No skipping orientation."},
+        {t:"Keep tests close to memory", p:"If results aren’t written back, the system loses its ground truth."},
+        {t:"Generalization moves up a layer", p:"General harness pattern + domain-specific memory objects = real agents."},
+        {t:"Moat is schema + harness", p:"Models swap; your memory factory stays valuable."}
+      ];
+      for(const it of items){
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `<div class="tick">✓</div><div><b>${it.t}</b><p>${it.p}</p></div>`;
+        box.appendChild(row);
+      }
+    }
+
+    // --- Simulator actions ---
+    function resetAll(){
+      state.session = 0;
+      state.memory = null;
+      state.amnesiacHistory = [];
+      terminal.innerHTML = "";
+      writeLine(`[${nowStamp()}] Reset complete. Pick a domain and run sessions.`, "tDim");
+      renderSchemaPreview();
+      renderMemory();
+      renderExternalize();
+    }
+
+    function setDomain(dom){
+      state.domain = dom;
+      // wipe state when switching domains
+      resetAll();
+      writeLine(`[${nowStamp()}] Domain set to: ${domains[dom].title}`, "tAccent");
+    }
+
+    function runAmnesiacSession(){
+      const d = domains[state.domain];
+      state.session += 1;
+      hr();
+      writeLine(`[${nowStamp()}] Session #${state.session} — GENERALIZED AGENT (no domain memory)`, "tWarn");
+
+      // Amnesiac agent "sees" only the user's high-level goal; it re-derives everything
+      writeLine(`> Receives: "Keep going, make progress."`, "tDim");
+      const guessedDefinition = randomPick([
+        "I think we're done.",
+        "I'll implement multiple features at once.",
+        "I'll refactor first to be safe.",
+        "I'll change requirements slightly for simplicity.",
+        "I'll focus on a different item than last time."
+      ]);
+      writeLine(`> Re-derives definition of done: ${guessedDefinition}`, "tWarn");
+
+      const action = randomPick([
+        "Adds changes without tests.",
+        "Runs a partial check, misses failing cases.",
+        "Implements a feature but breaks another.",
+        "Reimplements something already tried.",
+        "Claims success based on a single tool output."
+      ]);
+      writeLine(`> Action: ${action}`, "tWarn");
+
+      const outcome = randomPick([
+        {msg:"Reports success, but nothing was actually validated.", cls:"tBad"},
+        {msg:"Makes partial progress, but can’t prove it.", cls:"tWarn"},
+        {msg:"Breaks the build; forgets to record what happened.", cls:"tBad"}
+      ]);
+      writeLine(`> Outcome: ${outcome.msg}`, outcome.cls);
+
+      state.amnesiacHistory.push({session: state.session, guessedDefinition, action, outcome: outcome.msg});
+      writeLine(`> Next run will start from scratch again (no grounded state).`, "tDim");
+      renderMemory();
+    }
+
+    function runMemorySession(){
+      const d = domains[state.domain];
+      state.session += 1;
+      hr();
+      writeLine(`[${nowStamp()}] Session #${state.session} — DOMAIN MEMORY WORKER (memory factory)`, "tGood");
+
+      // If memory isn't initialized, initializer creates artifacts
+      if(!state.memory){
+        writeLine(`> Initializer: expands prompt → creates artifacts (backlog + constraints + log + tests).`, "tAccent");
+        state.memory = {
+          goal: d.goal,
+          constraints: clone(d.constraints),
+          backlog: clone(d.backlog),
+          progressLog: [],
+          bootRitual: clone(d.boot),
+          artifacts: clone(d.artifacts),
+          gitCommits: []
+        };
+        state.memory.progressLog.push(`Initialized memory artifacts for domain: ${d.title}`);
+        writeLine(`> Memory initialized. Worker can now be amnesiac safely (state lives outside).`, "tGood");
+        renderMemory();
+        return;
+      }
+
+      // Boot ritual
+      writeLine(`> Boot ritual: ${state.memory.bootRitual.join(" → ")}`, "tDim");
+
+      // Pick one failing item
+      const item = pickFailing(state.memory.backlog);
+      if(!item){
+        writeLine(`> Backlog has no failing items. System is stable.`, "tGood");
+        state.memory.progressLog.push(`All items passing; no work selected.`);
+        renderMemory();
+        return;
+      }
+      writeLine(`> Select ONE failing item: ${item.id} — ${item.name}`, "tAccent");
+
+      // Implement + test
+      writeLine(`> Implement change...`, "tDim");
+
+      // Simulate test pass probability (increases with memory discipline)
+      const passChance = 0.72;
+      const passed = Math.random() < passChance;
+
+      writeLine(`> Run test: ${item.test}`, "tDim");
+      if(passed){
+        item.status = "pass";
+        const commit = `${item.id}: ${item.name} (tests pass)`;
+        state.memory.gitCommits.push(commit);
+        state.memory.progressLog.push(`✅ ${commit}`);
+        writeLine(`> Result: PASS. Update backlog + write progress note + commit.`, "tGood");
+      } else {
+        // failure recorded instead of forgotten
+        const note = `❌ ${item.id} still failing; recorded failure + next steps`;
+        state.memory.progressLog.push(note);
+        writeLine(`> Result: FAIL. Record what broke; do not claim success.`, "tWarn");
+      }
+
+      // End-of-run discipline
+      writeLine(`> End: update memory → (commit or note) → exit (worker forgets; memory persists).`, "tGood");
+      renderMemory();
+    }
+
+    // --- Wire UI ---
+    $("#domainSelect").addEventListener("change", (e) => setDomain(e.target.value));
+    $("#resetBtn").addEventListener("click", resetAll);
+    $("#runAmnesiac").addEventListener("click", runAmnesiacSession);
+    $("#runMemory").addEventListener("click", runMemorySession);
+    $("#autoRun").addEventListener("click", async () => {
+      // Run 5 memory sessions quickly, with small pauses for readability
+      for(let i=0;i<5;i++){
+        runMemorySession();
+        await new Promise(r => setTimeout(r, 120));
+      }
+    });
+
+    // init
+    renderPrinciples();
+    renderExternalize();
+    renderSchemaPreview();
+    resetAll();
+  </script>
+</body>
+</html>

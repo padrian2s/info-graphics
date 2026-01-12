@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Second Brain 2026 — AI Loop Infographic</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1022;
+      --card:#0E1633cc;
+      --card2:#0E1633;
+      --stroke:#22306a;
+      --text:#EAF0FF;
+      --muted:#A9B4E3;
+      --muted2:#7F8BC4;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --accent:#60a5fa;
+      --accent2:#a78bfa;
+      --accent3:#2dd4bf;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+      --radius2: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 900px at 20% -10%, rgba(96,165,250,.35), transparent 60%),
+        radial-gradient(1000px 700px at 105% 10%, rgba(167,139,250,.25), transparent 60%),
+        radial-gradient(900px 700px at 60% 120%, rgba(45,212,191,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 64px}
+    .topbar{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      padding:10px 12px;border:1px solid rgba(34,48,106,.6);
+      border-radius:999px;background:rgba(9,14,34,.45);backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .chip{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 12px;border-radius:999px;border:1px solid rgba(34,48,106,.9);
+      background:rgba(14,22,51,.65);
+      color:var(--muted);
+      font-size:12px;letter-spacing:.2px;white-space:nowrap;
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .btn{
+      appearance:none;border:1px solid rgba(34,48,106,.9);
+      background:linear-gradient(180deg, rgba(96,165,250,.18), rgba(14,22,51,.65));
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:650;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      display:inline-flex;gap:8px;align-items:center;
+    }
+    .btn:hover{transform: translateY(-1px);border-color:rgba(96,165,250,.7)}
+    .btn:active{transform: translateY(0px)}
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(34,48,106,.6);
+      background:linear-gradient(180deg, rgba(14,22,51,.75), rgba(14,22,51,.45));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;inset:-1px;
+      background:
+        radial-gradient(800px 220px at 35% 0%, rgba(96,165,250,.22), transparent 60%),
+        radial-gradient(900px 280px at 85% 10%, rgba(167,139,250,.18), transparent 60%),
+        radial-gradient(700px 260px at 55% 110%, rgba(45,212,191,.14), transparent 55%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .kicker{
+      display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+      margin-bottom:12px;
+    }
+    .title{
+      font-size: clamp(28px, 4vw, 46px);
+      line-height:1.05;
+      margin:0;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      color:var(--muted);
+      max-width: 92ch;
+      font-size: 15px;
+      line-height:1.55;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(34,48,106,.65);
+      background: rgba(14,22,51,.62);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .card .hd{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(34,48,106,.5);
+    }
+    .card .hd h2{
+      margin:0;font-size:14px;letter-spacing:.3px;text-transform:uppercase;
+      color:var(--muted);
+      display:flex;gap:10px;align-items:center;
+    }
+    .badge{
+      font-size:11px;color:var(--text);
+      padding:5px 10px;border-radius:999px;
+      border:1px solid rgba(96,165,250,.55);
+      background: rgba(96,165,250,.12);
+      white-space:nowrap;
+    }
+    .body{padding:14px}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 680px){.cols{grid-template-columns:1fr}}
+    .mini{
+      border-radius: 14px;
+      border:1px solid rgba(34,48,106,.65);
+      background: rgba(7,10,18,.28);
+      padding:12px;
+    }
+    .mini h3{margin:0 0 8px;font-size:13px;letter-spacing:.2px}
+    .mini p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .spark{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:10px
+    }
+    .pill{
+      border:1px solid rgba(34,48,106,.75);
+      background: rgba(14,22,51,.55);
+      border-radius: 999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      display:inline-flex;gap:7px;align-items:center;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96,165,250,.14);
+    }
+    .dot.p{background:var(--accent2);box-shadow:0 0 0 3px rgba(167,139,250,.14)}
+    .dot.t{background:var(--accent3);box-shadow:0 0 0 3px rgba(45,212,191,.14)}
+    .dot.g{background:var(--good);box-shadow:0 0 0 3px rgba(52,211,153,.14)}
+    .dot.w{background:var(--warn);box-shadow:0 0 0 3px rgba(251,191,36,.14)}
+    .dot.b{background:var(--bad);box-shadow:0 0 0 3px rgba(251,113,133,.14)}
+
+    /* Diagram */
+    .diagram{
+      padding:14px;
+    }
+    .flow{
+      display:grid;
+      grid-template-columns: 1fr 56px 1fr 56px 1fr;
+      gap:10px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .flow{grid-template-columns:1fr}
+      .arrow{display:none}
+    }
+    .node{
+      border-radius: 16px;
+      border:1px solid rgba(34,48,106,.75);
+      background: rgba(7,10,18,.25);
+      padding:12px;
+      position:relative;
+      min-height:110px;
+    }
+    .node .cap{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:8px;margin-bottom:8px;
+    }
+    .node .cap b{font-size:14px}
+    .node .cap span{
+      font-size:11px;color:var(--muted);
+      padding:4px 9px;border-radius:999px;border:1px solid rgba(34,48,106,.7);
+      background: rgba(14,22,51,.5);
+      white-space:nowrap;
+    }
+    .node ul{margin:0;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.55}
+    .arrow{
+      display:flex;align-items:center;justify-content:center;
+      color:rgba(234,240,255,.55);
+      font-size:20px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.25));
+      user-select:none;
+    }
+
+    /* Simulator */
+    .simgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){.simgrid{grid-template-columns:1fr}}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+    label{font-size:12px;color:var(--muted)}
+    textarea, input[type="text"]{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(34,48,106,.85);
+      background: rgba(7,10,18,.35);
+      color: var(--text);
+      padding:10px 12px;
+      outline:none;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+      font-size:13px;
+    }
+    textarea{min-height:110px;resize:vertical;line-height:1.45}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .range{
+      width: 220px; max-width: 100%;
+    }
+    input[type="range"]{width:100%}
+    .stat{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 10px;border-radius: 14px;
+      border:1px solid rgba(34,48,106,.75);
+      background: rgba(7,10,18,.25);
+      color: var(--muted);
+      font-size:12px;
+    }
+    .stat b{color:var(--text)}
+    .out{
+      border-radius: 16px;
+      border:1px solid rgba(34,48,106,.75);
+      background: rgba(7,10,18,.25);
+      padding:12px;
+      overflow:hidden;
+    }
+    .outhead{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      margin-bottom:10px;
+    }
+    .outhead b{font-size:14px}
+    .tag{
+      font-size:11px;
+      padding:4px 9px;border-radius:999px;
+      border:1px solid rgba(34,48,106,.8);
+      color: var(--muted);
+      background: rgba(14,22,51,.5);
+      white-space:nowrap;
+    }
+    pre{
+      margin:0;
+      border-radius: 14px;
+      padding:10px 12px;
+      background: rgba(14,22,51,.6);
+      border:1px solid rgba(34,48,106,.65);
+      color: #d7e1ff;
+      font-family: var(--mono);
+      font-size:12px;
+      line-height:1.45;
+      overflow:auto;
+      max-height: 260px;
+    }
+    .dm{
+      border-radius: 16px;
+      border:1px solid rgba(34,48,106,.75);
+      background: rgba(14,22,51,.35);
+      padding:12px;
+    }
+    .dm .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px;margin-bottom:8px}
+    .bubble{
+      border-radius: 16px;
+      padding:10px 12px;
+      background: rgba(7,10,18,.35);
+      border:1px solid rgba(34,48,106,.75);
+      color: var(--text);
+      font-size:13px;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
+    .hr{
+      height:1px;background:rgba(34,48,106,.55);margin:12px 0;
+    }
+    .foot{
+      margin-top:16px;color:var(--muted2);font-size:12px;line-height:1.55;
+      padding:12px 14px;border-radius: 16px;border:1px solid rgba(34,48,106,.55);
+      background: rgba(7,10,18,.18);
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 6px;border-radius: 8px;
+      border:1px solid rgba(34,48,106,.8);
+      background: rgba(14,22,51,.55);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="chip"><span class="dot"></span><b>Second Brain</b> 2026</div>
+        <div class="chip"><span class="dot p"></span><b>AI Loop</b> > “AI search”</div>
+        <div class="chip"><span class="dot t"></span><b>Non-engineer stack</b>: Slack + Notion + Zapier + Claude/ChatGPT</div>
+      </div>
+      <button class="btn" id="copyLinkBtn" title="Copy a shareable hash-link to the simulator section">
+        ⤴︎ Share Simulator
+      </button>
+    </div>
+
+    <section class="hero">
+      <div class="kicker">
+        <span class="badge">The claim</span>
+        <span class="chip"><span class="dot"></span>500,000 years: same cognitive architecture</span>
+        <span class="chip"><span class="dot w"></span>4–7 working-memory items</span>
+        <span class="chip"><span class="dot b"></span>Open loops → low-grade anxiety</span>
+      </div>
+      <h1 class="title">Your brain is for thinking — not for storing.</h1>
+      <p class="subtitle">
+        For most of human history, “second brain” tools were <b>better storage</b>—but still demanded the hardest work at the worst moment:
+        deciding folders, tags, names, and structure while you’re tired, busy, or mid-meeting.
+        <br><br>
+        <b>What changes in 2026</b> is not just search or summarization. It’s the arrival of an <b>AI loop</b>:
+        systems that <b>classify</b>, <b>route</b>, <b>structure</b>, <b>log</b>, and <b>nudge</b> automatically—so your only job becomes one reliable behavior: <b>capture.</b>
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="hd">
+          <h2>Why the old way fails</h2>
+          <span class="badge">“Tax you don’t see”</span>
+        </div>
+        <div class="body cols">
+          <div class="mini">
+            <h3>Hidden cognitive tax</h3>
+            <p>
+              Forcing your brain to remember steals compute from thinking.
+              The cost appears as <b>relationship drift</b>, <b>project surprises</b>, and the constant hum of <b>unfinished loops</b>.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot b"></span>forgotten details</span>
+              <span class="pill"><span class="dot b"></span>missed follow-ups</span>
+              <span class="pill"><span class="dot b"></span>half-remembered warnings</span>
+            </div>
+          </div>
+          <div class="mini">
+            <h3>The taxonomy trap</h3>
+            <p>
+              Traditional systems demand decisions at capture time:
+              “Where does this go?”, “What’s the right tag?”, “How should I name it?”
+              That’s exactly where adoption dies for most people.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot w"></span>folder choice</span>
+              <span class="pill"><span class="dot w"></span>tagging</span>
+              <span class="pill"><span class="dot w"></span>structure fiddling</span>
+            </div>
+          </div>
+          <div class="mini">
+            <h3>Storage ≠ system</h3>
+            <p>
+              Notes pile up → trust drops → you stop capturing → the “wiki dump” effect.
+              The failure isn’t motivation. It’s a design mismatch with human cognition.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot b"></span>low trust</span>
+              <span class="pill"><span class="dot b"></span>low retrieval</span>
+              <span class="pill"><span class="dot b"></span>collapse</span>
+            </div>
+          </div>
+          <div class="mini">
+            <h3>What “AI inside notes” misses</h3>
+            <p>
+              Search & summaries are helpful, but they don’t keep the system alive.
+              The leap is AI doing work <b>without you remembering to ask</b>.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot t"></span>proactive</span>
+              <span class="pill"><span class="dot t"></span>scheduled</span>
+              <span class="pill"><span class="dot t"></span>actionable</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="hd">
+          <h2>The 2026 leap</h2>
+          <span class="badge">From knowledge base → behavior system</span>
+        </div>
+        <div class="body">
+          <div class="mini" style="margin-bottom:12px">
+            <h3>AI loop (the big shift)</h3>
+            <p>
+              Capture in seconds. The loop classifies, routes, structures, logs, and nudges.
+              Motivation becomes optional; <b>the system keeps running.</b>
+            </p>
+          </div>
+
+          <div class="mini" style="margin-bottom:12px">
+            <h3>Minimal no-code stack</h3>
+            <p><b>Slack</b> = capture inbox • <b>Zapier/Make</b> = automation • <b>Claude/ChatGPT</b> = intelligence • <b>Notion</b> = source of truth</p>
+            <div class="spark">
+              <span class="pill"><span class="dot"></span>Slack: SB Inbox</span>
+              <span class="pill"><span class="dot p"></span>Notion: 4 DBs</span>
+              <span class="pill"><span class="dot t"></span>Zapier: workflows</span>
+              <span class="pill"><span class="dot g"></span>LLM: JSON output</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>Four buckets (painfully small)</h3>
+            <p>
+              Keep categories stable: <b>People</b>, <b>Projects</b>, <b>Ideas</b>, <b>Admin</b>.
+              Routing beats organizing. You can add complexity later—only if evidence demands it.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <h2>Architecture at a glance</h2>
+        <span class="badge">Memory / Compute / Interface separated</span>
+      </div>
+      <div class="diagram">
+        <div class="flow">
+          <div class="node">
+            <div class="cap"><b>Interface</b><span>Slack</span></div>
+            <ul>
+              <li>One private channel: <span class="kbd">SB Inbox</span></li>
+              <li>One message per thought</li>
+              <li>No tags. No folders. No decisions.</li>
+            </ul>
+          </div>
+
+          <div class="arrow">➜</div>
+
+          <div class="node">
+            <div class="cap"><b>Compute</b><span>Zapier/Make + LLM</span></div>
+            <ul>
+              <li>Trigger on new Slack message</li>
+              <li>LLM returns <b>JSON only</b> (schema contract)</li>
+              <li>Confidence score + routing rules</li>
+            </ul>
+          </div>
+
+          <div class="arrow">➜</div>
+
+          <div class="node">
+            <div class="cap"><b>Memory</b><span>Notion DBs</span></div>
+            <ul>
+              <li>People • Projects • Ideas • Admin</li>
+              <li>+ Inbox Log (audit trail)</li>
+              <li>Views, filters, easy fixes</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="cols">
+          <div class="mini">
+            <h3>What makes it “alive”</h3>
+            <p>
+              Proactive surfacing: <b>daily digest</b> + <b>weekly review</b> delivered to Slack,
+              sized to fit a phone screen and trigger action.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot g"></span>daily: top 3 actions</span>
+              <span class="pill"><span class="dot w"></span>one stuck loop</span>
+              <span class="pill"><span class="dot p"></span>weekly: themes + next steps</span>
+            </div>
+          </div>
+          <div class="mini">
+            <h3>What makes it trustworthy</h3>
+            <p>
+              <b>Audit trail</b> (Inbox Log), <b>confidence filter</b> (bouncer), and a <b>one-step fix button</b>.
+              People abandon systems when errors feel mysterious.
+            </p>
+            <div class="spark">
+              <span class="pill"><span class="dot"></span>logging</span>
+              <span class="pill"><span class="dot w"></span>needs review state</span>
+              <span class="pill"><span class="dot t"></span>reply “fix:”</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="sim" style="margin-top:14px">
+      <div class="hd">
+        <h2>Interactive simulator</h2>
+        <span class="badge">Try the AI loop behavior</span>
+      </div>
+      <div class="body simgrid">
+        <div>
+          <div class="mini">
+            <h3>1) Drop a thought (Slack message)</h3>
+            <div class="field">
+              <label for="thought">Capture text (one thought per message)</label>
+              <textarea id="thought" placeholder="e.g., Remind me to ask Vlad about the timeline for the website relaunch. Also I should send the agenda draft tonight."></textarea>
+            </div>
+
+            <div class="row">
+              <div class="stat"><span class="dot w"></span>Working memory capacity <b id="wmVal">6</b></div>
+              <div class="range">
+                <label for="wm" style="display:block;margin-bottom:6px">Simulate “brain load” (4–7 items)</label>
+                <input id="wm" type="range" min="4" max="7" step="1" value="6" />
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="row">
+              <div class="stat"><span class="dot t"></span>Confidence threshold <b id="thVal">0.60</b></div>
+              <div class="range">
+                <label for="th" style="display:block;margin-bottom:6px">Bouncer threshold (0.00–1.00)</label>
+                <input id="th" type="range" min="0" max="1" step="0.01" value="0.60" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <button class="btn" id="runBtn">▶ Run the loop</button>
+              <button class="btn" id="randomBtn" style="opacity:.95">🎲 Example thought</button>
+              <span class="chip" id="statusChip"><span class="dot"></span>Ready</span>
+            </div>
+          </div>
+
+          <div class="mini" style="margin-top:12px">
+            <h3>2) Daily digest preview (Slack DM)</h3>
+            <p style="margin-bottom:10px;color:var(--muted)">Small, frequent, actionable. Fits on a phone screen.</p>
+            <div class="dm">
+              <div class="meta"><span class="dot"></span><b style="color:var(--text)">SB Assistant</b> <span>•</span> <span id="dmTime">Today 08:30</span></div>
+              <div class="bubble" id="digest">
+Top 3 today:
+1) (run the loop to generate actions)
+2)
+3)
+
+Stuck loop: —
+Small win: —
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="out">
+            <div class="outhead">
+              <b>LLM JSON output (prompt-as-API contract)</b>
+              <span class="tag" id="routeTag">route: —</span>
+            </div>
+            <pre id="jsonOut">{
+  "destination": "ideas|projects|people|admin",
+  "title": "…",
+  "confidence": 0.00,
+  "fields": { }
+}</pre>
+            <div class="hr"></div>
+            <div class="outhead">
+              <b>Inbox Log (audit trail)</b>
+              <span class="tag" id="logTag">status: —</span>
+            </div>
+            <pre id="logOut">{
+  "captured_text": "",
+  "filed_to": null,
+  "record_id": null,
+  "confidence": 0.00,
+  "status": "ready"
+}</pre>
+          </div>
+
+          <div class="mini" style="margin-top:12px">
+            <h3>3) One-step fix button</h3>
+            <p style="margin-bottom:10px">
+              If the filing is wrong, reply in-thread:
+              <span class="kbd">fix: people</span> or <span class="kbd">fix: projects</span>.
+              Systems get adopted when they’re easy to repair.
+            </p>
+            <div class="field">
+              <label for="fix">Try a fix reply (optional)</label>
+              <input id="fix" type="text" placeholder="fix: projects" />
+            </div>
+            <div class="row">
+              <button class="btn" id="applyFixBtn">↺ Apply fix</button>
+              <span class="chip" id="fixChip"><span class="dot p"></span>No fix applied</span>
+            </div>
+          </div>
+
+          <div class="foot">
+            <b>Design rules baked into the simulator:</b>
+            <ul style="margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.55;font-size:12px">
+              <li><b>Human does one thing:</b> capture.</li>
+              <li><b>Prompts are contracts:</b> JSON schema, no creative drift.</li>
+              <li><b>Default safe when uncertain:</b> low confidence → “needs review” instead of polluting memory.</li>
+              <li><b>Next action is the unit:</b> “Email Sarah…” beats “Work on project”.</li>
+              <li><b>Small outputs on cadence:</b> daily/weekly nudges keep the system alive.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <h2>The 8 building blocks</h2>
+        <span class="badge">Engineering principles in plain language</span>
+      </div>
+      <div class="body cols">
+        <div class="mini">
+          <h3>1) Dropbox</h3>
+          <p>One frictionless capture point. One action. One habit. (Slack channel.)</p>
+        </div>
+        <div class="mini">
+          <h3>2) Sorter</h3>
+          <p>AI classifier/router assigns the bucket so you don’t decide at capture time.</p>
+        </div>
+        <div class="mini">
+          <h3>3) Form</h3>
+          <p>A schema/data contract: consistent fields enable reliable automation and summaries.</p>
+        </div>
+        <div class="mini">
+          <h3>4) Filing cabinet</h3>
+          <p>Writable by automation, readable by humans, filterable by views. (Notion DBs.)</p>
+        </div>
+        <div class="mini">
+          <h3>5) Receipt</h3>
+          <p>Audit trail/ledger: what came in, what happened, why, and confidence score.</p>
+        </div>
+        <div class="mini">
+          <h3>6) Bouncer</h3>
+          <p>Confidence filter: low certainty → hold + ask for clarification, not bad filing.</p>
+        </div>
+        <div class="mini">
+          <h3>7) Tap on the shoulder</h3>
+          <p>Proactive surfacing: daily digest + weekly review delivered where you already are.</p>
+        </div>
+        <div class="mini">
+          <h3>8) Fix button</h3>
+          <p>One-step correction. If repair is hard, adoption dies.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <h2>Setup checklist</h2>
+        <span class="badge">No code, ~3 automations</span>
+      </div>
+      <div class="body cols">
+        <div class="mini">
+          <h3>A) Slack</h3>
+          <p>Create private channel <span class="kbd">SB Inbox</span>. Pin a short rule: “One thought per message. No organizing.”</p>
+        </div>
+        <div class="mini">
+          <h3>B) Notion</h3>
+          <p>Create a “Second Brain” page with 5 databases: <b>People</b>, <b>Projects</b>, <b>Ideas</b>, <b>Admin</b>, and <b>Inbox Log</b>.</p>
+        </div>
+        <div class="mini">
+          <h3>C) Zapier/Make</h3>
+          <p>Automation 1: Slack → LLM → Notion (routing + audit log + Slack confirmation).</p>
+        </div>
+        <div class="mini">
+          <h3>D) Daily digest</h3>
+          <p>Automation 2: scheduled every morning → query Notion → LLM summarization → Slack DM.</p>
+        </div>
+        <div class="mini">
+          <h3>E) Weekly review</h3>
+          <p>Automation 3: scheduled weekly → query week data → LLM review → Slack DM.</p>
+        </div>
+        <div class="mini">
+          <h3>F) Trust defaults</h3>
+          <p>Use confidence threshold (e.g., 0.60). Low confidence → “needs review” + ask for prefix.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="foot">
+      Tip: this HTML is a single file—save as <span class="kbd">second-brain-2026.html</span> and open in a browser.
+      Want it to open directly in canvas next time? Send <span class="kbd">infog</span> + a URL (your shortcut), or tell me “open in canvas”.
+    </p>
+  </div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (id) => document.getElementById(id);
+    const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+
+    function nowPretty(){
+      // local-ish: not strict tz handling; good enough for a mock DM stamp
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      return `Today ${hh}:${mm}`;
+    }
+
+    function scoreConfidence(text){
+      // Heuristic confidence: more cues, more certainty.
+      const t = text.toLowerCase();
+      let s = 0.42;
+
+      // Strong signals
+      const hasName = /\b([A-Z][a-z]+)\b/.test(text) && (/\bcall\b|\bemail\b|\bask\b|\bmeet\b|\bcoffee\b|\bfollow[- ]?up\b/i.test(text));
+      const hasDeadline = /\b(today|tomorrow|tonight|sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i.test(text) ||
+                          /\b\d{1,2}:\d{2}\b/.test(text) ||
+                          /\b\d{1,2}\/\d{1,2}\b/.test(text) ||
+                          /\bnext week\b|\bthis week\b/i.test(text);
+      const hasActionVerb = /\b(email|call|send|schedule|book|remind|buy|pay|submit|draft|review|fix|ship|write|ask|plan|prepare)\b/i.test(text);
+      const hasProjectCue = /\bproject\b|\brelaunch\b|\blaunch\b|\broadmap\b|\bsprint\b|\bmilestone\b|\bdeliverable\b|\bwebsite\b|\bapp\b/i.test(text);
+      const hasIdeaCue = /\bidea\b|\bwhat if\b|\bconcept\b|\bthesis\b|\binsight\b|\bhypothesis\b|\bmaybe we\b/i.test(text);
+      const hasAdminCue = /\b(invoice\b|\bbill\b|\btax\b|\bexpense\b|\brenew\b|\bsubscription\b|\baccount\b|\bpaperwork\b|\bform\b|\bappointment\b/i.test(text);
+
+      if (hasActionVerb) s += 0.14;
+      if (hasDeadline) s += 0.10;
+      if (hasProjectCue) s += 0.10;
+      if (hasIdeaCue) s += 0.08;
+      if (hasAdminCue) s += 0.08;
+      if (hasName) s += 0.10;
+
+      // Ambiguity penalties
+      if (text.trim().length < 12) s -= 0.18;
+      if (!hasActionVerb && !hasProjectCue && !hasIdeaCue && !hasAdminCue) s -= 0.10;
+
+      return clamp(Number(s.toFixed(2)), 0, 1);
+    }
+
+    function classify(text){
+      const t = text.toLowerCase();
+      const isPeople = /\b(ask|call|text|dm|follow up|catch up|coffee|meet)\b/.test(t) && /\b([A-Z][a-z]+)\b/.test(text);
+      const isAdmin = /\b(invoice|bill|tax|renew|subscription|pay|expense|receipt|paperwork|form|appointment|booking|visa|passport)\b/.test(t);
+      const isIdea = /\bidea|what if|concept|thesis|insight|hypothesis|maybe we|could we|should we\b/.test(t);
+      const isProject = /\bproject|relaunch|launch|roadmap|sprint|milestone|deliverable|website|app|feature|bug|deployment|ship\b/.test(t);
+
+      // Priority: admin, people, project, idea; then fallback by cues.
+      if (isAdmin) return "admin";
+      if (isPeople) return "people";
+      if (isProject) return "projects";
+      if (isIdea) return "ideas";
+
+      // fallback: infer by action verbs
+      if (/\b(buy|pay|renew|submit|schedule)\b/.test(t)) return "admin";
+      if (/\b(email|send|draft|review|fix|prepare)\b/.test(t)) return "projects";
+      return "ideas";
+    }
+
+    function extractTitle(dest, text){
+      const raw = text.replace(/\s+/g,' ').trim();
+      // crude summarization for title
+      if (dest === "people"){
+        const m = raw.match(/\b([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)\b/);
+        if (m) return `Follow-up: ${m[1]}`;
+      }
+      if (dest === "admin"){
+        if (/invoice|bill|receipt/i.test(raw)) return "Admin: invoices / payments";
+        if (/renew|subscription/i.test(raw)) return "Admin: renew subscription";
+        return "Admin: task";
+      }
+      if (dest === "projects"){
+        if (/website/i.test(raw)) return "Project: website";
+        if (/relaunch/i.test(raw)) return "Project: relaunch";
+        return "Project: next action";
+      }
+      // ideas
+      if (/what if/i.test(raw)) return "Idea: what if…";
+      if (/insight|thesis|hypothesis/i.test(raw)) return "Idea: core insight";
+      return "Idea: captured thought";
+    }
+
+    function makeFields(dest, text){
+      const raw = text.replace(/\s+/g,' ').trim();
+
+      // next action extraction: pick first actionable clause
+      const actionMatch = raw.match(/\b(email|call|send|schedule|book|remind|buy|pay|submit|draft|review|fix|write|ask|plan|prepare)\b[^.?!]*/i);
+      const nextAction = actionMatch ? actionMatch[0].trim().replace(/[,;:]$/,'') : null;
+
+      if (dest === "people"){
+        const name = (raw.match(/\b([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)\b/)||[])[1] || "Unknown";
+        return {
+          name,
+          context: "Captured from SB Inbox",
+          follow_ups: nextAction ? [capitalize(nextAction)] : ["Add a specific follow-up action"],
+          last_touched: new Date().toISOString()
+        };
+      }
+      if (dest === "projects"){
+        const status = /blocked|waiting/i.test(raw) ? "blocked" : "active";
+        return {
+          status,
+          next_action: nextAction ? capitalize(nextAction) : "Define a concrete next action",
+          notes: raw,
+          updated_at: new Date().toISOString()
+        };
+      }
+      if (dest === "ideas"){
+        const oneliner = raw.length > 110 ? raw.slice(0, 107) + "…" : raw;
+        return {
+          oneliner,
+          notes: raw,
+          captured_at: new Date().toISOString()
+        };
+      }
+      // admin
+      const due =
+        (raw.match(/\b(today|tomorrow|tonight|sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i)||[])[1] || null;
+      return {
+        status: "open",
+        due: due ? due.toLowerCase() : null,
+        next_action: nextAction ? capitalize(nextAction) : "Clarify the admin action",
+        notes: raw,
+        created_at: new Date().toISOString()
+      };
+    }
+
+    function capitalize(s){
+      if (!s) return s;
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function makeDigest(dest, obj){
+      // keep under ~150 words; mock but structured
+      const lines = [];
+      lines.push("Top 3 today:");
+      if (dest === "projects"){
+        lines.push(`1) ${obj.fields.next_action}`);
+        lines.push("2) Protect 25 minutes for the most blocked item");
+        lines.push("3) Send one “next step” message to keep momentum");
+        lines.push("");
+        lines.push("Stuck loop: If you keep avoiding it, define the *smallest* next action.");
+        lines.push("Small win: You captured the thought instead of carrying it.");
+      } else if (dest === "people"){
+        lines.push(`1) ${obj.fields.follow_ups?.[0] || "Do one follow-up"}`);
+        lines.push("2) Add one sentence of context to the person entry");
+        lines.push("3) Schedule the next touchpoint if relevant");
+        lines.push("");
+        lines.push("Stuck loop: Don’t rely on memory—write the follow-up into the system.");
+        lines.push("Small win: You’ll show up with continuity.");
+      } else if (dest === "admin"){
+        lines.push(`1) ${obj.fields.next_action}`);
+        lines.push("2) Batch all admin in a 15-minute block");
+        lines.push("3) Close one lingering loop before lunch");
+        lines.push("");
+        lines.push("Stuck loop: If it’s ambiguous, ask for one missing detail.");
+        lines.push("Small win: Your inbox stays clean because uncertainty routes safely.");
+      } else {
+        lines.push("1) Turn the idea into a 1-sentence hypothesis");
+        lines.push("2) Add one example or counterexample");
+        lines.push("3) Decide: incubate, test, or drop");
+        lines.push("");
+        lines.push("Stuck loop: If it’s fuzzy, ask: what would prove it wrong?");
+        lines.push("Small win: Ideas compound when they’re captured reliably.");
+      }
+
+      // trim to ~150 words by truncating if needed
+      const text = lines.join("\n");
+      const words = text.split(/\s+/).filter(Boolean);
+      if (words.length <= 150) return text;
+
+      return words.slice(0, 150).join(" ") + "…";
+    }
+
+    function prettyJSON(obj){
+      return JSON.stringify(obj, null, 2);
+    }
+
+    // --- Simulator wiring ---
+    const wm = $("wm"), wmVal = $("wmVal");
+    const th = $("th"), thVal = $("thVal");
+    const thought = $("thought");
+    const runBtn = $("runBtn");
+    const randomBtn = $("randomBtn");
+    const jsonOut = $("jsonOut");
+    const logOut = $("logOut");
+    const routeTag = $("routeTag");
+    const logTag = $("logTag");
+    const digest = $("digest");
+    const dmTime = $("dmTime");
+    const statusChip = $("statusChip");
+
+    const fix = $("fix");
+    const applyFixBtn = $("applyFixBtn");
+    const fixChip = $("fixChip");
+
+    const examples = [
+      "Remind me to email Sarah to confirm the copy deadline for the website relaunch.",
+      "Idea: what if our weekly review ends with one recurring theme + 3 suggested actions?",
+      "Pay the invoice for the software subscription and file the receipt.",
+      "Ask Vlad what he cared about most in last week's meeting and note it for next time.",
+      "Draft a 3-bullet agenda for tomorrow’s sync; send it tonight.",
+      "What if the system defaults to ‘needs review’ unless confidence is above the threshold?"
+    ];
+
+    let lastObj = null;
+
+    function setChip(el, text, mode){
+      el.innerHTML = `<span class="dot ${mode||""}"></span>${text}`;
+    }
+
+    function updateSliders(){
+      wmVal.textContent = wm.value;
+      thVal.textContent = Number(th.value).toFixed(2);
+    }
+
+    wm.addEventListener("input", updateSliders);
+    th.addEventListener("input", updateSliders);
+
+    randomBtn.addEventListener("click", () => {
+      thought.value = examples[Math.floor(Math.random()*examples.length)];
+      setChip(statusChip, "Example loaded", "p");
+    });
+
+    runBtn.addEventListener("click", () => {
+      const text = thought.value.trim();
+      if (!text){
+        setChip(statusChip, "Add a thought first", "w");
+        return;
+      }
+
+      // simulate “brain load”: more load slightly reduces confidence
+      const base = scoreConfidence(text);
+      const load = Number(wm.value);
+      const loadPenalty = (load - 4) * 0.02; // 0..0.06
+      const conf = clamp(Number((base - loadPenalty).toFixed(2)), 0, 1);
+
+      const dest = classify(text);
+      const title = extractTitle(dest, text);
+      const fields = makeFields(dest, text);
+
+      const obj = {
+        destination: dest,
+        title,
+        confidence: conf,
+        fields
+      };
+
+      // bouncer
+      const threshold = Number(th.value);
+      const needsReview = conf < threshold;
+
+      const recordId = needsReview ? null : ("rec_" + Math.random().toString(36).slice(2,10));
+      const filedTo = needsReview ? null : dest;
+
+      const log = {
+        captured_text: text,
+        filed_to: filedTo,
+        record_id: recordId,
+        confidence: conf,
+        status: needsReview ? "needs_review" : "filed"
+      };
+
+      lastObj = { obj, log };
+
+      jsonOut.textContent = prettyJSON(obj);
+      logOut.textContent = prettyJSON(log);
+
+      routeTag.textContent = `route: ${dest}`;
+      logTag.textContent = `status: ${log.status}`;
+
+      if (needsReview){
+        setChip(statusChip, `Needs review (conf ${conf})`, "w");
+        digest.textContent =
+`Top 3 today:
+1) Repost with a prefix (people/project/idea/admin)
+2) Add one missing detail (who/what/when)
+3) Keep capturing — don’t organize
+
+Stuck loop: Ambiguity is normal. The system fails safe.
+Small win: You didn’t pollute memory with a bad guess.`;
+      } else {
+        setChip(statusChip, `Filed to ${dest} (conf ${conf})`, "g");
+        digest.textContent = makeDigest(dest, obj);
+      }
+
+      dmTime.textContent = nowPretty();
+      fixChip.innerHTML = `<span class="dot p"></span>No fix applied`;
+      fix.value = "";
+    });
+
+    applyFixBtn.addEventListener("click", () => {
+      if (!lastObj){
+        setChip(fixChip, "Run the loop first", "w");
+        return;
+      }
+      const txt = fix.value.trim().toLowerCase();
+      const m = txt.match(/^fix:\s*(people|projects|ideas|admin)\s*$/);
+      if (!m){
+        setChip(fixChip, "Use: fix: people|projects|ideas|admin", "w");
+        return;
+      }
+      const newDest = m[1];
+
+      // update object + log
+      lastObj.obj.destination = newDest;
+      lastObj.obj.title = extractTitle(newDest, lastObj.log.captured_text);
+      lastObj.obj.fields = makeFields(newDest, lastObj.log.captured_text);
+
+      // “apply fix” implies we file it
+      const newId = "rec_" + Math.random().toString(36).slice(2,10);
+      lastObj.log.filed_to = newDest;
+      lastObj.log.record_id = newId;
+      lastObj.log.status = "filed (fixed)";
+
+      jsonOut.textContent = prettyJSON(lastObj.obj);
+      logOut.textContent = prettyJSON(lastObj.log);
+      routeTag.textContent = `route: ${newDest}`;
+      logTag.textContent = `status: ${lastObj.log.status}`;
+      digest.textContent = makeDigest(newDest, lastObj.obj);
+      setChip(fixChip, `Applied fix → ${newDest}`, "g");
+      setChip(statusChip, `Fixed & filed to ${newDest}`, "g");
+    });
+
+    // share button (hash link)
+    $("copyLinkBtn").addEventListener("click", async () => {
+      const url = location.origin ? (location.origin + location.pathname + "#sim") : ("#sim");
+      try{
+        await navigator.clipboard.writeText(url);
+        setChip(statusChip, "Simulator link copied", "t");
+      }catch{
+        // fallback
+        location.hash = "sim";
+        setChip(statusChip, "Jumped to simulator (#sim)", "t");
+      }
+    });
+
+    // init
+    updateSliders();
+    dmTime.textContent = nowPretty();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Bets: The Bifurcated Economy — Strategic Middle Layer</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0E1630;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --line:rgba(255,255,255,.10);
+      --good:#22C55E;
+      --warn:#F59E0B;
+      --bad:#EF4444;
+      --brand:#7C3AED;
+      --brand2:#06B6D4;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(124,58,237,.25), transparent 60%),
+        radial-gradient(800px 600px at 85% 20%, rgba(6,182,212,.22), transparent 55%),
+        radial-gradient(900px 700px at 50% 95%, rgba(34,197,94,.12), transparent 60%),
+        linear-gradient(180deg, #050713, #060A18 60%, #050713);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 70px}
+
+    /* Top */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr;}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .card.soft{background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));}
+
+    .kicker{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+    .dot{width:9px;height:9px;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+    h1{
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.05;
+      margin:12px 0 12px;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:68ch;
+    }
+
+    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.25);
+    }
+
+    .mini{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .statRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 560px){ .statRow{grid-template-columns:1fr;} }
+
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .stat .label{color:var(--muted); font-size:12px}
+    .stat .value{font-size:20px; margin-top:6px; font-weight:700}
+
+    /* Sections */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .sectionTitle h2{margin:0; font-size:18px; letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.22)}
+
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 680px){ .twoCol{grid-template-columns:1fr;} }
+
+    .callout{
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(124,58,237,.12), rgba(6,182,212,.08));
+      padding:12px 12px;
+      color:var(--text);
+    }
+    .callout p{margin:0; color:var(--muted); line-height:1.55; font-size:13.5px}
+    .callout strong{color:var(--text)}
+
+    /* Bifurcation diagram */
+    .barbell{
+      position:relative;
+      height:170px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .barbell:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(180px 120px at 18% 50%, rgba(124,58,237,.32), transparent 68%),
+        radial-gradient(180px 120px at 82% 50%, rgba(34,197,94,.24), transparent 68%),
+        radial-gradient(220px 120px at 50% 50%, rgba(245,158,11,.10), transparent 70%);
+      pointer-events:none;
+    }
+    .barbell .rail{
+      position:absolute;
+      left:10%; right:10%;
+      top:50%;
+      height:10px;
+      transform: translateY(-50%);
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(124,58,237,.65), rgba(245,158,11,.22), rgba(34,197,94,.45));
+      filter: blur(.2px);
+    }
+    .barbell .weight{
+      position:absolute;
+      top:50%;
+      width:160px; height:120px;
+      transform: translate(-50%,-50%);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:12px;
+      gap:6px;
+    }
+    .barbell .weight .t{font-weight:800}
+    .barbell .weight .d{color:var(--muted); font-size:12.5px; line-height:1.35}
+    .barbell .weight.left{left:18%}
+    .barbell .weight.right{left:82%}
+    .barbell .middle{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform: translate(-50%,-50%);
+      width:220px;
+      padding:12px;
+      border-radius:18px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      text-align:center;
+    }
+    .barbell .middle .t{font-weight:850}
+    .barbell .middle .d{color:var(--muted); font-size:12.5px; line-height:1.35; margin-top:6px}
+
+    /* Layer map */
+    .layers{display:grid; gap:10px;}
+    .layer{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns: 40px 1fr;
+      gap:12px;
+      align-items:center;
+    }
+    .layer .ico{
+      width:40px; height:40px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      font-weight:900;
+    }
+    .layer .name{font-weight:800; margin:0}
+    .layer .desc{color:var(--muted); margin:4px 0 0; font-size:13px; line-height:1.45}
+
+    /* Simulator */
+    .sim{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .sim h3{margin:0 0 6px; font-size:15px; letter-spacing:-.01em}
+    .sim p{margin:0 0 10px; color:var(--muted); font-size:13px; line-height:1.45}
+
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .row .k{color:var(--muted); font-size:12px; min-width:140px}
+    input[type="range"]{width:min(520px, 100%); accent-color: var(--brand2);}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color:var(--muted);
+    }
+    .badge strong{color:var(--text)}
+
+    .meter{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+    .meter > i{
+      display:block;
+      height:100%;
+      width:40%;
+      background: linear-gradient(90deg, rgba(124,58,237,.9), rgba(6,182,212,.9));
+    }
+
+    .tri{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){ .tri{grid-template-columns:1fr;} }
+
+    .box{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .box .h{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .box .h b{font-size:13px}
+    .box .h span{font-size:12px; color:var(--muted)}
+    .box p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45}
+
+    /* Diagnostic */
+    .diag{
+      display:grid;
+      gap:10px;
+    }
+    .diag .q{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .diag .q .top{display:flex; justify-content:space-between; gap:12px; align-items:baseline}
+    .diag .q label{font-weight:750; font-size:13px}
+    .diag .q .v{color:var(--muted); font-size:12px}
+
+    .result{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(6,182,212,.06));
+      padding:14px;
+    }
+    .result h3{margin:0; font-size:16px}
+    .result p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .recList{display:grid; gap:8px; margin-top:10px}
+    .rec{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns: 16px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .chip{width:12px;height:12px;border-radius:99px;margin-top:4px}
+    .chip.good{background:var(--good)}
+    .chip.warn{background:var(--warn)}
+    .chip.bad{background:var(--bad)}
+
+    .footer{margin-top:18px; color:rgba(168,179,214,.85); font-size:12.5px; line-height:1.6}
+    .footer code{background: rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; border:1px solid var(--line)}
+
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:700;
+    }
+    button:hover{border-color: rgba(255,255,255,.22)}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      backdrop-filter: blur(10px);
+      max-width: min(760px, calc(100vw - 24px));
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-4px)}
+
+    /* Tiny delight */
+    .spark{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:900;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="card">
+        <div class="kicker"><span class="dot"></span>Strategic middle layer for AI bets</div>
+        <h1>AI is not “transforming everything” equally — it’s <span class="spark">splitting the economy</span>.</h1>
+        <p class="sub">
+          Most AI talk is either <b>too abstract</b> (“AI changes everything”) or <b>too tactical</b> (“use ChatGPT for customer support”).
+          What leaders need is a map of <b>how competition changes</b> — where your business becomes vulnerable, and where it becomes
+          (ironically) protected.
+        </p>
+
+        <div class="pills">
+          <span class="pill">Contestable vs. non-contestable markets</span>
+          <span class="pill">Digital services vs. atoms-moving services</span>
+          <span class="pill">Commoditized production vs. scarce judgment</span>
+          <span class="pill">Why the middle tier gets squeezed</span>
+          <span class="pill">AI investment strategy by position</span>
+        </div>
+
+        <div class="statRow">
+          <div class="stat">
+            <div class="label">Key mechanism</div>
+            <div class="value">Cost of tokenizable cognition → <span style="color:var(--good)">toward zero</span></div>
+          </div>
+          <div class="stat">
+            <div class="label">Key outcome</div>
+            <div class="value">A “barbell” economy: <span style="color:var(--warn)">middle tier</span> squeezed</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card soft mini">
+        <div>
+          <div class="sectionTitle">
+            <h2>The missing lens</h2>
+            <div class="tag">1-minute read</div>
+          </div>
+          <div class="callout">
+            <p>
+              <strong>AI collapses the marginal cost</strong> of cognitive tasks that can be expressed in language (drafting, summarizing,
+              researching, coding, generating variants).
+              <br/><br/>
+              When production becomes abundant, the bottleneck moves to <strong>judgment + accountability</strong> — and to
+              <strong>physical execution</strong> where atoms must still move in the real world.
+            </p>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="sectionTitle">
+            <h2>Quick legend</h2>
+            <div class="tag">how to read</div>
+          </div>
+          <div class="recList">
+            <div class="rec"><span class="chip good"></span><div><b>Tailwind</b> — AI lowers overhead without raising competitive pressure.</div></div>
+            <div class="rec"><span class="chip warn"></span><div><b>Squeeze</b> — caught between lean AI-native teams and giants with distribution.</div></div>
+            <div class="rec"><span class="chip bad"></span><div><b>Commodity trap</b> — selling “production” that’s getting cheaper monthly.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The barbell economy (bifurcation)</h2>
+          <div class="tag">competition map</div>
+        </div>
+
+        <div class="barbell" aria-label="Bifurcated economy barbell diagram">
+          <div class="rail"></div>
+
+          <div class="weight left">
+            <div class="t">Digital, contestable markets</div>
+            <div class="d">Output easy to compare, switching easy → baseline commoditized, competition intensifies.</div>
+          </div>
+
+          <div class="middle">
+            <div class="t" style="color:var(--warn)">Middle tier gets crushed</div>
+            <div class="d">Professional services + mid-market shops selling cognitive production → squeezed from below & above.</div>
+          </div>
+
+          <div class="weight right">
+            <div class="t">Physical, local markets</div>
+            <div class="d">Relationship + location constraints → AI lowers overhead but doesn’t raise contestability → margins can rise.</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="twoCol">
+          <div class="box">
+            <div class="h"><b>Contestability</b><span>the key concept</span></div>
+            <p>
+              A market is contestable when buyers can easily evaluate alternatives and switch.
+              Switching to a marketing agency across the world is easy. Switching to a plumber across the world is… not.
+            </p>
+          </div>
+          <div class="box">
+            <div class="h"><b>Distribution</b><span>the scarce resource</span></div>
+            <p>
+              As production commoditizes, distribution, bundling, embedded workflows, and trust become more valuable.
+              Giants with distribution moats can benefit disproportionately.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The 3-layer map of value</h2>
+          <div class="tag">diagnostic lens</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer">
+            <div class="ico" style="background: linear-gradient(180deg, rgba(124,58,237,.18), rgba(0,0,0,.10));">1</div>
+            <div>
+              <p class="name">Tokenizable cognition (now abundant)</p>
+              <p class="desc">Drafting, summarizing, researching, coding, generating variants. AI collapses marginal cost.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background: linear-gradient(180deg, rgba(6,182,212,.18), rgba(0,0,0,.10));">2</div>
+            <div>
+              <p class="name">Judgment + accountability (bottleneck)</p>
+              <p class="desc">Choosing the right option, owning outcomes, taste, ethics, liability, relationships, trust.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background: linear-gradient(180deg, rgba(34,197,94,.16), rgba(0,0,0,.10));">3</div>
+            <div>
+              <p class="name">Physical execution (atoms)</p>
+              <p class="desc">Installation, repair, care, delivery — constrained by time, place, and the physical world.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="callout">
+          <p>
+            <strong>Rule of thumb:</strong> If you mostly sell Layer 1 output, you’re exposed.
+            If you mostly sell Layer 2 judgment, you’re resilient.
+            If you mostly sell Layer 3 execution, you’re structurally advantaged (AI helps overhead but can’t “teleport” the service).
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Mechanics simulator</h2>
+          <div class="tag">play with assumptions</div>
+        </div>
+
+        <div class="sim" id="simCost">
+          <h3>1) Cost collapse → output explosion (Jevons-style effect)</h3>
+          <p>
+            When something gets cheaper, we often use <b>more</b> of it, not less.
+            Cheaper “cognition” means: more drafts, more experiments, more segments, more analysis.
+            The bottleneck shifts to <b>judgment</b>.
+          </p>
+
+          <div class="row">
+            <div class="k">Cost per unit of cognition</div>
+            <input type="range" id="cost" min="1" max="100" value="35" />
+            <span class="badge">Cost: <strong id="costV">35</strong></span>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div class="k">Demand elasticity</div>
+            <input type="range" id="elas" min="1" max="100" value="65" />
+            <span class="badge">Elasticity: <strong id="elasV">65</strong></span>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="twoCol">
+            <div>
+              <div class="badge">Cognitive output volume: <strong id="volumeV">—</strong></div>
+              <div style="margin-top:10px" class="meter"><i id="volBar"></i></div>
+              <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.45">
+                As cost falls and elasticity rises, firms produce vastly more cognitive artifacts.
+              </p>
+            </div>
+            <div>
+              <div class="badge">Judgment bottleneck pressure: <strong id="judgeV">—</strong></div>
+              <div style="margin-top:10px" class="meter"><i id="judgeBar"></i></div>
+              <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.45">
+                More output means more reviewing, selecting, approving, and owning outcomes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim" id="simBaumol" style="margin-top:12px">
+          <h3>2) Baumol-style effect: what can’t be automated gets relatively pricier</h3>
+          <p>
+            If AI boosts productivity in some sectors, wages tend to rise broadly.
+            Work that can’t be “sped up” by AI (especially Layer 3) becomes <b>relatively more expensive</b>.
+          </p>
+
+          <div class="row">
+            <div class="k">AI productivity lift (digital)</div>
+            <input type="range" id="prod" min="0" max="100" value="70" />
+            <span class="badge">Lift: <strong id="prodV">70</strong></span>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <div class="k">Automation of physical work</div>
+            <input type="range" id="robot" min="0" max="100" value="20" />
+            <span class="badge">Robotics: <strong id="robotV">20</strong></span>
+          </div>
+
+          <div class="hr"></div>
+          <div class="tri">
+            <div class="box">
+              <div class="h"><b>Relative price of Layer 1</b><span id="p1">—</span></div>
+              <p>Drafting/production gets cheaper fast; often trends toward commodity pricing.</p>
+            </div>
+            <div class="box">
+              <div class="h"><b>Relative price of Layer 2</b><span id="p2">—</span></div>
+              <p>Judgment + accountability become more valuable as they gate increasingly abundant output.</p>
+            </div>
+            <div class="box">
+              <div class="h"><b>Relative price of Layer 3</b><span id="p3">—</span></div>
+              <p>Physical services rise if wages rise but physical productivity can’t keep up.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Where do you sit?</h2>
+          <div class="tag">interactive diagnostic</div>
+        </div>
+
+        <div class="diag">
+          <div class="q">
+            <div class="top">
+              <label for="contest">How contestable is your market?</label>
+              <div class="v"><span id="contestV">60</span>/100</div>
+            </div>
+            <input type="range" id="contest" min="0" max="100" value="60" />
+          </div>
+
+          <div class="q">
+            <div class="top">
+              <label for="atoms">How much do you “move atoms”?</label>
+              <div class="v"><span id="atomsV">25</span>/100</div>
+            </div>
+            <input type="range" id="atoms" min="0" max="100" value="25" />
+          </div>
+
+          <div class="q">
+            <div class="top">
+              <label for="dist">How strong is your distribution moat?</label>
+              <div class="v"><span id="distV">35</span>/100</div>
+            </div>
+            <input type="range" id="dist" min="0" max="100" value="35" />
+          </div>
+
+          <div class="q">
+            <div class="top">
+              <label for="l1">% of revenue from Layer 1 production</label>
+              <div class="v"><span id="l1V">55</span>%</div>
+            </div>
+            <input type="range" id="l1" min="0" max="100" value="55" />
+          </div>
+
+          <div class="q">
+            <div class="top">
+              <label for="l2">% of revenue from Layer 2 judgment/accountability</label>
+              <div class="v"><span id="l2V">35</span>%</div>
+            </div>
+            <input type="range" id="l2" min="0" max="100" value="35" />
+          </div>
+
+          <div class="q">
+            <div class="top">
+              <label for="l3">% of revenue from Layer 3 physical execution</label>
+              <div class="v"><span id="l3V">10</span>%</div>
+            </div>
+            <input type="range" id="l3" min="0" max="100" value="10" />
+            <p style="margin:8px 0 0; color:var(--muted); font-size:12.5px">
+              Tip: If these don’t sum to 100, that’s fine — think of them as “mix weights,” not strict accounting.
+            </p>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="result" id="result">
+          <h3 id="resultTitle">—</h3>
+          <p id="resultDesc">Adjust the sliders to see recommendations.</p>
+
+          <div class="recList" id="recs"></div>
+
+          <div class="btnRow">
+            <button id="copy">Copy diagnosis</button>
+            <button id="reset">Reset sliders</button>
+          </div>
+        </div>
+
+        <div class="footer">
+          <b>Death trap to avoid:</b> using AI only to make a legacy Layer‑1 production model ~20% more efficient.
+          If you’re competing with 3-person AI-native teams, that’s often just “dying slower.”
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>Investment playbook (by position)</h2>
+        <div class="tag">actionable bets</div>
+      </div>
+
+      <div class="tri">
+        <div class="box">
+          <div class="h"><b>Mid-tier in contestable digital markets</b><span style="color:var(--warn)">highest risk</span></div>
+          <p>
+            <b>Path A: Get radically lean</b> (overhead + headcount + process) to compete with tiny AI-native teams.
+            <br/>
+            <b>Path B: Move up the stack</b>: stop selling deliverables; sell judgment, accountability, quality, outcomes.
+            <br/>
+            <b>AI spend</b>: tools that amplify senior review, client trust, QA, compliance, and workflow integration.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>Physical, local, relationship-heavy services</b><span style="color:var(--good)">tailwind</span></div>
+          <p>
+            AI lowers administrative burden without making the market meaningfully more contestable.
+            <br/>
+            <b>AI spend</b>: scheduling, dispatch, quoting, customer comms, invoicing/collections, internal ops.
+            <br/>
+            Beware “transformation theater” — you often want boring reliability + efficiency.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>AI-native startups selling “production”</b><span style="color:var(--bad)">commodity risk</span></div>
+          <p>
+            Pure cognitive production is a depreciating asset — models get cheaper, margins compress.
+            <br/>
+            <b>Run toward moats</b>: distribution, embedded workflows, switching costs, compliance/audit, human-in-the-loop review,
+            liability/accountability wrappers, orchestration.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>Giants with distribution moats</b><span style="color:var(--good)">protected</span></div>
+          <p>
+            AI can make your moat more valuable: trust + bundling + platform status stand out as production commoditizes.
+            <br/>
+            <b>Main risk</b>: internal speed + talent flight (startups hire your best people).
+            <br/>
+            <b>AI spend</b>: internal enablement, rapid tooling, training, governance that accelerates adoption (not blocks it).
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>What “good” looks like</b><span>north star</span></div>
+          <p>
+            Use AI to flood Layer 1 with options — then build the systems, incentives, and workflows that make Layer 2 decisions
+            faster, safer, and more accountable. If you touch the real world, use AI to remove back-office friction so you can do more
+            of the physical work that stays scarce.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>Decision checklist</b><span>ask this weekly</span></div>
+          <p>
+            1) Are we selling scarce judgment or abundant production?
+            <br/>2) Are customers able to compare/switch easily?
+            <br/>3) Do we have distribution or embedded workflow advantage?
+            <br/>4) Is our AI spend reducing overhead or reinforcing a doomed model?
+            <br/>5) What bottleneck becomes binding as production gets cheaper?
+          </p>
+        </div>
+      </div>
+
+      <div class="footer" style="margin-top:14px">
+        Want to use this as a template in your team? Replace the slider defaults with your actual numbers, and paste the copied
+        diagnosis into a strategy doc. (Try: <code>Contestability</code>, <code>Atoms</code>, <code>Distribution</code>, and your Layer mix.)
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // --- Simulator 1: Jevons-style ---
+    function updateCostSim(){
+      const cost = +$("cost").value;      // 1..100 (higher = more expensive)
+      const elas = +$("elas").value;      // 1..100
+      $("costV").textContent = cost;
+      $("elasV").textContent = elas;
+
+      // Lower cost & higher elasticity => higher volume.
+      // Volume index: 0..200-ish
+      const costFactor = (101 - cost) / 100;     // 0..1
+      const elasFactor = elas / 100;             // 0..1
+      const volume = 10 + 190 * (0.2*costFactor + 0.8*costFactor*elasFactor);
+
+      // Judgment pressure grows superlinearly with volume
+      const pressure = Math.pow(volume/200, 1.35) * 100;
+
+      const vShow = Math.round(volume);
+      const pShow = Math.max(0, Math.min(100, Math.round(pressure)));
+
+      $("volumeV").textContent = vShow + " units";
+      $("judgeV").textContent  = pShow + "/100";
+
+      $("volBar").style.width = Math.min(100, (volume/200)*100) + "%";
+      $("judgeBar").style.width = pShow + "%";
+    }
+
+    // --- Simulator 2: Baumol-style ---
+    function updateBaumol(){
+      const prod = +$("prod").value;   // 0..100
+      const robot = +$("robot").value; // 0..100
+      $("prodV").textContent = prod;
+      $("robotV").textContent = robot;
+
+      // Relative prices: Layer1 down with digital productivity.
+      // Layer3 up with wage pressure minus robotics.
+      // Layer2 up moderately (gating function).
+      const p1 = 100 - 0.75*prod;                  // lower is cheaper
+      const wagePressure = 40 + 0.6*prod;          // productivity pulls wages
+      const p3 = wagePressure - 0.55*robot;        // robotics offsets
+      const p2 = 85 + 0.20*prod - 0.10*robot;      // slight increase
+
+      const fmt = (x)=> (x<0?0:x).toFixed(0) + " index";
+      $("p1").textContent = fmt(p1);
+      $("p2").textContent = fmt(p2);
+      $("p3").textContent = fmt(p3);
+    }
+
+    // --- Diagnostic / Recommendations ---
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function showToast(text){
+      const t = $("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>t.classList.remove("show"), 1400);
+    }
+
+    function scorePosition(){
+      const contest = +$("contest").value; // 0..100
+      const atoms = +$("atoms").value;
+      const dist = +$("dist").value;
+      const l1 = +$("l1").value;
+      const l2 = +$("l2").value;
+      const l3 = +$("l3").value;
+
+      $("contestV").textContent = contest;
+      $("atomsV").textContent = atoms;
+      $("distV").textContent = dist;
+      $("l1V").textContent = l1;
+      $("l2V").textContent = l2;
+      $("l3V").textContent = l3;
+
+      // Risk model (heuristic):
+      // - High contestability + high Layer1 exposure increases risk.
+      // - Higher distribution moat decreases risk.
+      // - More atoms decreases contestability impact (local constraints).
+      // - More Layer2/L3 decreases risk.
+      const c = contest/100;
+      const a = atoms/100;
+      const d = dist/100;
+      const L1 = l1/100;
+      const L2 = l2/100;
+      const L3 = l3/100;
+
+      const contestAdjusted = c * (1 - 0.65*a);
+      const productionExposure = L1 * (1 - 0.35*a);
+      const protection = 0.55*d + 0.35*L2 + 0.45*L3 + 0.25*a;
+
+      let risk = 0.85*contestAdjusted + 0.75*productionExposure - 0.75*protection;
+      risk = clamp01((risk + 0.35));
+
+      // Classify
+      let title = "";
+      let desc = "";
+      let recs = [];
+
+      const isPhysical = a > 0.55;
+      const isDigitalContestable = (contestAdjusted > 0.55) && !isPhysical;
+      const isGiant = d > 0.70;
+      const isMidTierTrap = isDigitalContestable && L1 > 0.45 && d < 0.55;
+
+      // Determine narrative
+      if(isPhysical){
+        title = "Physical / local services: AI tailwind (overhead down, contestability stable)";
+        desc = "You move atoms. AI won’t ‘teleport’ execution, so competition doesn’t intensify the same way. The win is operational leverage.";
+        recs = [
+          {s:"good", t:"Automate back office first", d:"Scheduling, dispatch, quoting, customer comms, invoicing/collections — boring wins compound."},
+          {s:"good", t:"Standardize playbooks", d:"Use AI to capture SOPs, diagnostics, and customer scripts — then make technicians faster and more consistent."},
+          {s:"warn", t:"Don’t overbuy ‘transformation’", d:"You usually want reliability + throughput, not flashy demos. Measure time-to-quote and time-to-cash."},
+        ];
+      } else if(isGiant){
+        title = "Distribution moat: protected — your risk is internal speed + talent";
+        desc = "If you own distribution, bundling, and trust, AI can make your moat more valuable as production commoditizes.";
+        recs = [
+          {s:"good", t:"Make internal adoption frictionless", d:"Training, safe sandboxes, and fast procurement so teams can actually ship with AI."},
+          {s:"good", t:"Embed AI into workflows", d:"Not a separate chatbot — integrate into core tools so usage becomes default."},
+          {s:"warn", t:"Guard against talent flight", d:"Your best people can get more leverage elsewhere. Create internal ‘startup lanes’ and real upside."},
+        ];
+      } else if(isMidTierTrap){
+        title = "Mid-tier in contestable digital markets: squeeze zone (highest danger)";
+        desc = "You’re exposed to cheaper near-equivalents from lean AI-native teams and to giants with distribution you can’t match.";
+        recs = [
+          {s:"warn", t:"Choose a path: get radically lean", d:"Rebuild around a small core team; redesign delivery so AI does most Layer‑1 production."},
+          {s:"warn", t:"…or move up the stack", d:"Stop selling deliverables; sell judgment, accountability, and outcomes. Reprice accordingly."},
+          {s:"bad", t:"Avoid the death trap", d:"‘Make our existing model 20% more efficient’ usually just delays the squeeze."},
+          {s:"good", t:"Invest where moats can form", d:"Compliance, audit trails, human-in-the-loop review, workflow embedding, domain trust, distribution partnerships."},
+        ];
+      } else if(isDigitalContestable){
+        title = "Digital & contestable: baseline commoditization — compete on distribution or judgment";
+        desc = "When customers can compare/switch easily, AI pushes prices toward commodity levels for Layer‑1 work.";
+        recs = [
+          {s:"good", t:"Differentiate on Layer‑2", d:"Build review systems, QA, accountability, and taste — and market those as the product."},
+          {s:"good", t:"Create switching costs", d:"Integrate into customer workflows; own data pipelines, templates, and governance."},
+          {s:"warn", t:"Price models matter", d:"If you bill for artifacts, you’ll feel deflation faster. Move toward outcomes, retainers, risk-sharing."},
+        ];
+      } else {
+        title = "Mixed position: use AI to amplify scarce constraints";
+        desc = "You’re not in the sharpest part of the squeeze. Your best returns come from removing bottlenecks and strengthening what stays scarce.";
+        recs = [
+          {s:"good", t:"Flood Layer‑1 with options", d:"Use AI to generate drafts/variants quickly — then tighten the decision loop."},
+          {s:"good", t:"Strengthen accountability", d:"Clear owners, review gates, audit logs, and ‘why we chose this’ documentation."},
+          {s:"warn", t:"Watch contestability creep", d:"If your output becomes easier to compare, you may drift into the squeeze. Build distribution or niche depth."},
+        ];
+      }
+
+      // Add a compact risk index
+      const riskPct = Math.round(risk*100);
+      const riskLabel = riskPct < 35 ? "Low" : riskPct < 65 ? "Medium" : "High";
+
+      return {contest, atoms, dist, l1, l2, l3, title, desc, recs, riskPct, riskLabel};
+    }
+
+    function render(){
+      const r = scorePosition();
+      const title = `${r.title}  •  Risk: ${r.riskLabel} (${r.riskPct}%)`;
+      $("resultTitle").textContent = title;
+      $("resultDesc").textContent = r.desc;
+
+      const recsEl = $("recs");
+      recsEl.innerHTML = "";
+      for(const item of r.recs){
+        const row = document.createElement("div");
+        row.className = "rec";
+        const chip = document.createElement("span");
+        chip.className = `chip ${item.s}`;
+        const body = document.createElement("div");
+        body.innerHTML = `<b>${item.t}</b><div style="margin-top:4px; color: var(--muted); font-size:13px; line-height:1.45">${item.d}</div>`;
+        row.appendChild(chip);
+        row.appendChild(body);
+        recsEl.appendChild(row);
+      }
+
+      // keep simulators fresh
+      updateCostSim();
+      updateBaumol();
+    }
+
+    function copyDiagnosis(){
+      const r = scorePosition();
+      const lines = [];
+      lines.push("AI Position Diagnosis");
+      lines.push("—");
+      lines.push(`Contestability: ${r.contest}/100`);
+      lines.push(`Atoms: ${r.atoms}/100`);
+      lines.push(`Distribution moat: ${r.dist}/100`);
+      lines.push(`Layer mix: L1 ${r.l1}% | L2 ${r.l2}% | L3 ${r.l3}%`);
+      lines.push(`Risk: ${r.riskLabel} (${r.riskPct}%)`);
+      lines.push("");
+      lines.push(r.title);
+      lines.push(r.desc);
+      lines.push("");
+      lines.push("Recommendations:");
+      r.recs.forEach((x, i)=> lines.push(`${i+1}. ${x.t} — ${x.d}`));
+
+      const text = lines.join("\n");
+      navigator.clipboard.writeText(text).then(
+        ()=>showToast("Copied diagnosis to clipboard"),
+        ()=>showToast("Couldn’t access clipboard")
+      );
+    }
+
+    function resetAll(){
+      $("contest").value = 60;
+      $("atoms").value = 25;
+      $("dist").value = 35;
+      $("l1").value = 55;
+      $("l2").value = 35;
+      $("l3").value = 10;
+      $("cost").value = 35;
+      $("elas").value = 65;
+      $("prod").value = 70;
+      $("robot").value = 20;
+      render();
+      showToast("Reset sliders");
+    }
+
+    // Wire up
+    ["cost","elas","prod","robot","contest","atoms","dist","l1","l2","l3"].forEach(id=>{
+      $(id).addEventListener("input", render);
+    });
+    $("copy").addEventListener("click", copyDiagnosis);
+    $("reset").addEventListener("click", resetAll);
+
+    // First paint
+    render();
+  </script>
+</body>
+</html>

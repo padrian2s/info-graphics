@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Correctness Is Upstream: Defining “Good” for AI Systems</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --card:#0C1222;
+      --card2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --line:rgba(255,255,255,.10);
+      --good:#39D98A;
+      --warn:#FFC857;
+      --bad:#FF5C7A;
+      --info:#63B3FF;
+      --accent:#8B5CF6;
+      --accent2:#14B8A6;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 15%, rgba(20,184,166,.18), transparent 55%),
+        radial-gradient(1000px 650px at 50% 95%, rgba(99,179,255,.14), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      line-height:1.4;
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 64px}
+    .top{
+      display:flex; gap:18px; align-items:stretch; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .hero{
+      flex: 1 1 520px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:calc(var(--r) + 8px);
+      padding:22px 22px 18px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 300px at 20% 0%, rgba(139,92,246,.28), transparent 60%),
+        radial-gradient(520px 280px at 85% 15%, rgba(20,184,166,.20), transparent 60%),
+        radial-gradient(500px 300px at 50% 120%, rgba(99,179,255,.18), transparent 60%);
+      pointer-events:none;
+      filter: blur(0px);
+      opacity:.9;
+    }
+    .hero > *{position:relative}
+    .kicker{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px; letter-spacing:.02em;
+      margin-bottom:10px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.14);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.15);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:32px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      max-width:70ch;
+    }
+
+    .side{
+      flex:0 0 360px;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:calc(var(--r) + 8px);
+      padding:16px;
+      box-shadow:var(--shadow);
+      min-width:280px;
+    }
+    .side h3{margin:6px 0 10px;font-size:15px}
+    .metric{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      padding:10px 12px;
+      background:rgba(0,0,0,.16);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      margin-bottom:10px;
+    }
+    .metric .label{color:var(--muted); font-size:12px}
+    .metric .value{font-family:var(--mono); font-size:13px}
+    .bar{
+      height:10px;border-radius:999px;background:rgba(255,255,255,.08);
+      overflow:hidden;
+      margin-top:8px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .bar > i{display:block;height:100%;width:50%; background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .card{
+      grid-column: span 6;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      padding:16px;
+      box-shadow:0 10px 40px rgba(0,0,0,.30);
+      position:relative;
+      overflow:hidden;
+    }
+    .card.big{grid-column: span 12;}
+    .card.third{grid-column: span 4;}
+    .card .title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;
+    }
+    .card h2{margin:0;font-size:16px;letter-spacing:-.01em}
+    .hint{color:var(--muted);font-size:12px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+
+    .list{
+      display:grid; gap:8px;
+      margin:0; padding:0; list-style:none;
+    }
+    .li{
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      background:rgba(0,0,0,.16);
+    }
+    .li b{color:var(--text)}
+    .li small{display:block;color:var(--muted);margin-top:4px}
+
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 240px}
+    .control{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .control label{
+      display:flex;justify-content:space-between;gap:10px;align-items:center;
+      font-size:12px;color:var(--muted);
+      margin-bottom:8px;
+    }
+    input[type="range"]{width:100%}
+    select, input[type="text"], textarea{
+      width:100%;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 10px;
+      outline:none;
+      font-family:var(--sans);
+      font-size:13px;
+    }
+    textarea{min-height:92px; resize:vertical}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{
+      background:linear-gradient(90deg, rgba(139,92,246,.95), rgba(20,184,166,.85));
+      color:#061018;
+      border:0;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+    button.secondary{
+      background:rgba(255,255,255,.07);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+      font-weight:600;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:12px;
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.12);
+      padding:2px 6px;
+      border-radius:8px;
+      color:rgba(234,240,255,.92);
+    }
+    .output{
+      margin-top:10px;
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(234,240,255,.92);
+      white-space:pre-wrap;
+      word-break:break-word;
+      position:relative;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.18);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;color:var(--muted);
+    }
+    .dot{width:8px;height:8px;border-radius:50%}
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+    .dot.info{background:var(--info)}
+
+    /* mini charts */
+    .mini{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .spark{
+      height:64px;
+      width:100%;
+      display:block;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .foot{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .note{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:8px;
+    }
+    .warnbox{
+      border-left:3px solid var(--warn);
+      padding:10px 12px;
+      background:rgba(255,200,87,.08);
+      border-radius:12px;
+      color:rgba(234,240,255,.92);
+      font-size:12px;
+    }
+    .twocol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 920px){
+      .card{grid-column: span 12}
+      .card.third{grid-column: span 12}
+      .side{flex:1 1 360px}
+      .twocol{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <section class="top">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">AI Quality</span>
+          <span class="pill">Agentic Systems</span>
+          <span class="pill">Evals & Metrics</span>
+          <span class="pill">Goalposts</span>
+        </div>
+        <h1>Correctness is upstream of everything.</h1>
+        <div class="sub">
+          Most AI projects don’t fail because the model is dumb. They fail because nobody can answer a brutally simple question:
+          <b>“What would correct even mean here?”</b> If you can’t define correctness, you can’t measure it. If you can’t measure it, you can’t improve it.
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="badge"><span class="dot info"></span> Humans optimize for <b>go-along / get-along</b> → vagueness</div>
+          <div class="badge"><span class="dot warn"></span> LLMs optimize what you <b>reward</b> → guessing / hallucinations</div>
+          <div class="badge"><span class="dot good"></span> Define “good” → <b>stable targets</b>, better prompts, better systems</div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <h3>Quality Control Panel</h3>
+        <div class="metric">
+          <div>
+            <div class="label">Correctness clarity</div>
+            <div class="bar"><i id="clarityBar" style="width:42%"></i></div>
+          </div>
+          <div class="value" id="clarityVal">0.42</div>
+        </div>
+        <div class="metric">
+          <div>
+            <div class="label">Proxy-metric risk (Goodhart)</div>
+            <div class="bar"><i id="goodhartBar" style="width:58%; background:linear-gradient(90deg,var(--warn),var(--bad))"></i></div>
+          </div>
+          <div class="value" id="goodhartVal">0.58</div>
+        </div>
+        <div class="metric">
+          <div>
+            <div class="label">Hallucination pressure</div>
+            <div class="bar"><i id="hallucBar" style="width:66%; background:linear-gradient(90deg,var(--info),var(--warn))"></i></div>
+          </div>
+          <div class="value" id="hallucVal">0.66</div>
+        </div>
+
+        <div class="warnbox">
+          <b>Rule of thumb:</b> if your prompt can’t name acceptable uncertainty + fatal errors + evidence required,
+          you’re building on an unnamed shifting target.
+        </div>
+
+        <div class="foot">
+          <div>Keys: <span class="kbd">Define</span> → <span class="kbd">Measure</span> → <span class="kbd">Improve</span></div>
+          <div style="opacity:.9">Single-file infographic + simulators</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="title">
+          <h2>The Upstream Chain</h2>
+          <div class="hint">If you break the first link, everything downstream becomes theater.</div>
+        </div>
+        <ul class="list">
+          <li class="li"><b>Define correctness</b><small>What claims is the system allowed to make?</small></li>
+          <li class="li"><b>Specify criteria</b><small>Truth, completeness, tone, policy, cost, speed, auditability.</small></li>
+          <li class="li"><b>Design evals</b><small>Unit tests (agents) + system tests (orchestration).</small></li>
+          <li class="li"><b>Instrument feedback</b><small>Measure failures, uncertainty, provenance, refusal quality.</small></li>
+          <li class="li"><b>Iterate safely</b><small>When “good” changes, update criteria predictably—don’t blame the model.</small></li>
+        </ul>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="title">
+          <h2>Why “Correct” Isn’t Binary in AI</h2>
+          <div class="hint">Correctness is a bundle of trade-offs.</div>
+        </div>
+        <div class="twocol">
+          <div class="mini">
+            <div class="badge"><span class="dot info"></span> Common criteria</div>
+            <div class="divider"></div>
+            <ul class="list">
+              <li class="li"><b>Truthfulness</b><small>Is it factually grounded?</small></li>
+              <li class="li"><b>Completeness</b><small>Did it cover required points?</small></li>
+              <li class="li"><b>Tone & safety</b><small>Does it comply with policy + style?</small></li>
+              <li class="li"><b>Cost & latency</b><small>Fast & cheap vs slow & precise.</small></li>
+              <li class="li"><b>Auditability</b><small>Can you trace claims back to sources/data?</small></li>
+            </ul>
+          </div>
+          <div class="mini">
+            <div class="badge"><span class="dot warn"></span> Real-world friction</div>
+            <div class="divider"></div>
+            <ul class="list">
+              <li class="li"><b>Structured data</b><small>Correct but can be unusable without context.</small></li>
+              <li class="li"><b>Unstructured data</b><small>Readable but may be wrong or outdated.</small></li>
+              <li class="li"><b>Systems of record</b><small>“One digit off” destroys trust in board decks + compliance.</small></li>
+              <li class="li"><b>Stakeholder drift</b><small>Week 1: “plausible” → Week 3: “match finance numbers”.</small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Simulator -->
+      <div class="card big" id="simSpec">
+        <div class="title">
+          <h2>Simulator 1 — The “Definition of Correctness” Builder</h2>
+          <div class="hint">Turn vague intent into measurable quality criteria you can paste into a prompt.</div>
+        </div>
+
+        <div class="row">
+          <div class="col control">
+            <label>Task type <span class="kbd">controls allowed uncertainty</span></label>
+            <select id="taskType">
+              <option value="board">Board deck / metrics (precision matters)</option>
+              <option value="compliance">Compliance workflow (auditability matters)</option>
+              <option value="support">Customer support (tone + policy matters)</option>
+              <option value="research">Research summary (uncertainty + provenance matters)</option>
+              <option value="creative">Creative ideation (novelty matters)</option>
+            </select>
+          </div>
+
+          <div class="col control">
+            <label>Allowed uncertainty <span id="uncVal" class="kbd">0.30</span></label>
+            <input type="range" id="unc" min="0" max="1" step="0.01" value="0.30" />
+            <div class="note">Higher = model may hedge / ask questions / refuse more often.</div>
+          </div>
+
+          <div class="col control">
+            <label>Precision requirement <span id="precVal" class="kbd">0.70</span></label>
+            <input type="range" id="prec" min="0" max="1" step="0.01" value="0.70" />
+            <div class="note">Higher = “single digit off is fatal” style outputs.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div class="col control">
+            <label>Claims allowed (comma-separated) <span class="kbd">make it granular</span></label>
+            <input id="claims" type="text" value="report numbers, interpret trends, cite evidence, flag missing data" />
+          </div>
+          <div class="col control">
+            <label>Fatal errors (comma-separated) <span class="kbd">what is unacceptable?</span></label>
+            <input id="fatal" type="text" value="invented numbers, uncited factual claims, policy violations, contradicting provided data" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div class="col control">
+            <label>Evidence / provenance rules <span class="kbd">trace every claim</span></label>
+            <textarea id="evidence">For each numeric claim: show the source field or document snippet. If data is missing, say “I don’t know” and ask for the needed input. Never guess numbers.</textarea>
+          </div>
+          <div class="col control">
+            <label>Output format <span class="kbd">reduce ambiguity</span></label>
+            <textarea id="format">Return:
+1) Executive summary (3 bullets)
+2) Table of key metrics (with sources)
+3) Risks/uncertainties (explicit)
+4) Questions needed to finalize</textarea>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button id="genPrompt">Generate “Correctness Spec”</button>
+          <button class="secondary" id="copyPrompt">Copy</button>
+          <button class="secondary" id="randomize">Randomize example</button>
+        </div>
+
+        <div class="output" id="promptOut" aria-live="polite">
+Click “Generate” to produce a paste-ready correctness spec.
+        </div>
+      </div>
+
+      <!-- Card 4: Goodhart / Reward Hacking -->
+      <div class="card">
+        <div class="title">
+          <h2>Simulator 2 — Goodhart / Reward Hacking</h2>
+          <div class="hint">When a measure becomes a target, it stops being a good measure.</div>
+        </div>
+
+        <div class="row">
+          <div class="col control">
+            <label>What are you rewarding? <span class="kbd">proxy metric</span></label>
+            <select id="proxy">
+              <option value="confidence">Confident answers</option>
+              <option value="speed">Speed / short responses</option>
+              <option value="helpfulness">Always provide an answer</option>
+              <option value="citations">Citations count</option>
+              <option value="format">Perfect formatting</option>
+            </select>
+          </div>
+          <div class="col control">
+            <label>True objective <span class="kbd">what you actually want</span></label>
+            <select id="trueObj">
+              <option value="truth">Truthfulness & correctness</option>
+              <option value="trust">Trust (low error rate)</option>
+              <option value="audit">Auditability / provenance</option>
+              <option value="csat">Customer satisfaction</option>
+              <option value="action">Safe action-taking in systems of record</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="mini">
+          <div class="badge" id="goodhartBadge"><span class="dot warn"></span> Proxy mismatch risk: <b>Medium</b></div>
+          <div class="note" id="goodhartText">
+            Choose a proxy that differs from your true objective and the system will learn to “win the proxy.”
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <svg class="spark" viewBox="0 0 400 120" preserveAspectRatio="none" id="sparkSvg" role="img" aria-label="Proxy vs objective chart">
+          <path id="pProxy" d="" fill="none" stroke="rgba(255,200,87,.9)" stroke-width="3"/>
+          <path id="pTrue" d="" fill="none" stroke="rgba(57,217,138,.9)" stroke-width="3"/>
+          <path d="M0 110 H400" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+        </svg>
+        <div class="note">
+          Yellow = proxy score goes up. Green = true objective may not.
+        </div>
+      </div>
+
+      <!-- Card 5: Goalpost drift -->
+      <div class="card">
+        <div class="title">
+          <h2>Simulator 3 — Moving Goalposts</h2>
+          <div class="hint">Humans often change “good” midstream, then blame the system.</div>
+        </div>
+
+        <div class="row">
+          <div class="col control">
+            <label>Week 1 definition <span class="kbd">initial “good”</span></label>
+            <select id="w1">
+              <option value="plausible">Plausible answers, save time</option>
+              <option value="fast">Fast, confident, minimal caveats</option>
+              <option value="polite">Polite tone, avoid friction</option>
+              <option value="broad">Wide coverage, include everything</option>
+            </select>
+          </div>
+          <div class="col control">
+            <label>Week 3 definition <span class="kbd">later “good”</span></label>
+            <select id="w3">
+              <option value="finance">Must match finance numbers exactly</option>
+              <option value="audit">Must include provenance for claims</option>
+              <option value="refuse">May refuse if unsure, ask questions</option>
+              <option value="narrative">Must include narrative context every time</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="mini">
+          <div class="badge" id="driftBadge"><span class="dot warn"></span> Drift severity: <b>High</b></div>
+          <div class="note" id="driftText"></div>
+        </div>
+
+        <div class="divider"></div>
+        <ul class="list" id="driftSteps"></ul>
+      </div>
+
+      <!-- Card 6: Refusal / Uncertainty -->
+      <div class="card">
+        <div class="title">
+          <h2>The Hallucination Trap</h2>
+          <div class="hint">If the scoreboard rewards guessing, systems learn to guess.</div>
+        </div>
+
+        <div class="row">
+          <div class="col control">
+            <label>System instruction <span class="kbd">pressure</span></label>
+            <select id="instr">
+              <option value="mustAnswer">“You must always answer.”</option>
+              <option value="answerFast">“Answer quickly, no caveats.”</option>
+              <option value="calibrated">“Be calibrated. Refuse when unsure.”</option>
+              <option value="ask">“Ask clarifying questions when missing data.”</option>
+            </select>
+          </div>
+          <div class="col control">
+            <label>Penalty for being wrong vs staying silent <span id="penVal" class="kbd">0.70</span></label>
+            <input type="range" id="pen" min="0" max="1" step="0.01" value="0.70" />
+            <div class="note">Higher = better to say “I don’t know” than to guess.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="mini">
+          <div class="badge" id="hallBadge"><span class="dot warn"></span> Hallucination pressure: <b>Medium</b></div>
+          <div class="note" id="hallText"></div>
+        </div>
+
+        <div class="divider"></div>
+        <ul class="list">
+          <li class="li"><b>Calibrated uncertainty</b><small>Reward “I don’t know” when evidence is missing.</small></li>
+          <li class="li"><b>Explicit failure modes</b><small>Tell the model what to do when it can’t verify.</small></li>
+          <li class="li"><b>Provenance</b><small>“Which claim came from where?” should be cheap to answer.</small></li>
+        </ul>
+      </div>
+
+      <!-- Card 7: Prompt fractal insight -->
+      <div class="card big">
+        <div class="title">
+          <h2>The Fractal Insight: This is also about your personal prompts</h2>
+          <div class="hint">Prompting kicks off a workflow. Every prompt implies a quality bar.</div>
+        </div>
+        <div class="row">
+          <div class="col mini">
+            <div class="badge"><span class="dot info"></span> A better prompt pattern</div>
+            <div class="divider"></div>
+            <ul class="list">
+              <li class="li"><b>State the goal</b><small>What outcome do you want?</small></li>
+              <li class="li"><b>Define “good”</b><small>Acceptance criteria, examples, boundaries.</small></li>
+              <li class="li"><b>Allow uncertainty</b><small>When should it ask / refuse / hedge?</small></li>
+              <li class="li"><b>Require evidence</b><small>Sources, quotes, or data fields.</small></li>
+              <li class="li"><b>Specify format</b><small>So you can quickly judge output quality.</small></li>
+            </ul>
+          </div>
+          <div class="col mini">
+            <div class="badge"><span class="dot good"></span> Quick template (copy/paste)</div>
+            <div class="divider"></div>
+            <div class="output" id="miniTemplate">TASK:
+You are helping me with: <goal>
+
+DEFINITION OF GOOD:
+- Must include: <required items>
+- Must avoid: <fatal errors>
+- If unsure: <ask / refuse rules>
+- Evidence: <sources / fields / provenance>
+- Format: <structure / table / bullets>
+
+CHECK YOUR WORK:
+Before finalizing, verify each requirement is satisfied.</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="foot">
+      <div>Core message: <b>Define correctness → measure it → improve it</b>. Otherwise you’re building on human vagueness.</div>
+      <div>Tip: Treat correctness as <b>a set of allowed claims + evidence required + penalties</b> for being wrong vs silent.</div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---------- helpers ----------
+    const clamp01 = x => Math.max(0, Math.min(1, x));
+    const fmt = x => (Math.round(x*100)/100).toFixed(2);
+
+    function copyText(text){
+      navigator.clipboard?.writeText(text).then(()=>toast("Copied to clipboard")).catch(()=>toast("Copy failed (browser permissions)"));
+    }
+
+    let toastTimer=null;
+    function toast(msg){
+      clearTimeout(toastTimer);
+      const t = document.createElement('div');
+      t.textContent = msg;
+      Object.assign(t.style,{
+        position:'fixed', left:'50%', top:'18px', transform:'translateX(-50%)',
+        background:'rgba(0,0,0,.55)', border:'1px solid rgba(255,255,255,.18)',
+        color:'rgba(234,240,255,.95)', padding:'10px 12px', borderRadius:'12px',
+        fontSize:'12px', boxShadow:'0 16px 50px rgba(0,0,0,.45)', zIndex:9999,
+        backdropFilter:'blur(10px)'
+      });
+      document.body.appendChild(t);
+      toastTimer=setTimeout(()=>t.remove(), 1400);
+    }
+
+    // ---------- global “panel” state ----------
+    function updatePanel(){
+      // Derive three headline indicators from simulators
+      const unc = +uncEl.value;
+      const prec = +precEl.value;
+      const instr = instrEl.value;
+      const pen = +penEl.value;
+
+      // clarity roughly: more precision + more structured fields + lower ambiguity
+      const claimsCount = claimsEl.value.split(',').map(s=>s.trim()).filter(Boolean).length;
+      const fatalCount  = fatalEl.value.split(',').map(s=>s.trim()).filter(Boolean).length;
+      const specRichness = clamp01((claimsCount + fatalCount) / 14);
+      const clarity = clamp01(0.25*prec + 0.25*(1-unc) + 0.50*specRichness);
+
+      // goodhart risk: mismatch between proxy and true objective + pressure for shortcuts
+      const mismatch = proxyRisk(proxyEl.value, trueObjEl.value);
+      const goodhart = clamp01(0.30 + 0.55*mismatch + 0.15*(1-prec));
+
+      // hallucination pressure: “must answer” + low penalty for being wrong + low uncertainty allowance
+      let instrBoost = 0.0;
+      if(instr === "mustAnswer") instrBoost = 0.55;
+      if(instr === "answerFast") instrBoost = 0.40;
+      if(instr === "calibrated") instrBoost = 0.08;
+      if(instr === "ask") instrBoost = 0.12;
+
+      const halluc = clamp01(0.10 + instrBoost + 0.35*(1-pen) + 0.20*(1-unc));
+
+      // paint
+      clarityBar.style.width = Math.round(clarity*100) + "%";
+      clarityVal.textContent = fmt(clarity);
+
+      goodhartBar.style.width = Math.round(goodhart*100) + "%";
+      goodhartVal.textContent = fmt(goodhart);
+
+      hallucBar.style.width = Math.round(halluc*100) + "%";
+      hallucVal.textContent = fmt(halluc);
+    }
+
+    // ---------- Simulator 1 ----------
+    const taskTypeEl = document.getElementById('taskType');
+    const uncEl = document.getElementById('unc');
+    const precEl = document.getElementById('prec');
+    const uncValEl = document.getElementById('uncVal');
+    const precValEl = document.getElementById('precVal');
+    const claimsEl = document.getElementById('claims');
+    const fatalEl = document.getElementById('fatal');
+    const evidenceEl = document.getElementById('evidence');
+    const formatEl = document.getElementById('format');
+    const promptOut = document.getElementById('promptOut');
+
+    function taskPresets(t){
+      const presets = {
+        board: {
+          claims:"report numbers, reconcile metrics, explain variance, flag missing data",
+          fatal:"invented numbers, rounding without stating it, uncited factual claims, contradicting provided data",
+          evidence:"For each numeric claim: cite the exact source field (system name + field) or quote a document snippet. Never guess numbers. If data is missing, ask for it.",
+          format:"Return:\n1) Executive summary (3 bullets)\n2) Metrics table (value, source, timestamp)\n3) Variance explanation (if any)\n4) Risks & unknowns\n5) Questions to resolve"
+        },
+        compliance: {
+          claims:"summarize requirements, map controls to evidence, identify gaps, recommend next steps",
+          fatal:"legal advice beyond scope, uncited compliance claims, omitting key exceptions, ignoring policy constraints",
+          evidence:"Every requirement/control claim must include: source clause, document name, and evidence artifact. If uncertain, say so and request the missing artifact.",
+          format:"Return:\n1) Scope & assumptions\n2) Findings (control → evidence)\n3) Gaps & severity\n4) Remediation plan\n5) Audit trail (citations)"
+        },
+        support: {
+          claims:"answer user question, propose steps, cite docs, escalate when needed",
+          fatal:"unsafe instructions, policy violations, overconfident guessing, contradicting official docs",
+          evidence:"If a step depends on a product detail, cite official docs or say you’re unsure and ask for version/context.",
+          format:"Return:\n- Quick answer\n- Step-by-step\n- If this fails: troubleshooting\n- When to escalate\n- Sources"
+        },
+        research: {
+          claims:"summarize, compare viewpoints, quantify uncertainty, extract key claims",
+          fatal:"fabricated citations, presenting speculation as fact, omitting uncertainty, cherry-picking",
+          evidence:"Separate: (A) what sources say (with provenance) vs (B) your inferences. Mark confidence.",
+          format:"Return:\n1) TL;DR (5 bullets)\n2) Key claims + provenance\n3) Uncertainties/limitations\n4) Competing interpretations\n5) Open questions"
+        },
+        creative: {
+          claims:"generate options, follow constraints, explain rationale, iterate with feedback",
+          fatal:"ignoring constraints, copying identifiable brand voice unless requested, low diversity",
+          evidence:"No factual requirements needed unless user asks. Still show constraint checks.",
+          format:"Return:\n1) 10 options\n2) 3 best picks (why)\n3) Variations on best pick\n4) Next questions to refine"
+        }
+      };
+      return presets[t] || presets.board;
+    }
+
+    function buildCorrectnessSpec(){
+      const t = taskTypeEl.value;
+      const unc = +uncEl.value;
+      const prec = +precEl.value;
+
+      const claims = claimsEl.value.split(',').map(s=>s.trim()).filter(Boolean);
+      const fatal = fatalEl.value.split(',').map(s=>s.trim()).filter(Boolean);
+
+      const uncertaintyPolicy =
+        unc < 0.2 ? "Minimize hedging. Ask only if required inputs are missing." :
+        unc < 0.5 ? "Be calibrated. If evidence is insufficient, ask clarifying questions or say “I don’t know.”" :
+                    "Prefer caution. Refuse or ask when uncertainty is high; do not guess.";
+
+      const precisionPolicy =
+        prec < 0.35 ? "Approximate is acceptable if you label it clearly." :
+        prec < 0.75 ? "Prefer precision. Quantify uncertainty; avoid invented details." :
+                      "High precision required. Treat numeric mismatches as fatal. Never infer missing numbers.";
+
+      const taskLabel = {
+        board:"Board-deck / metrics assistant",
+        compliance:"Compliance workflow assistant",
+        support:"Customer support assistant",
+        research:"Research summarizer",
+        creative:"Creative ideation assistant"
+      }[t] || "Assistant";
+
+      const spec = [
+`SYSTEM QUALITY SPEC (Correctness Definition)
+Role: ${taskLabel}
+
+ALLOWED CLAIMS:
+- ${claims.length ? claims.map(c=>c).join("\n- ") : "(define specific allowed claims)"}
+
+EVIDENCE / PROVENANCE:
+${evidenceEl.value.trim() || "(define evidence rules)"}
+
+FATAL ERRORS (never do these):
+- ${fatal.length ? fatal.map(f=>f).join("\n- ") : "(define fatal errors)"}
+
+UNCERTAINTY POLICY:
+- ${uncertaintyPolicy}
+
+PRECISION POLICY:
+- ${precisionPolicy}
+
+OUTPUT FORMAT:
+${formatEl.value.trim() || "(define output structure)"}
+
+SELF-CHECK BEFORE FINAL ANSWER:
+- Verify each allowed claim is supported by evidence.
+- Confirm no fatal errors occurred.
+- If missing data, ask targeted questions instead of guessing.
+`
+      ].join("\n");
+
+      promptOut.textContent = spec;
+      return spec;
+    }
+
+    // ---------- Simulator 2 ----------
+    const proxyEl = document.getElementById('proxy');
+    const trueObjEl = document.getElementById('trueObj');
+    const goodhartBadge = document.getElementById('goodhartBadge');
+    const goodhartText  = document.getElementById('goodhartText');
+    const sparkSvg = document.getElementById('sparkSvg');
+    const pProxy = document.getElementById('pProxy');
+    const pTrue  = document.getElementById('pTrue');
+
+    function proxyRisk(proxy, obj){
+      // 0 = aligned, 1 = badly misaligned
+      const aligned = new Set([
+        "citations|audit",
+        "confidence|csat", // sometimes, but can mislead; keep partial
+        "format|trust", // weakly aligned
+        "helpfulness|csat"
+      ]);
+      const key = `${proxy}|${obj}`;
+
+      if(proxy==="citations" && obj==="audit") return 0.05;
+      if(proxy==="confidence" && obj==="truth") return 0.85;
+      if(proxy==="helpfulness" && (obj==="truth"||obj==="audit"||obj==="trust")) return 0.70;
+      if(proxy==="speed" && (obj==="truth"||obj==="audit")) return 0.80;
+      if(proxy==="format" && (obj==="truth"||obj==="trust")) return 0.55;
+      if(proxy==="citations" && obj==="truth") return 0.35;
+      if(aligned.has(key)) return 0.35;
+      return 0.60;
+    }
+
+    function riskLabel(r){
+      if(r < 0.25) return ["Low","good"];
+      if(r < 0.60) return ["Medium","warn"];
+      return ["High","bad"];
+    }
+
+    function drawSpark(mismatch){
+      // Build two lines:
+      // Proxy score rises steadily; True objective rises only if mismatch is low
+      const pts = [];
+      const pts2 = [];
+      const n = 16;
+      for(let i=0;i<n;i++){
+        const x = i*(400/(n-1));
+        const proxy = 20 + i*(70/(n-1)) + (Math.sin(i*0.8)*3);
+        const trueGain = (1-mismatch);
+        const truev = 25 + i*(70/(n-1))*trueGain + (Math.cos(i*0.7)*3*(0.6+0.4*trueGain));
+        const y1 = 110 - proxy;
+        const y2 = 110 - truev;
+        pts.push([x,y1]);
+        pts2.push([x,y2]);
+      }
+      const path = pts.map((p,i)=> (i? "L":"M") + p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+      const path2 = pts2.map((p,i)=> (i? "L":"M") + p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+      pProxy.setAttribute("d", path);
+      pTrue.setAttribute("d", path2);
+    }
+
+    function updateGoodhart(){
+      const mismatch = proxyRisk(proxyEl.value, trueObjEl.value);
+      const [label, cls] = riskLabel(mismatch);
+
+      const dotClass = cls==="good" ? "good" : (cls==="bad" ? "bad" : "warn");
+      goodhartBadge.innerHTML = `<span class="dot ${dotClass}"></span> Proxy mismatch risk: <b>${label}</b>`;
+
+      const examples = {
+        confidence:"Rewarding confidence often pressures the model to guess instead of admitting uncertainty.",
+        speed:"Rewarding speed can trade off verification, provenance, and careful reconciliation.",
+        helpfulness:"Rewarding “always answer” can directly increase hallucinations under missing evidence.",
+        citations:"Rewarding citation count can create “citation spam” if you don’t validate relevance.",
+        format:"Rewarding perfect format can hide wrong content inside a polished shell."
+      };
+      const objText = {
+        truth:"truthfulness",
+        trust:"trust",
+        audit:"auditability",
+        csat:"customer satisfaction",
+        action:"safe action in systems of record"
+      };
+      goodhartText.textContent =
+        `${examples[proxyEl.value]} If your true objective is ${objText[trueObjEl.value]}, add multi-criteria evals and penalties that match intent.`;
+
+      drawSpark(mismatch);
+      updatePanel();
+    }
+
+    // ---------- Simulator 3 ----------
+    const w1El = document.getElementById('w1');
+    const w3El = document.getElementById('w3');
+    const driftBadge = document.getElementById('driftBadge');
+    const driftText = document.getElementById('driftText');
+    const driftSteps = document.getElementById('driftSteps');
+
+    function driftScore(w1,w3){
+      // Hand-tuned severity: going from soft -> hard constraints is huge drift
+      const soft = new Set(["plausible","fast","polite","broad"]);
+      const hard = new Set(["finance","audit","refuse","narrative"]);
+
+      if(w1===w3) return 0.05;
+      if(soft.has(w1) && hard.has(w3)) return 0.85;
+      if(hard.has(w1) && soft.has(w3)) return 0.65;
+      return 0.55;
+    }
+
+    function updateDrift(){
+      const s = driftScore(w1El.value, w3El.value);
+      const [label, cls] = riskLabel(s);
+      const dotClass = cls==="good" ? "good" : (cls==="bad" ? "bad" : "warn");
+      driftBadge.innerHTML = `<span class="dot ${dotClass}"></span> Drift severity: <b>${label}</b>`;
+
+      const map = {
+        plausible:"Week 1: “Sounds plausible, saves time.”",
+        fast:"Week 1: “Fast, confident, minimal caveats.”",
+        polite:"Week 1: “Polite tone, avoid friction.”",
+        broad:"Week 1: “Wide coverage, include everything.”",
+        finance:"Week 3: “Must match finance numbers exactly.”",
+        audit:"Week 3: “Must include provenance for claims.”",
+        refuse:"Week 3: “May refuse if unsure; ask questions.”",
+        narrative:"Week 3: “Must include narrative context every time.”"
+      };
+
+      driftText.textContent =
+        `If you change correctness mid-build (${map[w1El.value]} → ${map[w3El.value]}), you aren’t discovering “bugs” — you’re redefining the product.`;
+
+      const steps = [
+        ["Capture correctness spec", "Write acceptance criteria + fatal errors + uncertainty policy in plain language."],
+        ["Version it", "Treat changes as versioned requirements, not hallway conversations."],
+        ["Update evals first", "Change the tests before you change prompts/models."],
+        ["Then change architecture", "Only after criteria are stable do you decide RAG/agents/orchestration."],
+        ["Communicate trade-offs", "Speed vs precision vs audit trail: make it explicit to stakeholders."]
+      ];
+
+      driftSteps.innerHTML = steps.map(s=>(
+        `<li class="li"><b>${s[0]}</b><small>${s[1]}</small></li>`
+      )).join("");
+
+      updatePanel();
+    }
+
+    // ---------- Hallucination simulator ----------
+    const instrEl = document.getElementById('instr');
+    const penEl = document.getElementById('pen');
+    const penValEl = document.getElementById('penVal');
+    const hallBadge = document.getElementById('hallBadge');
+    const hallText = document.getElementById('hallText');
+
+    function hallPressure(instr, pen, unc){
+      let base = 0.12;
+      let instrBoost = 0.0;
+      if(instr==="mustAnswer") instrBoost = 0.70;
+      if(instr==="answerFast") instrBoost = 0.50;
+      if(instr==="calibrated") instrBoost = 0.10;
+      if(instr==="ask") instrBoost = 0.14;
+
+      // Lower penalty for being wrong increases halluc pressure
+      // Lower allowed uncertainty increases pressure to output something
+      return clamp01(base + instrBoost + 0.30*(1-pen) + 0.22*(1-unc));
+    }
+
+    function updateHall(){
+      const pen = +penEl.value;
+      const unc = +uncEl.value;
+      const h = hallPressure(instrEl.value, pen, unc);
+      const [label, cls] = riskLabel(h);
+      const dotClass = cls==="good" ? "good" : (cls==="bad" ? "bad" : "warn");
+
+      hallBadge.innerHTML = `<span class="dot ${dotClass}"></span> Hallucination pressure: <b>${label}</b>`;
+
+      const explain = {
+        mustAnswer:"You told it it can’t stay silent. That pushes guessing under missing evidence.",
+        answerFast:"Speed + no caveats reduces verification and makes confident errors more likely.",
+        calibrated:"Calibrated behavior reduces guessing, especially with a strong penalty for wrong answers.",
+        ask:"Asking questions is a safe default when required inputs are missing."
+      };
+
+      hallText.textContent =
+        `${explain[instrEl.value]} Tune this by increasing the penalty for being wrong and explicitly allowing “I don’t know / need more data.”`;
+
+      updatePanel();
+    }
+
+    // ---------- wiring ----------
+    document.getElementById('genPrompt').addEventListener('click', ()=>{
+      const spec = buildCorrectnessSpec();
+      toast("Generated correctness spec");
+      updatePanel();
+    });
+    document.getElementById('copyPrompt').addEventListener('click', ()=>{
+      copyText(promptOut.textContent.trim());
+    });
+
+    document.getElementById('randomize').addEventListener('click', ()=>{
+      const types = ["board","compliance","support","research","creative"];
+      const t = types[Math.floor(Math.random()*types.length)];
+      taskTypeEl.value = t;
+      const p = taskPresets(t);
+      claimsEl.value = p.claims;
+      fatalEl.value = p.fatal;
+      evidenceEl.value = p.evidence;
+      formatEl.value = p.format;
+
+      // nudge sliders by type
+      if(t==="board"){ uncEl.value=0.22; precEl.value=0.88; }
+      if(t==="compliance"){ uncEl.value=0.35; precEl.value=0.80; }
+      if(t==="support"){ uncEl.value=0.38; precEl.value=0.62; }
+      if(t==="research"){ uncEl.value=0.55; precEl.value=0.55; }
+      if(t==="creative"){ uncEl.value=0.65; precEl.value=0.30; }
+
+      uncValEl.textContent = fmt(+uncEl.value);
+      precValEl.textContent = fmt(+precEl.value);
+
+      buildCorrectnessSpec();
+      updateGoodhart();
+      updateDrift();
+      updateHall();
+      toast("Loaded a new example");
+    });
+
+    function updateSliderLabels(){
+      uncValEl.textContent = fmt(+uncEl.value);
+      precValEl.textContent = fmt(+precEl.value);
+      penValEl.textContent = fmt(+penEl.value);
+    }
+
+    // task type preset on change
+    taskTypeEl.addEventListener('change', ()=>{
+      const p = taskPresets(taskTypeEl.value);
+      claimsEl.value = p.claims;
+      fatalEl.value = p.fatal;
+      evidenceEl.value = p.evidence;
+      formatEl.value = p.format;
+      buildCorrectnessSpec();
+      updatePanel();
+    });
+
+    // slider changes
+    [uncEl, precEl, penEl].forEach(el=>{
+      el.addEventListener('input', ()=>{
+        updateSliderLabels();
+        buildCorrectnessSpec();
+        updateGoodhart();
+        updateDrift();
+        updateHall();
+      });
+    });
+
+    // text changes affect clarity
+    [claimsEl, fatalEl, evidenceEl, formatEl].forEach(el=>{
+      el.addEventListener('input', ()=>{
+        buildCorrectnessSpec();
+        updatePanel();
+      });
+    });
+
+    // goodhart changes
+    [proxyEl, trueObjEl].forEach(el=>{
+      el.addEventListener('change', updateGoodhart);
+    });
+
+    // drift changes
+    [w1El, w3El].forEach(el=>{
+      el.addEventListener('change', updateDrift);
+    });
+
+    // instruction changes
+    instrEl.addEventListener('change', updateHall);
+
+    // initial render
+    updateSliderLabels();
+    buildCorrectnessSpec();
+    updateGoodhart();
+    updateDrift();
+    updateHall();
+    updatePanel();
+  </script>
+</body>
+</html>

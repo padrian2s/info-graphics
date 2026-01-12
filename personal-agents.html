@@ -1,0 +1,1349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>2026: Personal “Chief of Staff” Agents — Infographic + Simulators</title>
+  <style>
+    :root{
+      --bg:#070A10;
+      --panel:#0C1220;
+      --panel2:#0A1020;
+      --stroke:rgba(255,255,255,.09);
+      --stroke2:rgba(255,255,255,.14);
+      --text:rgba(255,255,255,.88);
+      --muted:rgba(255,255,255,.62);
+      --faint:rgba(255,255,255,.42);
+
+      --a:#3B82F6;   /* blue */
+      --b:#8B5CF6;   /* purple */
+      --c:#14B8A6;   /* teal */
+      --d:#F59E0B;   /* amber */
+      --e:#EF4444;   /* red */
+      --good:#22C55E;
+
+      --shadow: 0 16px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+      --radius2: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(59,130,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 85% 25%, rgba(139,92,246,.15), transparent 55%),
+        radial-gradient(900px 700px at 55% 85%, rgba(20,184,166,.12), transparent 60%),
+        linear-gradient(180deg, #05070C, var(--bg));
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 70px}
+    header{
+      position:relative;
+      padding:28px 22px;
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute;inset:-1px;
+      background:
+        radial-gradient(900px 400px at 10% 0%, rgba(59,130,246,.25), transparent 55%),
+        radial-gradient(700px 400px at 90% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(700px 400px at 50% 120%, rgba(20,184,166,.18), transparent 60%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    header > *{position:relative}
+    .kicker{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+      font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border:1px solid var(--stroke2);
+      border-radius:999px;background:rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--c);box-shadow:0 0 18px rgba(20,184,166,.55)}
+    h1{
+      margin:14px 0 6px;
+      font-size:34px;line-height:1.06;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      max-width:920px;
+      font-size:15px;line-height:1.65;color:var(--muted);
+      margin:0;
+    }
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .card{
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .hd{
+      padding:16px 18px 12px;
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+      border-bottom:1px solid var(--stroke);
+      background:rgba(0,0,0,.12);
+    }
+    .card .hd h2{
+      margin:0;
+      font-size:16px;letter-spacing:-.01em;
+    }
+    .card .hd .mini{
+      font-size:12px;color:var(--faint);
+      display:flex;gap:8px;align-items:center;
+      user-select:none;
+    }
+    .tag{
+      font-size:11px;color:rgba(255,255,255,.72);
+      padding:5px 8px;border-radius:999px;
+      border:1px solid var(--stroke2);
+      background:rgba(0,0,0,.25);
+    }
+    .body{padding:16px 18px 18px}
+    .muted{color:var(--muted)}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .kpi{
+      flex:1 1 190px;
+      padding:12px 12px;
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background:rgba(0,0,0,.22);
+    }
+    .kpi .label{font-size:12px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+    .kpi .val{margin-top:6px;font-size:20px;letter-spacing:-.01em}
+    .kpi .desc{margin-top:6px;font-size:12.5px;color:var(--muted);line-height:1.45}
+    .spark{
+      height:8px;border-radius:999px;
+      background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(139,92,246,.9), rgba(20,184,166,.9));
+      opacity:.75;margin-top:10px;
+      position:relative;overflow:hidden;
+    }
+    .spark:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transform:translateX(-60%);
+      animation:shimmer 3.3s infinite linear;
+      opacity:.55;
+    }
+    @keyframes shimmer{to{transform:translateX(60%)}}
+
+    /* timeline */
+    .timeline{
+      display:grid;gap:10px;margin-top:8px;
+    }
+    .step{
+      display:grid;grid-template-columns: 36px 1fr;gap:12px;
+      padding:12px 12px;
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background:rgba(0,0,0,.2);
+    }
+    .badge{
+      width:36px;height:36px;border-radius:12px;
+      display:grid;place-items:center;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      font-family:var(--mono);
+      color:rgba(255,255,255,.85);
+    }
+    .step b{display:block;font-size:14px}
+    .step p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+
+    /* interactive */
+    .controls{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+      margin:10px 0 0;
+    }
+    button, .btn{
+      appearance:none;border:1px solid var(--stroke2);
+      background:rgba(0,0,0,.22);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.22)}
+    button:active{transform:translateY(0px);opacity:.95}
+    .btn.primary{
+      border-color:rgba(59,130,246,.45);
+      background:rgba(59,130,246,.16);
+    }
+    .btn.good{
+      border-color:rgba(34,197,94,.42);
+      background:rgba(34,197,94,.14);
+    }
+    .btn.warn{
+      border-color:rgba(245,158,11,.42);
+      background:rgba(245,158,11,.12);
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){ .split{grid-template-columns:1fr} }
+
+    textarea, input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      outline:none;
+      font-size:13px;
+    }
+    textarea{min-height:120px;resize:vertical;line-height:1.5}
+    .panel{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background:rgba(0,0,0,.16);
+      padding:12px;
+      overflow:hidden;
+    }
+    .panel h3{
+      margin:0 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)
+    }
+    .list{
+      display:grid;gap:10px;
+    }
+    .task{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+      display:grid;gap:8px;
+    }
+    .task .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .task .title{font-size:13px}
+    .task .meta{
+      display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;
+      font-size:11px;color:rgba(255,255,255,.75)
+    }
+    .chip{
+      padding:4px 8px;border-radius:999px;
+      border:1px solid var(--stroke2);background:rgba(0,0,0,.22);
+    }
+    .progress{
+      height:10px;border-radius:999px;border:1px solid var(--stroke);
+      background:rgba(0,0,0,.22);overflow:hidden;
+    }
+    .bar{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(20,184,166,.9))}
+    .log{
+      font-family:var(--mono);
+      font-size:12px;line-height:1.55;
+      color:rgba(255,255,255,.78);
+      white-space:pre-wrap;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background:rgba(0,0,0,.28);
+      min-height:120px;
+    }
+    .divider{
+      height:1px;background:var(--stroke);margin:12px 0;
+    }
+
+    /* right pane mock */
+    .app{
+      display:grid;grid-template-columns: 1.1fr .9fr;gap:12px;
+    }
+    @media (max-width: 980px){ .app{grid-template-columns:1fr} }
+    .screen{
+      border:1px solid var(--stroke);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      position:relative;
+      min-height:410px;
+    }
+    .topbar{
+      padding:10px 12px;
+      border-bottom:1px solid var(--stroke);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:rgba(0,0,0,.16);
+    }
+    .traffic{display:flex;gap:8px;align-items:center}
+    .t{width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,.18)}
+    .t:nth-child(1){background:rgba(239,68,68,.7)}
+    .t:nth-child(2){background:rgba(245,158,11,.7)}
+    .t:nth-child(3){background:rgba(34,197,94,.7)}
+    .addr{
+      flex:1;
+      font-size:12px;
+      color:rgba(255,255,255,.75);
+      padding:7px 10px;
+      border-radius:12px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.22);
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .content{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      min-height:360px;
+    }
+    @media (max-width: 980px){ .content{grid-template-columns:1fr} }
+    .left{
+      padding:12px;
+      border-right:1px solid var(--stroke);
+      background:radial-gradient(700px 360px at 20% 10%, rgba(59,130,246,.12), transparent 60%);
+    }
+    .right{
+      padding:12px;
+      background:radial-gradient(700px 360px at 40% 10%, rgba(20,184,166,.10), transparent 60%);
+    }
+    .fake-doc{
+      border:1px dashed rgba(255,255,255,.15);
+      border-radius:16px;
+      padding:12px;
+      color:rgba(255,255,255,.72);
+      font-size:13px;line-height:1.6;
+      background:rgba(0,0,0,.18);
+      min-height:250px;
+    }
+    .agent-pane{
+      border:1px solid rgba(20,184,166,.22);
+      border-radius:18px;
+      background:rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .agent-hd{
+      padding:10px 10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-bottom:1px solid var(--stroke);
+      background:rgba(0,0,0,.18);
+    }
+    .agent-hd .name{display:flex;gap:10px;align-items:center}
+    .orb{
+      width:28px;height:28px;border-radius:14px;
+      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(59,130,246,.32), rgba(139,92,246,.18), rgba(20,184,166,.12));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 12px 35px rgba(0,0,0,.45), 0 0 28px rgba(59,130,246,.12);
+    }
+    .agent-hd b{font-size:13px}
+    .agent-hd span{font-size:11px;color:var(--faint)}
+    .agent-body{padding:10px;display:grid;gap:10px}
+    .chat{
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      background:rgba(0,0,0,.22);
+      padding:10px;
+      height:220px;
+      overflow:auto;
+      display:grid;gap:8px;
+    }
+    .msg{
+      display:flex;gap:8px;align-items:flex-start;
+      font-size:12.8px;line-height:1.5;
+    }
+    .msg .who{
+      width:26px;height:26px;border-radius:10px;
+      border:1px solid var(--stroke2);
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.06);
+      font-family:var(--mono);
+      color:rgba(255,255,255,.75);
+      flex:0 0 auto;
+    }
+    .msg .bubble{
+      padding:9px 10px;border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.82);
+      flex:1;
+    }
+    .msg.ai .bubble{border-color:rgba(20,184,166,.22);background:rgba(20,184,166,.06)}
+    .composer{display:flex;gap:8px}
+    .composer input{border-radius:14px}
+    .composer .send{white-space:nowrap}
+
+    /* footer */
+    .foot{
+      margin-top:16px;
+      color:var(--faint);
+      font-size:12.5px;
+      line-height:1.6;
+    }
+
+    /* tiny helper */
+    .twoCols{
+      display:grid;grid-template-columns: 1fr 1fr;gap:12px;
+    }
+    @media (max-width: 980px){ .twoCols{grid-template-columns:1fr} }
+    .callout{
+      border:1px solid rgba(245,158,11,.28);
+      background:rgba(245,158,11,.08);
+      border-radius:16px;
+      padding:12px;
+      color:rgba(255,255,255,.78);
+      font-size:13px;line-height:1.55;
+    }
+    .fine{
+      font-size:12px;color:var(--faint);line-height:1.6
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">
+        <span class="pill"><span class="dot"></span> 2026 Adoption Thesis</span>
+        <span class="pill">Always-on “Mini-Me”</span>
+        <span class="pill">Memory Scaffolding</span>
+        <span class="pill">MCP / Skills</span>
+        <span class="pill">UX Layer Missing</span>
+      </div>
+      <h1>Personal Chief-of-Staff Agents: why 2026 feels like the breakout year</h1>
+      <p class="sub">
+        2025 proved “agents” in enterprise pilots — but not <i>trivially accessible</i> to everyone.
+        This infographic maps the pieces that are now lining up (hardware, attention span, memory scaffolds, skills/permissions)
+        and highlights the missing ingredient: an intuitive, always-on interface that turns messy intent into executable work.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="hd">
+            <h2>The 5 pieces that finally align</h2>
+            <div class="mini">
+              <span class="tag">Late 2025 → Early 2026</span>
+              <span class="tag">Consumer + Pro</span>
+            </div>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div class="kpi">
+                <div class="label">1) Hardware envelope</div>
+                <div class="val">Tokenization becomes “front-and-center”</div>
+                <div class="desc">Consumer devices get more GPU/NPU-friendly chips → smoother local preprocessing + better interactive latency.</div>
+                <div class="spark"></div>
+              </div>
+              <div class="kpi">
+                <div class="label">2) Sustained attention</div>
+                <div class="val">Minutes → hours</div>
+                <div class="desc">Longer continuous work windows make “keep running” scaffolds viable for real workflows.</div>
+                <div class="spark"></div>
+              </div>
+              <div class="kpi">
+                <div class="label">3) Memory scaffolding</div>
+                <div class="val">Amnesiac → “Looks like memory”</div>
+                <div class="desc">Notepad/task lists, summaries, state stores, checkpoints: the tricks that make continuity feel real.</div>
+                <div class="spark"></div>
+              </div>
+              <div class="kpi">
+                <div class="label">4) Skills & permissions</div>
+                <div class="val">MCP / tools go mainstream</div>
+                <div class="desc">More standard “how an agent touches files/browsers/apps” with safety boundaries.</div>
+                <div class="spark"></div>
+              </div>
+              <div class="kpi">
+                <div class="label">5) Work product</div>
+                <div class="val">Docs / sheets / slides become trivial</div>
+                <div class="desc">If output quality is high and friction is low, habit formation becomes possible.</div>
+                <div class="spark"></div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="timeline">
+              <div class="step">
+                <div class="badge">A</div>
+                <div>
+                  <b>The leap isn’t “more IQ” — it’s “more continuity”</b>
+                  <p>Personal adoption needs agents that persist: track goals, store state, and return tomorrow without forgetting.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="badge">B</div>
+                <div>
+                  <b>The UX gap: an always-on right pane</b>
+                  <p>A visible task ledger + sub-agent activity you can supervise → a chief-of-staff vibe instead of a chat toy.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="badge">C</div>
+                <div>
+                  <b>The human gap: intentional delegation</b>
+                  <p>You can’t delegate without priorities. A “translation layer” turns rambling intent into executable tickets.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="hd">
+            <h2>What changes the adoption curve</h2>
+            <div class="mini"><span class="tag">Habit > Hype</span></div>
+          </div>
+          <div class="body">
+            <div class="callout">
+              <b>Breakthrough product pattern:</b><br/>
+              <span class="muted">“Changes how people spend their time”</span> only when the loop is seamless:
+              <br/>1) capture intent → 2) translate → 3) execute → 4) deliver work product → 5) update ledger.
+            </div>
+            <div class="divider"></div>
+            <div class="fine">
+              <b>The constraint isn’t only models.</b> It’s whether users can define work within the agent’s window, and whether the system
+              makes “organization” feel automatic (not a chore).
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="kpi">
+                <div class="label">If this launches well</div>
+                <div class="val">A new “daily operating system”</div>
+                <div class="desc">Email, calendar, briefs, documents, analysis — orchestrated in one place, with auditability.</div>
+              </div>
+              <div class="kpi">
+                <div class="label">If it launches poorly</div>
+                <div class="val">Chat fatigue + distrust</div>
+                <div class="desc">Without reliable work product + clear supervision, people won’t build the habit.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Simulator 1: Intent → Task Translation -->
+    <section class="card" style="margin-top:16px;">
+      <div class="hd">
+        <h2>Simulator #1 — “Translation layer”: turn messy intent into executable tasks</h2>
+        <div class="mini">
+          <span class="tag">Rambling → tickets</span>
+          <span class="tag">Priority + scope</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="split">
+          <div class="panel">
+            <h3>Input: your raw brain dump</h3>
+            <textarea id="intentInput">I have an 11:30 meeting tomorrow and I’m not ready.
+Need a one-slide summary of risks + a 5-minute talking track.
+Also I forgot to reply to Alex about the timeline.
+And I should probably book a dentist appointment sometime next week.
+Oh—and if there’s any news about our competitor’s pricing changes, flag it.</textarea>
+            <div class="controls">
+              <button class="btn primary" id="translateBtn">Translate into tasks</button>
+              <button class="btn" id="sampleBtn">Load another example</button>
+              <button class="btn warn" id="clearBtn">Clear</button>
+            </div>
+            <p class="fine">This is a deterministic “toy translator” to illustrate the product concept. Real systems use model + tools + memory.</p>
+          </div>
+
+          <div class="panel">
+            <h3>Output: task ledger (what the chief-of-staff agent would run)</h3>
+            <div class="list" id="taskList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simulator 2: Always-on agent runtime + memory notepad -->
+    <section class="card" style="margin-top:16px;">
+      <div class="hd">
+        <h2>Simulator #2 — Always-on loop: “agent + notepad” beats “agent memory”</h2>
+        <div class="mini">
+          <span class="tag">Perpetual agent</span>
+          <span class="tag">Stateful ledger</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="twoCols">
+          <div class="panel">
+            <h3>Agent controls</h3>
+            <div class="row">
+              <div class="kpi">
+                <div class="label">Runtime window</div>
+                <div class="val"><span id="runtimeLabel">60</span>s</div>
+                <div class="desc">Longer windows allow deeper tasks, but supervision & cost matter.</div>
+                <div class="spark"></div>
+              </div>
+              <div class="kpi">
+                <div class="label">Task difficulty mix</div>
+                <div class="val" id="mixLabel">Balanced</div>
+                <div class="desc">Too many “hard” items increases stalls and partial completion.</div>
+                <div class="spark"></div>
+              </div>
+            </div>
+            <div class="controls">
+              <label class="fine" style="min-width:140px">Runtime:</label>
+              <input id="runtime" type="range" min="15" max="180" value="60" />
+              <label class="fine" style="min-width:140px">Difficulty:</label>
+              <select id="mix">
+                <option value="easy">Mostly easy</option>
+                <option value="balanced" selected>Balanced</option>
+                <option value="hard">Mostly hard</option>
+              </select>
+            </div>
+            <div class="controls">
+              <button class="btn good" id="runLoopBtn">Run “always-on” cycle</button>
+              <button class="btn" id="resetLoopBtn">Reset</button>
+            </div>
+            <div class="divider"></div>
+            <div class="progress"><div class="bar" id="loopBar"></div></div>
+            <p class="fine">Notice how the “notepad” is the memory: tasks survive even when the agent “forgets”.</p>
+          </div>
+
+          <div class="panel">
+            <h3>Agent log + notepad</h3>
+            <div class="log" id="loopLog"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simulator 3: Right-pane UX mock -->
+    <section class="card" style="margin-top:16px;">
+      <div class="hd">
+        <h2>Prototype mental model — the “right pane” chief-of-staff</h2>
+        <div class="mini">
+          <span class="tag">One agent feel</span>
+          <span class="tag">Many sub-agents</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="app">
+          <div class="screen">
+            <div class="topbar">
+              <div class="traffic"><span class="t"></span><span class="t"></span><span class="t"></span></div>
+              <div class="addr">Work / Notes / Project Brief — “Q1 Launch Review”</div>
+              <div class="tag">Draft</div>
+            </div>
+            <div class="content">
+              <div class="left">
+                <div class="fake-doc" id="docArea">
+                  <b>Meeting Brief (auto-maintained)</b><br/><br/>
+                  • Objective: Align on launch risks + mitigation<br/>
+                  • Audience: Product + Sales + Ops<br/>
+                  • Open questions: pricing response, timeline confidence<br/><br/>
+                  <span class="muted">As you talk to the agent, it updates this doc, generates slides, drafts emails, and logs decisions.</span>
+                </div>
+              </div>
+              <div class="right">
+                <div class="agent-pane">
+                  <div class="agent-hd">
+                    <div class="name">
+                      <div class="orb"></div>
+                      <div>
+                        <b>Mini-Me Chief of Staff</b><br/>
+                        <span>Always on • Task ledger • Sub-agents</span>
+                      </div>
+                    </div>
+                    <span class="tag" id="statusTag">Idle</span>
+                  </div>
+                  <div class="agent-body">
+                    <div class="chat" id="chat">
+                      <div class="msg">
+                        <div class="who">U</div>
+                        <div class="bubble">Set today’s priorities: prep for 11:30 meeting, reply to Alex, book dentist, watch competitor pricing.</div>
+                      </div>
+                      <div class="msg ai">
+                        <div class="who">A</div>
+                        <div class="bubble">Got it. I’ll translate into tasks, spin up sub-agents, and keep a visible ledger. You’ll get updates here.</div>
+                      </div>
+                      <div class="msg ai">
+                        <div class="who">A</div>
+                        <div class="bubble">Drafting: (1) 1-slide risk summary, (2) 5-min talking track, (3) email to Alex, (4) dentist options, (5) pricing watch.</div>
+                      </div>
+                    </div>
+                    <div class="composer">
+                      <input id="chatInput" placeholder="Talk to your agent… (try: ‘also remind me to send the deck at 10:45’)"/>
+                      <button class="btn primary send" id="chatSend">Send</button>
+                    </div>
+                    <div class="controls">
+                      <button class="btn" id="spawnBtn">Show sub-agents</button>
+                      <button class="btn" id="updateDocBtn">Update doc</button>
+                      <button class="btn warn" id="clearChatBtn">Clear</button>
+                    </div>
+                    <div id="subAgents" style="display:none">
+                      <div class="divider"></div>
+                      <div class="list" id="subAgentList"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>What’s missing today (and likely appears in 2026)</h3>
+            <div class="list">
+              <div class="task">
+                <div class="top">
+                  <div class="title"><b>Unified “intent → execution” surface</b></div>
+                  <div class="meta">
+                    <span class="chip">Right pane</span>
+                    <span class="chip">Ledger</span>
+                    <span class="chip">Supervision</span>
+                  </div>
+                </div>
+                <div class="muted" style="font-size:13px;line-height:1.55">
+                  One conversational entry point that <i>automatically</i> creates a structured plan, and shows you progress without forcing you
+                  to micro-manage prompts.
+                </div>
+              </div>
+
+              <div class="task">
+                <div class="top">
+                  <div class="title"><b>Safe permissions + “computer use” ergonomics</b></div>
+                  <div class="meta">
+                    <span class="chip">Files</span>
+                    <span class="chip">Browser</span>
+                    <span class="chip">Apps</span>
+                  </div>
+                </div>
+                <div class="muted" style="font-size:13px;line-height:1.55">
+                  A clear model for what the agent can touch, when it needs approval, and how you audit actions (like a “Git diff” for life).
+                </div>
+              </div>
+
+              <div class="task">
+                <div class="top">
+                  <div class="title"><b>Translation layer as default</b></div>
+                  <div class="meta">
+                    <span class="chip">Priorities</span>
+                    <span class="chip">Scope</span>
+                    <span class="chip">Constraints</span>
+                  </div>
+                </div>
+                <div class="muted" style="font-size:13px;line-height:1.55">
+                  Users shouldn’t need to be organized. The system should make organization “fall out” of normal talking.
+                </div>
+              </div>
+
+              <div class="task">
+                <div class="top">
+                  <div class="title"><b>Work product quality that builds habit</b></div>
+                  <div class="meta">
+                    <span class="chip">Slides</span>
+                    <span class="chip">Docs</span>
+                    <span class="chip">Email</span>
+                  </div>
+                </div>
+                <div class="muted" style="font-size:13px;line-height:1.55">
+                  People won’t chat daily unless the output is consistently excellent and arrives at the right moment.
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="foot">
+              <b>Prompt to end the infographic:</b><br/>
+              The big question isn’t “can we build it?” — it’s “who ships a product that feels obvious?”
+              <br/><br/>
+              <b>Your question:</b> Who do <i>you</i> think ships the mini-me executive assistant in 2026 — model makers, OS vendors, or a new “Cursor-for-life” startup?
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Who builds it? (non-web, reasoning-based scoreboard) -->
+    <section class="card" style="margin-top:16px;">
+      <div class="hd">
+        <h2>“Who ships it?” — a simple scoreboard you can tweak</h2>
+        <div class="mini">
+          <span class="tag">Distribution</span>
+          <span class="tag">Trust</span>
+          <span class="tag">Integration</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="split">
+          <div class="panel">
+            <h3>Weight the advantages</h3>
+            <p class="fine">Drag sliders to reflect what you think matters most for winning the “chief of staff” layer.</p>
+            <div class="controls">
+              <label class="fine" style="min-width:150px">Distribution</label>
+              <input id="wDist" type="range" min="0" max="10" value="7" />
+              <span class="fine" id="wDistVal">7</span>
+            </div>
+            <div class="controls">
+              <label class="fine" style="min-width:150px">Deep OS Integration</label>
+              <input id="wOS" type="range" min="0" max="10" value="8" />
+              <span class="fine" id="wOSVal">8</span>
+            </div>
+            <div class="controls">
+              <label class="fine" style="min-width:150px">Model quality</label>
+              <input id="wModel" type="range" min="0" max="10" value="6" />
+              <span class="fine" id="wModelVal">6</span>
+            </div>
+            <div class="controls">
+              <label class="fine" style="min-width:150px">Trust / Privacy</label>
+              <input id="wTrust" type="range" min="0" max="10" value="7" />
+              <span class="fine" id="wTrustVal">7</span>
+            </div>
+            <div class="controls">
+              <label class="fine" style="min-width:150px">Workflow UX</label>
+              <input id="wUX" type="range" min="0" max="10" value="9" />
+              <span class="fine" id="wUXVal">9</span>
+            </div>
+            <div class="controls">
+              <button class="btn primary" id="recalcBtn">Recalculate</button>
+              <button class="btn" id="presetBtn">Use my default take</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Scoreboard (toy model)</h3>
+            <div class="list" id="scoreList"></div>
+            <p class="fine">This isn’t “truth” — it’s a way to think about who has the best path to ship the right pane + translation layer + tools.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ---------------------------
+    // Simulator #1: translation
+    // ---------------------------
+    const intentInput = document.getElementById('intentInput');
+    const taskList = document.getElementById('taskList');
+    const translateBtn = document.getElementById('translateBtn');
+    const sampleBtn = document.getElementById('sampleBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    const examples = [
+`I’m behind on my history essay.
+Need a clean outline + 3 strong arguments and sources.
+Also remind me to email my coach about track practice times.
+And can you draft a polite message to a teacher asking for an extension?`,
+`This week is chaos. I need:
+- plan my 3 workouts and when to sleep
+- draft a 1-page plan for my side project
+- reply to 3 DMs I’ve been avoiding
+- find a gift idea for my mom
+Also keep an eye on any news about new AI agent products.`,
+`Tomorrow: Romanian test.
+I have scattered notes. Turn them into a study guide, then quiz me.
+Also: renew my phone plan and schedule haircut.
+If someone replies to my email thread, summarize it for me.`
+    ];
+    let exampleIdx = 0;
+
+    function guessPriority(text){
+      const t = text.toLowerCase();
+      if (/(tomorrow|today|in \d+ hours|11:|meeting|deadline|urgent|asap)/.test(t)) return "P0";
+      if (/(this week|next week|soon|follow up|reply)/.test(t)) return "P1";
+      return "P2";
+    }
+    function guessOwner(text){
+      const t = text.toLowerCase();
+      if (/(email|reply|message|dm)/.test(t)) return "Comms Agent";
+      if (/(calendar|schedule|meeting|appointment|book|dentist|haircut)/.test(t)) return "Calendar Agent";
+      if (/(slide|deck|powerpoint|presentation|talking track|brief)/.test(t)) return "Briefing Agent";
+      if (/(news|competitor|watch|monitor|pricing)/.test(t)) return "Research Agent";
+      if (/(doc|outline|study|guide|quiz|notes|essay)/.test(t)) return "Writing Agent";
+      return "General Agent";
+    }
+    function guessScope(text){
+      const t = text.toLowerCase();
+      if (/(one slide|1 slide|single slide)/.test(t)) return "Small";
+      if (/(outline|draft|summary|guide|quiz)/.test(t)) return "Medium";
+      if (/(plan|project|analysis|report)/.test(t)) return "Large";
+      return "Medium";
+    }
+
+    function splitIntoBullets(raw){
+      // Lightweight splitter: lines, punctuation, and "also/and"
+      let s = raw.replace(/\n+/g, "\n").trim();
+      if(!s) return [];
+      // Normalize separators
+      s = s.replace(/•/g,"- ").replace(/[–—]/g,"-");
+      // If user already used hyphen bullets, respect them
+      let parts = [];
+      if (/\n- /.test(s) || s.startsWith("- ")){
+        parts = s.split("\n").map(x=>x.trim()).filter(Boolean).map(x=>x.replace(/^- /,''));
+      } else {
+        parts = s
+          .replace(/Also/gi, "\nAlso")
+          .replace(/\bAnd\b/gi, "\nAnd")
+          .split(/\n|\.|;|\!/g)
+          .map(x=>x.trim())
+          .filter(x=>x.length>3);
+      }
+      // Post-clean
+      parts = parts.map(p => p.replace(/^and\s+/i,'').replace(/^also\s+/i,'').trim()).filter(Boolean);
+      return parts.slice(0, 10);
+    }
+
+    function renderTasks(tasks){
+      taskList.innerHTML = "";
+      if(!tasks.length){
+        taskList.innerHTML = `<div class="fine">No tasks yet. Paste some intent and click “Translate into tasks”.</div>`;
+        return;
+      }
+      tasks.forEach((t, i) => {
+        const el = document.createElement('div');
+        el.className = 'task';
+        el.innerHTML = `
+          <div class="top">
+            <div class="title"><b>${String(i+1).padStart(2,'0')}.</b> ${escapeHtml(t.title)}</div>
+            <div class="meta">
+              <span class="chip">${t.priority}</span>
+              <span class="chip">${escapeHtml(t.owner)}</span>
+              <span class="chip">Scope: ${t.scope}</span>
+            </div>
+          </div>
+          <div class="muted" style="font-size:13px;line-height:1.55">
+            <b>Definition of done:</b> ${escapeHtml(t.dod)}
+          </div>
+          <div class="progress"><div class="bar" style="width:${t.progress}%"></div></div>
+        `;
+        taskList.appendChild(el);
+      });
+    }
+
+    function translate(){
+      const raw = intentInput.value || "";
+      const bullets = splitIntoBullets(raw);
+      const tasks = bullets.map((b) => {
+        const priority = guessPriority(b);
+        const owner = guessOwner(b);
+        const scope = guessScope(b);
+        const dod = makeDoD(b, owner);
+        return {
+          title: b,
+          priority,
+          owner,
+          scope,
+          dod,
+          progress: 0
+        };
+      });
+
+      // Add an implicit "daily brief" if user mentioned many things
+      if (tasks.length >= 4){
+        tasks.push({
+          title: "Create a 60-second daily brief (what’s due + what’s blocked)",
+          priority: "P1",
+          owner: "Chief of Staff Agent",
+          scope: "Small",
+          dod: "A short brief: top 3 priorities, deadlines, and any approvals needed from me.",
+          progress: 0
+        });
+      }
+      renderTasks(tasks);
+    }
+
+    function makeDoD(text, owner){
+      const t = text.toLowerCase();
+      if(owner.includes("Calendar")) return "3 options with times + one recommended slot, ready for approval/book.";
+      if(owner.includes("Comms")) return "A draft message with subject, tone, and a 1-sentence ask, ready to send.";
+      if(owner.includes("Briefing")) return "A deliverable slide + a 5-minute speaking outline with key points and risks.";
+      if(owner.includes("Research")) return "A short memo with sources, what changed, and recommended response.";
+      if(owner.includes("Writing")) return "A structured doc: outline → draft → final polish, plus a quick checklist.";
+      if(/remind/.test(t)) return "A reminder created with time window + trigger condition.";
+      return "A concrete artifact (doc/email/plan) + next step, ready for review.";
+    }
+
+    function escapeHtml(str){
+      return (str ?? "").replace(/[&<>"']/g, (m)=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    translateBtn.addEventListener('click', translate);
+    sampleBtn.addEventListener('click', () => {
+      exampleIdx = (exampleIdx + 1) % examples.length;
+      intentInput.value = examples[exampleIdx];
+      translate();
+    });
+    clearBtn.addEventListener('click', () => {
+      intentInput.value = "";
+      renderTasks([]);
+    });
+
+    // initial render
+    renderTasks([]);
+
+    // --------------------------------------
+    // Simulator #2: always-on loop + notepad
+    // --------------------------------------
+    const runtime = document.getElementById('runtime');
+    const runtimeLabel = document.getElementById('runtimeLabel');
+    const mix = document.getElementById('mix');
+    const mixLabel = document.getElementById('mixLabel');
+    const runLoopBtn = document.getElementById('runLoopBtn');
+    const resetLoopBtn = document.getElementById('resetLoopBtn');
+    const loopLog = document.getElementById('loopLog');
+    const loopBar = document.getElementById('loopBar');
+
+    let loopState = {
+      notepad: [
+        {text:"Draft 1-slide risk summary for meeting", diff:"medium", done:false},
+        {text:"Write 5-minute talking track", diff:"medium", done:false},
+        {text:"Reply to Alex about timeline", diff:"easy", done:false},
+        {text:"Find dentist appointment options next week", diff:"easy", done:false},
+        {text:"Monitor competitor pricing news", diff:"hard", done:false},
+      ],
+      cycle: 0
+    };
+
+    function updateRuntimeUI(){
+      runtimeLabel.textContent = runtime.value;
+    }
+    function updateMixUI(){
+      const v = mix.value;
+      mixLabel.textContent = v === "easy" ? "Mostly easy" : v === "hard" ? "Mostly hard" : "Balanced";
+    }
+    runtime.addEventListener('input', updateRuntimeUI);
+    mix.addEventListener('change', updateMixUI);
+    updateRuntimeUI(); updateMixUI();
+
+    function resetLoop(){
+      loopState = {
+        notepad: [
+          {text:"Draft 1-slide risk summary for meeting", diff:"medium", done:false},
+          {text:"Write 5-minute talking track", diff:"medium", done:false},
+          {text:"Reply to Alex about timeline", diff:"easy", done:false},
+          {text:"Find dentist appointment options next week", diff:"easy", done:false},
+          {text:"Monitor competitor pricing news", diff:"hard", done:false},
+        ],
+        cycle: 0
+      };
+      loopLog.textContent = "Notepad initialized.\nWaiting for cycle…";
+      loopBar.style.width = "0%";
+    }
+    resetLoopBtn.addEventListener('click', resetLoop);
+    resetLoop();
+
+    function rand(n){ return Math.random() * n; }
+
+    function difficultyMultiplier(){
+      const v = mix.value;
+      if(v === "easy") return {easy:1.2, medium:1.0, hard:0.7};
+      if(v === "hard") return {easy:0.8, medium:0.95, hard:1.15};
+      return {easy:1.0, medium:1.0, hard:1.0};
+    }
+
+    function runCycle(){
+      const seconds = Number(runtime.value);
+      const mult = difficultyMultiplier();
+
+      loopState.cycle++;
+      let budget = seconds;
+
+      let log = [];
+      log.push(`Cycle #${loopState.cycle} — runtime window: ${seconds}s`);
+      log.push(`Notepad items: ${loopState.notepad.length} (done: ${loopState.notepad.filter(x=>x.done).length})`);
+      log.push("");
+
+      // choose next undone task
+      const undone = loopState.notepad.filter(x=>!x.done);
+      if(!undone.length){
+        log.push("All tasks completed. Agent is in maintenance mode: monitoring + brief updates.");
+        loopLog.textContent = log.join("\n");
+        loopBar.style.width = "100%";
+        return;
+      }
+
+      // Work on up to 3 tasks per cycle, depending on budget
+      const maxItems = budget > 120 ? 3 : budget > 50 ? 2 : 1;
+      const worklist = undone.slice(0, maxItems);
+
+      let completedThisCycle = 0;
+      worklist.forEach((item, idx) => {
+        const base = item.diff === "easy" ? 18 : item.diff === "medium" ? 45 : 80;
+        const cost = Math.round(base / (mult[item.diff] || 1));
+        const jitter = Math.round(rand(12));
+        const total = cost + jitter;
+
+        log.push(`→ Attempt: ${item.text}`);
+        log.push(`   difficulty=${item.diff}, estimated=${base}s, effective≈${total}s`);
+        if(total <= budget){
+          budget -= total;
+          item.done = true;
+          completedThisCycle++;
+          log.push(`   ✅ Completed. Remaining budget: ${budget}s`);
+        } else {
+          // partial progress, leave in notepad
+          const partial = Math.max(10, Math.round(budget * 0.6));
+          budget = Math.max(0, budget - partial);
+          log.push(`   ⏳ Partial progress (${partial}s). Left in notepad for next cycle.`);
+          log.push(`   Remaining budget: ${budget}s`);
+        }
+        log.push("");
+      });
+
+      const doneCount = loopState.notepad.filter(x=>x.done).length;
+      const pct = Math.round((doneCount / loopState.notepad.length) * 100);
+      loopBar.style.width = `${pct}%`;
+
+      // brief
+      log.push("Daily brief snapshot:");
+      log.push(`- Completed today: ${doneCount}/${loopState.notepad.length} (${pct}%)`);
+      const remaining = loopState.notepad.filter(x=>!x.done).map(x=>`  • ${x.text} (${x.diff})`);
+      log.push("- Still open:");
+      log.push(remaining.length ? remaining.join("\n") : "  • None");
+      loopLog.textContent = log.join("\n");
+    }
+
+    runLoopBtn.addEventListener('click', runCycle);
+
+    // --------------------------------------
+    // Simulator #3: right pane UX mock
+    // --------------------------------------
+    const chat = document.getElementById('chat');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+    const clearChatBtn = document.getElementById('clearChatBtn');
+    const spawnBtn = document.getElementById('spawnBtn');
+    const updateDocBtn = document.getElementById('updateDocBtn');
+    const statusTag = document.getElementById('statusTag');
+    const subAgents = document.getElementById('subAgents');
+    const subAgentList = document.getElementById('subAgentList');
+    const docArea = document.getElementById('docArea');
+
+    const subAgentTemplates = [
+      {name:"Calendar Agent", focus:"Optimizing schedule + booking", state:"Queued"},
+      {name:"Email Agent", focus:"Drafting + replying", state:"Queued"},
+      {name:"Briefing Agent", focus:"Slides + talking track", state:"Queued"},
+      {name:"Research Agent", focus:"Competitor monitoring", state:"Queued"},
+    ];
+
+    function addMsg(who, text, isAI=false){
+      const msg = document.createElement('div');
+      msg.className = 'msg' + (isAI ? ' ai' : '');
+      msg.innerHTML = `
+        <div class="who">${who}</div>
+        <div class="bubble">${escapeHtml(text)}</div>
+      `;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function pretendAgentResponse(userText){
+      statusTag.textContent = "Working";
+      const lower = (userText||"").toLowerCase();
+
+      // Lightweight “chief of staff” behavior: acknowledge + translate
+      let response = "Noted. I’ll translate that into the ledger and route it to the right sub-agent.";
+      if(/remind|reminder/.test(lower)) response = "Got it. I’ll set a reminder window and keep it in the task ledger until done.";
+      if(/deck|slide|presentation/.test(lower)) response = "Understood. I’ll produce a slide draft + a short speaking track and ask for approval.";
+      if(/email|reply|alex/.test(lower)) response = "I’ll draft a concise reply and present it for your final send.";
+      if(/dentist|appointment|book/.test(lower)) response = "I’ll find 3 options and recommend the best slot based on your constraints.";
+
+      setTimeout(() => addMsg("A", response, true), 250);
+      setTimeout(() => {
+        statusTag.textContent = "Idle";
+      }, 900);
+    }
+
+    chatSend.addEventListener('click', () => {
+      const t = chatInput.value.trim();
+      if(!t) return;
+      addMsg("U", t, false);
+      chatInput.value = "";
+      pretendAgentResponse(t);
+    });
+    chatInput.addEventListener('keydown', (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        chatSend.click();
+      }
+    });
+
+    clearChatBtn.addEventListener('click', () => {
+      chat.innerHTML = "";
+      addMsg("A", "Cleared. Your ledger remains intact — chat is not the source of truth; the notepad is.", true);
+    });
+
+    spawnBtn.addEventListener('click', () => {
+      subAgents.style.display = (subAgents.style.display === "none") ? "block" : "none";
+      if(subAgents.style.display === "block"){
+        subAgentList.innerHTML = "";
+        subAgentTemplates.forEach((sa, idx) => {
+          const el = document.createElement('div');
+          el.className = "task";
+          el.innerHTML = `
+            <div class="top">
+              <div class="title"><b>${escapeHtml(sa.name)}</b> — ${escapeHtml(sa.focus)}</div>
+              <div class="meta">
+                <span class="chip">Sub-agent</span>
+                <span class="chip" id="saState${idx}">${escapeHtml(sa.state)}</span>
+              </div>
+            </div>
+            <div class="progress"><div class="bar" id="saBar${idx}" style="width:0%"></div></div>
+            <div class="controls">
+              <button class="btn primary" data-run="${idx}">Run</button>
+              <button class="btn" data-pause="${idx}">Pause</button>
+            </div>
+          `;
+          subAgentList.appendChild(el);
+        });
+
+        // wire buttons
+        subAgentList.querySelectorAll('button[data-run]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const i = Number(btn.getAttribute('data-run'));
+            const st = document.getElementById(`saState${i}`);
+            const bar = document.getElementById(`saBar${i}`);
+            st.textContent = "Running";
+            let p = 0;
+            const timer = setInterval(() => {
+              p = Math.min(100, p + 8 + Math.round(Math.random()*10));
+              bar.style.width = `${p}%`;
+              if(p >= 100){
+                clearInterval(timer);
+                st.textContent = "Done (awaiting approval)";
+                addMsg("A", `${subAgentTemplates[i].name} finished. Want me to apply the output?`, true);
+              }
+              // store timer so pause can stop
+              btn._timer = timer;
+            }, 220);
+          });
+        });
+        subAgentList.querySelectorAll('button[data-pause]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const runBtn = btn.parentElement.querySelector('button[data-run]');
+            if(runBtn && runBtn._timer) clearInterval(runBtn._timer);
+            const idx = Number(btn.getAttribute('data-pause'));
+            const st = document.getElementById(`saState${idx}`);
+            if(st) st.textContent = "Paused";
+          });
+        });
+      }
+    });
+
+    updateDocBtn.addEventListener('click', () => {
+      // simulate doc update
+      const stamp = new Date().toLocaleString();
+      docArea.innerHTML = `
+        <b>Meeting Brief (auto-maintained)</b><br/><br/>
+        • Objective: Align on launch risks + mitigation<br/>
+        • Deliverables: 1-slide risk summary, 5-minute talking track<br/>
+        • Comms: Reply drafted for Alex (awaiting approval)<br/>
+        • Logistics: Dentist options prepared (awaiting approval)<br/>
+        • Monitoring: Competitor pricing watch running<br/><br/>
+        <span class="muted">Last refresh: ${escapeHtml(stamp)}</span>
+      `;
+      addMsg("A", "Updated the brief doc from the ledger. Next: I can generate a slide draft if you want.", true);
+    });
+
+    // --------------------------------------
+    // Scoreboard: Who ships it?
+    // --------------------------------------
+    const wDist = document.getElementById('wDist');
+    const wOS = document.getElementById('wOS');
+    const wModel = document.getElementById('wModel');
+    const wTrust = document.getElementById('wTrust');
+    const wUX = document.getElementById('wUX');
+
+    const wDistVal = document.getElementById('wDistVal');
+    const wOSVal = document.getElementById('wOSVal');
+    const wModelVal = document.getElementById('wModelVal');
+    const wTrustVal = document.getElementById('wTrustVal');
+    const wUXVal = document.getElementById('wUXVal');
+
+    const recalcBtn = document.getElementById('recalcBtn');
+    const presetBtn = document.getElementById('presetBtn');
+    const scoreList = document.getElementById('scoreList');
+
+    // Base “capabilities” (toy priors). You can edit these to match your worldview.
+    const players = [
+      {name:"Model makers (ChatGPT / Anthropic / etc.)", dist:7, os:5, model:9, trust:6, ux:7, note:"Best models + strong assistant brand; integration depends on partnerships."},
+      {name:"OS vendors (Apple / Microsoft / Google)", dist:9, os:10, model:6, trust:7, ux:7, note:"Unmatched OS hooks + distribution; model advantage depends on in-house/partners."},
+      {name:"“Cursor-for-life” startup layer", dist:4, os:6, model:7, trust:6, ux:9, note:"Can obsess over the right pane + translation layer; distribution is the hard part."},
+      {name:"Enterprise suites (Microsoft 365 / Google Workspace)", dist:8, os:6, model:7, trust:7, ux:6, note:"Already lives where email/docs/calendar are; risk: slow UX breakthroughs."},
+      {name:"Hardware OEM + assistant bundle", dist:6, os:6, model:6, trust:6, ux:6, note:"Could ship a default agent on devices; depends on software execution."},
+    ];
+
+    function syncWeightLabels(){
+      wDistVal.textContent = wDist.value;
+      wOSVal.textContent = wOS.value;
+      wModelVal.textContent = wModel.value;
+      wTrustVal.textContent = wTrust.value;
+      wUXVal.textContent = wUX.value;
+    }
+    [wDist,wOS,wModel,wTrust,wUX].forEach(el => el.addEventListener('input', () => {syncWeightLabels(); recalc();}));
+    syncWeightLabels();
+
+    function score(p){
+      const W = {
+        dist: Number(wDist.value),
+        os: Number(wOS.value),
+        model: Number(wModel.value),
+        trust: Number(wTrust.value),
+        ux: Number(wUX.value),
+      };
+      const s = p.dist*W.dist + p.os*W.os + p.model*W.model + p.trust*W.trust + p.ux*W.ux;
+      const max = 10*(W.dist+W.os+W.model+W.trust+W.ux);
+      return {raw:s, pct: Math.round((s/max)*100)};
+    }
+
+    function recalc(){
+      const ranked = players.map(p => ({...p, ...score(p)})).sort((a,b)=>b.raw-a.raw);
+      scoreList.innerHTML = "";
+      ranked.forEach((p, i) => {
+        const el = document.createElement('div');
+        el.className = "task";
+        el.innerHTML = `
+          <div class="top">
+            <div class="title"><b>${i+1}.</b> ${escapeHtml(p.name)}</div>
+            <div class="meta">
+              <span class="chip">Score: ${p.pct}%</span>
+              <span class="chip">Dist ${p.dist}</span>
+              <span class="chip">OS ${p.os}</span>
+              <span class="chip">Model ${p.model}</span>
+              <span class="chip">Trust ${p.trust}</span>
+              <span class="chip">UX ${p.ux}</span>
+            </div>
+          </div>
+          <div class="muted" style="font-size:13px;line-height:1.55">${escapeHtml(p.note)}</div>
+          <div class="progress"><div class="bar" style="width:${p.pct}%"></div></div>
+        `;
+        scoreList.appendChild(el);
+      });
+    }
+
+    recalcBtn.addEventListener('click', recalc);
+    presetBtn.addEventListener('click', () => {
+      // a “default take”: UX + OS integration are king
+      wDist.value = 7;
+      wOS.value = 9;
+      wModel.value = 6;
+      wTrust.value = 7;
+      wUX.value = 10;
+      syncWeightLabels();
+      recalc();
+    });
+
+    recalc();
+  </script>
+</body>
+</html>

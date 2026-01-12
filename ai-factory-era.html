@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CES 2026: The AI Factory Era</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.08);
+      --stroke:rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --faint:rgba(234,240,255,.5);
+      --good:#4EE7A8;
+      --warn:#FFCF5A;
+      --bad:#FF5B7E;
+      --a:#7C5CFF;
+      --b:#38BDF8;
+      --c:#34D399;
+      --shadow:0 20px 60px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(124,92,255,.18), transparent 60%),
+        radial-gradient(900px 650px at 80% 20%, rgba(56,189,248,.16), transparent 62%),
+        radial-gradient(900px 700px at 55% 95%, rgba(52,211,153,.12), transparent 60%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 18px 56px}
+
+    /* Top */
+    .top{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .hero{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;inset:-2px;
+      background:radial-gradient(900px 350px at 20% 0%, rgba(124,92,255,.18), transparent 65%),
+                 radial-gradient(700px 320px at 85% 40%, rgba(56,189,248,.14), transparent 62%);
+      filter: blur(0px);
+      pointer-events:none;
+    }
+
+    .kicker{
+      display:flex;gap:10px;align-items:center;
+      color:var(--muted);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:12px;
+      position:relative;
+    }
+
+    .pill{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.05);
+      padding:6px 10px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .dot{width:8px;height:8px;border-radius:50%}
+
+    h1{
+      margin:12px 0 8px;
+      font-size:36px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+      position:relative;
+    }
+
+    .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:15px;
+      max-width:70ch;
+      position:relative;
+    }
+
+    .heroGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:14px;
+      position:relative;
+    }
+
+    .stat{
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      padding:12px 12px 10px;
+      min-height:78px;
+    }
+    .stat .label{color:var(--faint);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+    .stat .value{font-size:22px;margin-top:6px;letter-spacing:-.01em}
+    .stat .hint{color:var(--muted);font-size:12px;margin-top:4px}
+
+    .side{
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap:18px;
+    }
+
+    .card{
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.05);
+      box-shadow:var(--shadow);
+      padding:16px;
+      overflow:hidden;
+    }
+
+    .card h3{margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+    .miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    .mini{
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.15);
+    }
+    .mini .t{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+    .mini .b{margin-top:8px;font-size:13px;color:var(--muted)}
+
+    /* Sections */
+    .sections{margin-top:18px;display:grid;gap:18px}
+    .sectionTitle{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:8px 2px}
+    .sectionTitle h2{margin:0;font-size:18px;letter-spacing:-.01em}
+    .sectionTitle p{margin:0;color:var(--muted);max-width:70ch}
+
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:18px}
+    @media (max-width: 980px){
+      .top{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr}
+      .heroGrid{grid-template-columns:1fr}
+      h1{font-size:32px}
+    }
+
+    /* Interactive controls */
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover{transform: translateY(-1px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+
+    .seg{
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      overflow:hidden;
+      display:inline-flex;
+      background:rgba(0,0,0,.12);
+    }
+    .seg button{
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      padding:10px 12px;
+      cursor:pointer;
+      font:inherit;
+    }
+    .seg button.active{background:rgba(255,255,255,.08);color:var(--text)}
+
+    .sliderWrap{display:grid;gap:10px}
+    input[type="range"]{width:100%}
+
+    .note{color:var(--muted);font-size:12px}
+
+    /* Diagram styles */
+    .diagram{border:1px solid var(--stroke);border-radius:16px;background:rgba(0,0,0,.12);padding:14px;overflow:hidden}
+    .nodes{display:grid;gap:10px}
+
+    .node{
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.05);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .node .l{display:grid;gap:6px}
+    .node .name{font-weight:650;letter-spacing:-.01em}
+    .node .desc{color:var(--muted);font-size:12px}
+    .chip{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .stack{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+
+    .stackItem{
+      display:grid;
+      grid-template-columns: 38px 1fr;
+      gap:10px;
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      padding:12px;
+    }
+
+    .icon{
+      width:38px;height:38px;border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--stroke);
+      display:grid;place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .icon::after{
+      content:"";
+      position:absolute;inset:-60%;
+      background:radial-gradient(circle at 30% 30%, rgba(124,92,255,.35), transparent 55%),
+                 radial-gradient(circle at 70% 70%, rgba(56,189,248,.25), transparent 55%);
+      transform:rotate(18deg);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .icon svg{position:relative;opacity:.9}
+
+    .stackItem .title{font-weight:700}
+    .stackItem .body{color:var(--muted);font-size:12px;margin-top:4px}
+
+    /* Canvas charts */
+    .chartBox{border:1px solid var(--stroke);border-radius:16px;background:rgba(0,0,0,.12);padding:14px;overflow:hidden}
+    canvas{width:100%;height:240px;display:block}
+
+    /* Timeline */
+    .timeline{display:grid;gap:10px}
+    .tItem{
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      padding:12px;
+      display:grid;
+      gap:6px;
+    }
+    .tItem .when{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    .tItem .what{font-weight:700}
+    .tItem .why{color:var(--muted);font-size:12px}
+
+    /* Footer */
+    .footer{margin-top:20px;color:var(--muted);font-size:12px;text-align:center}
+
+    /* subtle reveal */
+    .reveal{opacity:0;transform:translateY(8px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.on{opacity:1;transform:translateY(0)}
+
+    /* Tooltip */
+    .tip{position:relative}
+    .tip[data-tip]:hover::after{
+      content:attr(data-tip);
+      position:absolute;
+      left:0;top:calc(100% + 8px);
+      width:min(360px, 80vw);
+      background:rgba(0,0,0,.78);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:12px;
+      padding:10px 10px;
+      color:var(--muted);
+      font-size:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.45);
+      z-index:20;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="top">
+      <section class="hero reveal">
+        <div class="kicker">
+          <span class="pill"><span class="dot" style="background:var(--b)"></span> CES 2026</span>
+          <span class="pill"><span class="dot" style="background:var(--a)"></span> Industrial AI Phase</span>
+          <span class="pill"><span class="dot" style="background:var(--c)"></span> Inference Economics</span>
+        </div>
+
+        <h1>CES becomes a coordination event for the <span style="background:linear-gradient(90deg,var(--b),var(--a));-webkit-background-clip:text;background-clip:text;color:transparent;">AI factory era</span>.</h1>
+        <p class="sub">This year’s real headline isn’t “new gadgets.” It’s the assembly of a production system for <b>always‑on AI</b>: compute, memory, networking, power, security, and deployment velocity—optimized to ship intelligence <b>cheaply</b> and <b>reliably</b> at scale.</p>
+
+        <div class="heroGrid">
+          <div class="stat tip" data-tip="Core thesis: inference is now the cost center that shapes architecture. Latency + cost + reliability become the primary constraints.">
+            <div class="label">Optimization Target</div>
+            <div class="value">$ / token ↓</div>
+            <div class="hint">while latency & reliability stay inside SLAs</div>
+          </div>
+          <div class="stat tip" data-tip="Mental model shift: power, scale, electricity, big machines—AI as an industrial system.">
+            <div class="label">Mental Model</div>
+            <div class="value">AI = Factory</div>
+            <div class="hint">not a chip race—an end‑to‑end stack race</div>
+          </div>
+          <div class="stat tip" data-tip="Demand shock framing: actors with real usage data behave like they’re behind demand, not overbuilt.">
+            <div class="label">Macro Signal</div>
+            <div class="value">Demand Shock</div>
+            <div class="hint">usage >> single training run costs</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card reveal">
+          <h3>What changed</h3>
+          <div class="miniGrid">
+            <div class="mini">
+              <div class="t">Before</div>
+              <div class="b">“GPU launch” thinking: performance per chip, training milestones, spec sheets.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Now</div>
+              <div class="b">“Factory” thinking: rack scale, memory tiers, data movement, power, token economics.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Constraint</div>
+              <div class="b">Inference is continuous, latency‑bound, and ruthlessly cost‑sensitive.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Coordination</div>
+              <div class="b">OEM budgets + datacenter builds + partner roadmaps lock together.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card reveal">
+          <h3>Factory lens (quick map)</h3>
+          <div class="stack" id="factoryLens"></div>
+          <div class="note" style="margin-top:10px">Tip: click any layer to “pin” it and see what it optimizes for.</div>
+        </section>
+      </aside>
+    </div>
+
+
+    <div class="sections">
+
+      <div class="sectionTitle reveal">
+        <div>
+          <h2>1) The core plotline: inference dominates the operational reality</h2>
+          <p>Training still matters strategically (new capabilities), but <b>serving</b> is continuous. The system question becomes: how do you push <b>dollars per token down</b> while keeping latency & reliability inside SLAs?</p>
+        </div>
+        <div class="controls">
+          <span class="pill" title="A simple simulator to make the argument tangible">Token Economics Simulator</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="chartBox reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Token economics (interactive)</h3>
+
+          <div class="sliderWrap">
+            <label class="note">Serving load (relative): <b id="loadLabel">1.0×</b></label>
+            <input id="load" type="range" min="50" max="400" value="100" />
+
+            <label class="note">Context window size: <b id="ctxLabel">128k</b></label>
+            <input id="ctx" type="range" min="1" max="8" value="4" />
+
+            <label class="note">KV cache reuse rate: <b id="reuseLabel">20%</b></label>
+            <input id="reuse" type="range" min="0" max="80" value="20" />
+          </div>
+
+          <div style="margin-top:10px" class="miniGrid">
+            <div class="mini">
+              <div class="t">Unit cost proxy</div>
+              <div class="b"><b id="costOut">—</b> (lower is better)</div>
+            </div>
+            <div class="mini">
+              <div class="t">Latency pressure</div>
+              <div class="b"><b id="latOut">—</b> (lower is better)</div>
+            </div>
+            <div class="mini">
+              <div class="t">Why KV cache matters</div>
+              <div class="b">Higher reuse shifts work from recompute → data movement + storage.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Factory implication</div>
+              <div class="b">Context becomes a managed resource like a database tier.</div>
+            </div>
+          </div>
+
+          <canvas id="econChart" width="900" height="280" style="margin-top:12px"></canvas>
+          <div class="note">This is a <i>conceptual</i> simulator to visualize the argument: serving load + context size drive cost/latency, and cache reuse shifts bottlenecks.</div>
+        </section>
+
+        <section class="diagram reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">What “AI factory” means in product form</h3>
+          <div class="nodes" id="aiFactoryNodes"></div>
+          <div class="note" style="margin-top:10px">The announcements that matter most are the pieces of this system: compute, memory, networking, security, power, deployment velocity.</div>
+        </section>
+      </div>
+
+
+      <div class="sectionTitle reveal">
+        <div>
+          <h2>2) NVIDIA’s CES posture: selling a rack‑scale AI factory</h2>
+          <p>The key move isn’t “a new GPU.” It’s a <b>rack‑scale platform</b> optimized around <b>token economics</b> and <b>context management</b> for inference loads.</p>
+        </div>
+        <div class="controls">
+          <div class="seg" role="tablist" aria-label="Focus mode">
+            <button class="active" data-mode="overview" type="button">Overview</button>
+            <button data-mode="context" type="button">Context memory</button>
+            <button data-mode="rack" type="button">Rack scale</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="card reveal" style="padding:0">
+          <div style="padding:16px 16px 0">
+            <h3>Rubin era: what gets productized</h3>
+            <p class="sub" style="margin:0 0 10px">A conceptual decomposition of the platform story: interconnects, NICs, switching, and storage tiers exist to move data fast enough to serve large‑context inference.</p>
+          </div>
+          <div style="padding:0 16px 16px">
+            <canvas id="rackChart" width="900" height="280"></canvas>
+            <div class="note">Toggle modes to see how the “factory” posture shifts the system bottleneck.</div>
+          </div>
+        </section>
+
+        <section class="diagram reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">The inference‑era conceptual shift</h3>
+          <div class="node">
+            <div class="l">
+              <div class="name">Context becomes a managed resource</div>
+              <div class="desc">When platforms productize KV cache + context tiers, they’re admitting that scaling is now <b>memory + data movement</b> as much as compute.</div>
+            </div>
+            <div class="chip">KV cache • storage tier • reuse</div>
+          </div>
+          <div class="node" style="margin-top:10px">
+            <div class="l">
+              <div class="name">Inference is an operations problem</div>
+              <div class="desc">Continuous serving load + strict latency demands → system design revolves around <b>throughput</b>, <b>reliability</b>, and <b>unit economics</b>.</div>
+            </div>
+            <div class="chip">SLAs • latency • $/token</div>
+          </div>
+          <div class="node" style="margin-top:10px">
+            <div class="l">
+              <div class="name">Rack scale is the unit of competition</div>
+              <div class="desc">Interconnect + networking + memory hierarchy determine what can be served, how fast, and at what cost.</div>
+            </div>
+            <div class="chip">NVLink‑class • SuperNIC‑class • switching</div>
+          </div>
+        </section>
+      </div>
+
+
+      <div class="sectionTitle reveal">
+        <div>
+          <h2>3) OpenAI as a reference customer: buying the entire factory stack</h2>
+          <p>Read the infrastructure deals as “capacity and supply portfolio” building. The key framing is in <b>power</b> (gigawatts) and <b>memory supply</b>—because those are the limiting inputs for inference at scale.</p>
+        </div>
+        <div class="controls">
+          <button class="btn" id="playTimeline" type="button">
+            <span class="dot" style="background:var(--good)"></span>
+            Animate timeline
+          </button>
+          <button class="btn" id="resetTimeline" type="button">
+            <span class="dot" style="background:var(--warn)"></span>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="diagram reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Factory contracts timeline (conceptual)</h3>
+          <div class="timeline" id="timeline"></div>
+          <div class="note" style="margin-top:10px">This summarizes the narrative: multi‑vendor compute, cloud capacity locks, dedicated inference providers, and memory supply.</div>
+        </section>
+
+        <section class="chartBox reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Bottleneck radar: where the factory pinches</h3>
+          <div class="controls" style="margin-bottom:10px">
+            <span class="pill">Click to toggle constraints</span>
+            <button class="btn" type="button" data-constraint="power"><span class="dot" style="background:var(--warn)"></span>Power</button>
+            <button class="btn" type="button" data-constraint="memory"><span class="dot" style="background:var(--b)"></span>Memory</button>
+            <button class="btn" type="button" data-constraint="network"><span class="dot" style="background:var(--a)"></span>Networking</button>
+            <button class="btn" type="button" data-constraint="deploy"><span class="dot" style="background:var(--c)"></span>Deployment</button>
+          </div>
+          <canvas id="radar" width="900" height="280"></canvas>
+          <div class="note">Idea: as serving load rises, constraints migrate from pure compute → memory bandwidth, data movement, power, and deployment velocity.</div>
+        </section>
+      </div>
+
+
+      <div class="sectionTitle reveal">
+        <div>
+          <h2>4) “Threat to NVIDIA” nuance: dethronement vs multi‑ecosystem coexistence</h2>
+          <p>If “threat” means displacement in 12–18 months, evidence says no. If it means share gradually declines as demand forces second sources and specialization, then yes—through structural, demand‑driven pressures.</p>
+        </div>
+        <div class="controls">
+          <div class="seg" aria-label="Ecosystem toggle">
+            <button class="active" data-eco="nvidia" type="button">NVIDIA default</button>
+            <button data-eco="amd" type="button">2nd source GPUs</button>
+            <button data-eco="custom" type="button">Custom silicon</button>
+            <button data-eco="tpu" type="button">Exported in‑house</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="diagram reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Three pressures (structural)</h3>
+          <div id="pressureCards" class="nodes"></div>
+        </section>
+        <section class="card reveal">
+          <h3>Inference tolerates heterogeneity</h3>
+          <div class="miniGrid">
+            <div class="mini"><div class="t">Training</div><div class="b">Prefer homogeneity for clean, predictable runs and fast iteration.</div></div>
+            <div class="mini"><div class="t">Inference</div><div class="b">More operationally flexible; cost pressure is extreme; multi‑hardware is viable.</div></div>
+            <div class="mini"><div class="t">Analogy</div><div class="b">Multi‑cloud: share shifts, but everyone can grow as the pie expands.</div></div>
+            <div class="mini"><div class="t">Result</div><div class="b">“Many winners” without a single loser—demand outruns supply.</div></div>
+          </div>
+          <div class="note" style="margin-top:12px">Use the ecosystem toggle to see how each path changes the competitive story.</div>
+        </section>
+      </div>
+
+
+      <div class="sectionTitle reveal">
+        <div>
+          <h2>5) CES makes the shift legible: AI escapes the data center → physical & ambient AI</h2>
+          <p>Robotics, autonomy, and ambient intelligence increase inference demand further. Physical AI is highly latency‑ and reliability‑bound—amplifying the value of inference optimization.</p>
+        </div>
+        <div class="controls">
+          <button class="btn" id="toggleAmbient" type="button"><span class="dot" style="background:var(--b)"></span>Toggle ambient surfaces</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="chartBox reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Where inference runs (conceptual heatmap)</h3>
+          <canvas id="surfaces" width="900" height="280"></canvas>
+          <div class="note">A simple map: as AI moves into more surfaces (cars, factories, devices), total serving load climbs and latency constraints tighten.</div>
+        </section>
+        <section class="diagram reveal">
+          <h3 style="margin:0 0 10px;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">The concluding frame</h3>
+          <div class="node">
+            <div class="l">
+              <div class="name">This is the year AI becomes a factory</div>
+              <div class="desc">CES 2026: the industry stops acting like it’s only a chip race and starts behaving like it’s a <b>factory race</b>—with power, memory, and supply bottlenecks determining who ships intelligence.</div>
+            </div>
+            <div class="chip">power • memory • supply</div>
+          </div>
+          <div class="node" style="margin-top:10px">
+            <div class="l">
+              <div class="name">A world of ambient, instant, high‑quality AI</div>
+              <div class="desc">Factory scale enables sophisticated models served near‑instantly, on every digital surface, and increasingly in robotics.</div>
+            </div>
+            <div class="chip">latency • reliability • ubiquity</div>
+          </div>
+          <div class="node" style="margin-top:10px">
+            <div class="l">
+              <div class="name">Too big for one company</div>
+              <div class="desc">Expect a multi‑winner hardware landscape: default platforms + second sources + custom silicon can all gain share as demand explodes.</div>
+            </div>
+            <div class="chip">multi‑ecosystem</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer reveal">Built as a self-contained HTML infographic with lightweight simulators and diagrams. You can paste your own numbers/claims into the timeline and stats if you want it to become a cited brief.</div>
+
+    </div>
+  </div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (q, el=document) => el.querySelector(q);
+    const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+    // ---------- Reveal on scroll ----------
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){
+        if(e.isIntersecting){e.target.classList.add('on');}
+      }
+    },{threshold:0.12});
+    $$('.reveal').forEach(el=>io.observe(el));
+
+    // ---------- Factory lens stack ----------
+    const lens = [
+      {k:'Compute', d:'Rack-scale compute designed for continuous inference throughput.', tip:'GPU/accelerator + CPU pairing, serving-optimized scheduling.'},
+      {k:'Memory', d:'HBM/DRAM + context tiers; KV cache becomes a first-class scaling constraint.', tip:'Context windows grow → cache growth → bandwidth and reuse matter.'},
+      {k:'Networking', d:'Interconnect + NICs + switching to move tokens/contexts across a rack.', tip:'Data movement becomes the limiter as much as FLOPs.'},
+      {k:'Power', d:'Gigawatts as headline; deployment measured in electricity and cooling.', tip:'Industrial framing: power delivery and grid planning.'},
+      {k:'Security', d:'Factory-grade isolation, provenance, and compliance for always-on AI.', tip:'Serving at scale requires operational trust.'},
+      {k:'Velocity', d:'Deployment speed, procurement, and partner roadmaps lock together.', tip:'Coordination is as important as innovation.'},
+    ];
+
+    let pinned = null;
+    const lensRoot = $('#factoryLens');
+
+    function renderLens(){
+      lensRoot.innerHTML = '';
+      lens.forEach((x, i)=>{
+        const item = document.createElement('div');
+        item.className = 'stackItem tip';
+        item.dataset.tip = x.tip;
+        item.style.outline = (pinned===i) ? '2px solid rgba(124,92,255,.45)' : 'none';
+
+        item.innerHTML = `
+          <div class="icon" aria-hidden="true">
+            ${iconSVG(i)}
+          </div>
+          <div>
+            <div class="title">${x.k}</div>
+            <div class="body">${x.d}</div>
+          </div>
+        `;
+        item.addEventListener('click', ()=>{
+          pinned = (pinned===i) ? null : i;
+          renderLens();
+        });
+        lensRoot.appendChild(item);
+      });
+    }
+
+    function iconSVG(i){
+      const s = 20;
+      const base = (paths)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+      switch(i){
+        case 0: return base(`<path d="M7 8h10v8H7z" stroke="rgba(234,240,255,.85)" stroke-width="1.6"/><path d="M9 6v2M15 6v2M9 16v2M15 16v2" stroke="rgba(234,240,255,.65)" stroke-width="1.6" stroke-linecap="round"/>`);
+        case 1: return base(`<path d="M7 7h10v10H7z" stroke="rgba(234,240,255,.85)" stroke-width="1.6"/><path d="M9 9h6v6H9z" stroke="rgba(234,240,255,.65)" stroke-width="1.6"/>`);
+        case 2: return base(`<path d="M6 8h12M6 12h12M6 16h12" stroke="rgba(234,240,255,.85)" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="8" r="1.2" fill="rgba(234,240,255,.7)"/><circle cx="15" cy="12" r="1.2" fill="rgba(234,240,255,.7)"/><circle cx="11" cy="16" r="1.2" fill="rgba(234,240,255,.7)"/>`);
+        case 3: return base(`<path d="M13 2L6 14h6l-1 8 7-12h-6l1-8z" stroke="rgba(234,240,255,.85)" stroke-width="1.6" stroke-linejoin="round"/>`);
+        case 4: return base(`<path d="M12 2l8 4v6c0 5-3.5 9-8 10C7.5 21 4 17 4 12V6l8-4z" stroke="rgba(234,240,255,.85)" stroke-width="1.6"/><path d="M9.5 12l1.8 1.8L14.8 10" stroke="rgba(234,240,255,.65)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`);
+        default: return base(`<path d="M6 18l4-6 3 4 5-8" stroke="rgba(234,240,255,.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 18h12" stroke="rgba(234,240,255,.65)" stroke-width="1.6" stroke-linecap="round"/>`);
+      }
+    }
+    renderLens();
+
+    // ---------- AI factory nodes ----------
+    const factoryNodes = [
+      {name:'Compute', desc:'Accelerators + CPUs packaged for serving throughput and efficiency.', tag:'Throughput / $ per token'},
+      {name:'Context & Memory', desc:'KV cache growth turns into a managed tier; reuse beats recompute.', tag:'Context windows → cache'},
+      {name:'Interconnect', desc:'Rack-wide data movement: switches + fabric determine viable scale.', tag:'Bandwidth / topology'},
+      {name:'Networking I/O', desc:'NICs and data plumbing to keep GPUs fed and keep tail latency low.', tag:'Tail latency control'},
+      {name:'Power & Cooling', desc:'Gigawatts as planning unit; factories are measured in electricity.', tag:'Industrial planning'},
+      {name:'Deployment Velocity', desc:'Partner roadmaps + procurement + build plans lock together.', tag:'Coordination'},
+    ];
+
+    const factoryRoot = $('#aiFactoryNodes');
+    factoryNodes.forEach((x)=>{
+      const el = document.createElement('div');
+      el.className = 'node';
+      el.innerHTML = `
+        <div class="l">
+          <div class="name">${x.name}</div>
+          <div class="desc">${x.desc}</div>
+        </div>
+        <div class="chip">${x.tag}</div>
+      `;
+      factoryRoot.appendChild(el);
+    });
+
+
+    // ---------- Token economics simulator ----------
+    const load = $('#load');
+    const ctx = $('#ctx');
+    const reuse = $('#reuse');
+    const loadLabel = $('#loadLabel');
+    const ctxLabel = $('#ctxLabel');
+    const reuseLabel = $('#reuseLabel');
+    const costOut = $('#costOut');
+    const latOut = $('#latOut');
+
+    const ctxSizes = ["8k","16k","32k","64k","128k","256k","512k","1M"]; // conceptual
+
+    function model(){
+      // Conceptual proxy model (NOT a claim):
+      // cost grows with load and context; reuse reduces recompute cost but increases data movement penalty.
+      const L = load.value/100;           // 0.5..4.0
+      const C = Math.pow(2, Number(ctx.value)-1) / 16; // 1..8 mapped into 0.0625..0.5??
+      const R = reuse.value/100;          // 0..0.8
+
+      // recompute component
+      const recompute = L * (1 + 5*C) * (1 - 0.75*R);
+      // data movement component (worse with large contexts and higher reuse, since you manage cache and fetch)
+      const movement = L * (0.25 + 3.5*C) * (0.35 + 0.9*R);
+
+      const cost = recompute + 0.8*movement;
+      const latency = (0.8 + 2.2*C) * (0.65 + 0.55*L) * (1 - 0.22*R) + 0.25*(movement);
+
+      return {L,C,R,cost,latency,recompute,movement};
+    }
+
+    function fmt(v){
+      if(v<1) return v.toFixed(2);
+      if(v<10) return v.toFixed(2);
+      return v.toFixed(1);
+    }
+
+    function updateSim(){
+      const m = model();
+      loadLabel.textContent = (load.value/100).toFixed(1) + '×';
+      ctxLabel.textContent = ctxSizes[Number(ctx.value)-1];
+      reuseLabel.textContent = reuse.value + '%';
+
+      costOut.textContent = fmt(m.cost);
+      latOut.textContent = fmt(m.latency);
+
+      drawEconChart(m);
+    }
+
+    load.addEventListener('input', updateSim);
+    ctx.addEventListener('input', updateSim);
+    reuse.addEventListener('input', updateSim);
+
+    // ---------- Simple canvas charting ----------
+    function clear(ctx){
+      ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+    }
+
+    function grid(ctx){
+      const w=ctx.canvas.width,h=ctx.canvas.height;
+      ctx.save();
+      ctx.globalAlpha=.35;
+      ctx.lineWidth=1;
+      ctx.strokeStyle='rgba(255,255,255,.12)';
+      for(let i=1;i<8;i++){
+        const x = (w/8)*i;
+        ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
+      }
+      for(let i=1;i<6;i++){
+        const y = (h/6)*i;
+        ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function label(ctx, x, y, t){
+      ctx.save();
+      ctx.fillStyle='rgba(234,240,255,.75)';
+      ctx.font='12px ui-sans-serif, system-ui';
+      ctx.fillText(t, x, y);
+      ctx.restore();
+    }
+
+    function line(ctx, pts){
+      ctx.save();
+      ctx.lineWidth=2.2;
+      ctx.strokeStyle='rgba(234,240,255,.78)';
+      ctx.beginPath();
+      pts.forEach((p,i)=>{ if(i===0) ctx.moveTo(p[0],p[1]); else ctx.lineTo(p[0],p[1]); });
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function fillArea(ctx, pts, baseY){
+      ctx.save();
+      ctx.fillStyle='rgba(124,92,255,.12)';
+      ctx.beginPath();
+      pts.forEach((p,i)=>{ if(i===0) ctx.moveTo(p[0],p[1]); else ctx.lineTo(p[0],p[1]); });
+      ctx.lineTo(pts[pts.length-1][0], baseY);
+      ctx.lineTo(pts[0][0], baseY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawEconChart(m){
+      const c = $('#econChart');
+      const ctx2 = c.getContext('2d');
+      clear(ctx2);
+      grid(ctx2);
+
+      const w=c.width,h=c.height;
+      const pad=24;
+
+      // build curve across context sizes for current load and reuse
+      const ptsCost=[];
+      const ptsLat=[];
+      let maxV=0;
+      const fixedL = m.L;
+      const fixedR = m.R;
+      for(let i=1;i<=8;i++){
+        const C = Math.pow(2,i-1)/16;
+        const recompute = fixedL * (1 + 5*C) * (1 - 0.75*fixedR);
+        const movement = fixedL * (0.25 + 3.5*C) * (0.35 + 0.9*fixedR);
+        const cost = recompute + 0.8*movement;
+        const lat = (0.8 + 2.2*C) * (0.65 + 0.55*fixedL) * (1 - 0.22*fixedR) + 0.25*(movement);
+        maxV = Math.max(maxV, cost, lat);
+        ptsCost.push(cost);
+        ptsLat.push(lat);
+      }
+
+      const x = (i)=> pad + (w-2*pad) * (i/7);
+      const y = (v)=> pad + (h-2*pad) * (1 - v/maxV);
+
+      const costPts = ptsCost.map((v,i)=>[x(i),y(v)]);
+      const latPts = ptsLat.map((v,i)=>[x(i),y(v)]);
+
+      fillArea(ctx2, costPts, h-pad);
+      line(ctx2, costPts);
+
+      // latency line
+      ctx2.save();
+      ctx2.lineWidth=2.2;
+      ctx2.strokeStyle='rgba(56,189,248,.78)';
+      ctx2.beginPath();
+      latPts.forEach((p,i)=>{ if(i===0) ctx2.moveTo(p[0],p[1]); else ctx2.lineTo(p[0],p[1]); });
+      ctx2.stroke();
+      ctx2.restore();
+
+      // axis labels
+      label(ctx2, pad, 16, 'Context size →');
+      label(ctx2, pad, h-10, '8k');
+      label(ctx2, w-42, h-10, '1M');
+      label(ctx2, pad, h-22, 'Cost (purple) & Latency (blue) – conceptual');
+
+      // marker for current ctx
+      const idx = Number($('#ctx').value)-1;
+      const mc = costPts[idx];
+      const ml = latPts[idx];
+      ctx2.save();
+      ctx2.fillStyle='rgba(234,240,255,.9)';
+      ctx2.beginPath();ctx2.arc(mc[0], mc[1], 4.2, 0, Math.PI*2);ctx2.fill();
+      ctx2.fillStyle='rgba(56,189,248,.9)';
+      ctx2.beginPath();ctx2.arc(ml[0], ml[1], 4.2, 0, Math.PI*2);ctx2.fill();
+      ctx2.restore();
+
+      // legend
+      ctx2.save();
+      ctx2.fillStyle='rgba(234,240,255,.75)';
+      ctx2.font='12px ui-sans-serif, system-ui';
+      ctx2.fillText(`Load ${fixedL.toFixed(1)}× • Reuse ${(fixedR*100).toFixed(0)}%`, pad, 34);
+      ctx2.restore();
+    }
+
+    updateSim();
+
+
+    // ---------- Rack chart modes ----------
+    let rackMode = 'overview';
+
+    function drawRack(){
+      const c = $('#rackChart');
+      const ctx2 = c.getContext('2d');
+      clear(ctx2);
+      grid(ctx2);
+
+      const w=c.width,h=c.height;
+      const pad=26;
+
+      // conceptual contributions
+      const base = {
+        compute: 0.42,
+        memory: 0.26,
+        network: 0.18,
+        power: 0.14
+      };
+      const modes = {
+        overview: {compute:1.0,memory:1.0,network:1.0,power:1.0, title:'Balanced rack: end-to-end serving stack'},
+        context:  {compute:0.85,memory:1.35,network:1.20,power:1.05, title:'Context era: memory + data movement dominate'},
+        rack:     {compute:1.10,memory:1.05,network:1.35,power:1.20, title:'Rack scale: fabric + power delivery become primary'}
+      };
+      const m = modes[rackMode];
+
+      const vals = [
+        {k:'Compute', v: base.compute*m.compute, c:'rgba(124,92,255,.70)'},
+        {k:'Memory', v: base.memory*m.memory, c:'rgba(56,189,248,.70)'},
+        {k:'Networking', v: base.network*m.network, c:'rgba(52,211,153,.70)'},
+        {k:'Power', v: base.power*m.power, c:'rgba(255,207,90,.70)'}
+      ];
+
+      const maxV = Math.max(...vals.map(x=>x.v))*1.15;
+      const barW = (w-2*pad)/vals.length - 18;
+
+      // title
+      ctx2.save();
+      ctx2.fillStyle='rgba(234,240,255,.78)';
+      ctx2.font='12px ui-sans-serif, system-ui';
+      ctx2.fillText(m.title, pad, 18);
+      ctx2.restore();
+
+      vals.forEach((x,i)=>{
+        const bx = pad + i*((w-2*pad)/vals.length) + 9;
+        const bh = (h-2*pad) * (x.v/maxV);
+        const by = h-pad - bh;
+        ctx2.save();
+        ctx2.fillStyle = x.c;
+        ctx2.strokeStyle = 'rgba(255,255,255,.14)';
+        roundRect(ctx2, bx, by, barW, bh, 12, true, true);
+        ctx2.restore();
+
+        // label
+        ctx2.save();
+        ctx2.fillStyle='rgba(234,240,255,.72)';
+        ctx2.font='12px ui-sans-serif, system-ui';
+        ctx2.fillText(x.k, bx, h-10);
+        ctx2.restore();
+      });
+
+      ctx2.save();
+      ctx2.fillStyle='rgba(234,240,255,.55)';
+      ctx2.font='12px ui-sans-serif, system-ui';
+      ctx2.fillText('Conceptual “what dominates” view — not a benchmark.', pad, h-22);
+      ctx2.restore();
+    }
+
+    function roundRect(ctx, x, y, w, h, r, fill, stroke){
+      r = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+      if(fill) ctx.fill();
+      if(stroke) ctx.stroke();
+    }
+
+    drawRack();
+
+    $$('.seg button[data-mode]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        $$('.seg button[data-mode]').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        rackMode = b.dataset.mode;
+        drawRack();
+      });
+    });
+
+
+    // ---------- Timeline ----------
+    const timelineData = [
+      {when:'Late 2025', what:'Capacity portfolio strategy becomes explicit', why:'Deals read as “delivered compute at scale” is the constraint.'},
+      {when:'H2 2026 (planned)', what:'First gigawatt(s) come online (multiple vendors)', why:'Industry frames deployments in power (GW) → industrial posture.'},
+      {when:'2026–2027', what:'Cloud capacity locks bridge the gap', why:'Secure serving while factories ramp; reduce bottlenecks.'},
+      {when:'2026+', what:'Memory supply becomes strategic', why:'Large-context inference pushes DRAM/HBM into spotlight.'},
+      {when:'2026–2029', what:'Custom accelerators + rack systems mature', why:'Volume justifies specialization; inference economics rule.'},
+    ];
+
+    const timelineEl = $('#timeline');
+    function renderTimeline(active=-1){
+      timelineEl.innerHTML='';
+      timelineData.forEach((x,i)=>{
+        const el = document.createElement('div');
+        el.className='tItem';
+        el.style.borderColor = i<=active ? 'rgba(78,231,168,.35)' : 'rgba(255,255,255,.12)';
+        el.style.background = i<=active ? 'rgba(78,231,168,.06)' : 'rgba(255,255,255,.05)';
+        el.innerHTML = `
+          <div class="when">${x.when}</div>
+          <div class="what">${x.what}</div>
+          <div class="why">${x.why}</div>
+        `;
+        timelineEl.appendChild(el);
+      });
+    }
+
+    renderTimeline(-1);
+
+    let tIdx=-1, tTimer=null;
+    $('#playTimeline').addEventListener('click', ()=>{
+      if(tTimer) return;
+      tIdx=-1;
+      tTimer=setInterval(()=>{
+        tIdx++;
+        renderTimeline(tIdx);
+        if(tIdx>=timelineData.length-1){
+          clearInterval(tTimer);
+          tTimer=null;
+        }
+      }, 650);
+    });
+    $('#resetTimeline').addEventListener('click', ()=>{
+      if(tTimer){clearInterval(tTimer); tTimer=null;}
+      tIdx=-1;
+      renderTimeline(-1);
+    });
+
+
+    // ---------- Bottleneck radar (simple) ----------
+    const radar = $('#radar');
+    const rctx = radar.getContext('2d');
+
+    let constraint = 'power';
+    const radarProfiles = {
+      power:  {Compute:0.55, Memory:0.68, Network:0.62, Power:0.88, Deploy:0.70},
+      memory: {Compute:0.60, Memory:0.90, Network:0.78, Power:0.70, Deploy:0.66},
+      network:{Compute:0.64, Memory:0.72, Network:0.92, Power:0.72, Deploy:0.64},
+      deploy: {Compute:0.70, Memory:0.72, Network:0.66, Power:0.72, Deploy:0.92}
+    };
+
+    function drawRadar(){
+      clear(rctx);
+      grid(rctx);
+      const w=radar.width,h=radar.height;
+      const cx=w/2, cy=h/2+8;
+      const R=Math.min(w,h)*0.36;
+      const keys = ['Compute','Memory','Network','Power','Deploy'];
+
+      // rings
+      rctx.save();
+      rctx.strokeStyle='rgba(255,255,255,.14)';
+      rctx.globalAlpha=.8;
+      for(let i=1;i<=4;i++){
+        rctx.beginPath();
+        rctx.arc(cx,cy,R*(i/4),0,Math.PI*2);
+        rctx.stroke();
+      }
+      rctx.restore();
+
+      // axes
+      rctx.save();
+      rctx.strokeStyle='rgba(255,255,255,.12)';
+      keys.forEach((k,i)=>{
+        const a = (-Math.PI/2) + i*(Math.PI*2/keys.length);
+        rctx.beginPath();
+        rctx.moveTo(cx,cy);
+        rctx.lineTo(cx+Math.cos(a)*R, cy+Math.sin(a)*R);
+        rctx.stroke();
+      });
+      rctx.restore();
+
+      // labels
+      rctx.save();
+      rctx.fillStyle='rgba(234,240,255,.72)';
+      rctx.font='12px ui-sans-serif, system-ui';
+      keys.forEach((k,i)=>{
+        const a = (-Math.PI/2) + i*(Math.PI*2/keys.length);
+        const x = cx+Math.cos(a)*(R+18);
+        const y = cy+Math.sin(a)*(R+18);
+        rctx.fillText(k, x-18, y+4);
+      });
+      rctx.fillText('Constraint focus: '+constraint, 18, 18);
+      rctx.restore();
+
+      // polygon
+      const p = radarProfiles[constraint];
+      const pts = keys.map((k,i)=>{
+        const a = (-Math.PI/2) + i*(Math.PI*2/keys.length);
+        const rr = R * p[k];
+        return [cx+Math.cos(a)*rr, cy+Math.sin(a)*rr];
+      });
+
+      rctx.save();
+      rctx.fillStyle = 'rgba(124,92,255,.16)';
+      rctx.strokeStyle = 'rgba(124,92,255,.65)';
+      rctx.lineWidth = 2.2;
+      rctx.beginPath();
+      pts.forEach((pt,i)=>{ if(i===0) rctx.moveTo(pt[0],pt[1]); else rctx.lineTo(pt[0],pt[1]); });
+      rctx.closePath();
+      rctx.fill();
+      rctx.stroke();
+
+      // points
+      rctx.fillStyle = 'rgba(234,240,255,.85)';
+      pts.forEach(pt=>{ rctx.beginPath(); rctx.arc(pt[0],pt[1],3.8,0,Math.PI*2); rctx.fill(); });
+      rctx.restore();
+
+      rctx.save();
+      rctx.fillStyle='rgba(234,240,255,.55)';
+      rctx.font='12px ui-sans-serif, system-ui';
+      rctx.fillText('Higher = tighter constraint (conceptual).', 18, h-12);
+      rctx.restore();
+    }
+
+    drawRadar();
+
+    $$('button[data-constraint]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        constraint = b.dataset.constraint;
+        drawRadar();
+      });
+    });
+
+
+    // ---------- Pressures / ecosystem toggle ----------
+    const pressure = {
+      nvidia: {
+        title:'Default platform remains dominant (near-term)',
+        items:[
+          {name:'Evidence signal', desc:'Big customers commit in GW terms; default stack stays sticky.', tag:'Ecosystem inertia'},
+          {name:'Why it persists', desc:'End-to-end integration (compute + fabric + software) compounds advantage.', tag:'Platform leverage'},
+          {name:'What changes', desc:'Not “dethronement,” but pressure to diversify supply and cost profiles.', tag:'Demand-driven'}
+        ]
+      },
+      amd: {
+        title:'Second-source hyperscale GPUs',
+        items:[
+          {name:'Mechanism', desc:'Anchor customers validate an alternative ecosystem at scale.', tag:'2nd ecosystem'},
+          {name:'Why now', desc:'Demand is too large to rely on one supplier; capacity matters.', tag:'Supply portfolio'},
+          {name:'Outcome', desc:'Share can shift over time even while leader grows in absolute terms.', tag:'Multi-cloud analogy'}
+        ]
+      },
+      custom: {
+        title:'Custom accelerators for predictable serving',
+        items:[
+          {name:'Mechanism', desc:'At enormous volume, specialization wins on $/token.', tag:'Volume → ASIC'},
+          {name:'Trigger', desc:'You don’t take on custom silicon unless inference volume justifies it.', tag:'Scale threshold'},
+          {name:'Outcome', desc:'Targeted workloads migrate to custom racks while general stacks remain.', tag:'Hybrid future'}
+        ]
+      },
+      tpu: {
+        title:'Hyperscalers export in-house chips',
+        items:[
+          {name:'Mechanism', desc:'When price/perf and availability are compelling, non-default silicon wins.', tag:'Availability matters'},
+          {name:'Nuance', desc:'In-house chips remain a strategic advantage; exports are selective.', tag:'Strategic allocation'},
+          {name:'Outcome', desc:'A heterogeneous inference layer becomes normal.', tag:'Operational tolerance'}
+        ]
+      }
+    };
+
+    let eco = 'nvidia';
+    const pressureRoot = $('#pressureCards');
+
+    function renderPressure(){
+      pressureRoot.innerHTML='';
+      const p = pressure[eco];
+      const head = document.createElement('div');
+      head.className='node';
+      head.innerHTML = `
+        <div class="l">
+          <div class="name">${p.title}</div>
+          <div class="desc">Use cases and incentives differ, but the shared driver is the same: <b>exploding inference demand</b>.</div>
+        </div>
+        <div class="chip">${eco.toUpperCase()}</div>
+      `;
+      pressureRoot.appendChild(head);
+
+      p.items.forEach(x=>{
+        const el = document.createElement('div');
+        el.className='node';
+        el.innerHTML = `
+          <div class="l">
+            <div class="name">${x.name}</div>
+            <div class="desc">${x.desc}</div>
+          </div>
+          <div class="chip">${x.tag}</div>
+        `;
+        pressureRoot.appendChild(el);
+      });
+    }
+
+    renderPressure();
+
+    $$('.seg button[data-eco]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        $$('.seg button[data-eco]').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        eco = b.dataset.eco;
+        renderPressure();
+      });
+    });
+
+
+    // ---------- Surfaces heatmap ----------
+    const surfaces = $('#surfaces');
+    const sctx = surfaces.getContext('2d');
+    let ambient = false;
+
+    const surfaceItems = [
+      {k:'Data center', base:0.85},
+      {k:'Developer tools', base:0.62},
+      {k:'Enterprise apps', base:0.58},
+      {k:'Phones', base:0.46},
+      {k:'Cars', base:0.38},
+      {k:'Factories', base:0.34},
+      {k:'Robots', base:0.28},
+      {k:'Toys / consumer embodiment', base:0.22},
+    ];
+
+    function drawSurfaces(){
+      clear(sctx);
+      grid(sctx);
+
+      const w=surfaces.width,h=surfaces.height;
+      const pad=26;
+
+      sctx.save();
+      sctx.fillStyle='rgba(234,240,255,.78)';
+      sctx.font='12px ui-sans-serif, system-ui';
+      sctx.fillText('Inference demand distribution (conceptual) • toggle ambient surfaces', pad, 18);
+      sctx.restore();
+
+      const cols=4;
+      const gap=12;
+      const cellW = (w-2*pad - gap*(cols-1))/cols;
+      const cellH = 72;
+
+      surfaceItems.forEach((it, i)=>{
+        const r = Math.floor(i/cols);
+        const c = i%cols;
+        const x = pad + c*(cellW+gap);
+        const y = 34 + r*(cellH+gap);
+
+        let v = it.base;
+        if(ambient){
+          // ambient: non-datacenter surfaces heat up
+          v = it.k==='Data center' ? it.base*0.95 : clamp(it.base*1.28 + 0.05, 0, 1);
+        }
+
+        const alpha = 0.10 + 0.45*v;
+
+        sctx.save();
+        sctx.fillStyle = `rgba(56,189,248,${alpha})`;
+        sctx.strokeStyle = 'rgba(255,255,255,.14)';
+        roundRect(sctx, x, y, cellW, cellH, 14, true, true);
+
+        // label
+        sctx.fillStyle = 'rgba(234,240,255,.85)';
+        sctx.font = '13px ui-sans-serif, system-ui';
+        sctx.fillText(it.k, x+12, y+28);
+
+        // bar
+        const bw = (cellW-24) * v;
+        sctx.fillStyle = 'rgba(234,240,255,.65)';
+        roundRect(sctx, x+12, y+42, bw, 10, 6, true, false);
+
+        sctx.fillStyle = 'rgba(234,240,255,.55)';
+        sctx.font = '12px ui-sans-serif, system-ui';
+        sctx.fillText(Math.round(v*100)+'%', x+12, y+64);
+
+        sctx.restore();
+      });
+
+      sctx.save();
+      sctx.fillStyle='rgba(234,240,255,.55)';
+      sctx.font='12px ui-sans-serif, system-ui';
+      sctx.fillText(ambient ? 'Ambient ON: more surfaces become inference endpoints.' : 'Ambient OFF: serving concentrated in classic endpoints.', pad, h-12);
+      sctx.restore();
+    }
+
+    drawSurfaces();
+    $('#toggleAmbient').addEventListener('click', ()=>{
+      ambient = !ambient;
+      drawSurfaces();
+    });
+
+    // Redraw canvases on resize for crisper output
+    function fitCanvas(canvas){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(1, Math.min(2.25, window.devicePixelRatio || 1));
+      const w = Math.floor(rect.width * dpr);
+      const h = Math.floor(rect.height * dpr);
+      if(canvas.width !== w || canvas.height !== h){
+        canvas.width = w;
+        canvas.height = h;
+      }
+    }
+
+    function refit(){
+      [$('#econChart'), $('#rackChart'), $('#radar'), $('#surfaces')].forEach(c=>fitCanvas(c));
+      updateSim();
+      drawRack();
+      drawRadar();
+      drawSurfaces();
+    }
+
+    // initial after layout
+    requestAnimationFrame(()=>{refit();});
+    window.addEventListener('resize', ()=>{refit();});
+  </script>
+</body>
+</html>

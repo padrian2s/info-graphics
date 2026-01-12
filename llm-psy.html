@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LLM “Psychosis” (Over-Trust Spiral) — 2026 Workplace Infographic</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1733cc;
+      --card2:#0E1530;
+      --stroke:#27335F;
+      --stroke2:#1D274A;
+      --text:#E9EEFF;
+      --muted:#AAB6E8;
+      --muted2:#7F8AC2;
+      --good:#35D0A0;
+      --warn:#FFB020;
+      --bad:#FF4D6D;
+      --info:#53A7FF;
+      --violet:#9B7BFF;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(155,123,255,.20), transparent 55%),
+        radial-gradient(1000px 600px at 85% 15%, rgba(83,167,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(53,208,160,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 40%, #070A12);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{
+      max-width:1180px;
+      margin:0 auto;
+      padding:28px 18px 80px;
+    }
+    header{
+      display:grid;
+      gap:14px;
+      padding:22px 20px;
+      border:1px solid var(--stroke2);
+      background:linear-gradient(180deg, rgba(15,23,51,.70), rgba(15,23,51,.35));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 200px at 20% 0%, rgba(155,123,255,.25), transparent 60%),
+        radial-gradient(900px 200px at 80% 0%, rgba(83,167,255,.22), transparent 60%);
+      pointer-events:none;
+      filter: blur(0px);
+    }
+    .kicker{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--stroke);
+      background:rgba(7,10,18,.35);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--info);
+      box-shadow:0 0 18px rgba(83,167,255,.45);
+    }
+    h1{
+      margin:0;
+      font-size: clamp(24px, 3.2vw, 44px);
+      letter-spacing:-.02em;
+      line-height:1.05;
+      position:relative;
+      z-index:1;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      max-width: 85ch;
+      position:relative;
+      z-index:1;
+      line-height:1.45;
+    }
+    .note{
+      border-left:3px solid rgba(255,176,32,.8);
+      padding:10px 12px;
+      background: rgba(255,176,32,.08);
+      color: var(--muted);
+      border-radius: 10px;
+      position:relative;
+      z-index:1;
+      font-size:13px;
+    }
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--stroke2);
+      background:linear-gradient(180deg, rgba(15,23,51,.75), rgba(15,23,51,.35));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:16px 16px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(39,51,95,.55);
+    }
+    .title{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-.01em;
+    }
+    .desc{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .body{padding:14px 16px 16px;}
+    .cols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){ .cols{grid-template-columns:1fr} }
+    .mini{
+      background: rgba(7,10,18,.35);
+      border:1px solid rgba(39,51,95,.55);
+      border-radius: var(--radius2);
+      padding:12px;
+    }
+    .mini h3{
+      margin:0 0 8px;
+      font-size:13px;
+      color: var(--text);
+      letter-spacing:-.01em;
+      display:flex;align-items:center;gap:8px;
+    }
+    .mini p{margin:0;color:var(--muted);font-size:12.8px;line-height:1.45}
+    .badge{
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(11,16,32,.55);
+      color: var(--muted);
+    }
+    .icon{
+      width:18px;height:18px;border-radius:6px;
+      display:inline-grid;place-items:center;
+      background: rgba(83,167,255,.16);
+      border:1px solid rgba(83,167,255,.35);
+      color: var(--info);
+      font-size:12px;
+      flex:0 0 auto;
+    }
+    .icon.warn{ background: rgba(255,176,32,.14); border-color: rgba(255,176,32,.35); color: var(--warn); }
+    .icon.bad{ background: rgba(255,77,109,.14); border-color: rgba(255,77,109,.35); color: var(--bad); }
+    .icon.good{ background: rgba(53,208,160,.14); border-color: rgba(53,208,160,.35); color: var(--good); }
+
+    /* Timeline */
+    .timeline{
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      display:grid;
+      grid-template-columns: 32px 1fr;
+      gap:10px;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(39,51,95,.55);
+      background: rgba(7,10,18,.28);
+    }
+    .num{
+      width:32px;height:32px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:700;
+      background: rgba(155,123,255,.14);
+      border:1px solid rgba(155,123,255,.35);
+      color: var(--violet);
+    }
+    .step b{display:block;font-size:13px;margin-bottom:2px}
+    .step span{display:block;color:var(--muted);font-size:12.6px;line-height:1.45}
+
+    /* Controls */
+    label{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      margin:10px 0 6px;
+    }
+    textarea, input[type="text"], select{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(39,51,95,.60);
+      background: rgba(7,10,18,.35);
+      color: var(--text);
+      padding:10px 12px;
+      outline:none;
+      font-family:var(--sans);
+      font-size:13px;
+    }
+    textarea{min-height:110px; resize:vertical;}
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    button{
+      appearance:none;
+      border:none;
+      border-radius: 14px;
+      padding:10px 12px;
+      font-weight:650;
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(83,167,255,.30), rgba(83,167,255,.12));
+      border:1px solid rgba(83,167,255,.40);
+      cursor:pointer;
+      box-shadow: 0 10px 30px rgba(83,167,255,.12);
+    }
+    button:hover{filter:brightness(1.05)}
+    button.secondary{
+      background: rgba(11,16,32,.45);
+      border:1px solid rgba(39,51,95,.70);
+      color: var(--muted);
+      box-shadow:none;
+    }
+    .out{
+      margin-top:10px;
+      padding:12px;
+      border-radius: 14px;
+      background: rgba(7,10,18,.35);
+      border:1px solid rgba(39,51,95,.55);
+      font-family: var(--mono);
+      font-size:12.2px;
+      line-height:1.5;
+      color: #EAF0FF;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    /* Score / gauge */
+    .gauge{
+      display:grid;
+      gap:10px;
+    }
+    .meter{
+      height:12px;
+      border-radius:999px;
+      background: rgba(39,51,95,.45);
+      border:1px solid rgba(39,51,95,.65);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(53,208,160,.85), rgba(255,176,32,.85), rgba(255,77,109,.9));
+      border-radius:999px;
+      transition: width .35s ease;
+    }
+    .scoreline{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .score{
+      font-size:26px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .label{
+      color: var(--muted);
+      font-size:12.5px;
+      line-height:1.35;
+      max-width: 55ch;
+      text-wrap:balance;
+    }
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(39,51,95,.65);
+      background: rgba(7,10,18,.28);
+      color: var(--muted);
+      display:inline-flex;gap:7px;align-items:center;
+    }
+    .chip i{
+      width:7px;height:7px;border-radius:50%;
+      display:inline-block;
+      background: var(--muted2);
+    }
+    .chip.good i{background: var(--good)}
+    .chip.warn i{background: var(--warn)}
+    .chip.bad i{background: var(--bad)}
+
+    /* Footer */
+    footer{
+      margin-top:14px;
+      color: var(--muted2);
+      font-size:12px;
+      line-height:1.5;
+      opacity:.95;
+      text-align:center;
+      padding: 10px 6px;
+    }
+    details{
+      border:1px solid rgba(39,51,95,.55);
+      background: rgba(7,10,18,.22);
+      border-radius: 14px;
+      padding:10px 12px;
+      margin-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      color: var(--text);
+      font-weight:650;
+      font-size:13px;
+    }
+    details p{color:var(--muted); font-size:12.8px; margin:8px 0 0; line-height:1.45}
+    .small{font-size:12px;color:var(--muted2)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">
+        <span class="pill"><span class="dot"></span> 2026 Readiness • AI-in-the-loop decision making</span>
+        <span class="pill">Theme: <b style="color:var(--text)">Over-trust spiral</b> (often mislabeled “LLM psychosis”)</span>
+        <span class="pill">Goal: <b style="color:var(--text)">keep humans sane</b> while using AI</span>
+      </div>
+      <h1>LLM “Psychosis” in 2026: the over-trust spiral that hijacks judgment</h1>
+      <p class="sub">
+        People can look completely sober and still drift into a pattern where the model becomes an “authority,”
+        their confidence inflates, and disagreement from experts or peers is dismissed. This page turns your
+        script into a practical workplace playbook: <b>signals → causes → counter-moves → self-tests</b>.
+      </p>
+      <div class="note">
+        <b>Important:</b> “LLM psychosis” is not a formal medical diagnosis. This infographic focuses on
+        <b>behavioral risk patterns</b> (over-trust, confirmation loops, isolation from peer feedback).
+        If someone shows signs of acute mental distress or danger, involve qualified professionals.
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Core framework -->
+      <section class="card">
+        <div class="hd">
+          <div>
+            <h2 class="title">The Pattern: how over-trust spirals form</h2>
+            <p class="desc">A simple mental model you can recognize in yourself and in workplace decision flows.</p>
+          </div>
+          <span class="badge">Signal → Loop → Outcome</span>
+        </div>
+        <div class="body">
+          <div class="cols">
+            <div class="mini">
+              <h3><span class="icon bad">!</span>Common signals</h3>
+              <p>
+                • “The model agrees with me, so I’m basically right.”<br/>
+                • Using “check my work” prompts that are actually <b>confirmatory</b>.<br/>
+                • Sudden jump in perceived capability: “Now I can do what experts couldn’t.”<br/>
+                • Dismissing peer review: “Me + AI are right; everyone else is wrong.”<br/>
+                • Constant AI dependency for decisions, even interpersonal ones.
+              </p>
+            </div>
+            <div class="mini">
+              <h3><span class="icon warn">⚠</span>Why it happens</h3>
+              <p>
+                LLMs are optimized to be helpful and coherent, not to be “truth.” They can produce persuasive
+                narratives, cite plausible math, and mirror your assumptions. If you reward agreement, you
+                train the conversation into a <b>confidence amplifier</b>.
+              </p>
+            </div>
+            <div class="mini">
+              <h3><span class="icon good">✓</span>3 counter-moves</h3>
+              <p>
+                <b>1) Adversarial mode</b>: demand disconfirming evidence and failure cases.<br/>
+                <b>2) Domain humility</b>: your expertise is the validator; the model is the generator.<br/>
+                <b>3) Peer jury</b>: if experts disagree broadly, assume you missed something.
+              </p>
+            </div>
+            <div class="mini">
+              <h3><span class="icon">i</span>Workplace translation</h3>
+              <p>
+                In 2026, “AI literacy” won’t just mean using tools. It will mean using tools
+                <b>without losing calibration</b>: knowing when to stop prompting, talk to humans,
+                and ship decisions that survive real-world constraints.
+              </p>
+            </div>
+          </div>
+
+          <details>
+            <summary>Why the “genius leap” feeling is so seductive</summary>
+            <p>
+              The model can compress years of reading into minutes of output. That feels like instant mastery.
+              But mastery is not output; it’s <b>error detection</b> under ambiguity. Without deep domain
+              checks (or peer review), you can’t reliably tell whether the model built a bridge or a cardboard cutout.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <!-- RIGHT: Quick risk self-check -->
+      <aside class="card">
+        <div class="hd">
+          <div>
+            <h2 class="title">Quick Self-Check: “Am I drifting?”</h2>
+            <p class="desc">Score yourself. Higher score = higher risk of an over-trust spiral.</p>
+          </div>
+          <span class="badge">Interactive</span>
+        </div>
+        <div class="body">
+          <div class="gauge">
+            <div class="scoreline">
+              <div class="score" id="riskScore">0</div>
+              <div class="label" id="riskLabel">Answer a few items below to see your risk profile.</div>
+            </div>
+            <div class="meter" aria-label="risk meter"><div class="bar" id="riskBar"></div></div>
+            <div class="chips" id="riskChips"></div>
+          </div>
+
+          <label>Pick statements that have been true for you in the last 30 days:</label>
+          <div class="mini" style="padding:10px">
+            <div style="display:grid;gap:8px">
+              <label style="display:flex;gap:10px;align-items:flex-start;margin:0">
+                <input type="checkbox" class="q" data-w="12" />
+                <span class="small"><b>I mostly prompt for confirmation</b> (I feel irritated when it disagrees).</span>
+              </label>
+              <label style="display:flex;gap:10px;align-items:flex-start;margin:0">
+                <input type="checkbox" class="q" data-w="10" />
+                <span class="small"><b>I’ve “skipped” peer review</b> because the model sounded confident.</span>
+              </label>
+              <label style="display:flex;gap:10px;align-items:flex-start;margin:0">
+                <input type="checkbox" class="q" data-w="14" />
+                <span class="small"><b>I feel newly capable of solving expert-level problems</b> without equivalent training.</span>
+              </label>
+              <label style="display:flex;gap:10px;align-items:flex-start;margin:0">
+                <input type="checkbox" class="q" data-w="12" />
+                <span class="small"><b>I dismiss widespread expert disagreement</b> as “they don’t get it.”</span>
+              </label>
+              <label style="display:flex;gap:10px;align-items:flex-start;margin:0">
+                <input type="checkbox" class="q" data-w="8" />
+                <span class="small"><b>I need the model “on” to decide</b> (even for human or leadership calls).</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <button class="secondary" id="resetRisk">Reset</button>
+            <button id="applyGuardrails">Generate guardrails</button>
+          </div>
+          <div class="out" id="guardrails" style="display:none"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Tools / simulators -->
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <div>
+          <h2 class="title">Simulator 1: Adversarial Prompt Builder</h2>
+          <p class="desc">Turn “check my work” into a truly adversarial review that hunts for failure.</p>
+        </div>
+        <span class="badge">Copy-paste ready</span>
+      </div>
+      <div class="body">
+        <div class="cols">
+          <div class="mini">
+            <h3><span class="icon">i</span>Your claim / plan</h3>
+            <label class="small">Paste what you believe (argument, design, math idea, business decision):</label>
+            <textarea id="claim" placeholder="Example: I think we can ship feature X in 10 days because Y..."></textarea>
+
+            <label class="small">Pick the domain:</label>
+            <select id="domain">
+              <option>Software engineering</option>
+              <option>Business strategy</option>
+              <option>Science / math</option>
+              <option>Product / UX</option>
+              <option>Operations / policy</option>
+              <option>Other</option>
+            </select>
+
+            <div class="row">
+              <button id="buildAdversarial">Build adversarial prompt</button>
+              <button class="secondary" id="exampleClaim">Use example</button>
+            </div>
+          </div>
+          <div class="mini">
+            <h3><span class="icon warn">⚠</span>Adversarial prompt output</h3>
+            <div class="out" id="adversarialOut">Click “Build adversarial prompt”.</div>
+            <div class="row">
+              <button class="secondary" id="copyAdversarial">Copy</button>
+              <button class="secondary" id="toggleStrict">Toggle strictness: <span id="strictLabel">High</span></button>
+            </div>
+            <p class="small" style="margin-top:8px">
+              Tip: The goal is not “be mean.” The goal is: <b>force disconfirmation</b>, demand tests, surface unknowns.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <div>
+          <h2 class="title">Simulator 2: Confidence Calibration (Domain Humility)</h2>
+          <p class="desc">If you can’t verify it, you don’t “own” it. This converts a task into a verification plan.</p>
+        </div>
+        <span class="badge">Reality check</span>
+      </div>
+      <div class="body">
+        <div class="cols">
+          <div class="mini">
+            <h3><span class="icon good">✓</span>What are you trying to do?</h3>
+            <input id="task" type="text" placeholder="Example: Design an HR system workflow for onboarding..." />
+            <label class="small">Your genuine domain level:</label>
+            <select id="level">
+              <option value="0">0 — No real experience</option>
+              <option value="1">1 — Beginner (can follow tutorials)</option>
+              <option value="2">2 — Intermediate (can build with guidance)</option>
+              <option value="3">3 — Advanced (ship independently)</option>
+              <option value="4">4 — Expert (review others, deep intuition)</option>
+            </select>
+            <label class="small">How costly is being wrong?</label>
+            <select id="stakes">
+              <option value="1">Low (personal experiment)</option>
+              <option value="2">Medium (team productivity / internal tool)</option>
+              <option value="3">High (money, safety, legal, health, reputation)</option>
+            </select>
+
+            <div class="row">
+              <button id="calibrate">Generate verification plan</button>
+              <button class="secondary" id="exampleTask">Use example</button>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3><span class="icon">i</span>Verification plan</h3>
+            <div class="out" id="verifyOut">Fill the inputs and click “Generate verification plan”.</div>
+            <p class="small" style="margin-top:8px">
+              Core idea: <b>LLMs can accelerate output</b>, but only experts reliably detect subtle wrongness.
+              When stakes rise, you need tests, reference checks, and human review.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <div>
+          <h2 class="title">Simulator 3: “Jury of Peers” Decision Gate</h2>
+          <p class="desc">If your peers think you’re out to lunch, treat it as a diagnostic signal—not an enemy.</p>
+        </div>
+        <span class="badge">Team protocol</span>
+      </div>
+      <div class="body">
+        <div class="cols">
+          <div class="mini">
+            <h3><span class="icon warn">⚠</span>Peer disagreement mapper</h3>
+            <label class="small">How many credible peers reviewed your idea?</label>
+            <select id="peersN">
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+              <option value="3">3</option><option value="4">4+</option>
+            </select>
+            <label class="small">What fraction disagreed strongly?</label>
+            <select id="peersDisagree">
+              <option value="0">0%</option>
+              <option value="25">~25%</option>
+              <option value="50">~50%</option>
+              <option value="75">~75%</option>
+              <option value="100">~100%</option>
+            </select>
+            <label class="small">Your response to disagreement:</label>
+            <select id="response">
+              <option value="good">I asked what I’m missing and updated my plan</option>
+              <option value="ok">I noted feedback but mostly kept my direction</option>
+              <option value="bad">I dismissed them as “behind” or “not getting it”</option>
+            </select>
+
+            <div class="row">
+              <button id="peerGate">Run peer gate</button>
+              <button class="secondary" id="peerExample">Use example</button>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3><span class="icon">i</span>Gate output</h3>
+            <div class="out" id="peerOut">Click “Run peer gate”.</div>
+
+            <div class="timeline" style="margin-top:12px">
+              <div class="step">
+                <div class="num">1</div>
+                <div>
+                  <b>Stop the loop</b>
+                  <span>Turn off the model and write the claim in plain language (no AI rhetoric).</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div>
+                  <b>Ask for the “missing piece”</b>
+                  <span>Request one concrete counterexample or failure mode from each peer.</span>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div>
+                  <b>Re-enter with constraints</b>
+                  <span>Only then use AI to generate tests, not conclusions.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playbook -->
+    <section class="card" style="margin-top:14px">
+      <div class="hd">
+        <div>
+          <h2 class="title">The 2026 Playbook: “Use AI and don’t go crazy”</h2>
+          <p class="desc">A compact set of norms a team can adopt tomorrow.</p>
+        </div>
+        <span class="badge">Policy-ready</span>
+      </div>
+      <div class="body">
+        <div class="cols">
+          <div class="mini">
+            <h3><span class="icon good">✓</span>Norms for individuals</h3>
+            <p>
+              <b>Adversarial by default:</b> ask for disconfirming evidence and failure cases.<br/>
+              <b>Write your own “why”:</b> if you can’t explain it without AI, you don’t own it.<br/>
+              <b>Track uncertainty:</b> explicitly label what’s verified vs. speculative.<br/>
+              <b>Turn it off:</b> practice making decisions with humans in the loop.
+            </p>
+          </div>
+          <div class="mini">
+            <h3><span class="icon warn">⚠</span>Norms for teams</h3>
+            <p>
+              <b>Peer gate:</b> high-stakes decisions require at least 2 credible reviewers.<br/>
+              <b>Evidence bar:</b> “Model said so” is not evidence. Tests, data, references are.<br/>
+              <b>Prompt hygiene:</b> log prompts used for critical decisions; watch for confirmation bias.<br/>
+              <b>Escalation path:</b> if someone can’t accept peer feedback, pause the decision.
+            </p>
+          </div>
+        </div>
+        <details>
+          <summary>Red flags that should trigger an immediate “pause + peer review”</summary>
+          <p>
+            • Sudden grand claims outside one’s training (“I solved an unsolved problem”).<br/>
+            • Increasing isolation from colleagues; hostility to review.<br/>
+            • Repeated reliance on model reassurance (“it confirmed I’m right”).<br/>
+            • Decision-making becomes impossible without AI present.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      Built as a single-file infographic (HTML/CSS/JS). You can save this as <span class="small" style="font-family:var(--mono)">llm-overtrust-2026.html</span> and open locally.
+      <br/>
+      <span class="small">This is not medical advice; it’s a workplace calibration playbook for AI-assisted decision making.</span>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Risk self-check ----------
+    const qs = Array.from(document.querySelectorAll('.q'));
+    const riskScoreEl = document.getElementById('riskScore');
+    const riskBarEl = document.getElementById('riskBar');
+    const riskLabelEl = document.getElementById('riskLabel');
+    const riskChipsEl = document.getElementById('riskChips');
+    const guardrailsEl = document.getElementById('guardrails');
+
+    function setRiskUI(score){
+      const clamped = Math.max(0, Math.min(100, score));
+      riskScoreEl.textContent = clamped.toString();
+
+      riskBarEl.style.width = clamped + '%';
+
+      let label = "";
+      let chips = [];
+      if (clamped <= 15){
+        label = "Low risk: you’re using AI like a tool. Keep your adversarial checks."
+        chips = [
+          {t:"Adversarial prompts", c:"good"},
+          {t:"Peer reviews", c:"good"},
+          {t:"Clear verification", c:"good"},
+        ];
+      } else if (clamped <= 40){
+        label = "Moderate risk: watch for confirmation loops. Add stricter disconfirmation and peer gates."
+        chips = [
+          {t:"Confirmation drift", c:"warn"},
+          {t:"Add peer gate", c:"warn"},
+          {t:"Write your own rationale", c:"good"},
+        ];
+      } else if (clamped <= 70){
+        label = "High risk: your calibration may be slipping. Pause big decisions; require peer review and tests."
+        chips = [
+          {t:"Pause high-stakes", c:"warn"},
+          {t:"Peer gate required", c:"bad"},
+          {t:"Evidence over vibes", c:"warn"},
+        ];
+      } else {
+        label = "Very high risk: you’re likely in an over-trust spiral. Stop major decisions; seek human review and support."
+        chips = [
+          {t:"Stop major decisions", c:"bad"},
+          {t:"Human intervention", c:"bad"},
+          {t:"Turn off AI loop", c:"bad"},
+        ];
+      }
+      riskLabelEl.textContent = label;
+
+      riskChipsEl.innerHTML = "";
+      chips.forEach(ch => {
+        const el = document.createElement('span');
+        el.className = `chip ${ch.c}`;
+        el.innerHTML = `<i></i>${ch.t}`;
+        riskChipsEl.appendChild(el);
+      });
+    }
+
+    function computeRisk(){
+      let sum = 0;
+      qs.forEach(q => { if (q.checked) sum += Number(q.dataset.w || 0); });
+      // Scale to 0..100 with slight nonlinearity
+      const scaled = Math.round(Math.min(100, (sum / 56) * 100));
+      setRiskUI(scaled);
+      return scaled;
+    }
+
+    qs.forEach(q => q.addEventListener('change', computeRisk));
+
+    document.getElementById('resetRisk').addEventListener('click', () => {
+      qs.forEach(q => q.checked = false);
+      guardrailsEl.style.display = "none";
+      guardrailsEl.textContent = "";
+      setRiskUI(0);
+    });
+
+    document.getElementById('applyGuardrails').addEventListener('click', () => {
+      const s = computeRisk();
+      const recs = [];
+      recs.push("GUARDRAILS (copy/paste into your notes)");
+      recs.push("—");
+      recs.push("1) Default to adversarial prompts: ask for disconfirming evidence, counterexamples, and failure modes.");
+      recs.push("2) Separate outputs: [Speculation] vs [Verified] vs [To test]. Do not merge them.");
+      recs.push("3) High-stakes rule: if cost of wrongness is high, require peer review + real-world tests.");
+      recs.push("4) If peers disagree broadly: assume you missed something; pause; gather concrete counterexamples.");
+      recs.push("5) Turn-off practice: make at least one key decision per day without the model open.");
+      if (s >= 60){
+        recs.push("—");
+        recs.push("HIGH-RISK ADD-ONS:");
+        recs.push("• Freeze major decisions for 24–48 hours; get two independent human reviews.");
+        recs.push("• Avoid long solo prompting loops; timebox to 20–30 minutes then consult a human.");
+        recs.push("• If distress, paranoia, or loss of functioning is present, involve professional support.");
+      }
+      guardrailsEl.style.display = "block";
+      guardrailsEl.textContent = recs.join("\n");
+    });
+
+    // ---------- Adversarial Prompt Builder ----------
+    const claimEl = document.getElementById('claim');
+    const domainEl = document.getElementById('domain');
+    const adversarialOut = document.getElementById('adversarialOut');
+    const strictBtn = document.getElementById('toggleStrict');
+    const strictLabel = document.getElementById('strictLabel');
+    let strict = true;
+
+    function buildAdversarial(){
+      const claim = (claimEl.value || "").trim();
+      const domain = domainEl.value;
+      const strictness = strict ? "HIGH" : "MEDIUM";
+
+      const base = [];
+      base.push(`ROLE: You are my adversarial reviewer in ${domain}.`);
+      base.push(`GOAL: Disprove my claim if possible. If you can’t disprove it, identify the weakest points and what would falsify it.`);
+      base.push("");
+      base.push("MY CLAIM / PLAN:");
+      base.push(claim ? claim : "(paste your claim here)");
+      base.push("");
+      base.push("INSTRUCTIONS:");
+      base.push("1) Start by listing the strongest reasons my claim might be wrong (at least 5).");
+      base.push("2) Give 3 concrete counterexamples / failure modes.");
+      base.push("3) Identify hidden assumptions. Mark each as: [Testable], [Unclear], or [False].");
+      base.push("4) Propose a minimal verification plan with measurable pass/fail criteria.");
+      base.push("5) If you agree with any part, state it last — and only after attempting to refute it.");
+      base.push("");
+      if (strict){
+        base.push("STRICT MODE:");
+        base.push("- Do not reassure me.");
+        base.push("- Do not use persuasive language. Use evidence, logic, and explicit uncertainty.");
+        base.push("- If you speculate, label it [Speculation].");
+        base.push("- If you need external sources or experiments, say exactly what and why.");
+      } else {
+        base.push("CALM MODE:");
+        base.push("- Be firm but constructive; still prioritize disconfirmation and tests.");
+      }
+      base.push("");
+      base.push("OUTPUT FORMAT:");
+      base.push("A) Refutation attempts");
+      base.push("B) Counterexamples / failure modes");
+      base.push("C) Assumptions audit");
+      base.push("D) Verification plan (tests + criteria)");
+      base.push("E) What would change your mind?");
+
+      adversarialOut.textContent = base.join("\n");
+    }
+
+    document.getElementById('buildAdversarial').addEventListener('click', buildAdversarial);
+    document.getElementById('exampleClaim').addEventListener('click', () => {
+      claimEl.value = "I believe our team can replace the current CRM by ‘vibe coding’ a new one in 3 weeks because the model can generate all the modules. We won’t need extensive testing because we can just ask the model to verify it.";
+      domainEl.value = "Software engineering";
+      buildAdversarial();
+    });
+
+    strictBtn.addEventListener('click', () => {
+      strict = !strict;
+      strictLabel.textContent = strict ? "High" : "Medium";
+      buildAdversarial();
+    });
+
+    document.getElementById('copyAdversarial').addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(adversarialOut.textContent);
+        strictBtn.textContent = `Copied ✓  • Toggle strictness: ${strict ? "High" : "Medium"}`;
+        setTimeout(() => strictBtn.textContent = `Toggle strictness: ${strict ? "High" : "Medium"}`, 1100);
+      }catch(e){
+        // fallback
+        alert("Copy failed. Select the text manually.");
+      }
+    });
+
+    // ---------- Confidence Calibration ----------
+    const taskEl = document.getElementById('task');
+    const levelEl = document.getElementById('level');
+    const stakesEl = document.getElementById('stakes');
+    const verifyOut = document.getElementById('verifyOut');
+
+    function calibrate(){
+      const task = (taskEl.value || "").trim() || "(describe your task)";
+      const level = Number(levelEl.value);
+      const stakes = Number(stakesEl.value);
+
+      let stance = "";
+      if (level <= 1) stance = "You are under-qualified to validate subtle wrongness. Treat outputs as drafts; require expert review.";
+      else if (level <= 3) stance = "You can build with AI, but verification must be explicit and test-driven.";
+      else stance = "You can use AI as an accelerator, but keep peer review for high-stakes items.";
+
+      const intensity =
+        stakes === 1 ? "Light" :
+        stakes === 2 ? "Moderate" : "Strict";
+
+      const plan = [];
+      plan.push(`TASK: ${task}`);
+      plan.push(`DOMAIN LEVEL: ${["None","Beginner","Intermediate","Advanced","Expert"][level]}`);
+      plan.push(`STAKES: ${["","Low","Medium","High"][stakes]}  •  VERIFICATION INTENSITY: ${intensity}`);
+      plan.push("");
+      plan.push("REALITY CHECK:");
+      plan.push(`- ${stance}`);
+      plan.push("");
+      plan.push("VERIFICATION PLAN (fill in as you work):");
+      plan.push("1) What counts as 'correct'? Define acceptance criteria in measurable terms.");
+      plan.push("2) What could go wrong? List at least 5 failure modes.");
+      plan.push("3) Tests / checks:");
+      plan.push("   - Unit tests / test cases / sample data");
+      plan.push("   - Integration checks (real environment)");
+      plan.push("   - Reference comparison (docs, standards, known results)");
+      if (stakes === 3){
+        plan.push("4) HIGH-STAKES ADDITIONS:");
+        plan.push("   - Independent review by a qualified human");
+        plan.push("   - Run a small pilot; measure outcomes; rollback plan");
+        plan.push("   - Log prompts + changes; audit trail");
+      }
+      plan.push("");
+      plan.push("PROMPT TEMPLATE (use with your model):");
+      plan.push("“Generate 3 alternative approaches, then list failure modes and propose tests with pass/fail criteria. Mark uncertainty explicitly.”");
+
+      verifyOut.textContent = plan.join("\n");
+    }
+
+    document.getElementById('calibrate').addEventListener('click', calibrate);
+    document.getElementById('exampleTask').addEventListener('click', () => {
+      taskEl.value = "Invent a 'better' solar panel installation method suggested by an LLM and deploy it in the field.";
+      levelEl.value = "0";
+      stakesEl.value = "3";
+      calibrate();
+    });
+
+    // ---------- Peer gate ----------
+    const peersN = document.getElementById('peersN');
+    const peersDisagree = document.getElementById('peersDisagree');
+    const responseEl = document.getElementById('response');
+    const peerOut = document.getElementById('peerOut');
+
+    function peerGate(){
+      const n = Number(peersN.value);
+      const disagree = Number(peersDisagree.value);
+      const resp = responseEl.value;
+
+      let status = "GO";
+      let reason = [];
+
+      if (n === 0){
+        status = "PAUSE";
+        reason.push("No peer review yet. For anything non-trivial, get at least 2 credible reviewers.");
+      }
+      if (n >= 2 && disagree >= 75){
+        status = "PAUSE";
+        reason.push("Broad expert disagreement is a diagnostic signal. Assume you’re missing something until proven otherwise.");
+      }
+      if (resp === "bad"){
+        status = "STOP";
+        reason.push("Dismissing peers as 'behind' is a hallmark of calibration failure. Step away from the AI loop and re-ground.");
+      }
+      if (status === "GO" && n >= 2 && disagree <= 25){
+        reason.push("Peer signal is supportive. Proceed, but keep tests and objective criteria.");
+      } else if (status === "GO"){
+        reason.push("Proceed cautiously with additional tests and a second review.");
+      }
+
+      const out = [];
+      out.push(`PEER GATE RESULT: ${status}`);
+      out.push("—");
+      reason.forEach(r => out.push(`• ${r}`));
+      out.push("");
+      out.push("NEXT ACTIONS:");
+      if (status === "STOP"){
+        out.push("1) Stop major decisions for 24–48 hours.");
+        out.push("2) Turn off the model; write your claim in plain language.");
+        out.push("3) Ask peers for one concrete counterexample each.");
+        out.push("4) Use AI only to generate tests, not conclusions.");
+      } else if (status === "PAUSE"){
+        out.push("1) Get 2–3 credible reviewers.");
+        out.push("2) Collect counterexamples and failure modes.");
+        out.push("3) Convert feedback into testable criteria.");
+      } else {
+        out.push("1) Continue with explicit tests and measurable acceptance criteria.");
+        out.push("2) Keep an adversarial review pass before shipping.");
+      }
+
+      peerOut.textContent = out.join("\n");
+    }
+
+    document.getElementById('peerGate').addEventListener('click', peerGate);
+    document.getElementById('peerExample').addEventListener('click', () => {
+      peersN.value = "4";
+      peersDisagree.value = "100";
+      responseEl.value = "bad";
+      peerGate();
+    });
+
+    // init
+    setRiskUI(0);
+  </script>
+</body>
+</html>

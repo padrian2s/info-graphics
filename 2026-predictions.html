@@ -1,0 +1,1471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI in 2026 — 10 Predictions (70%+ Likely) + Bonus</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1222;
+      --card:#0F1A33cc;
+      --card2:#0F1A33;
+      --stroke:#1f2b4d;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --muted2:#7E8BB5;
+      --good:#2EE59D;
+      --warn:#FFCC66;
+      --hot:#FF5C7A;
+      --blue:#66A3FF;
+      --vio:#B38CFF;
+      --teal:#37D6FF;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 20% 12%, rgba(102,163,255,.22), transparent 55%),
+        radial-gradient(1000px 700px at 80% 20%, rgba(179,140,255,.18), transparent 60%),
+        radial-gradient(1100px 800px at 50% 90%, rgba(46,229,157,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, #070A12);
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 80px}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:14px 16px; border:1px solid var(--stroke); border-radius:999px;
+      background:linear-gradient(180deg, rgba(15,26,51,.75), rgba(15,26,51,.35));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+      position:sticky; top:12px; z-index:20;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width:240px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background: conic-gradient(from 200deg, var(--blue), var(--vio), var(--good), var(--teal), var(--blue));
+      box-shadow:0 0 0 1px rgba(255,255,255,.12) inset, 0 12px 30px rgba(0,0,0,.28);
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:9px;
+      border-radius:8px;
+      background:rgba(7,10,18,.75);
+      box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px; letter-spacing:.2px; font-weight:720;
+      line-height:1.12;
+    }
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted2)}
+    .controls{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      display:flex; gap:10px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.35);
+    }
+    .pill label{font-size:12px; color:var(--muted)}
+    .pill input[type="range"]{width:170px}
+    .pill .v{font-family:var(--mono); font-size:12px; color:var(--text); opacity:.9}
+    .btn{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:650;
+      font-size:12px;
+      display:inline-flex; align-items:center; gap:8px;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+    .btn .dot{
+      width:8px; height:8px; border-radius:99px;
+      background:var(--good);
+      box-shadow:0 0 0 4px rgba(46,229,157,.12);
+    }
+
+    header.hero{padding:34px 6px 18px}
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .heroCard{
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(15,26,51,.75), rgba(15,26,51,.35));
+      box-shadow: var(--shadow);
+      padding:20px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .heroCard:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 240px at 20% 10%, rgba(102,163,255,.18), transparent 60%),
+        radial-gradient(500px 260px at 85% 20%, rgba(179,140,255,.14), transparent 60%),
+        radial-gradient(480px 320px at 50% 100%, rgba(46,229,157,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .heroCard > *{position:relative}
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      font-size:12px; color:var(--muted);
+      letter-spacing:.25px;
+    }
+    .badge{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(7,10,18,.30);
+      color:rgba(234,240,255,.92);
+    }
+    .heroTitle{
+      margin:10px 0 8px;
+      font-size:34px;
+      line-height:1.06;
+      letter-spacing:-.5px;
+      font-weight:820;
+    }
+    .heroSub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      max-width:70ch;
+    }
+    .heroMeta{
+      margin-top:14px;
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(7,10,18,.28);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .chip b{color:var(--text)}
+    .miniPanel{
+      display:grid; gap:12px;
+      padding:16px;
+    }
+    .miniPanel h3{
+      margin:0;
+      font-size:13px;
+      letter-spacing:.2px;
+      color:rgba(234,240,255,.92);
+    }
+    .meter{
+      display:grid; gap:8px;
+      padding:14px 12px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius2);
+      background:rgba(7,10,18,.30);
+    }
+    .meterRow{display:flex; justify-content:space-between; gap:10px; align-items:center}
+    .meterRow span{font-size:12px; color:var(--muted)}
+    .meterRow b{font-family:var(--mono); font-size:12px}
+    .bar{
+      height:10px; border-radius:999px;
+      background:rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .bar > i{
+      display:block; height:100%; width:70%;
+      background:linear-gradient(90deg, var(--good), var(--teal), var(--blue));
+      border-radius:999px;
+      box-shadow: 0 0 18px rgba(55,214,255,.18);
+    }
+
+    .sectionTitle{
+      margin:26px 6px 10px;
+      display:flex; align-items:flex-end; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+      font-weight:820;
+    }
+    .sectionTitle p{
+      margin:0;
+      color:var(--muted2);
+      font-size:12px;
+      max-width:75ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:12px;
+    }
+    .card{
+      grid-column: span 6;
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(15,26,51,.78), rgba(15,26,51,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .head{
+      padding:16px 16px 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    }
+    .card .idx{
+      font-family:var(--mono);
+      font-weight:800;
+      font-size:12px;
+      color:rgba(234,240,255,.92);
+      background:rgba(7,10,18,.40);
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .card h3{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.1px;
+      font-weight:820;
+    }
+    .card .sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .card .body{padding:0 16px 14px}
+    .row{
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;
+    }
+    .tag{
+      font-size:11px;
+      color:rgba(234,240,255,.88);
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.28);
+      padding:6px 10px;
+      border-radius:999px;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .tag i{
+      width:9px; height:9px; border-radius:99px; display:inline-block;
+      background:var(--good);
+      box-shadow:0 0 0 4px rgba(46,229,157,.10);
+    }
+    .tag.warn i{background:var(--warn); box-shadow:0 0 0 4px rgba(255,204,102,.10)}
+    .tag.hot i{background:var(--hot); box-shadow:0 0 0 4px rgba(255,92,122,.10)}
+    .tag.blue i{background:var(--blue); box-shadow:0 0 0 4px rgba(102,163,255,.10)}
+    details{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:10px;
+      margin-top:10px;
+    }
+    details summary{
+      cursor:pointer;
+      user-select:none;
+      color:rgba(234,240,255,.92);
+      font-size:12px;
+      font-weight:750;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      list-style:none;
+    }
+    details summary::-webkit-details-marker{display:none}
+    .chev{
+      width:10px; height:10px; border-right:2px solid rgba(234,240,255,.75); border-bottom:2px solid rgba(234,240,255,.75);
+      transform: rotate(45deg);
+      transition: transform .15s ease;
+      opacity:.8;
+    }
+    details[open] .chev{transform: rotate(225deg); margin-top:4px}
+    .detailGrid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .mini{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.28);
+      border-radius:var(--radius2);
+      padding:10px 10px;
+    }
+    .mini h4{
+      margin:0 0 6px;
+      font-size:11px;
+      color:var(--muted);
+      font-weight:800;
+      letter-spacing:.25px;
+      text-transform:uppercase;
+    }
+    .mini p{
+      margin:0;
+      font-size:12px;
+      color:rgba(234,240,255,.90);
+      line-height:1.45;
+    }
+
+    .wide{grid-column: span 12;}
+    .panel{
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(15,26,51,.78), rgba(15,26,51,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:16px 16px 12px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .panelHead h3{margin:0; font-size:15px; font-weight:850}
+    .panelHead p{margin:6px 0 0; color:var(--muted); font-size:12px; max-width:90ch; line-height:1.5}
+    .panelBody{padding:0 16px 16px}
+
+    .simGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    .sim{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.30);
+      border-radius:var(--radius2);
+      padding:12px;
+      min-height:160px;
+      display:grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap:8px;
+    }
+    .sim h4{
+      margin:0;
+      font-size:12px;
+      font-weight:850;
+      letter-spacing:.15px;
+    }
+    .sim .hint{color:var(--muted2); font-size:11px; line-height:1.4}
+    .kv{
+      display:grid; gap:8px;
+      align-content:start;
+    }
+    .kv .line{
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .kv .line b{color:var(--text); font-family:var(--mono); font-size:12px}
+    .sim .out{
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(234,240,255,.92);
+      line-height:1.5;
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      padding:10px;
+      overflow:auto;
+      max-height:160px;
+      white-space:pre-wrap;
+    }
+    .sim .actions{
+      display:flex; gap:8px; flex-wrap:wrap;
+      align-items:center; justify-content:flex-end;
+      margin-top:6px;
+    }
+    .miniBtn{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:rgba(234,240,255,.92);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:11px;
+      font-weight:750;
+    }
+    .miniBtn:hover{border-color:rgba(255,255,255,.20)}
+    .miniBtn.primary{
+      background:linear-gradient(90deg, rgba(46,229,157,.18), rgba(55,214,255,.12));
+      border-color: rgba(46,229,157,.28);
+    }
+
+    .timeline{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+    }
+    .rail{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.28);
+      border-radius:var(--radius2);
+      padding:12px;
+    }
+    .rail .scale{
+      display:flex; justify-content:space-between; gap:10px;
+      font-family:var(--mono);
+      color:var(--muted2);
+      font-size:11px;
+      margin-bottom:8px;
+    }
+    .track{
+      position:relative;
+      height:190px;
+      border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+    }
+    .dot2{
+      position:absolute;
+      left:14px;
+      width:12px; height:12px;
+      border-radius:99px;
+      background:var(--good);
+      box-shadow:0 0 0 5px rgba(46,229,157,.12);
+      cursor:pointer;
+      transform: translateY(-50%);
+    }
+    .dot2.blue{background:var(--blue); box-shadow:0 0 0 5px rgba(102,163,255,.12)}
+    .dot2.warn{background:var(--warn); box-shadow:0 0 0 5px rgba(255,204,102,.12)}
+    .dot2.hot{background:var(--hot); box-shadow:0 0 0 5px rgba(255,92,122,.12)}
+    .dot2.teal{background:var(--teal); box-shadow:0 0 0 5px rgba(55,214,255,.12)}
+    .dot2:hover{filter:brightness(1.15)}
+    .dot2 span{
+      position:absolute;
+      left:22px; top:50%;
+      transform: translateY(-50%);
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(234,240,255,.92);
+      background:rgba(7,10,18,.55);
+      border:1px solid rgba(255,255,255,.12);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .legend{
+      display:grid; gap:10px;
+    }
+    .legend .item{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(7,10,18,.28);
+      border-radius:var(--radius2);
+      padding:10px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .legend .item:hover{transform: translateY(-1px); border-color:rgba(255,255,255,.20)}
+    .legend .item h4{margin:0 0 5px; font-size:12px; font-weight:850}
+    .legend .item p{margin:0; color:var(--muted); font-size:11px; line-height:1.4}
+
+    .footer{
+      margin-top:20px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+      padding:10px 6px 0;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:3px 7px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(7,10,18,.32);
+      color:rgba(234,240,255,.92);
+    }
+
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns: 1fr}
+      .card{grid-column: span 12}
+      .simGrid{grid-template-columns: 1fr}
+      .detailGrid{grid-template-columns: 1fr}
+      .timeline{grid-template-columns: 1fr}
+      .brand{min-width:unset}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar" id="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>AI in 2026 — 10 Predictions + Bonus</h1>
+          <p>Interactive infographic: likelihood, timing, and “what has to be true”.</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="pill" title="Filter predictions by minimum likelihood.">
+          <label for="minLikely">Min likelihood</label>
+          <input id="minLikely" type="range" min="50" max="95" value="70" />
+          <div class="v" id="minLikelyVal">70%</div>
+        </div>
+
+        <button class="btn" id="toggleAll" title="Expand/collapse all prediction cards.">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="toggleAllText">Expand all</span>
+        </button>
+
+        <button class="btn" id="reset" title="Reset filters and UI.">
+          <span class="dot" style="background:var(--blue); box-shadow:0 0 0 4px rgba(102,163,255,.12)" aria-hidden="true"></span>
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="heroGrid">
+        <section class="heroCard">
+          <div class="kicker">
+            <span class="badge">2026</span>
+            <span>10 specific breakthroughs + 1 bonus shift</span>
+            <span class="badge">≥ 70% likely (filterable)</span>
+          </div>
+
+          <h2 class="heroTitle">How will the world feel different with AI in 2026?</h2>
+
+          <p class="heroSub">
+            The throughline: intelligence is already strong — the breakthrough is <b>product surfaces</b> that make
+            memory, agency, review, proactivity, and governance <b>operational</b> for normal people and enterprises.
+            Expect a year where <b>humans become the bottleneck</b> and the winning skill is managing agent throughput.
+          </p>
+
+          <div class="heroMeta">
+            <span class="chip"><b>Theme</b> AI → workflows</span>
+            <span class="chip"><b>Pressure</b> speed compounding</span>
+            <span class="chip"><b>Risk</b> governance gap</span>
+            <span class="chip"><b>Moat</b> taste + eval loops</span>
+          </div>
+        </section>
+
+        <aside class="heroCard miniPanel">
+          <h3>Probability model (simple)</h3>
+
+          <div class="meter">
+            <div class="meterRow">
+              <span>Predictions shown</span>
+              <b id="shownCount">11</b>
+            </div>
+            <div class="bar"><i id="shownBar" style="width:100%"></i></div>
+            <div class="meterRow">
+              <span>Min likelihood</span>
+              <b id="minLabel">70%</b>
+            </div>
+          </div>
+
+          <div class="meter">
+            <div class="meterRow">
+              <span>Expected “feel-change” intensity</span>
+              <b id="intensityLabel">High</b>
+            </div>
+            <div class="bar"><i id="intensityBar" style="width:78%"></i></div>
+            <div style="color:var(--muted2); font-size:11px; line-height:1.45">
+              Driven by: long-running agents, AI-on-AI review, and proactive systems — each scales volume beyond human review capacity.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <div class="sectionTitle">
+      <h2>Predictions (click a card for details)</h2>
+      <p>Each prediction includes: likely timeframe, what we already have, the “application layer” that makes it feel like a breakthrough, and the main constraint.</p>
+    </div>
+
+    <section class="grid" id="cards"></section>
+
+    <div class="sectionTitle">
+      <h2>Simulators</h2>
+      <p>Mini interactive models for the key dynamics: memory fidelity, agent run-length risk, AI-on-AI review triage, and proactivity taste.</p>
+    </div>
+
+    <section class="panel wide">
+      <div class="panelHead">
+        <div>
+          <h3>Operational Dynamics Playground</h3>
+          <p>
+            These are intentionally simplified. The point is to make the <b>shape</b> of 2026 feel concrete:
+            small improvements in memory + autonomy + review compound into big workflow shifts.
+          </p>
+        </div>
+        <div class="chip"><b>Tip</b> click <span class="kbd">Run</span> for each sim</div>
+      </div>
+
+      <div class="panelBody">
+        <div class="simGrid">
+
+          <div class="sim" id="simMemory">
+            <h4>1) Memory Fidelity Simulator</h4>
+            <div class="hint">Compression + write-as-you-go + retrieval → “feels like” a memory breakthrough.</div>
+
+            <div class="kv">
+              <div class="line"><span>Compression quality</span><b id="m_cq">0.70</b></div>
+              <input type="range" min="0" max="100" value="70" id="m_cq_r" />
+              <div class="line"><span>Write frequency</span><b id="m_wf">0.65</b></div>
+              <input type="range" min="0" max="100" value="65" id="m_wf_r" />
+              <div class="line"><span>Retrieval precision</span><b id="m_rp">0.72</b></div>
+              <input type="range" min="0" max="100" value="72" id="m_rp_r" />
+            </div>
+
+            <div class="out" id="m_out"></div>
+
+            <div class="actions">
+              <button class="miniBtn primary" data-run="memory">Run</button>
+              <button class="miniBtn" data-demo="memory">Summer 2026 vibe</button>
+            </div>
+          </div>
+
+          <div class="sim" id="simAgents">
+            <h4>2) Long-Running Agent Risk</h4>
+            <div class="hint">If an agent runs for days, the key question is: when do you notice it went off-rails?</div>
+
+            <div class="kv">
+              <div class="line"><span>Runtime (hours)</span><b id="a_rt">30</b></div>
+              <input type="range" min="1" max="168" value="30" id="a_rt_r" />
+              <div class="line"><span>Drift rate</span><b id="a_dr">0.22</b></div>
+              <input type="range" min="0" max="100" value="22" id="a_dr_r" />
+              <div class="line"><span>Monitoring strength</span><b id="a_ms">0.45</b></div>
+              <input type="range" min="0" max="100" value="45" id="a_ms_r" />
+            </div>
+
+            <div class="out" id="a_out"></div>
+
+            <div class="actions">
+              <button class="miniBtn primary" data-run="agents">Run</button>
+              <button class="miniBtn" data-demo="agents">“Week-long agents”</button>
+            </div>
+          </div>
+
+          <div class="sim" id="simReview">
+            <h4>3) AI Reviews AI (Triage)</h4>
+            <div class="hint">2026 win: AI drafts + AI audits; humans touch only what fails checks.</div>
+
+            <div class="kv">
+              <div class="line"><span>Draft volume</span><b id="r_vol">120</b></div>
+              <input type="range" min="10" max="500" value="120" id="r_vol_r" />
+              <div class="line"><span>Judge strictness</span><b id="r_js">0.68</b></div>
+              <input type="range" min="0" max="100" value="68" id="r_js_r" />
+              <div class="line"><span>Eval coverage</span><b id="r_ec">0.55</b></div>
+              <input type="range" min="0" max="100" value="55" id="r_ec_r" />
+            </div>
+
+            <div class="out" id="r_out"></div>
+
+            <div class="actions">
+              <button class="miniBtn primary" data-run="review">Run</button>
+              <button class="miniBtn" data-demo="review">Enterprise mode</button>
+            </div>
+          </div>
+
+          <div class="sim" id="simProactive">
+            <h4>4) Proactivity Taste Slider</h4>
+            <div class="hint">Proactivity is value vs annoyance. The battleground is “interrupt precision”.</div>
+
+            <div class="kv">
+              <div class="line"><span>Proactivity level</span><b id="p_pl">0.40</b></div>
+              <input type="range" min="0" max="100" value="40" id="p_pl_r" />
+              <div class="line"><span>Signal quality</span><b id="p_sq">0.62</b></div>
+              <input type="range" min="0" max="100" value="62" id="p_sq_r" />
+              <div class="line"><span>User tolerance</span><b id="p_ut">0.52</b></div>
+              <input type="range" min="0" max="100" value="52" id="p_ut_r" />
+            </div>
+
+            <div class="out" id="p_out"></div>
+
+            <div class="actions">
+              <button class="miniBtn primary" data-run="proactive">Run</button>
+              <button class="miniBtn" data-demo="proactive">“End of 2026”</button>
+            </div>
+          </div>
+
+          <div class="sim wide" style="grid-column:1 / -1">
+            <h4>5) “Work AI vs Personal AI” Split</h4>
+            <div class="hint">Work AI becomes stricter: identity, permissions, logs, provenance, retention. Personal AI optimizes engagement + convenience.</div>
+            <div class="out" id="split_out"></div>
+            <div class="actions">
+              <button class="miniBtn primary" id="split_run">Run</button>
+              <button class="miniBtn" id="split_flip">Flip viewpoint</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="sectionTitle">
+      <h2>2026 “when it lands” map</h2>
+      <p>A timeline-style view of likely arrival windows (your text suggested: late Q1/Q2 for long-running agents; Q2 for continual learning; summer for memory application layer; proactivity rising through the year).</p>
+    </div>
+
+    <section class="panel wide">
+      <div class="panelHead">
+        <div>
+          <h3>Arrival Windows (Interactive)</h3>
+          <p>Click an item to highlight it on the rail.</p>
+        </div>
+        <div class="chip"><b>Scale</b> 2026 quarters</div>
+      </div>
+      <div class="panelBody timeline">
+        <div class="rail">
+          <div class="scale">
+            <span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span>
+          </div>
+          <div class="track" id="track"></div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div>Built as a single-file HTML infographic (offline-friendly). Edit the data model in <span class="kbd">predictions[]</span>.</div>
+      <div>Controls: filter likelihood • expand details • run simulators</div>
+    </div>
+  </div>
+
+  <script>
+    // --- Data model ----------------------------------------------------------
+    const predictions = [
+      {
+        id: 1,
+        title: "A real memory breakthrough (application layer)",
+        likelihood: 78,
+        when: "Summer 2026",
+        quarter: 3,
+        color: "teal",
+        gist:
+          "Not perfect recall — but reliable, high-fidelity, long-lived memory via compression + write-as-you-go + retrieval patterns.",
+        alreadyHave: [
+          "Compression + summarization primitives",
+          "Agentic workflows that write memory to files/notes",
+          "Long-running agents that maintain state over time",
+          "Better systems design patterns for tool-using agents"
+        ],
+        makesItFeelReal: [
+          "Memory that’s 'complete enough' to trust in daily life",
+          "Automatic capture of commitments, preferences, decisions",
+          "Consistent retrieval grounded in artifacts (notes/files)"
+        ],
+        constraint:
+          "Avoiding hallucinated memories + keeping retrieval stable and privacy-safe."
+      },
+      {
+        id: 2,
+        title: "Agent software UI breakthrough (“a little guy in the computer”)",
+        likelihood: 74,
+        when: "2026 (multiple startups)",
+        quarter: 2,
+        color: "blue",
+        gist:
+          "Agents become a first-class UI: inbox / tasks / tool access / filesystem, running continuously with clear affordances.",
+        alreadyHave: [
+          "Long-running agents + tool-use",
+          "MCP / skills / plugin patterns",
+          "File-system and app integration patterns",
+          "Consumer hardware upgrade cycle (local tokenization gets feasible)"
+        ],
+        makesItFeelReal: [
+          "Send a message/email → agent acts",
+          "Persistent workspace with tasks and 'work-in-progress'",
+          "Local speed + privacy options on consumer devices"
+        ],
+        constraint:
+          "Making agency safe + predictable for non-experts; reducing 'agent chaos'."
+      },
+      {
+        id: 3,
+        title: "Continual learning becomes an engineering rollout (even if janky)",
+        likelihood: 71,
+        when: "Q2 2026",
+        quarter: 2,
+        color: "warn",
+        gist:
+          "Models start learning post-deployment so they don’t stay frozen in time. Even partial continual learning is a big unlock.",
+        alreadyHave: [
+          "Awareness + research focus by model makers",
+          "Rapid technique iteration accelerated by models training models",
+          "Infrastructure for feedback loops and evals"
+        ],
+        makesItFeelReal: [
+          "Systems that update behaviors from real usage",
+          "Reduced dependence on 'next big model version' naming",
+          "Stickier products as they adapt"
+        ],
+        constraint:
+          "Catastrophic forgetting, data poisoning, and verifying what changed."
+      },
+      {
+        id: 4,
+        title: "Recursive self-improvement is operationalized (models build models)",
+        likelihood: 70,
+        when: "2026 (visible pipelines)",
+        quarter: 3,
+        color: "hot",
+        gist:
+          "Automating large parts of model production using models themselves. Alignment investment grows because the value is too high to ignore.",
+        alreadyHave: [
+          "Early hints from major labs",
+          "Auto-eval + auto-data workflows",
+          "Tool-using agent patterns applied to research pipelines"
+        ],
+        makesItFeelReal: [
+          "Shorter iteration cycles for new models",
+          "More frequent capability jumps",
+          "Specialized model 'subsystems' assembled faster"
+        ],
+        constraint:
+          "Alignment + safety gating so the loop doesn’t ship misaligned systems."
+      },
+      {
+        id: 5,
+        title: "Very long-running agents arrive (day → week)",
+        likelihood: 86,
+        when: "Late Q1–Q2 (day+), week by year end",
+        quarter: 2,
+        color: "teal",
+        gist:
+          "Agents run 20–30 hours today at the frontier; by end of 2026 week-long runs are normal — humans become the bottleneck.",
+        alreadyHave: [
+          "Reports of 20–30h agent runs already",
+          "Cheap tokens relative to human time",
+          "Tool ecosystems for agents (browsing, coding, docs, etc.)"
+        ],
+        makesItFeelReal: [
+          "“Set it and supervise” work for multi-day tasks",
+          "Agent colleagues across technical + non-technical domains",
+          "New dashboards for work-in-progress and intervention"
+        ],
+        constraint:
+          "Monitoring + early drift detection; otherwise you discover failure on day 3."
+      },
+      {
+        id: 6,
+        title: "Massive gains in AI reviewing AI (humans only where it matters)",
+        likelihood: 80,
+        when: "2026 (compounding fast)",
+        quarter: 2,
+        color: "blue",
+        gist:
+          "The big win shifts from drafts to audits: judge models, red-team passes, policy checks, factuality checks, domain linting.",
+        alreadyHave: [
+          "AI code review of AI-written code",
+          "Eval harnesses and multi-check loops",
+          "Specialized validators (policy, security, style, facts)"
+        ],
+        makesItFeelReal: [
+          "AI creates → AI reviews → humans polish",
+          "Huge volume without overwhelming humans",
+          "Higher consistency + fewer missed requirements"
+        ],
+        constraint:
+          "Evaluator alignment: 'good at judging' must match real-world correctness."
+      },
+      {
+        id: 7,
+        title: "Work AI vs Personal AI split hard",
+        likelihood: 76,
+        when: "2026 (becomes obvious)",
+        quarter: 3,
+        color: "warn",
+        gist:
+          "Work AI becomes regulated: identity, permissions, logs, provenance, retention. Personal AI optimizes engagement and convenience.",
+        alreadyHave: [
+          "Enterprise compliance expectations",
+          "Agent autonomy raises governance needs",
+          "Consumer apps optimize for time/engagement"
+        ],
+        makesItFeelReal: [
+          "Different tone + constraints across contexts",
+          "Agent control panes at work",
+          "Clear 'AI jet lag' when you switch environments"
+        ],
+        constraint:
+          "Users adapting behavior; managing dual mental models of AI."
+      },
+      {
+        id: 8,
+        title: "Non-technical work becomes engineering-shaped (at the frontier)",
+        likelihood: 72,
+        when: "2026 (fast companies first)",
+        quarter: 3,
+        color: "teal",
+        gist:
+          "Crisp requirements, success metrics, eval harnesses, throughput management — non-technical roles adopt engineering patterns.",
+        alreadyHave: [
+          "Agent workflows require specs + acceptance tests",
+          "Tools like Cursor/Claude Code push 'code for everyone'",
+          "Evals become the interface for correctness"
+        ],
+        makesItFeelReal: [
+          "Everyone can 'ship' with agent help",
+          "Org-wide agent layer becomes common",
+          "The boundary between code and non-code erodes"
+        ],
+        constraint:
+          "Training: people must learn to define and verify work, not just request it."
+      },
+      {
+        id: 9,
+        title: "Power-law adoption persists: a few companies go absurdly fast",
+        likelihood: 83,
+        when: "All year",
+        quarter: 4,
+        color: "hot",
+        gist:
+          "Top 1–5% rebuild around agents; many companies add thin layers and stall. Compounding speed creates sudden ambush disruptions.",
+        alreadyHave: [
+          "Observed uneven adoption already",
+          "Compounding advantage from eval+automation loops",
+          "Slow-company inertia remains high"
+        ],
+        makesItFeelReal: [
+          "10x–100x shipping speed deltas",
+          "New disruptors take customers quickly",
+          "‘Stable’ businesses collapse faster than expected"
+        ],
+        constraint:
+          "Change management and cultural willingness to rebuild workflows."
+      },
+      {
+        id: 10,
+        title: "Machines become proactive (they start prompting us)",
+        likelihood: 75,
+        when: "2026 (ramping), “slider” style controls",
+        quarter: 4,
+        color: "blue",
+        gist:
+          "AI notices decline, blocks, inconsistency with goals — interrupts with actionable help. Proactivity becomes a product battleground.",
+        alreadyHave: [
+          "Context windows + sensors + activity signals",
+          "Planning/monitoring agent patterns",
+          "Human preference modeling"
+        ],
+        makesItFeelReal: [
+          "AI suggests breaks, drafts options, resolves blocks",
+          "Adjustable proactivity level per person/team",
+          "Enterprise-defined proactivity policies"
+        ],
+        constraint:
+          "Interrupt precision: avoid turning into a nagging machine."
+      },
+      {
+        id: 11,
+        title: "BONUS: 2026 becomes the biggest workforce retooling year in decades",
+        likelihood: 82,
+        when: "All year (accelerating)",
+        quarter: 4,
+        color: "warn",
+        gist:
+          "The skill shift: from 'doing tasks' to 'defining, delegating, supervising, and evaluating fleets of agents'.",
+        alreadyHave: [
+          "Agents already change task allocation",
+          "Early patterns for agent management emerging",
+          "Enterprises starting to ask for governance and reproducibility"
+        ],
+        makesItFeelReal: [
+          "Managerial skills become baseline",
+          "New roles around evals, agent ops, and governance",
+          "Different solutions by scale: startup vs enterprise"
+        ],
+        constraint:
+          "Training bandwidth + organizational readiness to rewrite job definitions."
+      }
+    ];
+
+    // --- Rendering -----------------------------------------------------------
+    const cardsEl = document.getElementById("cards");
+    const minLikely = document.getElementById("minLikely");
+    const minLikelyVal = document.getElementById("minLikelyVal");
+    const minLabel = document.getElementById("minLabel");
+    const shownCount = document.getElementById("shownCount");
+    const shownBar = document.getElementById("shownBar");
+    const intensityLabel = document.getElementById("intensityLabel");
+    const intensityBar = document.getElementById("intensityBar");
+
+    function tagHTML(text, kind=""){
+      const cls = kind ? `tag ${kind}` : "tag";
+      return `<span class="${cls}"><i aria-hidden="true"></i>${escapeHTML(text)}</span>`;
+    }
+    function escapeHTML(s){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+      }[m]));
+    }
+
+    function render(){
+      const min = Number(minLikely.value);
+      minLikelyVal.textContent = `${min}%`;
+      minLabel.textContent = `${min}%`;
+
+      const filtered = predictions.filter(p => p.likelihood >= min);
+      shownCount.textContent = filtered.length;
+      const pctShown = Math.round((filtered.length / predictions.length) * 100);
+      shownBar.style.width = `${pctShown}%`;
+
+      // crude “intensity” heuristic: avg likelihood and count of structural shifts (agents/review/proactivity/work split)
+      const intensity = (() => {
+        const avg = filtered.reduce((a,p)=>a+p.likelihood,0) / Math.max(filtered.length,1);
+        const keywords = ["agent","review","proactive","split","workforce","memory","continual"];
+        const hit = filtered.reduce((a,p)=>{
+          const t = (p.title + " " + p.gist).toLowerCase();
+          return a + keywords.some(k => t.includes(k));
+        },0);
+        const score = Math.min(100, Math.round((avg*0.6) + (hit/11)*40));
+        return score;
+      })();
+      intensityBar.style.width = `${intensity}%`;
+      intensityLabel.textContent = intensity >= 75 ? "High" : intensity >= 55 ? "Medium" : "Moderate";
+
+      cardsEl.innerHTML = filtered.map(p => {
+        const colorClass =
+          p.color === "blue" ? "blue" :
+          p.color === "warn" ? "warn" :
+          p.color === "hot"  ? "hot"  : "";
+
+        return `
+          <article class="card" data-id="${p.id}" data-likelihood="${p.likelihood}">
+            <div class="head">
+              <div>
+                <div class="idx">#${p.id} • ${p.likelihood}%</div>
+                <h3 style="margin-top:10px">${escapeHTML(p.title)}</h3>
+                <div class="sub">${escapeHTML(p.gist)}</div>
+
+                <div class="row" style="margin-top:10px">
+                  ${tagHTML(`When: ${p.when}`, p.color === "teal" ? "" : colorClass)}
+                  ${tagHTML(`Constraint: ${p.constraint.split(".")[0]}`, (p.color==="hot")?"hot":(p.color==="warn")?"warn":"")}
+                </div>
+              </div>
+              <div style="text-align:right; min-width:160px">
+                <div class="badge">Arrival</div>
+                <div style="margin-top:8px; font-family:var(--mono); font-size:12px; color:rgba(234,240,255,.92)">
+                  Q${p.quarter} 2026
+                </div>
+                <div style="margin-top:8px" class="bar" aria-hidden="true">
+                  <i style="width:${p.likelihood}%; background:linear-gradient(90deg, var(--good), var(--teal), var(--blue));"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="body">
+              <details>
+                <summary>
+                  <span>Show reasoning hooks (what we already have → what changes)</span>
+                  <span class="chev" aria-hidden="true"></span>
+                </summary>
+
+                <div class="detailGrid">
+                  <div class="mini">
+                    <h4>What we already know / have</h4>
+                    <p>${escapeHTML(p.alreadyHave.join(" · "))}</p>
+                  </div>
+                  <div class="mini">
+                    <h4>What makes it feel like a breakthrough</h4>
+                    <p>${escapeHTML(p.makesItFeelReal.join(" · "))}</p>
+                  </div>
+                  <div class="mini" style="grid-column:1/-1">
+                    <h4>Main constraint / failure mode</h4>
+                    <p>${escapeHTML(p.constraint)}</p>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      renderTimeline(filtered);
+    }
+
+    // Expand/collapse all
+    let allOpen = false;
+    const toggleAllBtn = document.getElementById("toggleAll");
+    const toggleAllText = document.getElementById("toggleAllText");
+    toggleAllBtn.addEventListener("click", () => {
+      allOpen = !allOpen;
+      document.querySelectorAll("#cards details").forEach(d => d.open = allOpen);
+      toggleAllText.textContent = allOpen ? "Collapse all" : "Expand all";
+    });
+
+    // Reset
+    document.getElementById("reset").addEventListener("click", () => {
+      minLikely.value = 70;
+      allOpen = false;
+      toggleAllText.textContent = "Expand all";
+      render();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    // Filter
+    minLikely.addEventListener("input", render);
+
+    // --- Timeline ------------------------------------------------------------
+    const track = document.getElementById("track");
+    const legend = document.getElementById("legend");
+
+    function qToY(q){ // map Q1..Q4 to track y (top=Q1)
+      const padding = 18;
+      const h = 190 - padding*2;
+      const step = h/3;
+      return padding + (q-1)*step;
+    }
+
+    function renderTimeline(filtered){
+      track.innerHTML = "";
+      legend.innerHTML = "";
+
+      const items = filtered.slice().sort((a,b)=>a.quarter-b.quarter || b.likelihood-a.likelihood);
+
+      items.forEach((p, idx) => {
+        const y = qToY(p.quarter);
+        const cls =
+          p.color === "blue" ? "blue" :
+          p.color === "warn" ? "warn" :
+          p.color === "hot"  ? "hot"  :
+          p.color === "teal" ? "teal" : "";
+
+        const dot = document.createElement("div");
+        dot.className = `dot2 ${cls}`;
+        dot.style.top = `${y + (idx%3 - 1)*10}px`; // tiny jitter so items don't overlap
+        dot.dataset.id = p.id;
+        dot.innerHTML = `<span>#${p.id} • ${p.likelihood}%</span>`;
+        track.appendChild(dot);
+
+        const li = document.createElement("div");
+        li.className = "item";
+        li.dataset.id = p.id;
+        li.innerHTML = `
+          <h4>#${p.id} — ${escapeHTML(p.title)}</h4>
+          <p><span class="badge">Q${p.quarter}</span> &nbsp; ${escapeHTML(p.when)} • ${p.likelihood}% likely</p>
+        `;
+        legend.appendChild(li);
+      });
+
+      function highlight(id){
+        [...track.querySelectorAll(".dot2")].forEach(d => {
+          d.style.filter = (d.dataset.id === String(id)) ? "brightness(1.25)" : "none";
+          d.style.transform = (d.dataset.id === String(id)) ? "translateY(-50%) scale(1.08)" : "translateY(-50%) scale(1)";
+        });
+        [...legend.querySelectorAll(".item")].forEach(it => {
+          it.style.borderColor = (it.dataset.id === String(id)) ? "rgba(46,229,157,.38)" : "rgba(255,255,255,.10)";
+        });
+        const card = document.querySelector(`.card[data-id="${id}"]`);
+        if(card) card.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+
+      track.querySelectorAll(".dot2").forEach(d => d.addEventListener("click", () => highlight(d.dataset.id)));
+      legend.querySelectorAll(".item").forEach(it => it.addEventListener("click", () => highlight(it.dataset.id)));
+    }
+
+    // --- Simulators ----------------------------------------------------------
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+    function fmt(x, n=2){ return Number(x).toFixed(n); }
+
+    // Memory
+    const m = {
+      cq: document.getElementById("m_cq_r"),
+      wf: document.getElementById("m_wf_r"),
+      rp: document.getElementById("m_rp_r"),
+      out: document.getElementById("m_out"),
+      cqV: document.getElementById("m_cq"),
+      wfV: document.getElementById("m_wf"),
+      rpV: document.getElementById("m_rp")
+    };
+    function runMemory(){
+      const cq = m.cq.value/100, wf = m.wf.value/100, rp = m.rp.value/100;
+      m.cqV.textContent = fmt(cq); m.wfV.textContent = fmt(wf); m.rpV.textContent = fmt(rp);
+
+      // Toy model: fidelity = weighted geometric mean (punishes weak links)
+      const fidelity = Math.pow((cq+1e-6)*(wf+1e-6)*(rp+1e-6), 1/3);
+      const completeness = clamp01(0.20 + 0.55*wf + 0.15*cq);
+      const trust = clamp01(0.10 + 0.55*fidelity + 0.20*rp);
+      const "feel" = (trust*0.55 + completeness*0.45);
+
+      const verdict =
+        feel >= 0.72 ? "Feels like a breakthrough (daily-trust memory)." :
+        feel >= 0.58 ? "Useful, but you still double-check often." :
+        "Not reliable enough — feels like a clever notes app.";
+
+      m.out.textContent =
+`Memory Fidelity Report
+- Fidelity (how correct):      ${fmt(fidelity)}
+- Completeness (how much):     ${fmt(completeness)}
+- Trust (do you rely on it?):  ${fmt(trust)}
+- "Feels real" score:          ${fmt(feel)}
+
+Interpretation:
+${verdict}
+
+Operational layer that matters:
+- Auto-capture (write frequency) is usually the biggest lever.
+- Retrieval precision turns notes into "usable memory".
+- Compression improves longevity and cost.`;
+    }
+
+    // Agents
+    const a = {
+      rt: document.getElementById("a_rt_r"),
+      dr: document.getElementById("a_dr_r"),
+      ms: document.getElementById("a_ms_r"),
+      out: document.getElementById("a_out"),
+      rtV: document.getElementById("a_rt"),
+      drV: document.getElementById("a_dr"),
+      msV: document.getElementById("a_ms")
+    };
+    function runAgents(){
+      const rt = Number(a.rt.value);
+      const drift = a.dr.value/100;
+      const mon = a.ms.value/100;
+      a.rtV.textContent = rt;
+      a.drV.textContent = fmt(drift);
+      a.msV.textContent = fmt(mon);
+
+      // Toy risk model: risk rises with runtime and drift; monitoring reduces and improves detection
+      const risk = clamp01((1 - Math.exp(-rt/30)) * (0.35 + 0.75*drift) * (1.05 - 0.85*mon));
+      const detectProb = clamp01(0.20 + 0.70*mon - 0.25*drift + Math.log1p(rt)/10);
+      const expectedInterventionHour = clamp01((1.15 - mon) * (12 + 60*drift)) * 1.0; // toy
+
+      const status =
+        risk >= 0.70 ? "High drift risk — you need stronger monitoring & checkpoints." :
+        risk >= 0.45 ? "Manageable if you have review gates and alerts." :
+        "Stable enough for long runs (with sane safeguards).";
+
+      a.out.textContent =
+`Long-Running Agent Report
+- Runtime:                     ${rt} hours
+- Drift risk score:            ${fmt(risk)}
+- Probability of early detect:  ${fmt(detectProb)}
+- Expected intervention window: ~${Math.round(expectedInterventionHour)} hours
+
+Interpretation:
+${status}
+
+What 2026 needs:
+- Work-in-progress visibility (dashboards)
+- Checkpoints + eval gates during the run
+- Alerting on goal divergence and tool misuse`;
+    }
+
+    // Review
+    const r = {
+      vol: document.getElementById("r_vol_r"),
+      js: document.getElementById("r_js_r"),
+      ec: document.getElementById("r_ec_r"),
+      out: document.getElementById("r_out"),
+      volV: document.getElementById("r_vol"),
+      jsV: document.getElementById("r_js"),
+      ecV: document.getElementById("r_ec")
+    };
+    function runReview(){
+      const vol = Number(r.vol.value);
+      const strict = r.js.value/100;
+      const cov = r.ec.value/100;
+      r.volV.textContent = vol;
+      r.jsV.textContent = fmt(strict);
+      r.ecV.textContent = fmt(cov);
+
+      // Toy: pass rate drops as strictness rises; coverage improves true positives but may increase false fails
+      const baseQuality = 0.52 + 0.30*cov;               // drafts are better with eval culture
+      const passRate = clamp01(baseQuality - 0.35*strict + 0.10*(1-cov));
+      const aiReviewed = vol;
+      const humanTouches = Math.round(aiReviewed * (1 - passRate) * (0.65 - 0.35*cov)); // higher coverage means fewer human touches
+      const timeSaved = Math.max(0, Math.round((vol - humanTouches) * 6)); // minutes
+      const note =
+        humanTouches <= vol*0.15 ? "Humans mostly polish — AI is filtering hard." :
+        humanTouches <= vol*0.35 ? "Balanced — humans still review a meaningful subset." :
+        "Humans still drowning — improve eval coverage or tighten prompts.";
+
+      r.out.textContent =
+`AI-on-AI Review (Triage) Report
+- Draft volume:                ${vol}
+- Judge strictness:            ${fmt(strict)}
+- Eval coverage:               ${fmt(cov)}
+- Estimated pass rate:         ${fmt(passRate)}
+- Human touch count:           ${humanTouches}
+- Approx time saved:           ~${timeSaved} minutes/day
+
+Interpretation:
+${note}
+
+2026 pattern:
+AI drafts → AI audits (judges/red-team/policy/facts) → humans only finalize.`;
+    }
+
+    // Proactivity
+    const p = {
+      pl: document.getElementById("p_pl_r"),
+      sq: document.getElementById("p_sq_r"),
+      ut: document.getElementById("p_ut_r"),
+      out: document.getElementById("p_out"),
+      plV: document.getElementById("p_pl"),
+      sqV: document.getElementById("p_sq"),
+      utV: document.getElementById("p_ut")
+    };
+    function runProactive(){
+      const level = p.pl.value/100;
+      const signal = p.sq.value/100;
+      const tol = p.ut.value/100;
+      p.plV.textContent = fmt(level);
+      p.sqV.textContent = fmt(signal);
+      p.utV.textContent = fmt(tol);
+
+      // Toy: interruptions scale with level; precision scales with signal; annoyance depends on tolerance and false positives
+      const interruptsPerDay = Math.round(2 + 18*level);
+      const precision = clamp01(0.25 + 0.70*signal - 0.25*level);
+      const helpful = Math.round(interruptsPerDay * precision);
+      const annoying = Math.max(0, interruptsPerDay - helpful);
+      const annoyanceScore = clamp01((annoying/(interruptsPerDay||1)) * (1.15 - tol));
+      const verdict =
+        helpful >= 6 && annoyanceScore <= 0.28 ? "Great: proactive and trusted." :
+        helpful >= 4 && annoyanceScore <= 0.45 ? "Okay: useful but sometimes ignored." :
+        "Bad: feels naggy; users will train themselves to ignore it.";
+
+      p.out.textContent =
+`Proactivity Taste Report
+- Interrupts/day (est):         ${interruptsPerDay}
+- Precision (right timing):     ${fmt(precision)}
+- Helpful nudges/day:           ${helpful}
+- Annoying nudges/day:          ${annoying}
+- Annoyance score:              ${fmt(annoyanceScore)}
+
+Interpretation:
+${verdict}
+
+2026 battleground:
+Raise signal quality OR lower proactivity level until precision is high enough.`;
+    }
+
+    // Work vs Personal AI split
+    const splitOut = document.getElementById("split_out");
+    let splitView = "personal";
+    function runSplit(){
+      const personal = {
+        name: "Personal AI",
+        priorities: ["Convenience", "Engagement", "Cozy tone", "Low friction"],
+        typical: ["Auto-suggestions", "Content generation", "Ambient help", "Social/creator tooling"],
+        risks: ["Manipulative engagement loops", "Ad/content flooding", "Privacy drift"],
+        controls: ["User-level proactivity slider", "Light personalization settings"]
+      };
+      const work = {
+        name: "Work AI",
+        priorities: ["Provenance", "Auditability", "Permissions", "Reproducibility", "Retention rules"],
+        typical: ["Agent control panes", "Approval gates", "Policy/factuality checks", "Identity-bound tool access"],
+        risks: ["Complex UX", "Slower iteration if governance is heavy", "Shadow usage if too restrictive"],
+        controls: ["Org policies", "Access boundaries", "Logs", "Role-based autonomy limits"]
+      };
+
+      const left = (splitView === "personal") ? personal : work;
+      const right = (splitView === "personal") ? work : personal;
+
+      splitOut.textContent =
+`${left.name} (Optimized for the individual)
+- Priorities: ${left.priorities.join(", ")}
+- Typical surfaces: ${left.typical.join(", ")}
+- Risks: ${left.risks.join(", ")}
+- Controls: ${left.controls.join(", ")}
+
+vs.
+
+${right.name} (Optimized for accountability)
+- Priorities: ${right.priorities.join(", ")}
+- Typical surfaces: ${right.typical.join(", ")}
+- Risks: ${right.risks.join(", ")}
+- Controls: ${right.controls.join(", ")}
+
+What changes in 2026:
+You feel “AI jet lag” switching contexts. The same person uses two different AIs with different rules, tone, and autonomy.`;
+    }
+
+    // Wiring sim buttons
+    document.querySelectorAll("[data-run]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const which = btn.getAttribute("data-run");
+        if(which === "memory") runMemory();
+        if(which === "agents") runAgents();
+        if(which === "review") runReview();
+        if(which === "proactive") runProactive();
+      });
+    });
+    document.querySelectorAll("[data-demo]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const which = btn.getAttribute("data-demo");
+        if(which === "memory"){
+          m.cq.value = 78; m.wf.value = 76; m.rp.value = 80; runMemory();
+        }
+        if(which === "agents"){
+          a.rt.value = 168; a.dr.value = 18; a.ms.value = 68; runAgents();
+        }
+        if(which === "review"){
+          r.vol.value = 280; r.js.value = 72; r.ec.value = 74; runReview();
+        }
+        if(which === "proactive"){
+          p.pl.value = 62; p.sq.value = 80; p.ut.value = 55; runProactive();
+        }
+      });
+    });
+
+    // Live updates for sim labels
+    ["input","change"].forEach(evt => {
+      m.cq.addEventListener(evt, runMemory);
+      m.wf.addEventListener(evt, runMemory);
+      m.rp.addEventListener(evt, runMemory);
+
+      a.rt.addEventListener(evt, runAgents);
+      a.dr.addEventListener(evt, runAgents);
+      a.ms.addEventListener(evt, runAgents);
+
+      r.vol.addEventListener(evt, runReview);
+      r.js.addEventListener(evt, runReview);
+      r.ec.addEventListener(evt, runReview);
+
+      p.pl.addEventListener(evt, runProactive);
+      p.sq.addEventListener(evt, runProactive);
+      p.ut.addEventListener(evt, runProactive);
+    });
+
+    document.getElementById("split_run").addEventListener("click", runSplit);
+    document.getElementById("split_flip").addEventListener("click", () => {
+      splitView = (splitView === "personal") ? "work" : "personal";
+      runSplit();
+    });
+
+    // Initial render
+    render();
+    runMemory();
+    runAgents();
+    runReview();
+    runProactive();
+    runSplit();
+  </script>
+</body>
+</html>
