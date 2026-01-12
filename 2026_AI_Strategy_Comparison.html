@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Strategy 2026: Ship Fast vs Ship Carefully (Claude vs ChatGPT)</title>
+  <meta name="description" content="Interactive HTML infographic comparing two AI strategy philosophies heading into 2026: learn-by-deploying vs understand-before-deploying." />
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1022;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.14);
+      --text:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --muted2:rgba(234,240,255,.55);
+      --good:#36D399;
+      --warn:#FBBF24;
+      --bad:#FB7185;
+      --blue:#60A5FA;
+      --violet:#A78BFA;
+      --cyan:#22D3EE;
+      --pink:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+      --radius2: 16px;
+      --max: 1160px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(96,165,250,.22), transparent 60%),
+        radial-gradient(1000px 800px at 80% 20%, rgba(167,139,250,.22), transparent 60%),
+        radial-gradient(900px 700px at 60% 80%, rgba(34,211,238,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{ color:inherit; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 26px 18px 80px; }
+    .topbar{
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(7,10,18,.88), rgba(7,10,18,.35));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar .inner{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 10px 18px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content: space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 750;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+    .mark{
+      width: 28px; height: 28px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(96,165,250,.95), rgba(167,139,250,.95));
+      box-shadow: 0 10px 26px rgba(96,165,250,.25);
+      position:relative;
+    }
+    .mark:after{
+      content:"";
+      position:absolute; inset:7px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(34,211,238,.9), rgba(251,113,133,.85));
+      opacity:.75;
+      filter: blur(.0px);
+    }
+    .nav{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .chip{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.78);
+      cursor:pointer;
+      transition: .2s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+    .chip.active{ border-color: rgba(96,165,250,.55); background: rgba(96,165,250,.16); color: rgba(234,240,255,.92); }
+
+    header.hero{
+      margin-top: 18px;
+      padding: 22px 0 10px;
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    @media (max-width: 940px){
+      .heroGrid{ grid-template-columns: 1fr; }
+    }
+    .heroCard{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .heroCard::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 220px at 20% 0%, rgba(96,165,250,.25), transparent 55%),
+        radial-gradient(600px 220px at 85% 20%, rgba(167,139,250,.22), transparent 55%),
+        radial-gradient(520px 240px at 50% 100%, rgba(34,211,238,.12), transparent 60%);
+      pointer-events:none;
+      opacity: .9;
+    }
+    .heroCard .pad{ position:relative; padding: 20px 20px 18px; }
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(22px, 3.2vw, 40px);
+      line-height: 1.08;
+      letter-spacing: -.6px;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.45;
+      max-width: 70ch;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    @media (max-width: 700px){
+      .kpis{ grid-template-columns: 1fr; }
+    }
+    .kpi{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 12px 12px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 999px;
+      margin-top: 4px;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(96,165,250,.12);
+      flex:0 0 auto;
+    }
+    .kpi:nth-child(2) .dot{ background: var(--violet); box-shadow: 0 0 0 4px rgba(167,139,250,.12); }
+    .kpi:nth-child(3) .dot{ background: var(--cyan); box-shadow: 0 0 0 4px rgba(34,211,238,.10); }
+    .kpi .t{ font-weight: 700; font-size: 13px; }
+    .kpi .d{ margin-top: 3px; font-size: 12px; color: var(--muted2); line-height: 1.35; }
+
+    .sideCard{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .sideCard .pad{ padding: 16px 16px 14px; }
+    .miniTitle{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px; margin-bottom: 8px;
+    }
+    .miniTitle h2{ margin:0; font-size: 14px; letter-spacing:.2px; }
+    .pill{
+      font-size: 11px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.72);
+    }
+    .toggleRow{
+      display:flex;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.20);
+      border: 1px solid rgba(255,255,255,.10);
+      margin-top: 10px;
+    }
+    .btn{
+      flex:1;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.86);
+      cursor:pointer;
+      font-weight: 700;
+      font-size: 12px;
+      transition:.18s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(96,165,250,.22), rgba(167,139,250,.20));
+      border-color: rgba(96,165,250,.32);
+    }
+    .note{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .note code{
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: rgba(234,240,255,.88);
+    }
+
+    section{ margin-top: 16px; }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 16px 50px rgba(0,0,0,.36);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .pad{ padding: 16px; }
+    .cardHead{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      margin-bottom: 8px;
+    }
+    .cardHead h3{
+      margin:0;
+      font-size: 15px;
+      letter-spacing: .15px;
+    }
+    .tag{
+      font-size: 11px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: rgba(234,240,255,.72);
+      white-space:nowrap;
+    }
+    .rows{ display:flex; flex-direction:column; gap:10px; margin-top: 10px; }
+    .row{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+    .ic{
+      width: 28px; height: 28px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      display:grid; place-items:center;
+      flex:0 0 auto;
+      background: linear-gradient(135deg, rgba(96,165,250,.22), rgba(167,139,250,.18));
+    }
+    .ic svg{ width: 16px; height: 16px; opacity:.92; }
+    .row .rt{ font-weight: 750; font-size: 12.5px; margin:0; }
+    .row .rd{ margin: 2px 0 0; color: var(--muted2); font-size: 12px; line-height:1.35; }
+
+    .splitTitle{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 12px; margin: 22px 0 10px;
+    }
+    .splitTitle h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .splitTitle p{ margin:0; color: var(--muted2); font-size: 12.5px; max-width: 70ch; }
+
+    /* timeline */
+    .timeline{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 16px 50px rgba(0,0,0,.36);
+      overflow:hidden;
+    }
+    .timeline .pad{ padding: 14px 16px 10px; }
+    .tlRow{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px dashed rgba(255,255,255,.10);
+      align-items:flex-start;
+    }
+    .tlRow:first-of-type{ border-top: 0; }
+    @media (max-width: 700px){
+      .tlRow{ grid-template-columns: 1fr; }
+    }
+    .when{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(234,240,255,.70);
+      display:flex; align-items:center; gap:8px;
+    }
+    .bubble{
+      width: 10px; height: 10px; border-radius:999px;
+      background: rgba(255,255,255,.25);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.06);
+    }
+    .what{
+      padding: 10px 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+    .what b{ display:block; font-size: 12.8px; }
+    .what span{ display:block; margin-top: 3px; font-size: 12px; color: var(--muted2); line-height:1.35; }
+
+    /* two economies */
+    .economies{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px){
+      .economies{ grid-template-columns: 1fr; }
+    }
+    .econ{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 16px 50px rgba(0,0,0,.36);
+      overflow:hidden;
+      position:relative;
+    }
+    .econ .pad{ padding: 16px; }
+    .econ .title{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 6px;
+    }
+    .econ .title h3{ margin:0; font-size: 15px; }
+    .econ .desc{ margin:0; color: var(--muted); font-size: 12.5px; line-height:1.45; }
+    .meter{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .mRow{
+      display:grid;
+      grid-template-columns: 160px 1fr 40px;
+      gap: 10px;
+      align-items:center;
+    }
+    @media (max-width: 700px){
+      .mRow{ grid-template-columns: 1fr; gap:6px; }
+      .mRow .val{ justify-self:start; }
+    }
+    .mLbl{
+      font-size: 12px; color: rgba(234,240,255,.78);
+      display:flex; align-items:center; gap: 8px;
+    }
+    .mLbl code{
+      font-family: var(--mono);
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.86);
+    }
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.20);
+      overflow:hidden;
+      position:relative;
+    }
+    .fill{
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(90deg, rgba(96,165,250,.85), rgba(167,139,250,.85));
+      border-radius: 999px;
+    }
+    .econ.openai .fill{ background: linear-gradient(90deg, rgba(96,165,250,.92), rgba(34,211,238,.90)); }
+    .econ.anthropic .fill{ background: linear-gradient(90deg, rgba(167,139,250,.92), rgba(251,113,133,.78)); }
+    .val{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(234,240,255,.72);
+      justify-self:end;
+    }
+    .bullets{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+    .bullet{
+      font-size: 11.5px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(234,240,255,.75);
+    }
+
+    /* interactive selector */
+    .chooser{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 16px 50px rgba(0,0,0,.36);
+      overflow:hidden;
+    }
+    .chooser .pad{ padding: 16px; }
+    .qHead{
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .qHead h2{ margin:0; font-size: 16px; }
+    .qHead p{ margin:2px 0 0; color: var(--muted2); font-size: 12.5px; line-height:1.45; max-width: 72ch; }
+    .qa{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 860px){
+      .qa{ grid-template-columns: 1fr; }
+    }
+    .q{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      padding: 12px;
+    }
+    .q b{ display:block; font-size: 12.5px; margin-bottom: 8px; }
+    .opt{
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+    }
+    .opt button{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.82);
+      cursor:pointer;
+      transition:.15s ease;
+      font-size: 12px;
+      font-weight: 650;
+      user-select:none;
+    }
+    .opt button:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); }
+    .opt button.sel{
+      border-color: rgba(96,165,250,.55);
+      background: rgba(96,165,250,.18);
+    }
+
+    .result{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(135deg, rgba(96,165,250,.12), rgba(167,139,250,.10));
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+    }
+    .badge{
+      width: 34px; height: 34px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      display:grid; place-items:center;
+      flex:0 0 auto;
+    }
+    .badge svg{ width: 18px; height: 18px; opacity:.92; }
+    .result b{ display:block; font-size: 12.8px; }
+    .result span{ display:block; margin-top: 3px; font-size: 12px; color: var(--muted); line-height:1.4; }
+    .smallActions{
+      margin-top: 10px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .smallActions button{
+      padding: 9px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.86);
+      cursor:pointer;
+      font-weight: 750;
+      font-size: 12px;
+      transition: .16s ease;
+      user-select:none;
+    }
+    .smallActions button:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); }
+
+    /* footer */
+    footer{
+      margin-top: 18px;
+      padding: 18px 0 0;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      line-height:1.5;
+      text-align:center;
+    }
+    .hr{
+      height: 1px; background: rgba(255,255,255,.08);
+      margin: 18px 0 12px;
+    }
+
+    /* hidden sections */
+    [data-section]{ display:none; }
+    [data-section].show{ display:block; }
+
+    /* subtle float animation */
+    @keyframes floaty { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-3px); } }
+    .mark{ animation: floaty 3.2s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>AI Strategy 2026</div>
+      </div>
+      <div class="nav" role="navigation" aria-label="Infographic sections">
+        <div class="chip active" data-jump="overview">Overview</div>
+        <div class="chip" data-jump="philosophies">Philosophies</div>
+        <div class="chip" data-jump="divergence">Divergence</div>
+        <div class="chip" data-jump="economies">Two Economies</div>
+        <div class="chip" data-jump="choose">Which fits you?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="heroGrid">
+        <div class="heroCard">
+          <div class="pad">
+            <h1>Two strategies for building AI safely &amp; at scale — and why they diverged by January 2026</h1>
+            <p class="sub">
+              This infographic maps the split between <b>learn-by-deploying</b> (ship fast, iterate in public)
+              and <b>understand-before-deploying</b> (prove safety first, then scale). The claim isn’t “reckless vs cautious” —
+              it’s <b>two coherent theories of progress</b> producing two different products, users, and markets.
+            </p>
+
+            <div class="kpis" aria-label="Key idea summary">
+              <div class="kpi">
+                <div class="dot"></div>
+                <div>
+                  <div class="t">Safety theory</div>
+                  <div class="d">OpenAI: safety emerges through staged deployment + feedback loops.<br/>Anthropic: safety is a precondition you demonstrate before scaling.</div>
+                </div>
+              </div>
+              <div class="kpi">
+                <div class="dot"></div>
+                <div>
+                  <div class="t">Product shape</div>
+                  <div class="d">OpenAI: “consumer super-app” across media + life workflows.<br/>Anthropic: “professional OS” optimized for correctness + judgment.</div>
+                </div>
+              </div>
+              <div class="kpi">
+                <div class="dot"></div>
+                <div>
+                  <div class="t">The right question</div>
+                  <div class="d">Stop asking “Which model is better?” Ask: <b>What kind of work</b> are you doing, and what failure modes are acceptable?</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sideCard">
+          <div class="pad">
+            <div class="miniTitle">
+              <h2>Lens switch</h2>
+              <span class="pill">interactive</span>
+            </div>
+            <div class="toggleRow" role="tablist" aria-label="Choose lens">
+              <button class="btn primary" id="lensProduct" aria-selected="true">Product lens</button>
+              <button class="btn" id="lensSafety" aria-selected="false">Safety lens</button>
+            </div>
+            <p class="note" id="lensNote">
+              <b>Product lens:</b> Why ChatGPT looks like a <code>super-app</code> and Claude looks like a <code>precision tool</code>.
+            </p>
+            <div class="rows" id="lensRows" aria-label="Lens highlights">
+              <!-- injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section data-section="overview" class="show">
+      <div class="grid2">
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>Strategy A: Learn by deploying</h3>
+              <span class="tag">“Ship fast → feedback → iterate”</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 4.5v6c0 5-4 9-9 9s-9-4-9-9v-6L12 2Z" stroke="currentColor" stroke-width="1.8"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Safety as an evolving practice</p>
+                  <p class="rd">Release in steps, let society adapt, use real-world signals to harden the system.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Many bets, many surfaces</p>
+                  <p class="rd">Expand capabilities across domains (video, voice, search, health, etc.). Keep what sticks.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h8l-1 8 11-14h-8l0-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Default posture: velocity</p>
+                  <p class="rd">Competitive pressure tends to accelerate shipping; iteration is the tool for alignment.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>Strategy B: Understand before deploying</h3>
+              <span class="tag">“Prove safety → then scale”</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l2 2 4-4M12 22C7 22 3 18 3 13V6l9-4 9 4v7c0 5-4 9-9 9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Safety as a precondition</p>
+                  <p class="rd">Don’t treat the public as a red team; demonstrate safe operation before broad rollout.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 15l3-3 3 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Depth over breadth</p>
+                  <p class="rd">Prioritize reasoning density, code reliability, interpretability, low hallucination in complex domains.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="1.8"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Default posture: caution with “pause” option</p>
+                  <p class="rd">Governance aims to resist race dynamics; willingness to slow if safety can’t be demonstrated.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHIES -->
+    <section data-section="philosophies">
+      <div class="splitTitle">
+        <h2>Leaders &amp; “progress instincts”</h2>
+        <p>Framed as: <b>scientist → entrepreneur</b> (understand first) vs <b>entrepreneur → tech leader</b> (deploy to learn).</p>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>“Understand to deploy” profile</h3>
+              <span class="tag">Craftsmanship • knowledge-first</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4 2.5 7-7-4.5L5 20l2.5-7L2 9h7l3-7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Goal: fundamental understanding</p>
+                  <p class="rd">Build systems with internal coherence, interpretability, and controlled failure modes.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 20h10M9 20V8l3-3 3 3v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M9 10h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Institutional memory &amp; guardrails</p>
+                  <p class="rd">Governance designed to slow down if necessary; “prove-safe-then-scale” mindset.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M7 7v10a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Product bias: professional reliability</p>
+                  <p class="rd">If errors are expensive (law, medicine, production code), “trust density” is the differentiator.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>“Deploy to understand” profile</h3>
+              <span class="tag">Iteration • scale-first</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 10 10" stroke="currentColor" stroke-width="1.8"/><path d="M22 2v8h-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Failure = data</p>
+                  <p class="rd">Ship experiments, observe behavior, iterate quickly. Learning is embedded in release cycles.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 4h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Product bias: platform of many tools</p>
+                  <p class="rd">A “super-app” interface: voice, image, video, search, health, productivity — keep expanding the surface.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M13 10V3L4 14h7v7l9-11h-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Safety posture: staged rollout + feedback loops</p>
+                  <p class="rd">Internal testing first, then real-world monitoring and rapid patching informed by massive usage.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVERGENCE -->
+    <section data-section="divergence">
+      <div class="splitTitle">
+        <h2>The fork: 2021 → 2026</h2>
+        <p>A narrative of divergence: what you optimize for becomes what you build, who adopts you, and which problems you’re “allowed” to solve.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="pad">
+          <div class="tlRow">
+            <div class="when"><span class="bubble"></span>2021–2023</div>
+            <div class="what">
+              <b>Same headline race: “Which model is better?”</b>
+              <span>Benchmarks, arena scores, and vibes testing dominate because the finish line looks shared.</span>
+            </div>
+          </div>
+          <div class="tlRow">
+            <div class="when"><span class="bubble"></span>Late 2024</div>
+            <div class="what">
+              <b>Paths begin to fork</b>
+              <span>One strategy expands product surfaces; the other concentrates on reliability and complex-domain correctness.</span>
+            </div>
+          </div>
+          <div class="tlRow">
+            <div class="when"><span class="bubble"></span>2025</div>
+            <div class="what">
+              <b>Forking accelerates</b>
+              <span>Different governance, different risk tolerances, different “default reflex” under competitive pressure.</span>
+            </div>
+          </div>
+          <div class="tlRow">
+            <div class="when"><span class="bubble"></span>January 2026</div>
+            <div class="what">
+              <b>Not directly comparable anymore</b>
+              <span>More like comparing a <i>hospital</i> vs a <i>TV studio</i>: both are “buildings,” but they optimize for different outcomes.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="splitTitle">
+        <h2>Where “coders think they’re competing”</h2>
+        <p>Even in coding: the debate is less “who wins” and more “how do we spend time” — iterative agent loops vs slower, higher-confidence review cycles.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>Iterative agent loop (fast discovery)</h3>
+              <span class="tag">explore → refine → execute</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 7h10v10H7V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 4h4M16 4h4M4 20h4M16 20h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Best when requirements are fuzzy</p>
+                  <p class="rd">Let the agent interview you, surface constraints, propose plan variants, then iterate quickly.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Speed advantage</p>
+                  <p class="rd">More “shots on goal” per hour; good for prototypes, agents, glue code, tool orchestration.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pad">
+            <div class="cardHead">
+              <h3>Deliberate review loop (high confidence)</h3>
+              <span class="tag">plan → implement → verify</span>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M10 14l-2 2-4-4 2-2 2 2 6-6 2 2-6 6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Best when correctness dominates</p>
+                  <p class="rd">Bug finding, code review, careful refactors, safety-critical or high-cost failure domains.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="ic" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h5l2-7 4 14 2-7h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="rt">Trust advantage</p>
+                  <p class="rd">Fewer “surprises”; higher confidence outputs—valuable when errors are expensive.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TWO ECONOMIES -->
+    <section data-section="economies">
+      <div class="splitTitle">
+        <h2>Two AI economies (same year, different rules)</h2>
+        <p>One economy drives the marginal cost of output toward zero. The other focuses on managing complexity and amplifying expert judgment.</p>
+      </div>
+
+      <div class="economies">
+        <div class="econ openai">
+          <div class="pad">
+            <div class="title">
+              <h3>Economy 1: Abundance engine</h3>
+              <span class="tag">horizontal • consumer</span>
+            </div>
+            <p class="desc">
+              Optimized for <b>rapid generation</b> across many media and daily-life workflows. Strategy: expand the surface area, learn from massive usage, double down on winners.
+            </p>
+
+            <div class="meter" aria-label="Economy 1 meters">
+              <div class="mRow">
+                <div class="mLbl">Velocity <code>ship</code></div>
+                <div class="bar"><div class="fill" style="width:88%"></div></div>
+                <div class="val">0.88</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Breadth <code>scope</code></div>
+                <div class="bar"><div class="fill" style="width:92%"></div></div>
+                <div class="val">0.92</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Risk tolerance <code>iterate</code></div>
+                <div class="bar"><div class="fill" style="width:74%"></div></div>
+                <div class="val">0.74</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Judgment depth <code>precision</code></div>
+                <div class="bar"><div class="fill" style="width:58%"></div></div>
+                <div class="val">0.58</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">“Put many shots on goal”</div>
+              <div class="bullet">Habit-forming surface</div>
+              <div class="bullet">Multi-modal workflows</div>
+              <div class="bullet">Feedback as alignment fuel</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="econ anthropic">
+          <div class="pad">
+            <div class="title">
+              <h3>Economy 2: Complexity manager</h3>
+              <span class="tag">vertical • professional</span>
+            </div>
+            <p class="desc">
+              Optimized for <b>high-stakes correctness</b> and expert collaboration. Strategy: raise trust density, reduce hallucination, emphasize tool use and interpretability.
+            </p>
+
+            <div class="meter" aria-label="Economy 2 meters">
+              <div class="mRow">
+                <div class="mLbl">Velocity <code>ship</code></div>
+                <div class="bar"><div class="fill" style="width:62%"></div></div>
+                <div class="val">0.62</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Breadth <code>scope</code></div>
+                <div class="bar"><div class="fill" style="width:54%"></div></div>
+                <div class="val">0.54</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Risk tolerance <code>prove</code></div>
+                <div class="bar"><div class="fill" style="width:46%"></div></div>
+                <div class="val">0.46</div>
+              </div>
+              <div class="mRow">
+                <div class="mLbl">Judgment depth <code>precision</code></div>
+                <div class="bar"><div class="fill" style="width:90%"></div></div>
+                <div class="val">0.90</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">“Adoption quality”</div>
+              <div class="bullet">Lower hallucination tolerance</div>
+              <div class="bullet">Tool calling as leverage</div>
+              <div class="bullet">Governance to resist racing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHOOSER -->
+    <section data-section="choose">
+      <div class="chooser">
+        <div class="pad">
+          <div class="qHead">
+            <div>
+              <h2>Which world are you mostly in?</h2>
+              <p>
+                Answer a few prompts. You’ll get a recommendation <i>and</i> a “hybrid workflow” tip (because most people live in both).
+              </p>
+            </div>
+            <span class="pill" id="scorePill">0 / 4 answered</span>
+          </div>
+
+          <div class="qa" id="qa">
+            <div class="q" data-q="stakes">
+              <b>1) When you’re wrong, what happens?</b>
+              <div class="opt">
+                <button data-a="openai">It’s fine — iterate fast</button>
+                <button data-a="anthropic">It’s expensive — be precise</button>
+              </div>
+            </div>
+
+            <div class="q" data-q="scope">
+              <b>2) What do you need most often?</b>
+              <div class="opt">
+                <button data-a="openai">Many modalities + many tasks</button>
+                <button data-a="anthropic">Deep reasoning in one domain</button>
+              </div>
+            </div>
+
+            <div class="q" data-q="workflow">
+              <b>3) Your preferred style?</b>
+              <div class="opt">
+                <button data-a="openai">Ship + learn from reality</button>
+                <button data-a="anthropic">Prove + then ship</button>
+              </div>
+            </div>
+
+            <div class="q" data-q="coding">
+              <b>4) In code, you optimize for…</b>
+              <div class="opt">
+                <button data-a="openai">Velocity (prototype/agent loops)</button>
+                <button data-a="anthropic">Correctness (review/bugs)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="result" id="result" aria-live="polite">
+            <div class="badge" aria-hidden="true" id="badge">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 4.5v6c0 5-4 9-9 9s-9-4-9-9v-6L12 2Z" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <div>
+              <b id="resTitle">Answer the prompts to get a fit.</b>
+              <span id="resBody">You’ll see a recommendation plus a “best of both” workflow pattern.</span>
+            </div>
+          </div>
+
+          <div class="smallActions">
+            <button id="reset">Reset</button>
+            <button id="copySummary">Copy summary</button>
+            <button id="jumpTop">Back to top</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="hr"></div>
+        Built as a single-file HTML infographic. Tip: drop this into GitHub Pages / any static host.
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    // ---------- Section navigation ----------
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const sections = Array.from(document.querySelectorAll('[data-section]'));
+
+    function showSection(key){
+      sections.forEach(s => s.classList.toggle('show', s.dataset.section === key));
+      chips.forEach(c => c.classList.toggle('active', c.dataset.jump === key));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    chips.forEach(chip => chip.addEventListener('click', () => showSection(chip.dataset.jump)));
+
+    // ---------- Lens switch (side card) ----------
+    const lensProduct = document.getElementById('lensProduct');
+    const lensSafety = document.getElementById('lensSafety');
+    const lensNote = document.getElementById('lensNote');
+    const lensRows = document.getElementById('lensRows');
+
+    const icon = {
+      layers: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 5-9 5-9-5 9-5Z" stroke="currentColor" stroke-width="1.8"/><path d="M3 12l9 5 9-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 17l9 5 9-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+      shield: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 4.5v6c0 5-4 9-9 9s-9-4-9-9v-6L12 2Z" stroke="currentColor" stroke-width="1.8"/></svg>`,
+      spark: `<svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h8l-1 8 11-14h-8l0-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+      scale: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 7h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 7l-3 6h6l-3-6Zm13 0l-3 6h6l-3-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+    };
+
+    const lensData = {
+      product: {
+        note: `<b>Product lens:</b> Super-app breadth vs professional depth.`,
+        rows: [
+          { title: "OpenAI shape", desc: "Many surfaces: voice, image, video, search, health, productivity. A horizontal interface for everyday life.", svg: icon.layers },
+          { title: "Anthropic shape", desc: "Fewer distractions: reasoning density, tool use, reliability. A precision instrument for high-stakes work.", svg: icon.scale },
+          { title: "Market outcome", desc: "Two different adoption curves: habitual mass usage vs premium professional trust.", svg: icon.spark },
+        ]
+      },
+      safety: {
+        note: `<b>Safety lens:</b> “Safety emerges from deployment” vs “Safety is a precondition.”`,
+        rows: [
+          { title: "OpenAI posture", desc: "Stage releases, monitor in the wild, iterate quickly. Public feedback is a key signal.", svg: icon.spark },
+          { title: "Anthropic posture", desc: "Demonstrate safety before scaling; governance aims to slow down under risk escalation.", svg: icon.shield },
+          { title: "Core difference", desc: "Different epistemologies: learn-by-shipping vs prove-before-shipping.", svg: icon.scale },
+        ]
+      }
+    };
+
+    function renderLens(which){
+      const d = lensData[which];
+      lensNote.innerHTML = d.note;
+      lensRows.innerHTML = d.rows.map(r => `
+        <div class="row">
+          <div class="ic" aria-hidden="true">${r.svg}</div>
+          <div>
+            <p class="rt">${r.title}</p>
+            <p class="rd">${r.desc}</p>
+          </div>
+        </div>
+      `).join("");
+      const isProduct = which === "product";
+      lensProduct.classList.toggle('primary', isProduct);
+      lensSafety.classList.toggle('primary', !isProduct);
+      lensProduct.setAttribute('aria-selected', String(isProduct));
+      lensSafety.setAttribute('aria-selected', String(!isProduct));
+    }
+    lensProduct.addEventListener('click', () => renderLens('product'));
+    lensSafety.addEventListener('click', () => renderLens('safety'));
+    renderLens('product');
+
+    // ---------- Chooser ----------
+    const scorePill = document.getElementById('scorePill');
+    const result = document.getElementById('result');
+    const resTitle = document.getElementById('resTitle');
+    const resBody = document.getElementById('resBody');
+    const badge = document.getElementById('badge');
+
+    const state = { answers: {}, openai: 0, anthropic: 0 };
+
+    function answeredCount(){ return Object.keys(state.answers).length; }
+
+    function updateScore(){
+      const n = answeredCount();
+      scorePill.textContent = `${n} / 4 answered`;
+
+      // tally
+      state.openai = 0; state.anthropic = 0;
+      Object.values(state.answers).forEach(v => state[v]++);
+
+      // compute message
+      if(n < 4){
+        resTitle.textContent = "Keep going…";
+        resBody.textContent = "Answer all 4 to get a recommendation + hybrid workflow tip.";
+        badge.innerHTML = icon.shield;
+        return;
+      }
+
+      let winner = "hybrid";
+      if(state.openai >= 3) winner = "openai";
+      else if(state.anthropic >= 3) winner = "anthropic";
+
+      if(winner === "openai"){
+        resTitle.textContent = "You’re mostly in the Abundance Engine world (ship → learn → scale).";
+        resBody.textContent =
+          "Default workflow: use broad tools to generate drafts, media, options, and quick prototypes — then add a verification pass before you publish or deploy.";
+        badge.innerHTML = icon.spark;
+      } else if(winner === "anthropic"){
+        resTitle.textContent = "You’re mostly in the Complexity Manager world (prove → trust → scale).";
+        resBody.textContent =
+          "Default workflow: optimize for correctness, citations, and controlled tool use — then add a fast exploration pass when requirements are fuzzy.";
+        badge.innerHTML = icon.scale;
+      } else {
+        resTitle.textContent = "You’re a true hybrid (you need both philosophies).";
+        resBody.textContent =
+          "Hybrid pattern: (1) explore fast to discover constraints → (2) lock requirements → (3) run a correctness-first review loop → (4) ship with monitoring.";
+        badge.innerHTML = icon.layers;
+      }
+    }
+
+    // wire buttons
+    document.querySelectorAll('.q').forEach(q => {
+      const key = q.dataset.q;
+      q.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          // select UI
+          q.querySelectorAll('button').forEach(b => b.classList.remove('sel'));
+          btn.classList.add('sel');
+          // store answer
+          state.answers[key] = btn.dataset.a;
+          updateScore();
+        });
+      });
+    });
+
+    // actions
+    document.getElementById('reset').addEventListener('click', () => {
+      state.answers = {};
+      document.querySelectorAll('.opt button').forEach(b => b.classList.remove('sel'));
+      updateScore();
+      window.scrollTo({ top: result.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
+    });
+
+    document.getElementById('copySummary').addEventListener('click', async () => {
+      const n = answeredCount();
+      const lines = [];
+      lines.push("AI Strategy 2026 — personal fit");
+      lines.push(`Answered: ${n}/4`);
+      if(n === 4){
+        lines.push(`OpenAI-lean: ${state.openai} | Anthropic-lean: ${state.anthropic}`);
+        lines.push(resTitle.textContent);
+        lines.push(resBody.textContent);
+        lines.push("Hybrid pattern: explore fast → lock requirements → correctness-first review → ship with monitoring.");
+      } else {
+        lines.push("Finish the 4 prompts for a recommendation + hybrid workflow tip.");
+      }
+      try{
+        await navigator.clipboard.writeText(lines.join("\n"));
+        const old = scorePill.textContent;
+        scorePill.textContent = "Copied ✓";
+        setTimeout(()=> scorePill.textContent = old, 900);
+      } catch(e){
+        const old = scorePill.textContent;
+        scorePill.textContent = "Copy failed";
+        setTimeout(()=> scorePill.textContent = old, 900);
+      }
+    });
+
+    document.getElementById('jumpTop').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    updateScore();
+
+    // Keyboard shortcuts (nice for power users)
+    document.addEventListener('keydown', (e) => {
+      if(e.key === '1') showSection('overview');
+      if(e.key === '2') showSection('philosophies');
+      if(e.key === '3') showSection('divergence');
+      if(e.key === '4') showSection('economies');
+      if(e.key === '5') showSection('choose');
+    });
+  </script>
+</body>
+</html>
