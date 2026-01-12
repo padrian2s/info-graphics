@@ -740,7 +740,7 @@ Small win: —
       const hasActionVerb = /\b(email|call|send|schedule|book|remind|buy|pay|submit|draft|review|fix|ship|write|ask|plan|prepare)\b/i.test(text);
       const hasProjectCue = /\bproject\b|\brelaunch\b|\blaunch\b|\broadmap\b|\bsprint\b|\bmilestone\b|\bdeliverable\b|\bwebsite\b|\bapp\b/i.test(text);
       const hasIdeaCue = /\bidea\b|\bwhat if\b|\bconcept\b|\bthesis\b|\binsight\b|\bhypothesis\b|\bmaybe we\b/i.test(text);
-      const hasAdminCue = /\b(invoice\b|\bbill\b|\btax\b|\bexpense\b|\brenew\b|\bsubscription\b|\baccount\b|\bpaperwork\b|\bform\b|\bappointment\b/i.test(text);
+      const hasAdminCue = /\b(invoice|bill|tax|expense|renew|subscription|account|paperwork|form|appointment)\b/i.test(text);
 
       if (hasActionVerb) s += 0.14;
       if (hasDeadline) s += 0.10;
