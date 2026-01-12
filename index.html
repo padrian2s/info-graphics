@@ -438,6 +438,178 @@
         .hidden {
             display: none !important;
         }
+
+        /* Folder Cards */
+        .folder-card {
+            background: linear-gradient(180deg, rgba(15,26,51,.85), rgba(15,26,51,.55));
+            border: 1px solid var(--stroke);
+            border-radius: var(--radius);
+            padding: 0;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .folder-card .folder-preview {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(7,10,18,.5);
+        }
+
+        .folder-card .folder-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .folder-card:hover .folder-preview img {
+            transform: scale(1.05);
+        }
+
+        .folder-card .folder-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(7,10,18,.8) 100%);
+            pointer-events: none;
+        }
+
+        .folder-card .folder-content {
+            padding: 20px;
+        }
+
+        .folder-card .folder-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .folder-card .folder-header h3 {
+            margin: 0;
+        }
+
+        .folder-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(400px 200px at 0% 0%, rgba(255,204,102,.12), transparent 50%),
+                radial-gradient(300px 150px at 100% 100%, rgba(179,140,255,.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .folder-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,204,102,.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,.4);
+        }
+
+        .folder-card:hover::before {
+            opacity: 1;
+        }
+
+        .folder-card > * {
+            position: relative;
+        }
+
+        .folder-card .folder-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,204,102,.2), rgba(255,204,102,.08));
+            border: 1px solid rgba(255,204,102,.25);
+            flex-shrink: 0;
+        }
+
+        .folder-card .folder-icon .material-symbols-rounded {
+            font-size: 1.25rem;
+            color: var(--warn);
+        }
+
+        .folder-card h3 {
+            font-size: 1.15rem;
+            font-weight: 650;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .folder-card .folder-desc {
+            color: var(--muted);
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            line-height: 1.55;
+        }
+
+        .folder-card .folder-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .folder-card .folder-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--muted2);
+        }
+
+        .folder-card .folder-stat .material-symbols-rounded {
+            font-size: 1rem;
+            color: var(--teal);
+        }
+
+        .folder-card .folder-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .folders-section {
+            margin-bottom: 32px;
+        }
+
+        .folders-section .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--stroke);
+        }
+
+        .folders-section .section-header .material-symbols-rounded {
+            color: var(--warn);
+        }
+
+        .folders-section .section-title {
+            font-size: 1.1rem;
+            font-weight: 650;
+        }
+
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        @media (max-width: 700px) {
+            .folders-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -457,10 +629,13 @@
             </div>
             <div class="controls-right">
                 <div class="view-switcher" id="viewSwitcher">
-                    <button class="view-btn" data-view="category" title="By Category">
-                        <span class="material-symbols-rounded">folder</span>
+                    <button class="view-btn active" data-view="folder" title="Folders">
+                        <span class="material-symbols-rounded">folder_open</span>
                     </button>
-                    <button class="view-btn active" data-view="date" title="By Date">
+                    <button class="view-btn" data-view="category" title="By Category">
+                        <span class="material-symbols-rounded">category</span>
+                    </button>
+                    <button class="view-btn" data-view="date" title="By Date">
                         <span class="material-symbols-rounded">calendar_month</span>
                     </button>
                     <button class="view-btn" data-view="grid" title="Grid View">
@@ -500,6 +675,22 @@
             "engineering-mode-trigger-levels.html"
         ];
 
+        /**
+         * FOLDERS LIST - each folder has its own index.html
+         */
+        const folders = [
+            {
+                id: "social-ai",
+                name: "Social AI",
+                path: "social-ai/",
+                description: "Global AI & Prompt Engineering Readiness Reports - Interactive infographics analyzing country readiness for AI coding agents.",
+                icon: "public",
+                tags: ["Interactive", "Reports", "Global Analysis"],
+                fileCount: 6,
+                image: "image_4.png"
+            }
+        ];
+
         const categoryMeta = {
             "AI Strategy": { icon: "architecture", order: 1 },
             "AI Agents": { icon: "smart_toy", order: 2 },
@@ -536,7 +727,7 @@
         let pages = [];
         let activeCategory = "all";
         let searchQuery = "";
-        let currentView = "date";
+        let currentView = "folder";
 
         function extractMeta(html, name) {
             const match = html.match(new RegExp(`<meta\\s+name="${name}"\\s+content="([^"]*)"`, 'i'));
@@ -731,11 +922,105 @@
             `;
         }
 
+        function renderFolderCard(folder) {
+            const imageHtml = folder.image
+                ? `<div class="folder-preview">
+                       <img src="${folder.image}" alt="${folder.name} preview" loading="lazy">
+                       <div class="folder-preview-overlay"></div>
+                   </div>`
+                : '';
+
+            return `
+                <a href="${folder.path}" class="folder-card">
+                    ${imageHtml}
+                    <div class="folder-content">
+                        <div class="folder-header">
+                            <div class="folder-icon">
+                                <span class="material-symbols-rounded" aria-hidden="true">${folder.icon}</span>
+                            </div>
+                            <h3>${folder.name}</h3>
+                        </div>
+                        <p class="folder-desc">${folder.description}</p>
+                        <div class="folder-meta">
+                            <div class="folder-stat">
+                                <span class="material-symbols-rounded">description</span>
+                                ${folder.fileCount} files
+                            </div>
+                        </div>
+                        <div class="folder-tags">
+                            ${folder.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        function filterFolders() {
+            const query = searchQuery.toLowerCase().trim();
+            if (!query) return folders;
+
+            return folders.filter(folder => {
+                const searchable = [
+                    folder.name,
+                    folder.description,
+                    ...folder.tags
+                ].join(" ").toLowerCase();
+                return searchable.includes(query);
+            });
+        }
+
+        function renderFolderView(filtered) {
+            const filteredFolders = filterFolders();
+            const sorted = [...filtered].sort((a, b) => {
+                if (a.created && b.created) return b.created - a.created;
+                if (a.created) return -1;
+                if (b.created) return 1;
+                return a.order - b.order;
+            });
+
+            let html = '';
+
+            // Render folders section if there are folders
+            if (filteredFolders.length > 0) {
+                html += `
+                    <section class="folders-section">
+                        <div class="section-header">
+                            <span class="material-symbols-rounded" aria-hidden="true">folder_special</span>
+                            <h2 class="section-title">Collections</h2>
+                            <span class="category-count">${filteredFolders.length}</span>
+                        </div>
+                        <div class="folders-grid">
+                            ${filteredFolders.map(f => renderFolderCard(f)).join("")}
+                        </div>
+                    </section>
+                `;
+            }
+
+            // Render pages section
+            if (sorted.length > 0) {
+                html += `
+                    <section class="category">
+                        <div class="category-header">
+                            <span class="material-symbols-rounded" aria-hidden="true">description</span>
+                            <h2 class="category-title">Pages</h2>
+                            <span class="category-count">${sorted.length}</span>
+                        </div>
+                        <div class="pages-grid">
+                            ${sorted.map(p => renderCard(p, { showDate: true, showCategoryBadge: true })).join("")}
+                        </div>
+                    </section>
+                `;
+            }
+
+            return html;
+        }
+
         function render() {
             const content = document.getElementById("content");
             const filtered = filterPages();
+            const filteredFolders = filterFolders();
 
-            if (filtered.length === 0) {
+            if (filtered.length === 0 && filteredFolders.length === 0) {
                 content.innerHTML = `
                     <div class="empty-state">
                         <h3>No pages found</h3>
@@ -746,6 +1031,9 @@
             }
 
             switch (currentView) {
+                case "folder":
+                    content.innerHTML = renderFolderView(filtered);
+                    break;
                 case "date":
                     content.innerHTML = renderDateView(filtered);
                     break;
