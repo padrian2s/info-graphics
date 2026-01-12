@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info Graphics Hub</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0">
     <style>
         :root {
             --primary: #2563eb;
@@ -42,6 +43,22 @@
             min-height: 100vh;
         }
 
+        .material-symbols-rounded {
+            font-family: 'Material Symbols Rounded';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 1.25rem;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-flex;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -77,6 +94,15 @@
             position: relative;
         }
 
+        .search-box .material-symbols-rounded {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
         .search-box input {
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 2.5rem;
@@ -92,15 +118,6 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.875rem;
         }
 
         .filter-group {
@@ -142,10 +159,6 @@
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid var(--border);
-        }
-
-        .category-icon {
-            font-size: 1.25rem;
         }
 
         .category-title {
@@ -265,12 +278,13 @@
 <body>
     <div class="container">
         <header>
-            <h1>📊 Info Graphics Hub</h1>
+            <h1><span class="material-symbols-rounded" aria-hidden="true">bar_chart</span> Info Graphics Hub</h1>
             <p>Navigate and explore all available pages</p>
         </header>
 
         <div class="controls">
             <div class="search-box">
+                <span class="material-symbols-rounded" aria-hidden="true">search</span>
                 <input type="text" id="search" placeholder="Search pages..." autocomplete="off">
             </div>
             <div class="filter-group" id="filters">
@@ -297,31 +311,47 @@
             "ai-strategy.html",
             "ai-strategy2.html",
             "claude.html",
-            "engineering-mode-trigger-levels.html",
             "good-4-ai.html",
             "google-vs-openai.html",
             "llm-psy.html",
             "napoleon-technique.html",
-            "personal-agents.html"
+            "personal-agents.html",
+            "engineering-mode-trigger-levels.html"
         ];
 
         /**
          * CATEGORY DEFINITIONS
          */
         const categoryMeta = {
-            "AI Strategy": { icon: "📐", order: 1 },
-            "AI Agents": { icon: "🤖", order: 2 },
-            "AI Principles": { icon: "✅", order: 3 },
-            "AI Risks": { icon: "⚠️", order: 4 },
-            "Future Predictions": { icon: "🔮", order: 5 },
-            "Industry Analysis": { icon: "🏭", order: 6 },
-            "Documentation": { icon: "📚", order: 10 },
-            "Data Visualization": { icon: "📊", order: 11 },
-            "Reports": { icon: "📈", order: 12 },
-            "Tools": { icon: "🛠️", order: 13 },
-            "Reference": { icon: "📖", order: 14 },
-            "Uncategorized": { icon: "📁", order: 50 },
-            "Archive": { icon: "🗃️", order: 99 }
+            "AI Strategy": { icon: "architecture", order: 1 },
+            "AI Agents": { icon: "smart_toy", order: 2 },
+            "AI Principles": { icon: "check_circle", order: 3 },
+            "AI Risks": { icon: "warning", order: 4 },
+            "Future Predictions": { icon: "auto_awesome", order: 5 },
+            "Industry Analysis": { icon: "factory", order: 6 },
+            "Documentation": { icon: "menu_book", order: 10 },
+            "Data Visualization": { icon: "bar_chart", order: 11 },
+            "Reports": { icon: "analytics", order: 12 },
+            "Tools": { icon: "handyman", order: 13 },
+            "Reference": { icon: "library_books", order: 14 },
+            "Uncategorized": { icon: "folder", order: 50 },
+            "Archive": { icon: "inventory_2", order: 99 }
+        };
+
+        const iconMap = {
+            "🧠": "psychology",
+            "🔮": "auto_awesome",
+            "🤖": "smart_toy",
+            "🏭": "factory",
+            "📐": "architecture",
+            "🎯": "track_changes",
+            "📘": "menu_book",
+            "📊": "bar_chart",
+            "📈": "show_chart",
+            "✅": "check_circle",
+            "⏳": "hourglass_empty",
+            "👔": "person",
+            "⚠️": "warning"
         };
 
         // State
@@ -341,7 +371,7 @@
         }
 
         // Fetch and parse HTML file metadata
-        async function fetchPageMeta(filename) {
+        async function fetchPageMeta(filename, order) {
             try {
                 const response = await fetch(filename);
                 if (!response.ok) return null;
@@ -349,6 +379,8 @@
                 const html = await response.text();
                 const id = filename.replace('.html', '').toLowerCase();
                 const tags = extractMeta(html, 'tags');
+                const rawIcon = extractMeta(html, 'icon');
+                const resolvedIcon = iconMap[rawIcon] || "description";
 
                 return {
                     id,
@@ -357,7 +389,8 @@
                     href: filename,
                     category: extractMeta(html, 'category') || "Uncategorized",
                     tags: tags ? tags.split(',').map(t => t.trim()) : [],
-                    icon: extractMeta(html, 'icon') || "📄"
+                    icon: resolvedIcon,
+                    order
                 };
             } catch (e) {
                 console.error(`Failed to load ${filename}:`, e);
@@ -367,8 +400,8 @@
 
         // Load all pages
         async function loadPages() {
-            const results = await Promise.all(htmlFiles.map(fetchPageMeta));
-            pages = results.filter(p => p !== null);
+            const results = await Promise.all(htmlFiles.map((filename, index) => fetchPageMeta(filename, index)));
+            pages = results.filter(p => p !== null).sort((a, b) => a.order - b.order);
             initFilters();
             render();
         }
@@ -436,7 +469,7 @@
         function renderCard(page) {
             return `
                 <a href="${page.href}" class="page-card">
-                    <h3><span>${page.icon}</span> ${page.title}</h3>
+                    <h3><span class="material-symbols-rounded" aria-hidden="true">${page.icon}</span> ${page.title}</h3>
                     <p>${page.description}</p>
                     <div class="tags">
                         ${page.tags.map(t => `<span class="tag">${t}</span>`).join("")}
@@ -447,11 +480,11 @@
 
         // Render category
         function renderCategory(name, pages) {
-            const meta = categoryMeta[name] || { icon: "📁" };
+            const meta = categoryMeta[name] || { icon: "folder" };
             return `
                 <section class="category">
                     <div class="category-header">
-                        <span class="category-icon">${meta.icon}</span>
+                        <span class="material-symbols-rounded" aria-hidden="true">${meta.icon}</span>
                         <h2 class="category-title">${name}</h2>
                         <span class="category-count">${pages.length}</span>
                     </div>
