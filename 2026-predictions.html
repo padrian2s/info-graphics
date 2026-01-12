@@ -1213,7 +1213,7 @@
       const fidelity = Math.pow((cq+1e-6)*(wf+1e-6)*(rp+1e-6), 1/3);
       const completeness = clamp01(0.20 + 0.55*wf + 0.15*cq);
       const trust = clamp01(0.10 + 0.55*fidelity + 0.20*rp);
-      const "feel" = (trust*0.55 + completeness*0.45);
+      const feel = (trust*0.55 + completeness*0.45);
 
       const verdict =
         feel >= 0.72 ? "Feels like a breakthrough (daily-trust memory)." :
