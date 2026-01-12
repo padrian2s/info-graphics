@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Interactive ladder mapping prompt constraints to engineering-mode output levels for infographics." />
+  <meta name="category" content="Data Visualization" />
+  <meta name="tags" content="prompting, engineering, ladder, constraints, infographic" />
+  <meta name="icon" content="📊" />
+  <title>Engineering-Mode Trigger Levels (Prompt → Output)</title>
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --faint: rgba(255,255,255,.45);
+      --line: rgba(255,255,255,.14);
+      --good: #34d399;
+      --warn: #fbbf24;
+      --hot: #fb7185;
+      --accent: #60a5fa;
+      --accent2: #a78bfa;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    [data-theme="light"]{
+      --bg: #f7f8fb;
+      --panel: rgba(0,0,0,.05);
+      --panel2: rgba(0,0,0,.08);
+      --text: rgba(0,0,0,.90);
+      --muted: rgba(0,0,0,.66);
+      --faint: rgba(0,0,0,.44);
+      --line: rgba(0,0,0,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.10);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(96,165,250,.25), transparent 60%),
+        radial-gradient(900px 600px at 80% 0%, rgba(167,139,250,.20), transparent 60%),
+        radial-gradient(900px 600px at 50% 115%, rgba(52,211,153,.14), transparent 60%),
+        var(--bg);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:12px;height:12px;border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(96,165,250,.12);
+    }
+    .brand .title{
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .btn{
+      appearance:none;border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      font-weight: 650;
+      font-size: 13px;
+      display:flex;align-items:center;gap:8px;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    [data-theme="light"] .btn:hover{ border-color: rgba(0,0,0,.18)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+    .btn .k{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+    }
+    [data-theme="light"] .btn .k{ background: rgba(255,255,255,.65); }
+
+    header.hero{
+      position:relative;
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      background: linear-gradient(180deg, var(--panel2), var(--panel));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    header.hero:before{
+      content:"";
+      position:absolute; inset:-80px -120px auto auto;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle at 30% 30%, rgba(96,165,250,.35), transparent 60%);
+      transform: rotate(25deg);
+      filter: blur(6px);
+      pointer-events:none;
+    }
+    header.hero:after{
+      content:"";
+      position:absolute; inset:auto auto -140px -140px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle at 60% 60%, rgba(167,139,250,.28), transparent 60%);
+      filter: blur(8px);
+      pointer-events:none;
+    }
+
+    .hgrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 900px){
+      .hgrid{grid-template-columns: 1fr}
+    }
+
+    h1{
+      margin: 0 0 8px 0;
+      font-size: 30px;
+      line-height: 1.08;
+      letter-spacing: -0.5px;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.5;
+      max-width: 60ch;
+    }
+    .pillrow{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .pill{
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    [data-theme="light"] .pill{ background: rgba(255,255,255,.55); }
+
+    .card{
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 16px;
+    }
+    .card h3{
+      margin:0 0 10px 0;
+      font-size: 14px;
+      letter-spacing: .2px;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .meter{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .meter .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    [data-theme="light"] .bar{ background: rgba(255,255,255,.60); }
+    .bar > i{
+      display:block;
+      height:100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--good), var(--warn), var(--hot));
+      transition: width .25s ease;
+    }
+
+    .slider{
+      width: 100%;
+      margin-top: 6px;
+      accent-color: var(--accent);
+    }
+    .hint{
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--faint);
+      line-height: 1.45;
+    }
+
+    main{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      main{grid-template-columns: 1fr}
+    }
+
+    /* Ladder */
+    .ladder{
+      padding: 16px;
+    }
+    .levels{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .lvl{
+      display:grid;
+      grid-template-columns: 58px 1fr;
+      gap: 12px;
+      align-items:stretch;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      overflow:hidden;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    [data-theme="light"] .lvl{ background: rgba(255,255,255,.55); }
+    .lvl:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    [data-theme="light"] .lvl:hover{ border-color: rgba(0,0,0,.18) }
+
+    .lvl.active{
+      border-color: rgba(96,165,250,.55);
+      box-shadow: 0 18px 40px rgba(96,165,250,.15);
+    }
+    .badge{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 12px;
+      color: rgba(255,255,255,.92);
+      background: linear-gradient(180deg, rgba(96,165,250,.95), rgba(167,139,250,.95));
+    }
+    [data-theme="light"] .badge{ color: rgba(0,0,0,.85); }
+
+    .lvl .content{
+      padding: 12px 12px 12px 0;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      justify-content:center;
+    }
+    .lvl .name{
+      font-weight: 850;
+      font-size: 14px;
+      letter-spacing: .1px;
+    }
+    .lvl .one{
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* Detail panel */
+    .detail{
+      padding: 16px;
+    }
+    .detailHeader{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom: 10px;
+    }
+    .detailHeader .left{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .detailHeader .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 750;
+      width: fit-content;
+    }
+    [data-theme="light"] .detailHeader .tag{ background: rgba(255,255,255,.60); }
+    .detailHeader h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+    .detailHeader p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.55;
+      max-width: 70ch;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .kv .box{
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      padding: 12px;
+    }
+    [data-theme="light"] .kv .box{ background: rgba(255,255,255,.55); }
+    .box h4{
+      margin:0 0 8px 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .25px;
+    }
+    .box ul{
+      margin: 0;
+      padding-left: 16px;
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .box li{ margin: 6px 0; }
+    .prompt{
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px dashed var(--line);
+      background: rgba(0,0,0,.18);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: rgba(255,255,255,.86);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    [data-theme="light"] .prompt{
+      background: rgba(255,255,255,.75);
+      color: rgba(0,0,0,.85);
+    }
+
+    .footer{
+      margin-top: 18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      color: var(--faint);
+      font-size: 12.5px;
+    }
+    .mini{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .chip{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 12px;
+    }
+    [data-theme="light"] .chip{ background: rgba(255,255,255,.60); }
+
+    /* Tiny legend */
+    .legend{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .lg{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .sq{ width:10px;height:10px;border-radius:3px; background: var(--good); }
+    .sq.w{ background: var(--warn); }
+    .sq.h{ background: var(--hot); }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <div class="topbar">
+      <div class="brand" title="Prompt → Mode → Output">
+        <div class="dot"></div>
+        <div class="title">Prompt Engineering Mode Ladder</div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="copyBtn" title="Copy this page’s key prompt template">
+          Copy template <span class="k">T</span>
+        </button>
+        <button class="btn" id="themeBtn" title="Toggle theme">
+          Theme <span class="k">D</span>
+        </button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="hgrid">
+        <div>
+          <h1>Why “Infographic” vs “HTML Infographic” feels like a different model</h1>
+          <p class="sub">
+            Every extra constraint collapses the possibility space. When your prompt gets more
+            <b>execution-coupled</b> (HTML, “self-contained”, “responsive”, “deployable”), ChatGPT shifts from
+            <b>conceptual framing</b> to <b>deterministic implementation</b>.
+          </p>
+          <div class="pillrow">
+            <span class="pill">Level 0–2: Think / Organize / Represent</span>
+            <span class="pill">Level 3–4: Build / Engineer</span>
+            <span class="pill">Level 5–6: Execute / Architect</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Constraint Density Meter</h3>
+          <div class="meter">
+            <div class="row">
+              <span id="meterLabel">Selected: Level 3</span>
+              <span id="meterValue">~55%</span>
+            </div>
+            <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+            <input class="slider" id="slider" type="range" min="0" max="6" step="1" value="3" aria-label="Select level"/>
+            <p class="hint">
+              Drag the slider or click a level. This updates the detail panel and shows how the same intent
+              becomes more “engineering-like” as constraints pile on.
+            </p>
+            <div class="legend" aria-hidden="true">
+              <span class="lg"><span class="sq"></span>flexible</span>
+              <span class="lg"><span class="sq w"></span>committing</span>
+              <span class="lg"><span class="sq h"></span>deterministic</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="card ladder">
+        <h3>Levels</h3>
+        <div class="levels" id="levels"></div>
+        <div class="footer">
+          <div class="mini">
+            <span class="chip">Tip: concept → then HTML</span>
+            <span class="chip">Less ambiguity = more code</span>
+          </div>
+          <div>Keyboard: <span class="chip">0–6</span> <span class="chip">↑ ↓</span></div>
+        </div>
+      </section>
+
+      <section class="card detail">
+        <div class="detailHeader">
+          <div class="left">
+            <div class="tag" id="detailTag">Mode: Build</div>
+            <h2 id="detailTitle">Level 3 — Soft Engineering Mode</h2>
+            <p id="detailDesc"></p>
+          </div>
+        </div>
+
+        <div class="kv">
+          <div class="box">
+            <h4>Trigger</h4>
+            <ul id="detailTrigger"></ul>
+          </div>
+
+          <div class="box">
+            <h4>Model Behavior</h4>
+            <ul id="detailBehavior"></ul>
+          </div>
+
+          <div class="box">
+            <h4>Typical Output</h4>
+            <ul id="detailOutput"></ul>
+          </div>
+
+          <div class="box">
+            <h4>Example Prompt</h4>
+            <p class="prompt" id="detailPrompt"></p>
+          </div>
+
+          <div class="box">
+            <h4>Best Use</h4>
+            <ul id="detailUse"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const data = [
+      {
+        level: 0,
+        name: "Narrative / Idea Mode",
+        mode: "Think",
+        density: 10,
+        trigger: ["No execution constraints", "Open-ended ask (explain/summarize/brainstorm)"],
+        behavior: ["Conceptual framing", "High abstraction & metaphor", "Low commitment to one structure"],
+        output: ["Bullets & sections", "Narratives and takeaways", "Design language without implementation"],
+        prompt: "Create an infographic about how prompts change ChatGPT’s behavior.",
+        use: ["You want insight, framing, or explanation", "Early ideation before committing to format"]
+      },
+      {
+        level: 1,
+        name: "Structural Design Mode",
+        mode: "Organize",
+        density: 22,
+        trigger: ["Light structure constraints", "“Include sections / timeline / layers / flow”"],
+        behavior: ["Hierarchy-first thinking", "Spatial organization without code", "Still flexible and editorial"],
+        output: ["Named panels/blocks", "Ordered flows", "Suggested layout & visual metaphors"],
+        prompt: "Create a structured infographic with 6–8 sections and a clear narrative arc.",
+        use: ["You want clarity without locking into an implementation", "Preparing a strong outline"]
+      },
+      {
+        level: 2,
+        name: "Representation Mode",
+        mode: "Represent",
+        density: 38,
+        trigger: ["Semi-formal formats (table/matrix/schema)", "Diagram syntax (Mermaid/D2)"],
+        behavior: ["Syntax-aware consistency", "More precise relationships", "Constraint checking (valid graph/format)"],
+        output: ["Mermaid/D2 diagrams", "Tables/matrices", "Schematics & pseudo-layouts"],
+        prompt: "Express the levels as a Mermaid flowchart + a summary table.",
+        use: ["You want precision but still easy edits", "Great for system thinking without UI polish yet"]
+      },
+      {
+        level: 3,
+        name: "Soft Engineering Mode",
+        mode: "Build",
+        density: 55,
+        trigger: ["Technology mentioned loosely (HTML infographic)", "Interactive layout hinted but not strict"],
+        behavior: ["Commits to a concrete layout", "Tradeoffs: less insight density, more renderability", "Builder mindset (DOM/layout)"],
+        output: ["HTML + CSS (maybe JS)", "Monolithic artifact", "Minimal narration, more implementation"],
+        prompt: "Create an HTML infographic explaining the 0–6 triggering levels. Make it clean and readable.",
+        use: ["You want something that renders right now", "Sharing a demo or embedding in a page"]
+      },
+      {
+        level: 4,
+        name: "Hard Engineering Mode",
+        mode: "Engineer",
+        density: 70,
+        trigger: ["Explicit constraints: self-contained, responsive, no libs", "Specific layout rules (Grid, dark mode)"],
+        behavior: ["Deterministic, literal constraint-satisfaction", "Less creativity, more correctness", "Assumption-heavy but consistent"],
+        output: ["Production-ish HTML/CSS/JS", "Robust layout + states", "Edge-case handling (mobile/desktop)"],
+        prompt: "Build a self-contained responsive HTML file (no external libs). Include dark mode, keyboard nav, and a slider.",
+        use: ["You want deployable artifacts", "You care about constraints & usability"]
+      },
+      {
+        level: 5,
+        name: "Tool / Runtime Mode",
+        mode: "Execute",
+        density: 82,
+        trigger: ["Environment coupling: Canvas/GitHub Pages/React/Three.js", "“Run this” / integration requirements"],
+        behavior: ["Environment-aware decisions", "More error-avoidant", "Optimizes for runtime success"],
+        output: ["App-level code", "Integration instructions", "Build/runtime assumptions"],
+        prompt: "Create a React app version deployable to GitHub Pages, with the same interactions and components.",
+        use: ["You’re demoing or integrating", "You care about real execution context"]
+      },
+      {
+        level: 6,
+        name: "System / Production Engineering Mode",
+        mode: "Architect",
+        density: 92,
+        trigger: ["Lifecycle constraints: maintainable, modular, accessible, performance budgets", "Future-proof requirements"],
+        behavior: ["Tradeoff reasoning", "Architecture over syntax", "Testing/structure/documentation minded"],
+        output: ["Componentized design", "File structure + rationale", "Accessibility + performance considerations"],
+        prompt: "Architect this as a maintainable component system with WCAG basics, perf budget, and a clear folder layout.",
+        use: ["You’re building a real product", "You want maintainability, scale, and longevity"]
+      }
+    ];
+
+    const els = {
+      app: document.getElementById("app"),
+      levels: document.getElementById("levels"),
+      slider: document.getElementById("slider"),
+      meterLabel: document.getElementById("meterLabel"),
+      meterValue: document.getElementById("meterValue"),
+      barFill: document.getElementById("barFill"),
+      detailTag: document.getElementById("detailTag"),
+      detailTitle: document.getElementById("detailTitle"),
+      detailDesc: document.getElementById("detailDesc"),
+      detailTrigger: document.getElementById("detailTrigger"),
+      detailBehavior: document.getElementById("detailBehavior"),
+      detailOutput: document.getElementById("detailOutput"),
+      detailPrompt: document.getElementById("detailPrompt"),
+      detailUse: document.getElementById("detailUse"),
+      themeBtn: document.getElementById("themeBtn"),
+      copyBtn: document.getElementById("copyBtn"),
+    };
+
+    const descFor = (d) => {
+      const focus =
+        d.mode === "Think" ? "High-level reasoning. Minimal constraints." :
+        d.mode === "Organize" ? "Clear structure. Still flexible." :
+        d.mode === "Represent" ? "Formal-ish representation. More consistency." :
+        d.mode === "Build" ? "Executable vibe. Concrete layout choices." :
+        d.mode === "Engineer" ? "Constraint satisfaction. Deterministic output." :
+        d.mode === "Execute" ? "Runtime-aware. Integration-focused." :
+        "System thinking. Maintainable architecture.";
+      return focus;
+    };
+
+    function makeLevelCard(d){
+      const div = document.createElement("div");
+      div.className = "lvl";
+      div.setAttribute("role","button");
+      div.setAttribute("tabindex","0");
+      div.dataset.level = d.level;
+
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = `L${d.level}`;
+
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = `${d.name}`;
+
+      const one = document.createElement("div");
+      one.className = "one";
+      one.textContent = `${d.mode} • constraint density ~${d.density}%`;
+
+      content.appendChild(name);
+      content.appendChild(one);
+
+      div.appendChild(badge);
+      div.appendChild(content);
+
+      div.addEventListener("click", () => setActive(d.level));
+      div.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          setActive(d.level);
+        }
+      });
+
+      return div;
+    }
+
+    function fillList(ul, items){
+      ul.innerHTML = "";
+      for(const it of items){
+        const li = document.createElement("li");
+        li.textContent = it;
+        ul.appendChild(li);
+      }
+    }
+
+    function setActive(level){
+      level = Math.max(0, Math.min(6, Number(level)));
+      const d = data[level];
+
+      // highlight
+      document.querySelectorAll(".lvl").forEach(x => x.classList.toggle("active", Number(x.dataset.level) === level));
+
+      // meter
+      els.slider.value = level;
+      els.meterLabel.textContent = `Selected: Level ${level}`;
+      els.meterValue.textContent = `~${d.density}%`;
+      els.barFill.style.width = `${d.density}%`;
+
+      // detail
+      els.detailTag.textContent = `Mode: ${d.mode}`;
+      els.detailTitle.textContent = `Level ${d.level} — ${d.name}`;
+      els.detailDesc.textContent = descFor(d);
+
+      fillList(els.detailTrigger, d.trigger);
+      fillList(els.detailBehavior, d.behavior);
+      fillList(els.detailOutput, d.output);
+      els.detailPrompt.textContent = d.prompt;
+      fillList(els.detailUse, d.use);
+
+      // little polish: scroll detail into view on mobile
+      if(window.matchMedia("(max-width: 980px)").matches){
+        document.querySelector(".detail")?.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    }
+
+    function init(){
+      // Render cards
+      els.levels.innerHTML = "";
+      data.forEach(d => els.levels.appendChild(makeLevelCard(d)));
+
+      // initial
+      setActive(3);
+
+      // slider sync
+      els.slider.addEventListener("input", (e) => setActive(e.target.value));
+
+      // keyboard shortcuts (0-6, arrows)
+      window.addEventListener("keydown", (e) => {
+        const key = e.key;
+        const active = Number(els.slider.value);
+        if(key >= "0" && key <= "6"){
+          setActive(Number(key));
+        } else if(key === "ArrowDown" || key === "ArrowRight"){
+          setActive(active + 1);
+        } else if(key === "ArrowUp" || key === "ArrowLeft"){
+          setActive(active - 1);
+        } else if(key.toLowerCase() === "d"){
+          toggleTheme();
+        } else if(key.toLowerCase() === "t"){
+          copyTemplate();
+        }
+      });
+
+      els.themeBtn.addEventListener("click", toggleTheme);
+      els.copyBtn.addEventListener("click", copyTemplate);
+
+      // restore theme
+      const saved = localStorage.getItem("infog_theme");
+      if(saved === "light" || saved === "dark"){
+        document.documentElement.dataset.theme = saved;
+      }
+    }
+
+    function toggleTheme(){
+      const cur = document.documentElement.dataset.theme || "dark";
+      const next = cur === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("infog_theme", next);
+    }
+
+    async function copyTemplate(){
+      const template =
+`Two-phase prompt (keeps insight AND yields HTML):
+
+1) First design the infographic concept and narrative.
+   - Provide: sections, hierarchy, key points, and a layout plan.
+
+2) Then implement it as a self-contained HTML infographic.
+   - Constraints: responsive, clean typography, minimal JS, no external libraries.
+   - Include: interactions (optional), keyboard navigation (optional), dark mode toggle (optional).`;
+
+      try{
+        await navigator.clipboard.writeText(template);
+        flashBtn(els.copyBtn, "Copied ✅");
+      }catch{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = template;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        flashBtn(els.copyBtn, "Copied ✅");
+      }
+    }
+
+    function flashBtn(btn, text){
+      const old = btn.textContent;
+      btn.textContent = text;
+      setTimeout(() => (btn.textContent = old), 900);
+    }
+
+    init();
+  </script>
+</body>
+</html>
