@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="How AI mandates create selection pressure and reshape the talent market - from encouraged to expected to measured.">
+  <meta name="category" content="AI Strategy">
+  <meta name="tags" content="Talent Market, Red Queen, Selection Pressure, AI Fluency, Workforce">
+  <meta name="icon" content="👔">
+  <meta name="created" content="2026-01-13">
+  <title>AI-as-Baseline: The Red Queen Talent Market Restructuring (Apr 2025 → Jan 2026)</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0A0F1D;
+      --text:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --faint:rgba(234,240,255,.12);
+      --line:rgba(234,240,255,.10);
+      --accent:#7C5CFF;
+      --accent2:#2EE6A6;
+      --warn:#FFCC66;
+      --bad:#FF5C7A;
+
+      --radius:18px;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(900px 600px at 85% 30%, rgba(46,230,166,.18), transparent 55%),
+        radial-gradient(700px 500px at 40% 95%, rgba(255,204,102,.10), transparent 55%),
+        linear-gradient(180deg, #060810, #070A12 45%, #060810);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
+
+    /* top bar */
+    .top{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(10,15,29,.55);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      position: sticky;
+      top: 14px;
+      z-index: 30;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 260px;
+    }
+    .dot{
+      width:12px; height:12px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(124,92,255,.10);
+    }
+    .brand h1{
+      font-size:13px; margin:0; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(234,240,255,.88);
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .nav{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(11,16,32,.45);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      color:rgba(234,240,255,.82);
+      transition:.18s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip:hover{ transform:translateY(-1px); border-color:rgba(234,240,255,.20); }
+    .chip.active{
+      background: rgba(124,92,255,.18);
+      border-color: rgba(124,92,255,.45);
+      box-shadow: 0 0 0 6px rgba(124,92,255,.10);
+    }
+
+    /* hero */
+    .hero{
+      margin-top:18px;
+      padding:26px 22px 22px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(11,16,32,.72), rgba(10,15,29,.55));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(800px 450px at 80% 40%, rgba(46,230,166,.18), transparent 55%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; z-index:2; }
+    .kicker{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      color:rgba(234,240,255,.80);
+      font-size:13px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(7,10,18,.45);
+      color:rgba(234,240,255,.85);
+      white-space:nowrap;
+    }
+    .title{
+      font-size:40px;
+      line-height:1.05;
+      margin:0 0 10px;
+      letter-spacing:-.03em;
+    }
+    .subtitle{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      max-width: 84ch;
+    }
+    .heroRow{
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap:14px;
+      margin-top:16px;
+    }
+    @media (max-width: 920px){
+      .heroRow{ grid-template-columns:1fr; }
+      .brand{ min-width: auto; }
+      .title{ font-size:34px; }
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(10,15,29,.58);
+      padding:16px;
+      box-shadow: var(--shadow2);
+    }
+    .card h3{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(234,240,255,.85);
+    }
+
+    /* stats */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    .stat{
+      padding:12px 12px 10px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(7,10,18,.45);
+      position:relative;
+      overflow:hidden;
+      min-height:86px;
+    }
+    .stat:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(220px 120px at 20% 20%, rgba(124,92,255,.22), transparent 60%),
+                  radial-gradient(260px 140px at 80% 40%, rgba(46,230,166,.14), transparent 65%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .stat > *{ position:relative; z-index:2; }
+    .stat .num{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      margin-bottom:4px;
+    }
+    .stat .lbl{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.25;
+    }
+    .stat .tag{
+      margin-top:8px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(234,240,255,.72);
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(11,16,32,.40);
+    }
+    .spark{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    /* sections */
+    section{ margin-top:16px; }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 920px){ .grid2{ grid-template-columns:1fr; } }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .li{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(7,10,18,.38);
+      padding:12px 12px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .bullet{
+      width:10px; height:10px; border-radius:999px;
+      margin-top:5px;
+      background: rgba(234,240,255,.22);
+      flex:0 0 auto;
+    }
+    .li strong{ font-weight:800; }
+    .li p{ margin:0; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    /* timeline */
+    .timeline{
+      position:relative;
+      padding-left:14px;
+    }
+    .timeline:before{
+      content:"";
+      position:absolute;
+      left:6px;
+      top:8px;
+      bottom:8px;
+      width:2px;
+      background: linear-gradient(180deg, rgba(124,92,255,.70), rgba(46,230,166,.55));
+      opacity:.7;
+      border-radius:999px;
+    }
+    .titem{
+      position:relative;
+      padding:12px 12px 12px 16px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(7,10,18,.38);
+      margin:0 0 10px;
+    }
+    .titem:before{
+      content:"";
+      position:absolute;
+      left:-14px;
+      top:16px;
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(124,92,255,.12);
+    }
+    .tmeta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:6px;
+    }
+    .date{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(11,16,32,.40);
+      color:rgba(234,240,255,.78);
+    }
+    .titem h4{ margin:0 0 6px; font-size:14px; }
+    .titem p{ margin:0; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    /* comparison */
+    .compare{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 720px){ .compare{ grid-template-columns:1fr; } }
+    .col{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(7,10,18,.38);
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .col:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(260px 140px at 20% 15%, rgba(124,92,255,.18), transparent 65%);
+      opacity:.75;
+      pointer-events:none;
+    }
+    .col > *{ position:relative; z-index:2; }
+    .colHead{
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:8px;
+    }
+    .colHead span{
+      font-size:12px; letter-spacing:.10em; text-transform:uppercase; color:rgba(234,240,255,.82);
+    }
+    .badge{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(11,16,32,.40);
+      color:rgba(234,240,255,.78);
+    }
+    .col ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13px; line-height:1.5; }
+    .col li{ margin:6px 0; }
+
+    /* bar chart (CSS-only) */
+    .bars{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .barRow{
+      display:grid;
+      grid-template-columns: 140px 1fr 48px;
+      gap:10px;
+      align-items:center;
+    }
+    @media (max-width: 520px){
+      .barRow{ grid-template-columns: 120px 1fr 44px; }
+    }
+    .barLabel{
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(234,240,255,.78);
+    }
+    .barTrack{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(7,10,18,.40);
+      overflow:hidden;
+      position:relative;
+    }
+    .barFill{
+      height:100%;
+      width:var(--w);
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(124,92,255,.9), rgba(46,230,166,.85));
+      box-shadow: 0 10px 26px rgba(124,92,255,.12);
+    }
+    .barVal{
+      text-align:right;
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(234,240,255,.78);
+    }
+
+    /* collapsibles */
+    details{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(7,10,18,.38);
+      padding:10px 12px;
+    }
+    details + details{ margin-top:10px; }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      user-select:none;
+      font-weight:700;
+      font-size:13px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sumRight{
+      display:flex; align-items:center; gap:10px;
+      color:rgba(234,240,255,.70);
+      font-family:var(--mono);
+      font-size:11px;
+    }
+    .chev{
+      width:10px; height:10px;
+      border-right:2px solid rgba(234,240,255,.65);
+      border-bottom:2px solid rgba(234,240,255,.65);
+      transform: rotate(45deg);
+      transition:.18s ease;
+      margin-right:2px;
+    }
+    details[open] .chev{ transform: rotate(225deg); }
+    .detailBody{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .code{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(6,8,16,.55);
+      color:rgba(234,240,255,.82);
+      overflow:auto;
+      white-space:pre-wrap;
+    }
+
+    /* footer */
+    .footer{
+      margin-top:16px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(10,15,29,.55);
+      color:rgba(234,240,255,.70);
+      font-size:12px;
+      line-height:1.55;
+      box-shadow: var(--shadow2);
+    }
+    .footer b{ color:rgba(234,240,255,.86); }
+    .fine{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      border-top:1px solid var(--line);
+      padding-top:10px;
+      color:rgba(234,240,255,.58);
+    }
+    .btn{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      border:1px solid var(--line);
+      background: rgba(7,10,18,.35);
+      padding:9px 12px;
+      border-radius:999px;
+      color:rgba(234,240,255,.82);
+      cursor:pointer;
+      user-select:none;
+      transition:.18s ease;
+      font-size:12px;
+    }
+    .btn:hover{ transform:translateY(-1px); border-color:rgba(234,240,255,.20); }
+    .btn .miniDot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    /* highlight */
+    mark{
+      background: rgba(124,92,255,.18);
+      color: rgba(234,240,255,.92);
+      padding: 0 .25em;
+      border-radius: .35em;
+      border:1px solid rgba(124,92,255,.25);
+    }
+
+    /* hidden pages */
+    .page{ display:none; }
+    .page.active{ display:block; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top" role="navigation" aria-label="Infographic navigation">
+      <div class="brand">
+        <div class="dot" aria-hidden="true"></div>
+        <h1>Talent Market Restructuring · Apr 2025 → Jan 2026</h1>
+      </div>
+      <div class="nav" id="nav">
+        <div class="chip active" data-page="overview">Overview</div>
+        <div class="chip" data-page="mechanism">Mechanism</div>
+        <div class="chip" data-page="infrastructure">Infrastructure</div>
+        <div class="chip" data-page="signals">Signals & Stats</div>
+        <div class="chip" data-page="forecast">2026 Forecast</div>
+        <div class="chip" data-page="playbook">Your Playbook</div>
+      </div>
+    </div>
+
+    <!-- PAGE: OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Core frame: “Red Queen” selection pressure</span>
+          <span class="pill">AI moves: encouraged → expected → measured</span>
+        </div>
+        <h2 class="title">AI isn’t a productivity story. It’s a <span style="color:rgba(124,92,255,.95)">filter</span>.</h2>
+        <p class="subtitle">
+          The “AI is mandatory” memo didn’t just push people to use tools. It altered the <mark>selection pressure</mark> inside
+          companies—who thrives, who gets hired, what gets rewarded, and how roles are defined. Eight months later (January 2026),
+          the pattern is showing up across hiring criteria, compensation, interviews, and org design.
+        </p>
+
+        <div class="heroRow">
+          <div class="card">
+            <h3>What changed (in one sentence)</h3>
+            <ul class="list">
+              <li class="li">
+                <span class="bullet" aria-hidden="true"></span>
+                <p><strong>AI fluency</strong> shifted from “nice to have” to <strong>baseline expectation</strong>—like email or spreadsheets.</p>
+              </li>
+              <li class="li">
+                <span class="bullet" aria-hidden="true"></span>
+                <p>Work is being <strong>recomposed</strong>: role boundaries dissolve as people cross domains faster.</p>
+              </li>
+              <li class="li">
+                <span class="bullet" aria-hidden="true"></span>
+                <p>Comp is <strong>polarizing</strong>: premiums for real leverage, pressure for flat productivity.</p>
+              </li>
+              <li class="li">
+                <span class="bullet" aria-hidden="true"></span>
+                <p>Entry-level is getting squeezed—yet “AI-native” juniors are increasingly valued (the <strong>U-shaped</strong> market).</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Key stats (from your narrative)</h3>
+            <div class="stats">
+              <div class="stat">
+                <div class="num">5% → 9%</div>
+                <div class="lbl">Job postings requiring AI skills (2024 → 2025)</div>
+                <div class="tag"><span class="spark"></span> demand signal</div>
+              </div>
+              <div class="stat">
+                <div class="num">1M → 7M</div>
+                <div class="lbl">Workers in AI-fluency occupations (2023 → 2025)</div>
+                <div class="tag"><span class="spark"></span> adoption curve</div>
+              </div>
+              <div class="stat">
+                <div class="num">66%</div>
+                <div class="lbl">Enterprises reducing entry-level hiring as AI adoption rises</div>
+                <div class="tag"><span class="spark"></span> squeeze</div>
+              </div>
+              <div class="stat">
+                <div class="num">84%</div>
+                <div class="lbl">Companies reporting significant internal skill gaps</div>
+                <div class="tag"><span class="spark"></span> capability gap</div>
+              </div>
+            </div>
+            <div class="bars" aria-label="Quick bar visualization">
+              <div class="barRow">
+                <div class="barLabel">AI skills in postings</div>
+                <div class="barTrack"><div class="barFill" style="--w:56%"></div></div>
+                <div class="barVal">9%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">Entry-level reduction</div>
+                <div class="barTrack"><div class="barFill" style="--w:66%"></div></div>
+                <div class="barVal">66%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">Role changes reported</div>
+                <div class="barTrack"><div class="barFill" style="--w:91%"></div></div>
+                <div class="barVal">91%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">Low “AI maturity”</div>
+                <div class="barTrack"><div class="barFill" style="--w:9%"></div></div>
+                <div class="barVal">9%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>Timeline: memo → market</h3>
+          <div class="timeline">
+            <div class="titem">
+              <div class="tmeta">
+                <span class="date">Apr 2025</span><span class="date">Shopify</span>
+              </div>
+              <h4>“AI is mandatory”</h4>
+              <p>Prove AI can’t do it before hiring. Add AI usage to performance reviews. Make “AI reflexive” a baseline expectation.</p>
+            </div>
+            <div class="titem">
+              <div class="tmeta">
+                <span class="date">2025 (rest)</span><span class="date">Copycat wave</span>
+              </div>
+              <h4>Bandwagon & divergence</h4>
+              <p>Similar policies appear elsewhere; outcomes vary drastically depending on culture + infrastructure readiness.</p>
+            </div>
+            <div class="titem">
+              <div class="tmeta">
+                <span class="date">Nov 2025</span><span class="date">Big Tech signal</span>
+              </div>
+              <h4>“Automate everything possible”</h4>
+              <p>Executives frame AI automation as inevitable while insisting work remains—shifting the debate from “if” to “how.”</p>
+            </div>
+            <div class="titem">
+              <div class="tmeta">
+                <span class="date">Jan 2026</span><span class="date">Market acceleration</span>
+              </div>
+              <h4>Premiums for AI-native builders</h4>
+              <p>New signals weekly: hiring premiums, redesigned roles, interview loops that test AI fluency, and compensation recalibration.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>The central argument</h3>
+          <details open>
+            <summary>
+              Productivity vs selection pressure
+              <span class="sumRight"><span class="chev"></span> core shift</span>
+            </summary>
+            <div class="detailBody">
+              When you make AI usage <mark>measurable</mark> (review cycles, headcount gates, peer ratings),
+              you are not merely “speeding up work.” You are changing which behaviors survive and spread.
+              That selection pressure reshapes the talent pool—who applies, who stays, and who gets promoted.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Red Queen logic (applied to AI)
+              <span class="sumRight"><span class="chev"></span> compounding</span>
+            </summary>
+            <div class="detailBody">
+              In a company growing 20–40% YoY, you must improve at least that much yearly just to “re-qualify” for your role.
+              AI becomes a capability multiplier that makes this expectation executable—especially for the people willing to adopt it deeply.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Why this spreads beyond one company
+              <span class="sumRight"><span class="chev"></span> standard-setting</span>
+            </summary>
+            <div class="detailBody">
+              Early movers build data, norms, and internal tooling. Those norms become de facto standards in hiring and interviews.
+              Late adopters face a chicken-and-egg: they can’t hire AI-fluent workers without infrastructure, and can’t build infrastructure without the workers.
+            </div>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE: MECHANISM -->
+    <div class="page" id="page-mechanism">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Mechanism: incentives + measurement</span>
+          <span class="pill">Failure mode: Goodhart’s law</span>
+        </div>
+        <h2 class="title">How “AI mandatory” becomes a <span style="color:rgba(46,230,166,.92)">talent filter</span></h2>
+        <p class="subtitle">
+          Once AI usage is included in reviews and headcount gates, it changes the internal “physics” of a company:
+          what people practice, what teams optimize, and which skills become scarce (and expensive).
+        </p>
+
+        <section class="grid2">
+          <div class="card">
+            <h3>Mandates (operationalized)</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span><p><strong>Reflexive AI usage</strong> becomes baseline expectation.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>AI dominates prototyping</strong> in “get-stuff-done” work.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Performance reviews</strong> include explicit AI usage questions.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Headcount requests</strong> require proving AI can’t do the job.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Everyone</strong> is included (including execs).</p></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Selection pressure loop</h3>
+            <div class="code" aria-label="Selection pressure loop diagram (text)">
+1) Measure AI fluency → 
+2) Reward leverage → 
+3) Attract AI-native applicants → 
+4) Promote AI-native norms → 
+5) Build more tooling & data → 
+6) Raise baseline expectations → 
+7) Repeat (compounding advantage)
+            </div>
+            <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.55;">
+              This is why the memo doesn’t “fade”: it’s not a slogan. It’s a feedback system.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>Goodhart risk: “gaming” AI usage</h3>
+          <details open>
+            <summary>
+              Shallow usage (easy to fake)
+              <span class="sumRight"><span class="chev"></span> anti-pattern</span>
+            </summary>
+            <div class="detailBody">
+              Token spam, unnecessary prompts, “AI theater,” low-impact automation, or using tools without improving outcomes.
+              If measurement is naive, people optimize for appearances rather than leverage.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Deep usage (hard to fake)
+              <span class="sumRight"><span class="chev"></span> durable</span>
+            </summary>
+            <div class="detailBody">
+              Rebuilding workflows, compressing coordination, turning repetitive work into systems,
+              and demonstrating faster iteration cycles <mark>with quality intact</mark>.
+              Deep usage shows up as fewer handoffs, clearer artifacts, and more output per unit time.
+            </div>
+          </details>
+          <details>
+            <summary>
+              A practical “anti-Goodhart” rubric
+              <span class="sumRight"><span class="chev"></span> checklist</span>
+            </summary>
+            <div class="detailBody">
+              Evaluate AI leverage by:
+              <ul>
+                <li>Time-to-prototype (hours → minutes)</li>
+                <li>Cycle time (idea → shipped)</li>
+                <li>Error/incident rate (quality didn’t collapse)</li>
+                <li>Coordination load (fewer meetings, fewer handoffs)</li>
+                <li>Reusable assets created (agents, templates, scripts, connectors)</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h3>U-shaped talent market</h3>
+          <div class="compare">
+            <div class="col">
+              <div class="colHead">
+                <span>Very senior</span>
+                <span class="badge">extreme leverage</span>
+              </div>
+              <ul>
+                <li>Deep domain intuition + AI multi-threading</li>
+                <li>Agents + orchestration → outsized output</li>
+                <li>Premium compensation for measurable leverage</li>
+              </ul>
+            </div>
+            <div class="col">
+              <div class="colHead">
+                <span>AI-native juniors</span>
+                <span class="badge">fast adopters</span>
+              </div>
+              <ul>
+                <li>Less “unlearning” of pre-AI workflows</li>
+                <li>Comfort with tools as default interface</li>
+                <li>Valued as cultural + workflow catalysts</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.55;">
+            Mid-tier talent gets squeezed: if your productivity stays flat while the baseline rises, wage pressure follows.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE: INFRASTRUCTURE -->
+    <div class="page" id="page-infrastructure">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Prereq: permissive access + connectors</span>
+          <span class="pill">Pattern: prototype → infrastructure</span>
+        </div>
+        <h2 class="title">Why some “AI-first” programs work—and others explode</h2>
+        <p class="subtitle">
+          The execution gap is mostly <mark>infrastructure + culture</mark>. When tooling is scarce, gated, or legally blocked,
+          mandates feel like threats. When tooling is abundant and safe-by-default, mandates become accelerators.
+        </p>
+
+        <section class="grid2">
+          <div class="card">
+            <h3>Infrastructure that makes “AI mandatory” viable</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span><p><strong>Internal LLM proxy</strong>: one interface, multiple models, tracking/failover.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>MCP connectors</strong>: Slack, Salesforce, G Suite—“MCP everything.”</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Org-wide access</strong>: no tight quotas; everyone can experiment.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Structured agent work</strong>: break prompts into steps; keep agents on-track.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Legal alignment</strong>: “How do we do it safely?” vs “Can we?”</p></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Propagation mechanism</h3>
+            <details open>
+              <summary>
+                Individual prototype → organizational platform
+                <span class="sumRight"><span class="chev"></span> repeatable</span>
+              </summary>
+              <div class="detailBody">
+                A single employee builds a tool to reduce their own friction.
+                If the environment allows sharing, it spreads.
+                Then it becomes “official,” gets staffed, and compounds into infrastructure.
+              </div>
+            </details>
+            <details>
+              <summary>
+                “Process power” (work re-levering)
+                <span class="sumRight"><span class="chev"></span> key idea</span>
+              </summary>
+              <div class="detailBody">
+                Not just accelerating existing workflows—<mark>restructuring</mark> them.
+                Example: the “homepage” becomes the AI workspace; legacy tools get disintermediated.
+              </div>
+            </details>
+            <details>
+              <summary>
+                Role drift becomes normal
+                <span class="sumRight"><span class="chev"></span> consequence</span>
+              </summary>
+              <div class="detailBody">
+                Designers submit pull requests. Non-engineers prototype. Engineers run side experiments.
+                When crossing domains gets cheap, job titles lag reality.
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>Copycat outcomes (why they diverge)</h3>
+          <div class="compare">
+            <div class="col">
+              <div class="colHead">
+                <span>Durable path</span>
+                <span class="badge" style="border-color:rgba(46,230,166,.35)">incentives aligned</span>
+              </div>
+              <ul>
+                <li>AI removes busywork</li>
+                <li>Teams keep the “savings” for strategic bets</li>
+                <li>Adoption feels like opportunity</li>
+                <li>Tooling supports broad experimentation</li>
+              </ul>
+            </div>
+            <div class="col">
+              <div class="colHead">
+                <span>Backlash path</span>
+                <span class="badge" style="border-color:rgba(255,92,122,.35)">trust breaks</span>
+              </div>
+              <ul>
+                <li>AI framed as replacement</li>
+                <li>Customers interpret “people last”</li>
+                <li>Internal fear dampens experimentation</li>
+                <li>Mandates land before readiness</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Chicken-and-egg problem (late adopters)</h3>
+          <div class="code">
+Need AI-fluent workers → to build AI-native infrastructure
+Need AI-native infrastructure → to attract/retain AI-fluent workers
+          </div>
+          <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.55;">
+            This is why early movers can “set the standard.” They’re compounding while others are negotiating permission.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE: SIGNALS & STATS -->
+    <div class="page" id="page-signals">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Evidence: postings, hiring, comp, interviews</span>
+          <span class="pill">Signal density: weekly</span>
+        </div>
+        <h2 class="title">Signals that the market is being rewritten</h2>
+        <p class="subtitle">
+          The most important shift: <mark>skills matter more than jobs</mark>.
+          Companies increasingly interview for AI fluency as a baseline and redesign roles to match cross-domain work.
+        </p>
+
+        <section class="grid2">
+          <div class="card">
+            <h3>Market metrics (as stated)</h3>
+            <div class="bars">
+              <div class="barRow">
+                <div class="barLabel">AI skills in postings</div>
+                <div class="barTrack"><div class="barFill" style="--w:56%"></div></div>
+                <div class="barVal">9%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">Entry-level reduced</div>
+                <div class="barTrack"><div class="barFill" style="--w:66%"></div></div>
+                <div class="barVal">66%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">Role changes</div>
+                <div class="barTrack"><div class="barFill" style="--w:91%"></div></div>
+                <div class="barVal">91%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">AI mature orgs</div>
+                <div class="barTrack"><div class="barFill" style="--w:9%"></div></div>
+                <div class="barVal">9%</div>
+              </div>
+              <div class="barRow">
+                <div class="barLabel">AI/ML roles fill time</div>
+                <div class="barTrack"><div class="barFill" style="--w:89%"></div></div>
+                <div class="barVal">89d</div>
+              </div>
+            </div>
+
+            <p style="margin:12px 0 0; color:var(--muted); font-size:13px; line-height:1.55;">
+              Translation: demand is rising, supply is constrained, and most orgs feel “immature” even while using AI operationally.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Observable changes (what shows up in practice)</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span><p><strong>Job descriptions</strong> add AI fluency as baseline.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Interview loops</strong> test how candidates work with AI, not just what they know.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Comp models</strong> price “leverage,” not merely tenure.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Coordination roles</strong> appear to manage higher output volume (synthesis/curation).</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Role boundaries</strong> blur as cross-domain execution gets cheaper.</p></li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>What “AI-native” means (behavioral)</h3>
+          <details open>
+            <summary>
+              Reflexive usage
+              <span class="sumRight"><span class="chev"></span> baseline</span>
+            </summary>
+            <div class="detailBody">
+              You don’t “decide” to use AI—AI is the default interface for thinking, drafting, exploring, and prototyping.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Workflow redesign
+              <span class="sumRight"><span class="chev"></span> leverage</span>
+            </summary>
+            <div class="detailBody">
+              You build small systems: prompts → templates → agents → connectors → reusable automation.
+              Output scales because the process scales.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Evidence over vibes
+              <span class="sumRight"><span class="chev"></span> credible</span>
+            </summary>
+            <div class="detailBody">
+              You can show artifacts: a repo, an agent, a dashboard, a connector, a playbook—something that proves you can “ship” with AI.
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h3>The “skills > jobs” thesis</h3>
+          <div class="code">
+Old world: Role → tasks → tools
+New world: Skills → tools → tasks → role (fluid)
+          </div>
+          <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.55;">
+            If tools lower the cost of crossing domains, the org chart stops describing reality.
+            Companies start hiring for adaptable, tool-native capability.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE: 2026 FORECAST -->
+    <div class="page" id="page-forecast">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Prediction horizon: end of 2026</span>
+          <span class="pill">Vector: baseline uplift</span>
+        </div>
+        <h2 class="title">Where this heads in 2026</h2>
+        <p class="subtitle">
+          The first eight months looked “speculative.” January 2026 looks like <mark>standardization</mark>.
+          Expect policy + tooling + hiring criteria to converge toward AI fluency as a default.
+        </p>
+
+        <section class="grid2">
+          <div class="card">
+            <h3>Forecast (high confidence)</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span><p><strong>AI fluency → baseline</strong> in most knowledge-work postings.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Role boundaries dissolve</strong>: adjacent domain crossing becomes routine.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>New coordination roles</strong>: synthesis/curation for high output volume.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Compensation polarizes</strong>: premiums for leverage, pressure for flat scaling.</p></li>
+              <li class="li"><span class="bullet"></span><p><strong>Entry-level squeeze intensifies</strong> unless companies redesign training models.</p></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Two competing realities (both true)</h3>
+            <details open>
+              <summary>
+                Juniors may benefit more (average)
+                <span class="sumRight"><span class="chev"></span> research trend</span>
+              </summary>
+              <div class="detailBody">
+                Early-career workers have less “unlearning,” and AI can scaffold skills, raising their baseline quickly.
+              </div>
+            </details>
+            <details>
+              <summary>
+                Senior outliers may dwarf everyone (tail)
+                <span class="sumRight"><span class="chev"></span> leverage tail</span>
+              </summary>
+              <div class="detailBody">
+                Domain mastery + orchestration + agent workflows can create extreme output. Expect a long tail of
+                highly compensated, highly leveraged seniors.
+              </div>
+            </details>
+            <details>
+              <summary>
+                The middle gets compressed
+                <span class="sumRight"><span class="chev"></span> pressure</span>
+              </summary>
+              <div class="detailBody">
+                If one AI-fluent worker replaces the output of two or three, the salary “math” shifts.
+                Stable output becomes insufficient in a Red Queen market.
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>What wins: readiness, not slogans</h3>
+          <div class="compare">
+            <div class="col">
+              <div class="colHead">
+                <span>AI-ready org</span>
+                <span class="badge">compounds</span>
+              </div>
+              <ul>
+                <li>Broad access + safe defaults</li>
+                <li>Connectors to internal data</li>
+                <li>Structured agent workflows</li>
+                <li>Incentives: teams keep “savings”</li>
+              </ul>
+            </div>
+            <div class="col">
+              <div class="colHead">
+                <span>AI-fragile org</span>
+                <span class="badge">stalls</span>
+              </div>
+              <ul>
+                <li>Gated models, tight quotas, fear</li>
+                <li>No data access / no connectors</li>
+                <li>Mandate without enablement</li>
+                <li>“Savings” extracted as cost cuts</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Executive intent (why memos keep coming)</h3>
+          <p style="margin:0; color:var(--muted); font-size:13px; line-height:1.55;">
+            Leaders increasingly frame AI as existential selection pressure at the firm level:
+            if the company doesn’t evolve, it risks slow-motion failure. “Stagnation is almost certain” becomes
+            shorthand for “do nothing and you lose.”
+          </p>
+          <div class="code" style="margin-top:10px">
+Company risk: AI lowers cost of execution → increases competition → compresses margins
+Survival response: raise internal capability baseline → attract leverage talent → iterate faster
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE: YOUR PLAYBOOK -->
+    <div class="page" id="page-playbook">
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">For individuals</span>
+          <span class="pill">For teams</span>
+        </div>
+        <h2 class="title">What to do next (without panic)</h2>
+        <p class="subtitle">
+          This affects everyone: job seekers, incumbents, managers, and executives.
+          The move is to become <mark>credibly AI-leveraged</mark>—not “AI-adjacent.”
+        </p>
+
+        <section class="grid2">
+          <div class="card">
+            <h3>If you’re an individual</h3>
+            <details open>
+              <summary>
+                Build proof, not opinions
+                <span class="sumRight"><span class="chev"></span> portfolio</span>
+              </summary>
+              <div class="detailBody">
+                Create artifacts that demonstrate leverage:
+                <ul>
+                  <li>A small agent that saves time weekly</li>
+                  <li>A connector/workflow template others can reuse</li>
+                  <li>A repo showing AI-assisted iteration + tests</li>
+                  <li>A write-up: problem → approach → results</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary>
+                Learn “structured prompting” (agents need rails)
+                <span class="sumRight"><span class="chev"></span> practical</span>
+              </summary>
+              <div class="detailBody">
+                Use discrete steps, checklists, and constraints. Treat AI like a junior teammate:
+                clear objectives, short loops, and explicit acceptance criteria.
+              </div>
+            </details>
+            <details>
+              <summary>
+                Optimize for cycle time
+                <span class="sumRight"><span class="chev"></span> Red Queen</span>
+              </summary>
+              <div class="detailBody">
+                Track how quickly you go from idea → prototype → feedback → revision.
+                The winning skill is not “knowing everything,” it’s iterating faster with quality intact.
+              </div>
+            </details>
+          </div>
+
+          <div class="card">
+            <h3>If you’re leading a team</h3>
+            <details open>
+              <summary>
+                Make enablement precede measurement
+                <span class="sumRight"><span class="chev"></span> trust</span>
+              </summary>
+              <div class="detailBody">
+                Before adding AI to reviews, ensure:
+                <ul>
+                  <li>Broad access to tools</li>
+                  <li>Clear data policies</li>
+                  <li>Shared templates & workflows</li>
+                  <li>Training time on calendar</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary>
+                Measure outcomes, not tokens
+                <span class="sumRight"><span class="chev"></span> anti-Goodhart</span>
+              </summary>
+              <div class="detailBody">
+                Reward faster cycle time, fewer handoffs, reusable automation, and stable quality metrics.
+                Avoid “AI theater” KPIs.
+              </div>
+            </details>
+            <details>
+              <summary>
+                Keep the savings with the builders
+                <span class="sumRight"><span class="chev"></span> incentives</span>
+              </summary>
+              <div class="detailBody">
+                If automation reduces effort, let teams reinvest that capacity into strategic projects.
+                Turning adoption into opportunity reduces fear and increases experimentation.
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <section class="grid2">
+        <div class="card">
+          <h3>Glossary (fast)</h3>
+          <details open>
+            <summary>
+              Red Queen
+              <span class="sumRight"><span class="chev"></span> growth pressure</span>
+            </summary>
+            <div class="detailBody">
+              In a fast-growing org, you must improve continually just to stay “even.” AI becomes the new lever for that required improvement.
+            </div>
+          </details>
+          <details>
+            <summary>
+              AI-native / AI-reflexive
+              <span class="sumRight"><span class="chev"></span> default mode</span>
+            </summary>
+            <div class="detailBody">
+              AI is the default interface for work: drafting, prototyping, searching, planning, and iterating—not an occasional add-on.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Selection pressure
+              <span class="sumRight"><span class="chev"></span> who thrives</span>
+            </summary>
+            <div class="detailBody">
+              Incentives + measurement that determine which behaviors are rewarded and which people succeed, shaping the talent pool over time.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Process power
+              <span class="sumRight"><span class="chev"></span> re-levering</span>
+            </summary>
+            <div class="detailBody">
+              Restructuring workflows (not just speeding them up) so the “shape” of work changes: fewer tool hops, fewer handoffs, more output per person.
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h3>One-page summary you can reuse</h3>
+          <div class="code" aria-label="Reusable summary">
+AI is shifting from “encouraged” to “expected” to “measured.”
+That’s not a productivity slogan; it’s selection pressure.
+Companies that enable broad experimentation (access + connectors + safe defaults)
+create compounding advantages: more leverage talent, faster iteration, stronger norms.
+
+Expect 2026 to bring:
+- AI fluency as baseline in most knowledge-work roles
+- Dissolving role boundaries (cross-domain execution)
+- New synthesis/curation coordination roles
+- Polarized compensation (premiums for leverage)
+- A tighter entry-level funnel with higher expectations
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <b>Note:</b> This infographic is built directly from the narrative you provided (April 2025 → January 2026),
+      emphasizing the core frame: <mark>AI mandates work because they create selection pressure</mark>, and they fail when
+      culture/infrastructure aren’t ready or incentives are misaligned.
+      <div class="fine">
+        <div>Tip: Use the top chips to switch sections. Everything is self-contained (no external assets).</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="btnCopy"><span class="miniDot"></span> Copy share-summary</button>
+          <button class="btn" id="btnPrint"><span class="miniDot"></span> Print / Save PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const pages = {
+      overview: document.getElementById('page-overview'),
+      mechanism: document.getElementById('page-mechanism'),
+      infrastructure: document.getElementById('page-infrastructure'),
+      signals: document.getElementById('page-signals'),
+      forecast: document.getElementById('page-forecast'),
+      playbook: document.getElementById('page-playbook'),
+    };
+
+    function setPage(key){
+      chips.forEach(c => c.classList.toggle('active', c.dataset.page === key));
+      Object.entries(pages).forEach(([k, el]) => el.classList.toggle('active', k === key));
+      // small UX: scroll to top of content on page change (but keep sticky nav)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // update hash
+      history.replaceState(null, '', '#' + key);
+    }
+
+    chips.forEach(ch => ch.addEventListener('click', () => setPage(ch.dataset.page)));
+
+    // Load from hash
+    const hash = (location.hash || '').replace('#','');
+    if (hash && pages[hash]) setPage(hash);
+
+    // Copy share summary
+    const shareText =
+`AI is shifting from “encouraged” to “expected” to “measured.”
+That’s not a productivity slogan; it’s selection pressure.
+
+Early movers compound (access + connectors + safe defaults):
+- attract leverage talent
+- iterate faster
+- set hiring norms
+
+2026 direction:
+- AI fluency becomes baseline in most knowledge work
+- role boundaries dissolve (cross-domain execution)
+- new synthesis/curation coordination roles
+- compensation polarizes (premiums for leverage)
+- entry-level funnel tightens with higher expectations`;
+
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(shareText);
+        const btn = document.getElementById('btnCopy');
+        const old = btn.innerHTML;
+        btn.innerHTML = '<span class="miniDot"></span> Copied';
+        setTimeout(()=> btn.innerHTML = old, 900);
+      }catch(e){
+        alert('Copy failed (clipboard permissions). You can manually copy from the summary box on the Playbook page.');
+      }
+    });
+
+    // Print
+    document.getElementById('btnPrint').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>
