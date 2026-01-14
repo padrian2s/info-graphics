@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="category" content="AI Strategy" />
+  <meta name="description" content="Product discovery via latent demand, org culture as incentives, and multi-agent AI coding swarms — build for the model 6 months from now." />
+  <meta name="tags" content="Latent Demand, AI Swarms, Product Principles, Org Culture, Claude Code" />
+  <meta name="icon" content="🧠" />
+  <meta name="created" content="2025-01-14" />
+  <title>Latent Demand → AI Coding Swarms — Boris Chney (Claude Code) | HTML Infographic</title>
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --panel:#101827;
+      --panel2:#0f1624;
+      --text:#e8eefc;
+      --muted:#a9b4cc;
+      --faint:#6f7a92;
+      --line:#23304a;
+      --brand:#6ae4ff;
+      --brand2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --paper:#0c1322;
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --shadow2: 0 10px 25px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(106,228,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 90% 10%, rgba(167,139,250,.16), transparent 55%),
+        radial-gradient(900px 600px at 50% 110%, rgba(52,211,153,.10), transparent 55%),
+        linear-gradient(180deg, #070a11, var(--bg));
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 70px}
+    .topbar{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(11,15,23,.85), rgba(11,15,23,.55));
+      border-bottom:1px solid rgba(35,48,74,.55);
+      padding:14px 18px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;min-width:280px;
+    }
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: conic-gradient(from 210deg, rgba(106,228,255,.95), rgba(167,139,250,.95), rgba(52,211,153,.95), rgba(106,228,255,.95));
+      box-shadow: 0 10px 30px rgba(106,228,255,.15);
+    }
+    .brand h1{
+      font-size:14px;margin:0;letter-spacing:.2px;font-weight:750;
+    }
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .controls{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;
+    }
+    .chip{
+      display:flex;align-items:center;gap:8px;
+      padding:9px 10px;border-radius:999px;
+      border:1px solid rgba(35,48,74,.75);
+      background: rgba(16,24,39,.6);
+      box-shadow: 0 8px 22px rgba(0,0,0,.22);
+      font-size:12px;color:var(--muted);
+    }
+    .chip b{color:var(--text);font-weight:700}
+    .search{
+      display:flex;align-items:center;gap:10px;
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(35,48,74,.75);
+      background: rgba(16,24,39,.6);
+      box-shadow: 0 8px 22px rgba(0,0,0,.22);
+      min-width:280px;
+    }
+    .search input{
+      width:100%;
+      background:transparent;border:0;outline:0;
+      color:var(--text);font-size:12px;
+    }
+    .btn{
+      cursor:pointer; user-select:none;
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(35,48,74,.75);
+      background: linear-gradient(180deg, rgba(16,24,39,.85), rgba(16,24,39,.55));
+      color:var(--text);font-size:12px;font-weight:650;
+      box-shadow: 0 8px 22px rgba(0,0,0,.22);
+    }
+    .btn:hover{border-color: rgba(106,228,255,.6)}
+    header.hero{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(16,24,39,.92), rgba(12,19,34,.82));
+      border:1px solid rgba(35,48,74,.7);
+      border-radius:var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .pad{padding:18px}
+    .kicker{
+      font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(106,228,255,.85);
+      display:flex; align-items:center; gap:10px;
+    }
+    .kicker .dot{width:7px;height:7px;border-radius:50%;background:rgba(106,228,255,.9);box-shadow:0 0 0 6px rgba(106,228,255,.12)}
+    .title{
+      margin:10px 0 8px;
+      font-size:26px; line-height:1.15;
+      font-weight:850;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:14px; line-height:1.5;
+    }
+    .quote{
+      margin-top:14px;
+      padding:14px 14px 12px;
+      border-radius:14px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+    }
+    .quote p{margin:0;color:var(--text);font-size:13px;line-height:1.55}
+    .quote .by{margin-top:10px;color:var(--muted);font-size:12px}
+    .metaGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      height:100%;
+    }
+    .mini{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+      box-shadow: var(--shadow2);
+    }
+    .mini h3{margin:0 0 8px;font-size:13px}
+    .mini p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{
+      font-size:11px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(35,48,74,.7);
+      background: rgba(16,24,39,.55);
+      color:var(--muted);
+    }
+    .pill.good{border-color: rgba(52,211,153,.45); color: rgba(52,211,153,.95)}
+    .pill.warn{border-color: rgba(251,191,36,.45); color: rgba(251,191,36,.95)}
+    .pill.brand{border-color: rgba(106,228,255,.45); color: rgba(106,228,255,.95)}
+    .pill.purple{border-color: rgba(167,139,250,.45); color: rgba(167,139,250,.95)}
+
+    main{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width: 980px){
+      header.hero{grid-template-columns:1fr}
+      main{grid-template-columns:1fr}
+      .search{min-width:0;width:100%}
+      .brand{min-width:0}
+    }
+
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;
+      gap:12px;margin:0 0 10px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.02em;
+      font-weight:850;
+    }
+    .sectionTitle span{
+      color:var(--faint);
+      font-size:12px;
+    }
+
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width: 980px){ .grid3{grid-template-columns:1fr} }
+
+    .metric{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .metric:before{
+      content:"";
+      position:absolute;inset:-60px -80px auto auto;
+      width:220px;height:220px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(106,228,255,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .metric .big{
+      font-size:22px;font-weight:900;letter-spacing:.01em;margin:0 0 6px;
+    }
+    .metric .label{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+    .metric code{font-family:var(--mono);font-size:11px;color:rgba(106,228,255,.9)}
+
+    .timeline{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+      box-shadow: var(--shadow2);
+    }
+    .trow{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap:12px;
+      padding:10px 8px;
+      border-bottom:1px dashed rgba(35,48,74,.55);
+    }
+    .trow:last-child{border-bottom:0}
+    .trow .when{color:rgba(167,139,250,.95);font-size:12px;font-weight:800}
+    .trow .what b{display:block;margin-bottom:4px;font-size:13px}
+    .trow .what{color:var(--muted);font-size:12px;line-height:1.5}
+
+    details{
+      border-radius:16px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .sumL{display:flex;flex-direction:column;gap:4px}
+    .sumL b{font-size:13px}
+    .sumL span{font-size:12px;color:var(--muted)}
+    .chev{
+      width:32px;height:32px;border-radius:999px;
+      border:1px solid rgba(35,48,74,.7);
+      display:grid;place-items:center;
+      color:var(--muted);
+      background: rgba(16,24,39,.45);
+      flex: 0 0 auto;
+    }
+    details[open] .chev{color:rgba(106,228,255,.9);border-color:rgba(106,228,255,.45)}
+    .detailBody{padding:0 14px 14px}
+    .detailBody p{margin:10px 0;color:var(--muted);font-size:12.5px;line-height:1.6}
+    .detailBody ul{margin:10px 0 0 18px;color:var(--muted);font-size:12.5px;line-height:1.55}
+    .detailBody li{margin:6px 0}
+    .callout{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(35,48,74,.65);
+      background: linear-gradient(180deg, rgba(16,24,39,.6), rgba(16,24,39,.35));
+      color:var(--muted);
+      font-size:12px; line-height:1.6;
+    }
+    .callout b{color:var(--text)}
+    .kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:8px;border:1px solid rgba(35,48,74,.7);background: rgba(16,24,39,.55);color:rgba(106,228,255,.9)}
+    .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:3px 7px;
+      border-radius:999px;
+      border:1px solid rgba(35,48,74,.7);
+      background: rgba(16,24,39,.55);
+      color:rgba(106,228,255,.9);
+      display:inline-block;
+    }
+
+    .diagram{
+      padding:14px;
+      border-radius:16px;
+      background: rgba(10,14,24,.55);
+      border:1px solid rgba(35,48,74,.65);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .diagram .cap{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px
+    }
+    .diagram .cap b{font-size:13px}
+    .diagram .cap span{font-size:12px;color:var(--muted)}
+    svg{width:100%;height:auto;display:block}
+    .foot{
+      margin-top:18px;
+      color:var(--faint);
+      font-size:12px;
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      padding:14px 2px 0;
+      border-top:1px solid rgba(35,48,74,.55);
+    }
+    .mono{font-family:var(--mono)}
+    .hidden{display:none !important;}
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>From Latent Demand to AI Coding Swarms</h1>
+        <p>Boris Chney — product principles + org dynamics + “build for 6 months from now”</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="chip"><b id="matchCount">0</b> <span>matches</span></div>
+      <div class="search" title="Filter sections by keyword (e.g., latent, incentives, swarms)">
+        <span style="color:var(--faint);font-size:12px;">⌕</span>
+        <input id="q" placeholder="Search this infographic…" />
+      </div>
+      <button class="btn" id="expandAll">Expand all</button>
+      <button class="btn" id="collapseAll">Collapse</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <header class="hero">
+      <section class="card" data-tags="overview models moving quickly build for the model 6 months from now">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span>Episode compressed into an operating system</div>
+          <h2 class="title">Don’t build for the model of today.<br/>Build for the model <span style="color:rgba(106,228,255,.95)">6 months</span> from now.</h2>
+          <p class="subtitle">
+            This conversation is really three stories stitched together:
+            <b>product discovery (latent demand)</b>, <b>org reality (incentives + culture)</b>,
+            and <b>a new dev workflow (multi-agent coding swarms)</b> where estimates become unstable because capability jumps fast.
+          </p>
+
+          <div class="quote" data-tags="quote models moving quickly estimates change">
+            <p>“The models are moving so quickly… if you ask me in 3 months or 6 months, my answer will be totally different.”</p>
+            <div class="by">— Boris (paraphrased from the transcript)</div>
+          </div>
+
+          <div class="pillrow" data-tags="themes">
+            <span class="pill brand">latent demand</span>
+            <span class="pill purple">incentives & culture</span>
+            <span class="pill good">generalists</span>
+            <span class="pill warn">time-box scoping</span>
+            <span class="pill brand">AI swarms</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card" data-tags="highlights metrics productivity 70% per engineer">
+        <div class="pad metaGrid">
+          <div class="mini">
+            <h3>What “wins” repeatedly in the transcript</h3>
+            <p>
+              Build what users already try to do (latent demand), align incentives before aligning architecture,
+              and convert repeated friction into <span class="tag">automation</span>.
+            </p>
+            <div class="pillrow">
+              <span class="pill good">ship + learn</span>
+              <span class="pill purple">trust first</span>
+              <span class="pill brand">tooling leverage</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>AI changes the shape of work</h3>
+            <p>
+              From deep-focus “maker” blocks → orchestration: spin up multiple agents, review outputs, tighten quality bar,
+              merge when it’s right.
+            </p>
+            <div class="pillrow">
+              <span class="pill brand">plan mode</span>
+              <span class="pill warn">quality bar = same</span>
+              <span class="pill good">parallelism</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>North star: common sense</h3>
+            <p>
+              In big companies, processes + org incentives can drag you away from “obvious” actions.
+              He keeps returning to: <b>trust yourself</b>, <b>time-box</b>, <b>act when path is unclear</b>.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <main>
+      <!-- LEFT COLUMN -->
+      <section class="card" data-tags="principles latent demand product discovery abuse hacks data">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>1) Product Principle: Latent Demand</h2>
+            <span>“Users already do it — you just formalize it.”</span>
+          </div>
+
+          <div class="grid3">
+            <div class="metric" data-tags="latent demand definition">
+              <p class="big">Latent Demand</p>
+              <p class="label">
+                Users are already “hacking” your product to do a job it wasn’t designed for.
+                The signal is in the misuse patterns—then you build the official workflow.
+              </p>
+            </div>
+            <div class="metric" data-tags="marketplace example 40% posts buy sell">
+              <p class="big">40%</p>
+              <p class="label">
+                Example: groups used for commerce → buy/sell groups → Marketplace.
+                <br/><span class="mono">intent → product</span>
+              </p>
+            </div>
+            <div class="metric" data-tags="dating example 60% profile views opposite gender not friends">
+              <p class="big">~60%</p>
+              <p class="label">
+                Example: profile views across non-friends (opposite gender) → demand for dating workflow.
+              </p>
+            </div>
+          </div>
+
+          <div class="diagram" style="margin-top:12px" data-tags="latent demand loop diagram">
+            <div class="cap">
+              <b>The Latent Demand Loop</b>
+              <span>observe → quantify → formalize</span>
+            </div>
+
+            <svg viewBox="0 0 980 240" role="img" aria-label="Latent demand loop diagram">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="rgba(106,228,255,.9)"/>
+                  <stop offset="1" stop-color="rgba(167,139,250,.9)"/>
+                </linearGradient>
+                <filter id="s" x="-20%" y="-40%" width="140%" height="180%">
+                  <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="rgba(0,0,0,.45)"/>
+                </filter>
+              </defs>
+
+              <rect x="24" y="28" width="270" height="170" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)" filter="url(#s)"/>
+              <text x="54" y="72" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">1. Users hack it</text>
+              <text x="54" y="104" fill="rgba(169,180,204,.95)" font-size="14">Unintended workflows emerge</text>
+              <text x="54" y="128" fill="rgba(169,180,204,.95)" font-size="14">“Abuse” becomes signal</text>
+              <text x="54" y="152" fill="rgba(169,180,204,.95)" font-size="14">You can’t force new intent</text>
+
+              <rect x="355" y="28" width="270" height="170" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)" filter="url(#s)"/>
+              <text x="385" y="72" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">2. Measure it</text>
+              <text x="385" y="104" fill="rgba(169,180,204,.95)" font-size="14">Quantify patterns</text>
+              <text x="385" y="128" fill="rgba(169,180,204,.95)" font-size="14">Top misuse categories</text>
+              <text x="385" y="152" fill="rgba(169,180,204,.95)" font-size="14">Cohorts → conversion paths</text>
+
+              <rect x="686" y="28" width="270" height="170" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)" filter="url(#s)"/>
+              <text x="716" y="72" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">3. Build the product</text>
+              <text x="716" y="104" fill="rgba(169,180,204,.95)" font-size="14">Formalize the intent</text>
+              <text x="716" y="128" fill="rgba(169,180,204,.95)" font-size="14">Reduce friction</text>
+              <text x="716" y="152" fill="rgba(169,180,204,.95)" font-size="14">Ship → re-observe</text>
+
+              <path d="M 294 112 C 320 112, 330 112, 355 112" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M 625 112 C 651 112, 661 112, 686 112" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+              <path d="M 820 205 C 650 238, 340 238, 160 205" stroke="rgba(106,228,255,.35)" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <text x="430" y="230" fill="rgba(106,228,255,.75)" font-size="12" font-family="ui-monospace,Menlo,monospace">feedback loop</text>
+            </svg>
+          </div>
+
+          <div class="callout" data-tags="rule cannot get people to do what they do not yet do">
+            <b>Rule of thumb:</b> You can’t get people to do something they don’t already do.
+            You can only <b>find existing intent</b> and make it easier / safer / more legible.
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <section class="card" data-tags="org culture incentives messenger facebook reliability performance engagement">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>2) Org Reality: Culture = Incentives in Disguise</h2>
+            <span>“Nightmare” happens when goals don’t match</span>
+          </div>
+
+          <div class="timeline" data-tags="culture clash timeline">
+            <div class="trow">
+              <div class="when">Facebook</div>
+              <div class="what">
+                <b>Ship fast</b>
+                DAU, engagement, iteration speed. Engineers act as generalists: UXR, design, product.
+              </div>
+            </div>
+            <div class="trow">
+              <div class="when">Messenger</div>
+              <div class="what">
+                <b>Reliability & performance</b>
+                Uptime / latency / regressions. Shipping slowly is rational under those incentives.
+              </div>
+            </div>
+            <div class="trow">
+              <div class="when">Failure mode</div>
+              <div class="what">
+                <b>Teams become suspicious</b>
+                Not personal—your changes threaten their metrics. Values show up in org design.
+              </div>
+            </div>
+            <div class="trow">
+              <div class="when">Fix pattern</div>
+              <div class="what">
+                <b>Find a shared hypothesis</b>
+                If it’s only exciting for one side, it’s unstable. Align reporting lines / goals.
+              </div>
+            </div>
+          </div>
+
+          <details style="margin-top:12px" data-tags="working across orgs advice shared goal incentives">
+            <summary>
+              <div class="sumL">
+                <b>How to collaborate across opposite cultures</b>
+                <span>Align incentives before architecture.</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                When “culture” is actually <b>metrics + risk tolerance</b>, persuasion is less effective than
+                <b>structural alignment</b>.
+              </p>
+              <ul>
+                <li><b>Start with a shared goal:</b> a hypothesis both teams would be happy to validate.</li>
+                <li><b>Make trade-offs explicit:</b> “This changes your uptime/latency; here’s the guardrail.”</li>
+                <li><b>Reduce blame risk:</b> joint ownership + staged rollout + clear rollback plan.</li>
+                <li><b>Org design matters:</b> sometimes success requires a closer common manager / reporting chain.</li>
+              </ul>
+              <div class="callout">
+                <b>Translation:</b> if you can’t get cooperation, it might not be “communication” — it might be the
+                <b>scoreboard</b>.
+              </div>
+            </div>
+          </details>
+
+          <details style="margin-top:12px" data-tags="generalists facebook culture design uxr product sense">
+            <summary>
+              <div class="sumL">
+                <b>Why generalists dominated early wins</b>
+                <span>Engineers doing UXR in the cafeteria is a feature, not a bug.</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                A recurring theme: <b>tight teams</b> + <b>high ownership</b> beat perfect specialization early.
+                Generalists move faster because they close loops.
+              </p>
+              <ul>
+                <li>Run “scrappy UXR” (observe users doing a task with minimal prompting)</li>
+                <li>Prototype → measure “signs of life” → request headcount</li>
+                <li>Teach the loop so the whole team can run it</li>
+              </ul>
+              <div class="callout">
+                If you want to grow influence: solve real friction end-to-end, not just “your lane.”
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- LEFT COLUMN: ENGINEERING LEVERAGE -->
+      <section class="card" data-tags="leverage automation lint rules better engineering network influence">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>3) Engineering Leverage: Turn Repetition into Tooling</h2>
+            <span>“Free leverage” → automation flywheel</span>
+          </div>
+
+          <div class="diagram" data-tags="automation flywheel diagram">
+            <div class="cap">
+              <b>The “Repeated Comment → Lint Rule” Flywheel</b>
+              <span>toil → tally → automate</span>
+            </div>
+
+            <svg viewBox="0 0 980 260" role="img" aria-label="Automation flywheel diagram">
+              <defs>
+                <linearGradient id="g2" x1="0" x2="1">
+                  <stop offset="0" stop-color="rgba(52,211,153,.9)"/>
+                  <stop offset="1" stop-color="rgba(106,228,255,.9)"/>
+                </linearGradient>
+              </defs>
+
+              <rect x="30" y="36" width="285" height="188" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)"/>
+              <text x="60" y="78" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">1) Notice repetition</text>
+              <text x="60" y="110" fill="rgba(169,180,204,.95)" font-size="14">Same review comment</text>
+              <text x="60" y="132" fill="rgba(169,180,204,.95)" font-size="14">2–3 times → signal</text>
+              <text x="60" y="154" fill="rgba(169,180,204,.95)" font-size="14">“Others have it too”</text>
+
+              <rect x="348" y="36" width="285" height="188" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)"/>
+              <text x="378" y="78" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">2) Quantify it</text>
+              <text x="378" y="110" fill="rgba(169,180,204,.95)" font-size="14">Tally in a sheet</text>
+              <text x="378" y="132" fill="rgba(169,180,204,.95)" font-size="14">Find team hotspots</text>
+              <text x="378" y="154" fill="rgba(169,180,204,.95)" font-size="14">Offer targeted help</text>
+
+              <rect x="666" y="36" width="285" height="188" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)"/>
+              <text x="696" y="78" fill="rgba(232,238,252,.95)" font-size="18" font-weight="800">3) Automate</text>
+              <text x="696" y="110" fill="rgba(169,180,204,.95)" font-size="14">Lint rule / tool</text>
+              <text x="696" y="132" fill="rgba(169,180,204,.95)" font-size="14">Removes toil at scale</text>
+              <text x="696" y="154" fill="rgba(169,180,204,.95)" font-size="14">Improves “edge excellence”</text>
+
+              <path d="M 315 130 C 332 130, 335 130, 348 130" stroke="url(#g2)" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M 633 130 C 650 130, 653 130, 666 130" stroke="url(#g2)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+              <path d="M 835 228 C 620 262, 350 262, 145 228" stroke="rgba(52,211,153,.35)" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <text x="445" y="248" fill="rgba(52,211,153,.75)" font-size="12" font-family="ui-monospace,Menlo,monospace">leverage loop</text>
+            </svg>
+          </div>
+
+          <details style="margin-top:12px" data-tags="side quests adoption internal talks scrape group issues by team">
+            <summary>
+              <div class="sumL">
+                <b>Side quests that compound (Undux, TypeScript, meetups)</b>
+                <span>Depth → network → influence → more scope</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                Side projects are treated as a <b>curiosity signal</b> and a <b>taste signal</b>:
+                you spot pain, build a simpler version, then teach it.
+              </p>
+              <ul>
+                <li>“Scrape pain”: gather repeated questions/issues → identify teams → do targeted tech talks</li>
+                <li>Write resources when none exist (e.g., early TypeScript deep dives)</li>
+                <li>Communities create surface area for opportunity (“JavaScript celebrities are just people”)</li>
+              </ul>
+              <div class="callout">
+                <b>Hiring lens:</b> look for people with “side quests” (projects, crafts, obsessions) → more likely to notice latent demand.
+              </div>
+            </div>
+          </details>
+
+          <details style="margin-top:12px" data-tags="scoping time box 30 minutes strawman talk to experts">
+            <summary>
+              <div class="sumL">
+                <b>Scoping at scale: how to do it fast</b>
+                <span>Time-box + experts + strawman designs</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                His recurring advice: <b>don’t get lost in infinite detail</b>.
+                Most scoping can start in <b>~30 minutes</b>, then sharpen with experts.
+              </p>
+              <ul>
+                <li><b>Time-box:</b> 30 minutes → 2 hours max for a first-pass map</li>
+                <li><b>List experts:</b> talk to them early; reduce surprises</li>
+                <li><b>Bring a strawman:</b> don’t ask “what should we do?” — ask “what’s wrong with this?”</li>
+                <li><b>Front-load risk:</b> identify the 20% unknowns → spikes</li>
+              </ul>
+              <div class="callout">
+                With AI tools, the “map the system” step becomes cheap: ask the agent to enumerate systems, call sites, migration surfaces.
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: AI CODING WORKFLOW -->
+      <section class="card" data-tags="ai coding quad code claude code swarms quality bar plan mode">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>4) AI Coding: From Autocomplete → Orchestration</h2>
+            <span>“This is the worst it’ll ever be.”</span>
+          </div>
+
+          <div class="grid3">
+            <div class="metric" data-tags="build for 6 months from now scaling laws">
+              <p class="big">Strategy</p>
+              <p class="label">
+                Act like a lab: model capability jumps fast, so your product must “snap into usefulness” later.
+                <br/><code>design for Δcapability</code>
+              </p>
+            </div>
+            <div class="metric" data-tags="quality bar same for model and human">
+              <p class="big">Quality Bar</p>
+              <p class="label">
+                Same standard whether code is human-written or AI-written.
+                If it’s bad, iterate—don’t merge.
+              </p>
+            </div>
+            <div class="metric" data-tags="vibe coding prototypes throwaway code">
+              <p class="big">Modes</p>
+              <p class="label">
+                Vibe-code for prototypes; pair for maintainable code; hand-write when you care about every line.
+              </p>
+            </div>
+          </div>
+
+          <details style="margin-top:12px" data-tags="workflow plan mode shift tab review merge">
+            <summary>
+              <div class="sumL">
+                <b>The practical workflow (pairing)</b>
+                <span>Plan → execute → review → refine → merge</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                The default mode is <b>pair programming with the model</b>, not “generate everything and pray.”
+              </p>
+              <ul>
+                <li>Start in <b>plan mode</b> (<span class="kbd">Shift</span>+<span class="kbd">Tab</span> in his example) to align on approach</li>
+                <li>Generate a PR-sized change, not a whole system rewrite</li>
+                <li>Ask for cleanup: naming, factoring, tests, docs, edge cases</li>
+                <li>Review like you would a strong human teammate</li>
+              </ul>
+              <div class="callout">
+                <b>Key behavior:</b> treat the model as a fast junior + fast senior in bursts. You still own correctness.
+              </div>
+            </div>
+          </details>
+
+          <details style="margin-top:12px" data-tags="swarms 20 agents parallel docker dangerous mode plugins weekend">
+            <summary>
+              <div class="sumL">
+                <b>“Swarms” change estimates</b>
+                <span>Parallel agents collapse time-to-first-draft</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                The transcript points to a new baseline: instead of “one engineer writes one stream,” you run
+                <b>multiple agents in parallel</b> and manage the queue.
+              </p>
+              <ul>
+                <li>Spin up N agents with different sub-tasks (“make PRs”, “write tests”, “scan call sites”)</li>
+                <li>Use tool access (e.g., browser/UI runners like puppeteer) for feedback loops</li>
+                <li>Review outputs, keep only what passes the same bar</li>
+              </ul>
+              <div class="callout">
+                <b>Why estimates break:</b> productivity is a function of capability × parallelism × review throughput.
+              </div>
+            </div>
+          </details>
+
+          <div class="diagram" style="margin-top:12px" data-tags="maker manager schedule ai orchestration diagram">
+            <div class="cap">
+              <b>Maker → Orchestrator Shift</b>
+              <span>context switching becomes productive</span>
+            </div>
+            <svg viewBox="0 0 980 260" role="img" aria-label="Maker to orchestrator shift diagram">
+              <defs>
+                <linearGradient id="g3" x1="0" x2="1">
+                  <stop offset="0" stop-color="rgba(167,139,250,.9)"/>
+                  <stop offset="1" stop-color="rgba(106,228,255,.9)"/>
+                </linearGradient>
+              </defs>
+
+              <rect x="30" y="42" width="440" height="176" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)"/>
+              <text x="60" y="82" fill="rgba(232,238,252,.95)" font-size="18" font-weight="850">Old: Maker loop</text>
+              <text x="60" y="114" fill="rgba(169,180,204,.95)" font-size="14">Deep focus → write → debug → repeat</text>
+              <text x="60" y="140" fill="rgba(169,180,204,.95)" font-size="14">Progress is mostly serial</text>
+              <text x="60" y="166" fill="rgba(169,180,204,.95)" font-size="14">Meetings disrupt flow</text>
+
+              <rect x="510" y="42" width="440" height="176" rx="18" fill="rgba(16,24,39,.7)" stroke="rgba(35,48,74,.7)"/>
+              <text x="540" y="82" fill="rgba(232,238,252,.95)" font-size="18" font-weight="850">Now: Orchestrator loop</text>
+              <text x="540" y="114" fill="rgba(169,180,204,.95)" font-size="14">Start agents → review outputs → refine</text>
+              <text x="540" y="140" fill="rgba(169,180,204,.95)" font-size="14">Parallel drafts → faster iteration</text>
+              <text x="540" y="166" fill="rgba(169,180,204,.95)" font-size="14">Context switching can add throughput</text>
+
+              <path d="M 470 130 C 490 130, 498 130, 510 130" stroke="url(#g3)" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <text x="475" y="118" fill="rgba(167,139,250,.85)" font-size="12" font-family="ui-monospace,Menlo,monospace">shift</text>
+
+              <!-- small agent bubbles -->
+              <g opacity="1">
+                <circle cx="810" cy="92" r="10" fill="rgba(106,228,255,.85)"/>
+                <circle cx="842" cy="110" r="10" fill="rgba(106,228,255,.65)"/>
+                <circle cx="866" cy="90" r="10" fill="rgba(52,211,153,.75)"/>
+                <circle cx="888" cy="112" r="10" fill="rgba(167,139,250,.75)"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- FULL WIDTH INSIDE GRID: CAREER PATTERNS -->
+      <section class="card" style="grid-column:1/-1" data-tags="career patterns promotions underleveled trust disagreement delegation common sense">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>5) Career OS: Patterns That Kept Repeating</h2>
+            <span>Trust, scope, disagreement, delegation</span>
+          </div>
+
+          <div class="grid3">
+            <div class="metric" data-tags="underleveled lower expectations momentum">
+              <p class="big">Underleveled = runway</p>
+              <p class="label">
+                Lower expectations → space to explore → build momentum → reputation compounding.
+              </p>
+            </div>
+            <div class="metric" data-tags="technical disagreement earn trust disagree and commit reverse decision">
+              <p class="big">Disagree + earn it</p>
+              <p class="label">
+                Strong disagreement works when trust exists: commit first, then push back with evidence, be willing to reverse.
+              </p>
+            </div>
+            <div class="metric" data-tags="delegate what you want to do high output management andy grove">
+              <p class="big">Delegate the fun parts</p>
+              <p class="label">
+                Delegate what you like and know—so you can monitor quality and coach.
+                (Andy Grove: <span class="mono">High Output Management</span>)
+              </p>
+            </div>
+          </div>
+
+          <details style="margin-top:12px" data-tags="design competition blue team green team architecture workshop">
+            <summary>
+              <div class="sumL">
+                <b>The “architecture tournament” move</b>
+                <span>Two teams design in parallel → compare 80% overlap → identify 20% risk</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                When the path is unclear, force parallel thinking. Two independent designs that converge reveal the
+                “obvious” solution and isolate the true unknowns.
+              </p>
+              <ul>
+                <li>Split senior TLs into two groups</li>
+                <li>Give same requirements + time limit</li>
+                <li>Compare outputs: what’s consistent is likely right; differences mark risk</li>
+                <li>Spike the risky 20% and start execution</li>
+              </ul>
+              <div class="callout">
+                This is consensus-building <b>without</b> endless meetings: you get alignment through artifacts.
+              </div>
+            </div>
+          </details>
+
+          <details style="margin-top:12px" data-tags="imposter syndrome advice no one knows what they are doing">
+            <summary>
+              <div class="sumL">
+                <b>Imposter syndrome (his take)</b>
+                <span>It fades; a little is healthy if you’re pushing yourself</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                His framing is pragmatic: everyone is guessing at every level; confidence comes from doing, not from certainty.
+              </p>
+              <div class="callout">
+                <b>Operational takeaway:</b> focus on building trust + delivering results; your internal narrative catches up later.
+              </div>
+            </div>
+          </details>
+
+          <details style="margin-top:12px" data-tags="levels are for company not engineer impact leverage">
+            <summary>
+              <div class="sumL">
+                <b>Levels are for the company, not for you</b>
+                <span>Chase interesting problems; promos lag behind impact</span>
+              </div>
+              <div class="chev">⌄</div>
+            </summary>
+            <div class="detailBody">
+              <p>
+                Levels communicate expectations and enable comparisons / finance planning—but they’re a poor motivational target.
+              </p>
+              <ul>
+                <li>Think in <b>scope</b>, <b>leverage</b>, <b>user value</b></li>
+                <li>Write briefs, pitch, prototype, iterate</li>
+                <li>If something is “obviously useful,” keep pushing until it finds the right home</li>
+              </ul>
+              <div class="callout">
+                <b>Meta-lesson:</b> influence grows fastest when you solve problems other people feel but can’t fix.
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- FULL WIDTH: TAKEAWAYS -->
+      <section class="card" style="grid-column:1/-1" data-tags="takeaways checklist action items">
+        <div class="pad">
+          <div class="sectionTitle">
+            <h2>6) Builder Checklist</h2>
+            <span>A compact “do this Monday” set</span>
+          </div>
+
+          <div class="grid3">
+            <div class="metric" data-tags="checklist latent demand">
+              <p class="big">Product</p>
+              <p class="label">
+                Find <b>misuse</b> → quantify → build official flow.
+                <br/>Ask: “What do users already try to do here?”
+              </p>
+            </div>
+            <div class="metric" data-tags="checklist org incentives">
+              <p class="big">Org</p>
+              <p class="label">
+                Map incentives first. If goals conflict, fix structure/guardrails before “alignment meetings.”
+              </p>
+            </div>
+            <div class="metric" data-tags="checklist ai tooling">
+              <p class="big">AI</p>
+              <p class="label">
+                Run agents in parallel for drafts, but keep the <b>same quality bar</b>.
+                Use plan-first prompting.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout" data-tags="final advice common sense">
+            <b>Final advice from the arc of the transcript:</b> “Use common sense.”
+            Big systems pull you away from it. Your job is to return to it—again and again.
+          </div>
+
+          <div class="foot">
+            <div>Built as a single-file HTML infographic • <span class="mono">search + expand/collapse included</span></div>
+            <div>Tip: search “latent”, “incentives”, “swarms”, “lint”, “scoping”</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // --- Expand/Collapse All ---
+    const expandAllBtn = document.getElementById('expandAll');
+    const collapseAllBtn = document.getElementById('collapseAll');
+    const allDetails = () => Array.from(document.querySelectorAll('details'));
+
+    expandAllBtn.addEventListener('click', () => allDetails().forEach(d => d.open = true));
+    collapseAllBtn.addEventListener('click', () => allDetails().forEach(d => d.open = false));
+
+    // --- Search / Filter ---
+    const q = document.getElementById('q');
+    const matchCount = document.getElementById('matchCount');
+
+    function norm(s){
+      return (s || "").toLowerCase().replace(/\s+/g,' ').trim();
+    }
+
+    function getSearchText(el){
+      const tags = el.getAttribute('data-tags') || "";
+      const text = el.innerText || "";
+      return norm(tags + " " + text);
+    }
+
+    function applyFilter(){
+      const query = norm(q.value);
+      const items = Array.from(document.querySelectorAll('[data-tags]'));
+      if(!query){
+        items.forEach(el => el.classList.remove('hidden'));
+        matchCount.textContent = String(items.length);
+        return;
+      }
+      let m = 0;
+      items.forEach(el => {
+        const hay = getSearchText(el);
+        const ok = query.split(' ').every(tok => hay.includes(tok));
+        el.classList.toggle('hidden', !ok);
+        if(ok) m++;
+      });
+      matchCount.textContent = String(m);
+    }
+
+    q.addEventListener('input', applyFilter);
+
+    // initial count
+    (function init(){
+      const items = Array.from(document.querySelectorAll('[data-tags]'));
+      matchCount.textContent = String(items.length);
+    })();
+  </script>
+</body>
+</html>
