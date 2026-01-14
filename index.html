@@ -439,6 +439,482 @@
             display: none !important;
         }
 
+        /* Story Timeline View */
+        .timeline-view {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline-view::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--teal), var(--vio), var(--blue));
+            border-radius: 999px;
+            opacity: 0.4;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-node {
+            position: absolute;
+            left: -40px;
+            top: 20px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--bg0);
+            z-index: 2;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .timeline-item:hover .timeline-node {
+            transform: scale(1.15);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Temperature colors */
+        .temp-hot { background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: #ff6b6b; }
+        .temp-warm { background: linear-gradient(135deg, #ffd93d, #ff9f43); color: #ffd93d; }
+        .temp-mild { background: linear-gradient(135deg, #6bcf7f, #4ecdc4); color: #6bcf7f; }
+        .temp-cool { background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: #4ecdc4; }
+        .temp-cold { background: linear-gradient(135deg, #74b9ff, #a29bfe); color: #a29bfe; }
+
+        .timeline-card {
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateX(8px);
+            border-color: rgba(102,163,255,.4);
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-card-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .timeline-card-header:hover {
+            background: rgba(255,255,255,.02);
+        }
+
+        .timeline-card-main {
+            flex: 1;
+        }
+
+        .timeline-card-main h3 {
+            font-size: 1rem;
+            font-weight: 620;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timeline-card-main h3 .material-symbols-rounded {
+            color: var(--good);
+            font-size: 1.1rem;
+        }
+
+        .timeline-card-main p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .timeline-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .temp-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid currentColor;
+            background: rgba(0,0,0,.2);
+        }
+
+        .temp-badge .material-symbols-rounded {
+            font-size: 0.9rem;
+        }
+
+        .temp-hot .temp-badge { border-color: rgba(255,107,107,.4); }
+        .temp-warm .temp-badge { border-color: rgba(255,217,61,.4); }
+        .temp-mild .temp-badge { border-color: rgba(107,207,127,.4); }
+        .temp-cool .temp-badge { border-color: rgba(78,205,196,.4); }
+        .temp-cold .temp-badge { border-color: rgba(162,155,254,.4); }
+
+        .date-badge {
+            font-size: 0.75rem;
+            color: var(--muted2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .date-badge .material-symbols-rounded {
+            font-size: 0.9rem;
+            color: var(--teal);
+        }
+
+        .expand-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            border: 1px solid var(--stroke);
+            background: rgba(0,0,0,.2);
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .expand-btn:hover {
+            background: rgba(255,255,255,.05);
+            color: var(--text);
+        }
+
+        .expand-btn .material-symbols-rounded {
+            font-size: 1.1rem;
+            transition: transform 0.25s;
+        }
+
+        .timeline-card.expanded .expand-btn .material-symbols-rounded {
+            transform: rotate(180deg);
+        }
+
+        /* Expandable content */
+        .timeline-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .timeline-card.expanded .timeline-card-body {
+            max-height: 800px;
+        }
+
+        .timeline-card-inner {
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--stroke);
+        }
+
+        .topic-cluster {
+            margin-top: 16px;
+        }
+
+        .topic-cluster-title {
+            font-size: 0.8rem;
+            color: var(--muted2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topic-cluster-title .material-symbols-rounded {
+            font-size: 1rem;
+            color: var(--vio);
+        }
+
+        .topic-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topic-pill {
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            background: rgba(179,140,255,.1);
+            border: 1px solid rgba(179,140,255,.2);
+            color: var(--vio);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .topic-pill:hover {
+            background: rgba(179,140,255,.2);
+            border-color: rgba(179,140,255,.4);
+            transform: translateY(-2px);
+        }
+
+        .topic-pill .material-symbols-rounded {
+            font-size: 0.9rem;
+        }
+
+        .related-pages {
+            margin-top: 16px;
+        }
+
+        .related-title {
+            font-size: 0.8rem;
+            color: var(--muted2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .related-title .material-symbols-rounded {
+            font-size: 1rem;
+            color: var(--teal);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .related-card {
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(0,0,0,.2);
+            border: 1px solid var(--stroke);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .related-card:hover {
+            background: rgba(255,255,255,.03);
+            border-color: rgba(102,163,255,.3);
+            transform: translateY(-2px);
+        }
+
+        .related-card .material-symbols-rounded {
+            font-size: 1.1rem;
+            color: var(--good);
+        }
+
+        .related-card span {
+            font-size: 0.8rem;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .timeline-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .timeline-action-btn {
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid var(--stroke);
+            background: rgba(0,0,0,.2);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .timeline-action-btn:hover {
+            background: linear-gradient(180deg, rgba(102,163,255,.2), rgba(102,163,255,.08));
+            border-color: var(--blue);
+        }
+
+        .timeline-action-btn.primary {
+            background: linear-gradient(180deg, rgba(46,229,157,.2), rgba(46,229,157,.08));
+            border-color: rgba(46,229,157,.4);
+        }
+
+        .timeline-action-btn.primary:hover {
+            background: linear-gradient(180deg, rgba(46,229,157,.3), rgba(46,229,157,.12));
+        }
+
+        .timeline-action-btn .material-symbols-rounded {
+            font-size: 1rem;
+        }
+
+        /* Temperature legend */
+        .temp-legend {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: rgba(0,0,0,.2);
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .temp-legend-title {
+            font-size: 0.8rem;
+            color: var(--muted2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .temp-legend-title .material-symbols-rounded {
+            font-size: 1rem;
+        }
+
+        .temp-legend-items {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .temp-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .temp-legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .temp-legend-dot.hot { background: linear-gradient(135deg, #ff6b6b, #ff8e53); }
+        .temp-legend-dot.warm { background: linear-gradient(135deg, #ffd93d, #ff9f43); }
+        .temp-legend-dot.mild { background: linear-gradient(135deg, #6bcf7f, #4ecdc4); }
+        .temp-legend-dot.cool { background: linear-gradient(135deg, #4ecdc4, #45b7d1); }
+        .temp-legend-dot.cold { background: linear-gradient(135deg, #74b9ff, #a29bfe); }
+
+        /* Mindmap styles */
+        .mindmap-container {
+            padding: 20px;
+            background: rgba(0,0,0,.15);
+            border: 1px solid var(--stroke);
+            border-radius: var(--radius);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mindmap-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(102,163,255,.3), rgba(179,140,255,.3));
+            border: 2px solid rgba(255,255,255,.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mindmap-center:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 0 0 40px rgba(102,163,255,.3);
+        }
+
+        .mindmap-center .material-symbols-rounded {
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .mindmap-center span {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .mindmap-branch {
+            position: absolute;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--stroke);
+            cursor: pointer;
+            transition: all 0.25s;
+            max-width: 180px;
+        }
+
+        .mindmap-branch:hover {
+            transform: scale(1.05);
+            border-color: rgba(102,163,255,.5);
+            box-shadow: var(--shadow);
+            z-index: 20;
+        }
+
+        .mindmap-branch h4 {
+            font-size: 0.85rem;
+            margin: 0 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mindmap-branch h4 .material-symbols-rounded {
+            font-size: 1rem;
+        }
+
+        .mindmap-branch .count {
+            font-size: 0.7rem;
+            color: var(--muted2);
+        }
+
+        .mindmap-line {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(102,163,255,.3), rgba(179,140,255,.3));
+            height: 2px;
+            transform-origin: left center;
+            pointer-events: none;
+        }
+
         /* Folder Cards */
         .folder-card {
             background: linear-gradient(180deg, rgba(15,26,51,.85), rgba(15,26,51,.55));
@@ -632,6 +1108,9 @@
                     <button class="view-btn active" data-view="folder" title="Folders">
                         <span class="material-symbols-rounded">folder_open</span>
                     </button>
+                    <button class="view-btn" data-view="timeline" title="Story Timeline">
+                        <span class="material-symbols-rounded">timeline</span>
+                    </button>
                     <button class="view-btn" data-view="category" title="By Category">
                         <span class="material-symbols-rounded">category</span>
                     </button>
@@ -701,10 +1180,10 @@
             "AI Risks": { icon: "warning", order: 4 },
             "Future Predictions": { icon: "auto_awesome", order: 5 },
             "Industry Analysis": { icon: "factory", order: 6 },
+            "Tools": { icon: "construction", order: 7 },
             "Documentation": { icon: "menu_book", order: 10 },
             "Data Visualization": { icon: "bar_chart", order: 11 },
             "Reports": { icon: "analytics", order: 12 },
-            "Tools": { icon: "handyman", order: 13 },
             "Reference": { icon: "library_books", order: 14 },
             "Uncategorized": { icon: "folder", order: 50 },
             "Archive": { icon: "inventory_2", order: 99 }
@@ -723,7 +1202,8 @@
             "✅": "check_circle",
             "⏳": "hourglass_empty",
             "👔": "person",
-            "⚠️": "warning"
+            "⚠️": "warning",
+            "🛠️": "construction"
         };
 
         // State
@@ -925,6 +1405,284 @@
             `;
         }
 
+        function getTemperature(page) {
+            if (!page.created) return { class: 'temp-cold', label: 'Archive', icon: 'ac_unit', days: null };
+
+            const now = new Date();
+            const diffTime = Math.abs(now - page.created);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 7) return { class: 'temp-hot', label: 'Fresh', icon: 'local_fire_department', days: diffDays };
+            if (diffDays <= 30) return { class: 'temp-warm', label: 'Recent', icon: 'whatshot', days: diffDays };
+            if (diffDays <= 90) return { class: 'temp-mild', label: 'Current', icon: 'wb_sunny', days: diffDays };
+            if (diffDays <= 180) return { class: 'temp-cool', label: 'Settling', icon: 'air', days: diffDays };
+            return { class: 'temp-cold', label: 'Archive', icon: 'ac_unit', days: diffDays };
+        }
+
+        function getRelatedPages(page, allPages) {
+            const related = [];
+            const pageTags = page.tags.map(t => t.toLowerCase());
+
+            allPages.forEach(p => {
+                if (p.id === page.id) return;
+
+                let score = 0;
+                // Same category
+                if (p.category === page.category) score += 2;
+                // Shared tags
+                const pTags = p.tags.map(t => t.toLowerCase());
+                const sharedTags = pageTags.filter(t => pTags.includes(t));
+                score += sharedTags.length * 3;
+
+                if (score > 0) {
+                    related.push({ page: p, score });
+                }
+            });
+
+            return related
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 4)
+                .map(r => r.page);
+        }
+
+        function getAllTopics(pages) {
+            const topicMap = {};
+            pages.forEach(page => {
+                page.tags.forEach(tag => {
+                    const key = tag.toLowerCase();
+                    if (!topicMap[key]) {
+                        topicMap[key] = { name: tag, count: 0, pages: [] };
+                    }
+                    topicMap[key].count++;
+                    topicMap[key].pages.push(page);
+                });
+            });
+            return Object.values(topicMap).sort((a, b) => b.count - a.count);
+        }
+
+        function renderTimelineCard(page, allPages) {
+            const temp = getTemperature(page);
+            const related = getRelatedPages(page, allPages);
+            const dateStr = page.created ? formatDate(page.created) : 'No date';
+            const daysAgo = temp.days ? `${temp.days}d ago` : '';
+
+            return `
+                <div class="timeline-item">
+                    <div class="timeline-node ${temp.class}"></div>
+                    <div class="timeline-card" data-page-id="${page.id}">
+                        <div class="timeline-card-header" onclick="toggleTimelineCard('${page.id}')">
+                            <div class="timeline-card-main">
+                                <h3>
+                                    <span class="material-symbols-rounded" aria-hidden="true">${page.icon}</span>
+                                    ${page.title}
+                                </h3>
+                                <p>${page.description}</p>
+                            </div>
+                            <div class="timeline-meta">
+                                <div class="temp-badge ${temp.class}">
+                                    <span class="material-symbols-rounded">${temp.icon}</span>
+                                    ${temp.label}
+                                </div>
+                                <div class="date-badge">
+                                    <span class="material-symbols-rounded">calendar_month</span>
+                                    ${dateStr}
+                                </div>
+                                <button class="expand-btn" type="button">
+                                    <span class="material-symbols-rounded">expand_more</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="timeline-card-body">
+                            <div class="timeline-card-inner">
+                                <div class="topic-cluster">
+                                    <div class="topic-cluster-title">
+                                        <span class="material-symbols-rounded">sell</span>
+                                        Topics & Tags
+                                    </div>
+                                    <div class="topic-pills">
+                                        ${page.tags.map(tag => `
+                                            <div class="topic-pill" onclick="filterByTopic('${tag}')">
+                                                <span class="material-symbols-rounded">tag</span>
+                                                ${tag}
+                                            </div>
+                                        `).join("")}
+                                        <div class="topic-pill" onclick="filterByCategory('${page.category}')" style="background: rgba(102,163,255,.1); border-color: rgba(102,163,255,.2); color: var(--blue);">
+                                            <span class="material-symbols-rounded">category</span>
+                                            ${page.category}
+                                        </div>
+                                    </div>
+                                </div>
+                                ${related.length > 0 ? `
+                                    <div class="related-pages">
+                                        <div class="related-title">
+                                            <span class="material-symbols-rounded">hub</span>
+                                            Related Infographics
+                                        </div>
+                                        <div class="related-grid">
+                                            ${related.map(r => `
+                                                <a href="${r.href}" class="related-card">
+                                                    <span class="material-symbols-rounded">${r.icon}</span>
+                                                    <span>${r.title}</span>
+                                                </a>
+                                            `).join("")}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                <div class="timeline-actions">
+                                    <a href="${page.href}" class="timeline-action-btn primary">
+                                        <span class="material-symbols-rounded">open_in_new</span>
+                                        Open Infographic
+                                    </a>
+                                    <button class="timeline-action-btn" onclick="showMindmap('${page.id}')">
+                                        <span class="material-symbols-rounded">account_tree</span>
+                                        Topic Map
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTimelineView(filtered) {
+            const sorted = [...filtered].sort((a, b) => {
+                if (a.created && b.created) return b.created - a.created;
+                if (a.created) return -1;
+                if (b.created) return 1;
+                return a.order - b.order;
+            });
+
+            const topics = getAllTopics(filtered);
+
+            return `
+                <div class="temp-legend">
+                    <div class="temp-legend-title">
+                        <span class="material-symbols-rounded">thermostat</span>
+                        Freshness
+                    </div>
+                    <div class="temp-legend-items">
+                        <div class="temp-legend-item">
+                            <div class="temp-legend-dot hot"></div>
+                            <span>Fresh (≤7d)</span>
+                        </div>
+                        <div class="temp-legend-item">
+                            <div class="temp-legend-dot warm"></div>
+                            <span>Recent (≤30d)</span>
+                        </div>
+                        <div class="temp-legend-item">
+                            <div class="temp-legend-dot mild"></div>
+                            <span>Current (≤90d)</span>
+                        </div>
+                        <div class="temp-legend-item">
+                            <div class="temp-legend-dot cool"></div>
+                            <span>Settling (≤180d)</span>
+                        </div>
+                        <div class="temp-legend-item">
+                            <div class="temp-legend-dot cold"></div>
+                            <span>Archive (>180d)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-view">
+                    ${sorted.map(page => renderTimelineCard(page, pages)).join("")}
+                </div>
+            `;
+        }
+
+        // Timeline interaction functions
+        window.toggleTimelineCard = function(pageId) {
+            const card = document.querySelector(`.timeline-card[data-page-id="${pageId}"]`);
+            if (card) {
+                card.classList.toggle('expanded');
+            }
+        };
+
+        window.filterByTopic = function(topic) {
+            document.getElementById('search').value = topic;
+            searchQuery = topic;
+            render();
+        };
+
+        window.filterByCategory = function(category) {
+            activeCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === category);
+            });
+            render();
+        };
+
+        window.showMindmap = function(pageId) {
+            const page = pages.find(p => p.id === pageId);
+            if (!page) return;
+
+            const related = getRelatedPages(page, pages);
+            const topics = page.tags;
+
+            // Calculate positions for mindmap branches
+            const centerX = 50;
+            const centerY = 50;
+            const radius = 35;
+
+            let branchesHtml = '';
+            const allItems = [
+                ...topics.map(t => ({ type: 'topic', name: t })),
+                ...related.slice(0, 4).map(r => ({ type: 'page', page: r }))
+            ];
+
+            allItems.forEach((item, i) => {
+                const angle = (i / allItems.length) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                if (item.type === 'topic') {
+                    const topicPages = pages.filter(p =>
+                        p.tags.some(t => t.toLowerCase() === item.name.toLowerCase())
+                    );
+                    branchesHtml += `
+                        <div class="mindmap-branch" style="left: ${x}%; top: ${y}%; transform: translate(-50%, -50%);" onclick="filterByTopic('${item.name}')">
+                            <h4><span class="material-symbols-rounded" style="color: var(--vio);">tag</span> ${item.name}</h4>
+                            <div class="count">${topicPages.length} infographic${topicPages.length !== 1 ? 's' : ''}</div>
+                        </div>
+                    `;
+                } else {
+                    branchesHtml += `
+                        <a href="${item.page.href}" class="mindmap-branch" style="left: ${x}%; top: ${y}%; transform: translate(-50%, -50%);">
+                            <h4><span class="material-symbols-rounded" style="color: var(--good);">${item.page.icon}</span> ${item.page.title.slice(0, 25)}${item.page.title.length > 25 ? '...' : ''}</h4>
+                            <div class="count">${item.page.category}</div>
+                        </a>
+                    `;
+                }
+            });
+
+            const modal = document.createElement('dialog');
+            modal.innerHTML = `
+                <div style="padding: 16px; border-bottom: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 600;">Topic Map: ${page.title.slice(0, 40)}${page.title.length > 40 ? '...' : ''}</div>
+                    <button onclick="this.closest('dialog').close(); this.closest('dialog').remove();" style="background: none; border: 1px solid var(--stroke); border-radius: 8px; padding: 8px 12px; color: var(--text); cursor: pointer;">Close</button>
+                </div>
+                <div class="mindmap-container" style="height: 450px;">
+                    <div class="mindmap-center" onclick="window.location.href='${page.href}'">
+                        <span class="material-symbols-rounded">${page.icon}</span>
+                        <span>Current</span>
+                    </div>
+                    ${branchesHtml}
+                </div>
+            `;
+            modal.style.cssText = 'border: 1px solid var(--stroke); border-radius: 18px; padding: 0; background: linear-gradient(180deg, rgba(15,26,51,.95), rgba(11,18,34,.98)); color: var(--text); width: min(900px, 94vw); box-shadow: var(--shadow);';
+            document.body.appendChild(modal);
+            modal.showModal();
+
+            modal.addEventListener('click', (e) => {
+                const rect = modal.getBoundingClientRect();
+                if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+                    modal.close();
+                    modal.remove();
+                }
+            });
+        };
+
         function renderFolderCard(folder) {
             const imageHtml = folder.image
                 ? `<div class="folder-preview">
@@ -1036,6 +1794,9 @@
             switch (currentView) {
                 case "folder":
                     content.innerHTML = renderFolderView(filtered);
+                    break;
+                case "timeline":
+                    content.innerHTML = renderTimelineView(filtered);
                     break;
                 case "date":
                     content.innerHTML = renderDateView(filtered);
