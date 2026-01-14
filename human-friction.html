@@ -1,0 +1,1282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IT Workplace Frictions → Build Your Own AI Tools</title>
+  <style>
+    :root{
+      --bg0:#070A10;
+      --bg1:#0B1020;
+      --card:#0E1630;
+      --card2:#0B1328;
+      --ink:#EAF0FF;
+      --muted:#A9B6DA;
+      --muted2:#7F90C2;
+      --line:rgba(255,255,255,.10);
+      --good:#6EE7B7;
+      --warn:#FBBF24;
+      --bad:#F87171;
+      --accent:#60A5FA;
+      --accent2:#A78BFA;
+      --accent3:#34D399;
+      --shadow: 0 20px 70px rgba(0,0,0,.45);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(96,165,250,.20), transparent 60%),
+        radial-gradient(1000px 600px at 85% 20%, rgba(167,139,250,.16), transparent 55%),
+        radial-gradient(800px 500px at 60% 90%, rgba(52,211,153,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 18px 70px;}
+    header{
+      display:flex; flex-direction:column; gap:14px;
+      padding:20px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: calc(var(--r) + 6px);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 180px at 25% 0%, rgba(96,165,250,.25), transparent 60%),
+        radial-gradient(600px 180px at 75% 0%, rgba(167,139,250,.18), transparent 60%);
+      filter: blur(14px);
+      opacity:.8;
+      pointer-events:none;
+    }
+    header > *{position:relative}
+    .kicker{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 42px);
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size: clamp(14px, 1.6vw, 17px);
+      line-height:1.55;
+      max-width: 78ch;
+    }
+
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px 12px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    }
+    .card .hd h2{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+      color: var(--muted);
+      font-weight:650;
+    }
+    .card .bd{ padding: 16px; }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    select, input[type="search"]{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline:none;
+      font-size:13px;
+      min-width: 180px;
+    }
+    input[type="search"]{min-width:220px}
+    .btn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--ink);
+      border-radius:12px;
+      padding: 10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18);}
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .legend{
+      display:flex; gap:12px; flex-wrap:wrap;
+      font-size:12px; color: var(--muted);
+      margin-top: 10px;
+    }
+    .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:7px; vertical-align:middle;}
+    .dot.good{ background: var(--good);}
+    .dot.warn{ background: var(--warn);}
+    .dot.bad{ background: var(--bad);}
+
+    .roles{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width: 780px){
+      .roles{grid-template-columns:1fr}
+    }
+
+    .role{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.04));
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .role:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(220px 160px at 18% 0%, rgba(96,165,250,.18), transparent 60%),
+        radial-gradient(220px 160px at 82% 0%, rgba(167,139,250,.13), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .role > *{position:relative}
+    .roleTop{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .roleName{
+      font-weight:750; letter-spacing:-.01em;
+      display:flex; align-items:center; gap:10px;
+      font-size:15px;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:4px 8px;
+      background: rgba(0,0,0,.15);
+      white-space:nowrap;
+    }
+    .score{
+      display:flex; align-items:center; gap:10px;
+    }
+    .meter{
+      width:120px; height:10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      overflow:hidden;
+    }
+    .fill{
+      height:100%;
+      width: 50%;
+      background: linear-gradient(90deg, var(--good), var(--warn), var(--bad));
+      border-radius:999px;
+    }
+    .scoreLabel{
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--muted);
+      width: 44px;
+      text-align:right;
+    }
+
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin: 10px 0 0;
+    }
+    .tab{
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding:7px 10px;
+      font-size:12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease;
+    }
+    .tab:hover{ background: rgba(255,255,255,.06); transform: translateY(-1px); }
+    .tab.active{
+      color: var(--ink);
+      border-color: rgba(96,165,250,.45);
+      background: rgba(96,165,250,.13);
+    }
+    .list{
+      display:grid;
+      gap:10px;
+      margin-top: 8px;
+    }
+    .item{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(0,0,0,.14);
+      padding: 10px 10px 10px 12px;
+      display:grid;
+      grid-template-columns: 14px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .sev{
+      width:12px; height:12px; border-radius:4px;
+      margin-top: 2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.10);
+    }
+    .sev.good{ background: rgba(110,231,183,.95); }
+    .sev.warn{ background: rgba(251,191,36,.95); }
+    .sev.bad{ background: rgba(248,113,113,.95); }
+    .titleRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .item b{font-size:13px}
+    .item p{
+      margin:6px 0 0;
+      font-size:12.5px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+    .chips{ display:flex; gap:7px; flex-wrap:wrap; margin-top:8px;}
+    .chip{
+      font-family: var(--mono);
+      font-size:11px;
+      color: rgba(234,240,255,.92);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:4px 7px;
+      border-radius: 999px;
+      white-space:nowrap;
+    }
+
+    .rightStack{
+      display:grid; gap:14px;
+      grid-auto-rows: min-content;
+    }
+    .callout{
+      padding: 16px;
+      border-radius: var(--r);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(500px 250px at 10% 0%, rgba(52,211,153,.16), transparent 60%),
+        radial-gradient(600px 300px at 90% 10%, rgba(96,165,250,.18), transparent 60%),
+        rgba(0,0,0,.18);
+      box-shadow: var(--shadow);
+    }
+    .callout h3{ margin:0 0 8px; font-size:14px; letter-spacing:.02em; text-transform:uppercase; color: var(--muted); }
+    .callout p{ margin:0; color: var(--ink); line-height:1.55; font-size:14px; }
+    .callout ul{ margin:10px 0 0; padding-left: 18px; color: var(--muted); line-height:1.55; }
+    .callout li{ margin:6px 0; font-size:13px;}
+
+    .flow{
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.14);
+      padding: 12px 12px 12px 12px;
+      display:grid;
+      grid-template-columns: 30px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .num{
+      width:30px; height:30px;
+      border-radius: 10px;
+      display:flex; align-items:center; justify-content:center;
+      font-family: var(--mono);
+      font-weight:700;
+      background: rgba(96,165,250,.18);
+      border:1px solid rgba(96,165,250,.35);
+      color: rgba(234,240,255,.95);
+    }
+    .step b{ font-size:13px; }
+    .step p{ margin:6px 0 0; color: var(--muted); font-size:12.8px; line-height:1.45; }
+    .kbd{
+      font-family: var(--mono);
+      font-size:12px;
+      color: rgba(234,240,255,.92);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:2px 6px;
+      border-radius: 8px;
+      white-space:nowrap;
+    }
+    .footer{
+      margin-top: 18px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color: var(--muted2);
+      font-size:12px;
+    }
+    .mini{
+      font-family: var(--mono);
+      color: var(--muted2);
+    }
+    .hr{
+      height:1px; background: var(--line); border:0; margin: 12px 0;
+    }
+
+    /* Modal */
+    dialog{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      padding:0;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.20));
+      color: var(--ink);
+      width:min(860px, 94vw);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop{
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+    }
+    .modalHd{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .modalHd b{ font-size:13px; letter-spacing:.02em; text-transform:uppercase; color: var(--muted); }
+    .modalBd{ padding:16px; }
+    .twoCol{
+      display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+    }
+    @media (max-width: 820px){ .twoCol{ grid-template-columns:1fr; } }
+    .box{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.14);
+      padding: 12px;
+    }
+    .box h4{ margin:0 0 8px; font-size:13px; }
+    .box p{ margin:0; color: var(--muted); font-size:12.8px; line-height:1.5; }
+    .pre{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
+      padding: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(234,240,255,.95);
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .closeBtn{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">
+        <span class="pill">IT Workplace</span>
+        <span class="pill">Friction Map</span>
+        <span class="pill">Build-Your-Own Tools with AI</span>
+      </div>
+      <h1>Day-to-day frictions by role — and why the winning move is building yourself tools with AI</h1>
+      <p class="sub">
+        Most “productivity problems” aren’t lack of effort — they’re <b>local friction</b>: repeated context-switches,
+        missing glue between systems, unclear specs, slow feedback loops, and knowledge trapped in chat threads.
+        When friction is <i>specific</i> to your team and workflows, off-the-shelf tools rarely fit.
+        That’s why teams increasingly build <b>small, personal/role-specific AI tools</b> that remove the exact bottlenecks.
+      </p>
+    </header>
+
+    <section class="grid">
+      <div class="card" id="rolesCard">
+        <div class="hd">
+          <h2>Friction by role</h2>
+          <div class="controls">
+            <select id="roleSelect" aria-label="Role">
+              <option value="all">All roles</option>
+            </select>
+            <select id="severitySelect" aria-label="Severity">
+              <option value="all">All severity</option>
+              <option value="bad">High friction</option>
+              <option value="warn">Medium friction</option>
+              <option value="good">Low friction</option>
+            </select>
+            <input id="search" type="search" placeholder="Search (e.g., 'tickets', 'context', 'docs')…" />
+            <button class="btn" id="resetBtn" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="bd">
+          <div class="legend">
+            <span><span class="dot bad"></span>High friction (drains hours)</span>
+            <span><span class="dot warn"></span>Medium friction (drains focus)</span>
+            <span><span class="dot good"></span>Low friction (still repeatable)</span>
+          </div>
+          <hr class="hr">
+          <div class="roles" id="roles"></div>
+        </div>
+      </div>
+
+      <aside class="rightStack">
+        <div class="callout">
+          <h3>Why you end up building tools</h3>
+          <p>
+            Your real work is a chain of small steps across systems (docs → tickets → code → reviews → dashboards).
+            Friction lives in the “gaps”. AI is useful because it can become <b>glue</b>:
+            summarize, transform, validate, and automate those gaps without waiting for a vendor roadmap.
+          </p>
+          <ul>
+            <li><b>Friction is local:</b> your naming conventions, ticket fields, repos, and workflows.</li>
+            <li><b>Friction is repetitive:</b> the same 20 annoyances happen every week.</li>
+            <li><b>Friction is contextual:</b> requires “team memory” to do it right.</li>
+            <li><b>Friction is measurable:</b> minutes saved per task → compounding hours/month.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="hd">
+            <h2>The AI tool-building loop</h2>
+          </div>
+          <div class="bd">
+            <div class="flow">
+              <div class="step">
+                <div class="num">1</div>
+                <div>
+                  <b>Spot the repeat</b>
+                  <p>Write down tasks you do <span class="kbd">≥ 2×/week</span> that feel annoying, slow, or error-prone.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div>
+                  <b>Define “good”</b>
+                  <p>Turn vague pain into a checklist: format, rules, edge cases, “don’t do” constraints.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div>
+                  <b>Build a tiny tool</b>
+                  <p>Start with a script, a prompt template, a browser extension, or a Slack/Jira bot. Small beats perfect.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">4</div>
+                <div>
+                  <b>Put it in the workflow</b>
+                  <p>If it’s not in the place you work (IDE, ticket, chat, CI), it won’t stick.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="num">5</div>
+                <div>
+                  <b>Measure & harden</b>
+                  <p>Track minutes saved, common failures, and add guardrails (validation, citations, unit tests).</p>
+                </div>
+              </div>
+            </div>
+            <hr class="hr">
+            <div class="footer">
+              <div>Tip: Pick <b>one</b> role and build a “micro-assistant” for their top 3 frictions.</div>
+              <div class="mini">Outcome = fewer context switches + faster feedback loops</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <dialog id="modal">
+      <div class="modalHd">
+        <b id="modalTitle">Friction → Tool</b>
+        <button class="closeBtn" id="closeModal" type="button">Close</button>
+      </div>
+      <div class="modalBd" id="modalBody"></div>
+    </dialog>
+  </div>
+
+  <script>
+    // Data model: role -> friction items -> suggested AI tool patterns
+    const DATA = [
+      {
+        role: "Software Engineer",
+        tag: "build + maintain",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Context switching across tickets, code, docs",
+            why: "You lose flow reconstructing what matters: requirements, decisions, related changes, prior incidents.",
+            tool: "A 'work packet' generator: paste a ticket/PR link → AI pulls key context + checklist + gotchas.",
+            patterns: ["Ticket→PR summary", "Decision log", "Local runbook snippet"],
+            prompt: `Goal: Create a Work Packet for this task.
+Inputs: ticket text, linked docs, related PRs/commits (if available).
+Output:
+1) One-paragraph objective
+2) Acceptance criteria checklist
+3) Risk/edge cases
+4) Suggested implementation plan (bullets)
+5) Test plan
+Constraints: Use our repo conventions; do NOT invent APIs; ask questions if requirements are missing.`
+          },
+          {
+            sev: "warn",
+            title: "PR review delays + unclear feedback",
+            why: "Review cycles stall on missing context, style disputes, and not knowing 'what to look for'.",
+            tool: "A PR 'review brief' bot: generates reviewer checklist + highlights risky diffs + links tests.",
+            patterns: ["Diff risk scan", "Reviewer checklist", "Changelog draft"],
+            prompt: `You are a senior reviewer. Produce:
+- Summary of change (<=5 bullets)
+- Risky areas (why)
+- Review checklist tailored to this diff
+- Suggested tests to run
+- Questions to ask author
+Do not comment on style unless it impacts correctness or maintainability.`
+          },
+          {
+            sev: "warn",
+            title: "Debugging: log spam, missing signals",
+            why: "The signal is buried. You scan logs manually and re-run the same queries.",
+            tool: "Log triage assistant: paste logs → extracts timeline + suspects + next diagnostic commands.",
+            patterns: ["Timeline extraction", "Suspect ranking", "Command suggestions"],
+            prompt: `Given logs, produce:
+- Timeline (timestamped)
+- Most likely root causes (ranked) with evidence
+- Next 5 diagnostics (commands/queries) and expected outcomes
+- If insufficient info, list exactly what to collect.`
+          },
+          {
+            sev: "good",
+            title: "Writing docs nobody reads",
+            why: "Docs rot because they’re hard to maintain and not attached to the workflow.",
+            tool: "Docs sync: generate/update README/runbook sections from code + recent incidents.",
+            patterns: ["Doc diff", "Runbook extraction", "Glossary builder"],
+            prompt: `Update this runbook section based on:
+- Current code structure
+- Recent incident notes
+Keep it concise, operational, and include verification steps.`
+          }
+        ]
+      },
+      {
+        role: "DevOps / SRE",
+        tag: "reliability + automation",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Incidents: slow triage + scattered data",
+            why: "Metrics, logs, traces, and deploy history are spread out. Time-to-diagnosis suffers.",
+            tool: "Incident commander copilot: incident channel → live summary + hypothesis board + action log.",
+            patterns: ["Hypothesis tracker", "Action items", "Timeline"],
+            prompt: `In an incident, maintain:
+- Current status (1 paragraph)
+- Hypotheses (ranked, with evidence)
+- Actions taken + results
+- Next actions
+Ask for missing signals. Never assert certainty without evidence.`
+          },
+          {
+            sev: "warn",
+            title: "Runbooks are outdated",
+            why: "After changes, procedures drift and responders waste time rediscovering steps.",
+            tool: "Runbook validator: compares runbook steps vs real commands/alerts; flags drift.",
+            patterns: ["Drift detection", "Command verification", "Alert mapping"],
+            prompt: `Compare runbook steps to current system reality.
+Output:
+- Steps that likely fail (why)
+- Updated commands/paths
+- Preconditions and rollback steps
+Avoid guessing; mark unknowns explicitly.`
+          },
+          {
+            sev: "warn",
+            title: "Terraform/K8s changes reviewed too late",
+            why: "Reviews miss blast radius until after apply.",
+            tool: "Blast-radius analyzer: plan/app diff → who/what is impacted + rollback plan.",
+            patterns: ["Plan explanation", "Risk tags", "Rollback checklist"],
+            prompt: `Given an infra diff, produce:
+- Impacted services/users
+- Risk level + reasons
+- Safe rollout plan
+- Rollback plan
+- Monitoring to watch.`
+          },
+          {
+            sev: "good",
+            title: "Pager fatigue: noisy alerts",
+            why: "Too many alerts train you to ignore them.",
+            tool: "Alert deduper: clusters alerts, suggests thresholds, and writes suppression rules with guardrails.",
+            patterns: ["Clustering", "Threshold suggestion", "Suppression rules"],
+            prompt: `Cluster alerts by root cause.
+For each cluster propose:
+- Better signal metric
+- Threshold change suggestion
+- Suppression rule with expiry + safety conditions.`
+          }
+        ]
+      },
+      {
+        role: "Product Manager",
+        tag: "alignment + decisions",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Requirements are ambiguous",
+            why: "Teams build different interpretations. Rework is the tax.",
+            tool: "Spec clarifier: turns rough notes into a PRD + explicit open questions + acceptance tests.",
+            patterns: ["PRD generator", "Question list", "Acceptance tests"],
+            prompt: `Transform these notes into a PRD:
+- Problem statement
+- Users + use cases
+- Non-goals
+- Acceptance criteria (testable)
+- Open questions (must ask)
+No fluff; make it implementable.`
+          },
+          {
+            sev: "warn",
+            title: "Stakeholder updates eat time",
+            why: "You rewrite the same story for different audiences every week.",
+            tool: "Update generator: status notes → exec summary + team update + risks + asks.",
+            patterns: ["Audience-specific summaries", "Risk log", "Asks"],
+            prompt: `Create:
+1) Exec summary (<=6 bullets)
+2) Team update (detailed)
+3) Risks/mitigations
+4) Decisions needed + who
+Use concrete dates and metrics where possible.`
+          },
+          {
+            sev: "warn",
+            title: "Roadmap tradeoffs are hard to justify",
+            why: "Decisions feel subjective without a shared scoring model.",
+            tool: "Decision memo builder: options → scored by impact/cost/risk with assumptions.",
+            patterns: ["Scoring table", "Assumption list", "Decision memo"],
+            prompt: `Draft a decision memo:
+- Options
+- Pros/cons
+- Scoring (impact, effort, risk)
+- Assumptions + unknowns
+- Recommendation with rationale.`
+          },
+          {
+            sev: "good",
+            title: "User feedback is unstructured",
+            why: "Insights live in scattered calls, tickets, and chats.",
+            tool: "Feedback clusterer: transcripts → themes + top pain points + suggested experiments.",
+            patterns: ["Theme extraction", "Pain point ranking", "Experiment ideas"],
+            prompt: `Cluster feedback into themes.
+Output:
+- Top 5 pain points with example quotes
+- Frequency estimate
+- Suggested experiments + success metrics.`
+          }
+        ]
+      },
+      {
+        role: "QA / Test Engineer",
+        tag: "quality + confidence",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Manual regression takes forever",
+            why: "The suite grows but time doesn't. Coverage drops.",
+            tool: "Test case generator: PR diff → risk-based test plan + new test templates.",
+            patterns: ["Risk-based plan", "Scenario generation", "Boundary tests"],
+            prompt: `Given a change description/diff, generate:
+- Risk-based test plan
+- New test cases (happy, edge, failure)
+- Data setup + teardown
+- Automation opportunities.`
+          },
+          {
+            sev: "warn",
+            title: "Flaky tests waste cycles",
+            why: "Intermittent failures create mistrust and slow releases.",
+            tool: "Flake triage assistant: failure logs → probable causes + stabilization steps.",
+            patterns: ["Flake classification", "Root-cause hints", "Stabilization checklist"],
+            prompt: `Analyze flaky failures and output:
+- Flake type (timing, env, data, ordering)
+- Evidence from logs
+- Concrete stabilization steps
+- What metrics to track to confirm fix.`
+          },
+          {
+            sev: "warn",
+            title: "Bug reports lack reproduction steps",
+            why: "Engineers spend time reproducing instead of fixing.",
+            tool: "Bug report normalizer: raw notes → steps + expected/actual + env + attachments checklist.",
+            patterns: ["Repro steps", "Env capture", "Minimal repro"],
+            prompt: `Rewrite as a high-quality bug report:
+- Title
+- Steps to reproduce
+- Expected vs actual
+- Environment
+- Suspected area + logs to attach.`
+          },
+          {
+            sev: "good",
+            title: "Coverage gaps are invisible",
+            why: "Teams think they're safe until prod says otherwise.",
+            tool: "Coverage storyteller: maps code areas to user flows and shows 'risk hotspots'.",
+            patterns: ["Flow mapping", "Hotspot report", "Release risk note"],
+            prompt: `Map this code to user flows.
+Identify hotspots with low coverage and suggest targeted tests.`
+          }
+        ]
+      },
+      {
+        role: "Data Analyst / BI",
+        tag: "insight + trust",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Metric definitions differ by team",
+            why: "Meetings become arguments about numbers, not decisions.",
+            tool: "Metric contract builder: defines a metric, source tables, filters, and edge cases.",
+            patterns: ["Definition registry", "SQL template", "Edge-case list"],
+            prompt: `Create a metric contract:
+- Definition
+- Inclusion/exclusion
+- Source of truth tables
+- SQL template
+- Known pitfalls
+- Example values.`
+          },
+          {
+            sev: "warn",
+            title: "SQL is repetitive + brittle",
+            why: "Copy-paste queries drift and break silently.",
+            tool: "Query generator with guardrails: natural language → SQL + validation checks.",
+            patterns: ["SQL generation", "Data quality checks", "Explain plan"],
+            prompt: `Generate SQL and include:
+- Assumptions
+- Data quality checks
+- How to validate results
+- Alternatives if schema differs.`
+          },
+          {
+            sev: "warn",
+            title: "Dashboards are hard to maintain",
+            why: "Small changes cause cascading confusion.",
+            tool: "Dashboard changelog bot: translates diffs into human-readable impact statements.",
+            patterns: ["Impact narrative", "Audience summary", "Backfill notice"],
+            prompt: `Explain dashboard changes:
+- What changed
+- Who is impacted
+- How to interpret now
+- Any backfill or breakage risks.`
+          },
+          {
+            sev: "good",
+            title: "Stakeholders want instant answers",
+            why: "Ad-hoc questions interrupt deep work.",
+            tool: "Analyst concierge: lightweight Q&A that routes to existing dashboards/queries first.",
+            patterns: ["Answer routing", "Linking", "Escalation rules"],
+            prompt: `Answer using existing sources first.
+If not possible, propose the smallest new query and ask clarifying questions.`
+          }
+        ]
+      },
+      {
+        role: "Security / GRC",
+        tag: "risk + compliance",
+        frictions: [
+          {
+            sev: "bad",
+            title: "Policy vs reality mismatch",
+            why: "Controls are written abstractly, but teams need concrete, actionable steps.",
+            tool: "Control translator: policy text → engineering checklist + evidence collection plan.",
+            patterns: ["Checklist", "Evidence pack", "Control mapping"],
+            prompt: `Translate policy into:
+- Engineering checklist
+- Evidence to collect
+- Common failure modes
+- Implementation examples (generic, not invented specifics).`
+          },
+          {
+            sev: "warn",
+            title: "Threat modeling is inconsistent",
+            why: "Different teams produce different depth; risks get missed.",
+            tool: "Threat model template filler: architecture notes → STRIDE-style risks + mitigations.",
+            patterns: ["Threat enumeration", "Mitigation list", "Residual risk"],
+            prompt: `Create a threat model:
+- Assets, actors, trust boundaries
+- Threats (structured)
+- Mitigations
+- Residual risk + monitoring.`
+          },
+          {
+            sev: "warn",
+            title: "Security review bottlenecks releases",
+            why: "Reviews are manual and late.",
+            tool: "Pre-review scanner: PR description + configs → flags likely issues + required evidence.",
+            patterns: ["Pre-flight checklist", "Misconfig detection", "Evidence request"],
+            prompt: `Pre-review this change:
+- Potential security issues
+- Evidence required
+- Questions for author
+- Suggested safer defaults.`
+          },
+          {
+            sev: "good",
+            title: "Audit evidence collection is painful",
+            why: "People scramble at the last minute.",
+            tool: "Evidence harvester: auto-collects links, screenshots, logs with timestamps and owners.",
+            patterns: ["Evidence index", "Timestamping", "Owner mapping"],
+            prompt: `Build an evidence index:
+- Control -> evidence link
+- Owner
+- Timestamp
+- Status (missing/complete)
+Keep it minimal and auditable.`
+          }
+        ]
+      }
+    ];
+
+    const roleSelect = document.getElementById('roleSelect');
+    const severitySelect = document.getElementById('severitySelect');
+    const search = document.getElementById('search');
+    const resetBtn = document.getElementById('resetBtn');
+    const rolesEl = document.getElementById('roles');
+
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeModal = document.getElementById('closeModal');
+
+    // Populate role select
+    DATA.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.role;
+      opt.textContent = r.role;
+      roleSelect.appendChild(opt);
+    });
+
+    const sevRank = { good: 1, warn: 2, bad: 3 };
+    const sevLabel = { good: "Low", warn: "Medium", bad: "High" };
+
+    function sevClass(sev){ return sev === 'bad' ? 'bad' : (sev === 'warn' ? 'warn' : 'good'); }
+
+    function roleFrictionScore(roleObj){
+      // Weighted avg for quick "pain" signal
+      const total = roleObj.frictions.reduce((acc,f)=> acc + sevRank[f.sev], 0);
+      const max = roleObj.frictions.length * 3;
+      return Math.round((total / max) * 100);
+    }
+
+    function matchesQuery(text, q){
+      if(!q) return true;
+      return text.toLowerCase().includes(q.toLowerCase());
+    }
+
+    function render(){
+      const roleVal = roleSelect.value;
+      const sevVal = severitySelect.value;
+      const q = search.value.trim();
+
+      rolesEl.innerHTML = "";
+
+      const filteredRoles = DATA.filter(r => roleVal === "all" ? true : r.role === roleVal);
+
+      filteredRoles.forEach(roleObj => {
+        const score = roleFrictionScore(roleObj);
+
+        const roleCard = document.createElement('div');
+        roleCard.className = 'role';
+
+        const top = document.createElement('div');
+        top.className = 'roleTop';
+
+        const left = document.createElement('div');
+        left.className = 'roleName';
+        left.innerHTML = `${roleObj.role} <span class="badge">${roleObj.tag}</span>`;
+
+        const right = document.createElement('div');
+        right.className = 'score';
+
+        const meter = document.createElement('div');
+        meter.className = 'meter';
+        const fill = document.createElement('div');
+        fill.className = 'fill';
+        fill.style.width = `${Math.max(12, Math.min(100, score))}%`;
+        meter.appendChild(fill);
+
+        const scoreLabel = document.createElement('div');
+        scoreLabel.className = 'scoreLabel';
+        scoreLabel.textContent = `${score}%`;
+
+        right.appendChild(meter);
+        right.appendChild(scoreLabel);
+
+        top.appendChild(left);
+        top.appendChild(right);
+
+        // Tabs: Frictions / Tools
+        const tabs = document.createElement('div');
+        tabs.className = 'tabs';
+
+        const tabA = document.createElement('div');
+        tabA.className = 'tab active';
+        tabA.textContent = "Frictions";
+
+        const tabB = document.createElement('div');
+        tabB.className = 'tab';
+        tabB.textContent = "Tool Ideas";
+
+        tabs.appendChild(tabA);
+        tabs.appendChild(tabB);
+
+        const list = document.createElement('div');
+        list.className = 'list';
+
+        function renderFrictions(){
+          list.innerHTML = "";
+          roleObj.frictions
+            .filter(f => sevVal === "all" ? true : f.sev === sevVal)
+            .filter(f => matchesQuery(`${f.title} ${f.why} ${f.tool} ${(f.patterns||[]).join(" ")}`, q))
+            .sort((a,b) => sevRank[b.sev] - sevRank[a.sev])
+            .forEach(f => {
+              const item = document.createElement('div');
+              item.className = 'item';
+              const s = document.createElement('div');
+              s.className = `sev ${sevClass(f.sev)}`;
+              const content = document.createElement('div');
+
+              const titleRow = document.createElement('div');
+              titleRow.className = 'titleRow';
+              const b = document.createElement('b');
+              b.textContent = f.title;
+
+              const tag = document.createElement('span');
+              tag.className = 'badge';
+              tag.textContent = `${sevLabel[f.sev]} friction`;
+
+              titleRow.appendChild(b);
+              titleRow.appendChild(tag);
+
+              const p = document.createElement('p');
+              p.textContent = f.why;
+
+              const chips = document.createElement('div');
+              chips.className = 'chips';
+              (f.patterns || []).slice(0,4).forEach(x => {
+                const c = document.createElement('span');
+                c.className = 'chip';
+                c.textContent = x;
+                chips.appendChild(c);
+              });
+
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'btn';
+              btn.style.marginTop = "10px";
+              btn.textContent = "Open AI Tool Blueprint";
+              btn.addEventListener('click', () => openModal(roleObj.role, f));
+
+              content.appendChild(titleRow);
+              content.appendChild(p);
+              content.appendChild(chips);
+              content.appendChild(btn);
+
+              item.appendChild(s);
+              item.appendChild(content);
+              list.appendChild(item);
+            });
+
+          if(!list.children.length){
+            const empty = document.createElement('div');
+            empty.className = 'item';
+            empty.innerHTML = `<div class="sev good"></div><div>
+              <b>No matches</b>
+              <p>Try changing role, severity, or search terms.</p>
+            </div>`;
+            list.appendChild(empty);
+          }
+        }
+
+        function renderTools(){
+          list.innerHTML = "";
+          const tools = roleObj.frictions
+            .filter(f => sevVal === "all" ? true : f.sev === sevVal)
+            .filter(f => matchesQuery(`${f.title} ${f.why} ${f.tool} ${(f.patterns||[]).join(" ")}`, q))
+            .sort((a,b)=> sevRank[b.sev]-sevRank[a.sev]);
+
+          tools.forEach(f => {
+            const item = document.createElement('div');
+            item.className = 'item';
+
+            const s = document.createElement('div');
+            s.className = `sev ${sevClass(f.sev)}`;
+
+            const content = document.createElement('div');
+            const titleRow = document.createElement('div');
+            titleRow.className = 'titleRow';
+
+            const b = document.createElement('b');
+            b.textContent = f.tool;
+
+            const tag = document.createElement('span');
+            tag.className = 'badge';
+            tag.textContent = `Solves: ${sevLabel[f.sev]} friction`;
+
+            titleRow.appendChild(b);
+            titleRow.appendChild(tag);
+
+            const p = document.createElement('p');
+            p.textContent = `Targets: ${f.title}. Why it works: it automates the “gap” work and keeps context close to where you execute.`;
+
+            const chips = document.createElement('div');
+            chips.className = 'chips';
+            ["IDE hook", "Chat bot", "CLI script", "CI check", "Browser ext", "Ticket assistant"]
+              .slice(0,4)
+              .forEach(x => {
+                const c = document.createElement('span');
+                c.className = 'chip';
+                c.textContent = x;
+                chips.appendChild(c);
+              });
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn';
+            btn.style.marginTop = "10px";
+            btn.textContent = "Open AI Tool Blueprint";
+            btn.addEventListener('click', () => openModal(roleObj.role, f));
+
+            content.appendChild(titleRow);
+            content.appendChild(p);
+            content.appendChild(chips);
+            content.appendChild(btn);
+
+            item.appendChild(s);
+            item.appendChild(content);
+            list.appendChild(item);
+          });
+
+          if(!list.children.length){
+            const empty = document.createElement('div');
+            empty.className = 'item';
+            empty.innerHTML = `<div class="sev good"></div><div>
+              <b>No matches</b>
+              <p>Try changing role, severity, or search terms.</p>
+            </div>`;
+            list.appendChild(empty);
+          }
+        }
+
+        tabA.addEventListener('click', () => {
+          tabA.classList.add('active'); tabB.classList.remove('active');
+          renderFrictions();
+        });
+        tabB.addEventListener('click', () => {
+          tabB.classList.add('active'); tabA.classList.remove('active');
+          renderTools();
+        });
+
+        roleCard.appendChild(top);
+        roleCard.appendChild(tabs);
+        roleCard.appendChild(list);
+
+        rolesEl.appendChild(roleCard);
+        renderFrictions();
+      });
+    }
+
+    function openModal(roleName, friction){
+      modalTitle.textContent = `${roleName}: Friction → AI Tool Blueprint`;
+
+      const sev = friction.sev;
+      const sevText = sevLabel[sev];
+      const suggestedSurface = rememberSurface(roleName);
+
+      modalBody.innerHTML = `
+        <div class="twoCol">
+          <div class="box">
+            <h4>Friction</h4>
+            <p><b>${escapeHtml(friction.title)}</b></p>
+            <p style="margin-top:8px">${escapeHtml(friction.why)}</p>
+            <div class="pre" style="margin-top:10px">Severity: ${sevText} friction</div>
+          </div>
+          <div class="box">
+            <h4>Tool to build</h4>
+            <p><b>${escapeHtml(friction.tool)}</b></p>
+            <p style="margin-top:8px">Best surface (where you already work): <b>${escapeHtml(suggestedSurface)}</b></p>
+            <div class="pre" style="margin-top:10px">${escapeHtml(toolBlueprint(roleName, friction))}</div>
+          </div>
+        </div>
+
+        <div class="box" style="margin-top:12px">
+          <h4>Starter prompt / spec (copy-paste)</h4>
+          <p>Use this as your “definition of good”. Add your repo conventions, field names, and guardrails.</p>
+          <div class="pre">${escapeHtml(friction.prompt || defaultPrompt(roleName, friction))}</div>
+        </div>
+      `;
+
+      modal.showModal();
+    }
+
+    function toolBlueprint(roleName, f){
+      // Minimal, practical blueprint: I/O, steps, guardrails, success metric.
+      return [
+        `Blueprint: ${f.tool}`,
+        ``,
+        `1) Input:`,
+        `   - Source text (ticket/PR/logs/spec)`,
+        `   - Links (optional): docs, dashboards, commits`,
+        `   - Constraints: scope, deadlines, non-goals`,
+        ``,
+        `2) Processing:`,
+        `   - Summarize context in 5-10 bullets`,
+        `   - Extract checklist (acceptance/tests)`,
+        `   - Identify missing info → ask questions`,
+        `   - Generate next actions (ranked)`,
+        ``,
+        `3) Output (structured):`,
+        `   - "What matters" summary`,
+        `   - Risks + mitigations`,
+        `   - Next steps + owners`,
+        `   - Template artifacts (PRD/PR brief/runbook/test plan)`,
+        ``,
+        `4) Guardrails:`,
+        `   - Never invent APIs/metrics; mark unknowns`,
+        `   - Prefer links/citations when available`,
+        `   - Validate format (JSON/YAML/Markdown)`,
+        `   - Add a "confidence + evidence" section`,
+        ``,
+        `5) Success metric:`,
+        `   - Minutes saved per run + fewer back-and-forth cycles`,
+      ].join("\n");
+    }
+
+    function rememberSurface(roleName){
+      const map = {
+        "Software Engineer": "IDE (VS Code/JetBrains) + PR template",
+        "DevOps / SRE": "Incident channel + runbook repo + CI checks",
+        "Product Manager": "Docs (PRD) + ticket fields + weekly update template",
+        "QA / Test Engineer": "Test plan template + CI annotations",
+        "Data Analyst / BI": "Notebook/SQL editor + metric registry page",
+        "Security / GRC": "PR gate checklist + evidence index doc"
+      };
+      return map[roleName] || "Where the work happens (IDE, chat, ticket, CI)";
+    }
+
+    function defaultPrompt(roleName, f){
+      return `Role: ${roleName}
+Task: Build a micro-tool to reduce the friction: "${f.title}"
+
+Requirements:
+- Produce structured output with headings and checklists.
+- Ask clarifying questions if inputs are missing.
+- Do not guess; clearly mark unknowns.
+- Include a validation section (what to verify, how).
+
+Output format:
+1) Summary
+2) Checklist
+3) Risks
+4) Next actions
+5) Verification`;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Events
+    roleSelect.addEventListener('change', render);
+    severitySelect.addEventListener('change', render);
+    search.addEventListener('input', render);
+    resetBtn.addEventListener('click', () => {
+      roleSelect.value = "all";
+      severitySelect.value = "all";
+      search.value = "";
+      render();
+    });
+
+    closeModal.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => {
+      // Close if clicking backdrop
+      const rect = modal.getBoundingClientRect();
+      const inDialog =
+        e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if(!inDialog) modal.close();
+    });
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>
