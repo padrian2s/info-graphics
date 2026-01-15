@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI-Native Work: When Execution Becomes Cheap</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0E1730;
+      --card2:#0B132A;
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.16);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --dim:rgba(255,255,255,.55);
+      --good:#3EE6B6;
+      --warn:#F6C945;
+      --bad:#FF5D7A;
+      --a:#6EA8FF;
+      --b:#A78BFA;
+      --c:#22C55E;
+      --d:#F97316;
+      --shadow: 0 14px 35px rgba(0,0,0,.42);
+      --shadow2: 0 10px 25px rgba(0,0,0,.35);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 20% 10%, rgba(110,168,255,.18), transparent 60%),
+        radial-gradient(900px 520px at 85% 20%, rgba(167,139,250,.18), transparent 65%),
+        radial-gradient(900px 520px at 50% 85%, rgba(62,230,182,.12), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 60px}
+    header{
+      position:relative;
+      padding:24px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius:calc(var(--r) + 6px);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(500px 220px at 15% 20%, rgba(110,168,255,.24), transparent 60%),
+        radial-gradient(540px 240px at 85% 35%, rgba(167,139,250,.22), transparent 60%),
+        radial-gradient(560px 260px at 55% 90%, rgba(62,230,182,.14), transparent 60%);
+      pointer-events:none;
+      filter:saturate(1.1);
+    }
+    .hero{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+    .kicker{
+      font-family:var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:40px;
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    @media (max-width: 720px){ h1{font-size:32px} }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:15.5px;
+      line-height:1.55;
+      max-width:78ch;
+    }
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12.5px;
+      display:flex; gap:8px; align-items:center;
+    }
+    .dot{width:9px;height:9px;border-radius:999px;background:var(--a); box-shadow:0 0 0 4px rgba(110,168,255,.14)}
+    .dot.b{background:var(--b); box-shadow:0 0 0 4px rgba(167,139,250,.14)}
+    .dot.c{background:var(--good); box-shadow:0 0 0 4px rgba(62,230,182,.14)}
+    .dot.d{background:var(--warn); box-shadow:0 0 0 4px rgba(246,201,69,.14)}
+
+    .side{
+      position:relative;
+      border-radius:var(--r);
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.22);
+      box-shadow:var(--shadow2);
+      padding:14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .side h3{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.02em;
+      color:rgba(255,255,255,.88);
+    }
+    .scene{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius:14px;
+      padding:12px;
+    }
+    .scene .t{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .scene .b{
+      font-size:13.5px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+    }
+    .scene strong{color:rgba(255,255,255,.95)}
+    .miniStat{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:10px;
+    }
+    .stat .n{font-size:18px; font-weight:700; letter-spacing:-.01em}
+    .stat .l{font-size:12px; color:var(--muted); margin-top:2px}
+    .stat .n span{font-family:var(--mono); font-size:12px; font-weight:600; color:var(--dim); margin-left:6px}
+
+    main{margin-top:18px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius:var(--r);
+      box-shadow:var(--shadow2);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card .hd{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .card h2{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-.01em;
+    }
+    .help{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.3;
+      max-width:60ch;
+    }
+    .pill{
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(255,255,255,.78);
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+      padding:6px 9px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px}
+    .row label{font-size:12px;color:var(--muted)}
+    input[type="range"]{width:260px; max-width:100%}
+    .btns{display:flex; gap:8px; flex-wrap:wrap}
+    button{
+      cursor:pointer;
+      color:rgba(255,255,255,.9);
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--stroke);
+      padding:9px 10px;
+      border-radius:12px;
+      font-size:12.5px;
+      transition:transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{transform:translateY(-1px); background:rgba(255,255,255,.06); border-color:var(--stroke2)}
+    button:active{transform:translateY(0px) scale(.99)}
+    button.primary{
+      background:linear-gradient(180deg, rgba(110,168,255,.18), rgba(110,168,255,.06));
+      border-color:rgba(110,168,255,.25);
+    }
+    button.good{
+      background:linear-gradient(180deg, rgba(62,230,182,.18), rgba(62,230,182,.06));
+      border-color:rgba(62,230,182,.25);
+    }
+    .twoCol{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:12px;
+      margin-top:12px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){ .twoCol{grid-template-columns:1fr} }
+
+    .viz{
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+      overflow:hidden;
+      min-height:300px;
+    }
+    .viz svg{width:100%; height:100%}
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px
+    }
+    .lg{
+      display:flex; gap:8px; align-items:center;
+      font-size:12px; color:var(--muted);
+      padding:6px 8px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+    }
+    .sw{width:10px; height:10px; border-radius:3px; background:var(--a)}
+    .sw.b{background:var(--b)}
+    .sw.c{background:var(--good)}
+    .sw.w{background:var(--warn)}
+    .sw.r{background:var(--bad)}
+
+    .habits{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 900px){ .habits{grid-template-columns:1fr} }
+    .habit{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .habit .top{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+      margin-bottom:8px;
+    }
+    .num{
+      font-family:var(--mono);
+      font-weight:700;
+      font-size:12px;
+      letter-spacing:.08em;
+      color:rgba(255,255,255,.75);
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+    }
+    .habit h3{margin:0; font-size:14.5px; letter-spacing:-.01em}
+    .habit p{margin:6px 0 0; font-size:13px; line-height:1.45; color:rgba(255,255,255,.80)}
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .box{
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .box .k{font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:6px}
+    .box ul{margin:0; padding-left:16px}
+    .box li{font-size:12.5px; line-height:1.4; color:rgba(255,255,255,.78); margin:6px 0}
+    .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(255,255,255,.75);
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      padding:5px 8px;
+      background:rgba(255,255,255,.02);
+      white-space:nowrap;
+    }
+    .tag.good{border-color:rgba(62,230,182,.25); background:rgba(62,230,182,.06)}
+    .tag.warn{border-color:rgba(246,201,69,.25); background:rgba(246,201,69,.06)}
+    .tag.bad{border-color:rgba(255,93,122,.25); background:rgba(255,93,122,.06)}
+    .footer{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+      text-align:center;
+      opacity:.9;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.65);
+      border:1px solid var(--stroke);
+      color:rgba(255,255,255,.9);
+      padding:10px 12px;
+      border-radius:14px;
+      box-shadow:var(--shadow2);
+      font-size:12.5px;
+      display:none;
+      max-width:min(760px, calc(100vw - 24px));
+    }
+
+    /* Tooltip */
+    .tip{
+      position:fixed;
+      pointer-events:none;
+      background:rgba(0,0,0,.78);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:12px;
+      padding:10px 10px;
+      color:rgba(255,255,255,.92);
+      font-size:12px;
+      line-height:1.35;
+      max-width:320px;
+      box-shadow:var(--shadow2);
+      display:none;
+      z-index:50;
+    }
+    .tip .t{font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.72); margin-bottom:6px}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hero">
+        <div>
+          <div class="kicker">AI-native work habits • bottleneck shift • 2026 reality check</div>
+          <h1>The Chaos Isn’t Random. It’s a Bottleneck Migration.</h1>
+          <p class="sub">
+            AI made <b>execution</b> cheap, fast, and abundant. The “scarcity” that once shaped work rituals
+            (approval gates, PRDs, meetings-before-building) has moved downstream.
+            The new crunch points are <b>clarity</b>, <b>ambition</b>, <b>distribution</b>, and <b>relationships</b>.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><span class="dot"></span>Execution capacity isn’t scarce</div>
+            <div class="chip"><span class="dot b"></span>Planning can cost more than shipping</div>
+            <div class="chip"><span class="dot c"></span>Results create alignment</div>
+            <div class="chip"><span class="dot d"></span>Value shifts to judgment + relationships</div>
+          </div>
+        </div>
+
+        <aside class="side">
+          <h3>Two scenes (last month)</h3>
+          <div class="scene">
+            <div class="t">Scene 1 — “10 days, 4 people”</div>
+            <div class="b">
+              A small team ships a full feature rapidly, heavily AI-assisted. <br/>
+              <span class="muted">Implication: execution is no longer the limiter.</span>
+            </div>
+          </div>
+          <div class="scene">
+            <div class="t">Scene 2 — “Roadmap theater”</div>
+            <div class="b">
+              Leaders ask for 30/90-day roadmaps with phases, milestones, protection of capacity. <br/>
+              <span class="muted">Implication: habits still optimize for the old scarcity.</span>
+            </div>
+          </div>
+          <div class="miniStat">
+            <div class="stat">
+              <div class="n">Cheap<span>new</span></div>
+              <div class="l">Prototypes & iterations</div>
+            </div>
+            <div class="stat">
+              <div class="n">Expensive<span>new</span></div>
+              <div class="l">Clarity & distribution</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- CARD 1: Cost Ratio Simulator -->
+      <section class="card" id="card-cost">
+        <div class="hd">
+          <div>
+            <h2>Simulator: The Cost Ratio Flip</h2>
+            <div class="help">
+              Drag the slider: when execution gets cheaper, the “responsible” rituals can become the bottleneck.
+              Watch how the optimal strategy changes from <span class="tag bad">protect execution</span> to
+              <span class="tag good">ship to learn</span>.
+            </div>
+          </div>
+          <div class="pill" id="ratioLabel">Execution cost: 70 • Coordination cost: 30</div>
+        </div>
+
+        <div class="twoCol">
+          <div class="viz" id="costViz" aria-label="Cost ratio chart"></div>
+          <div class="viz">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <div>
+                <div style="font-weight:700; letter-spacing:-.01em; margin-bottom:2px;">What to optimize for</div>
+                <div class="help" id="optExplain">Move the slider to see the recommendation.</div>
+              </div>
+              <span class="tag" id="optTag">—</span>
+            </div>
+
+            <div style="margin-top:12px; border:1px solid var(--stroke); border-radius:14px; padding:12px; background:rgba(0,0,0,.18);">
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:8px;">Practical swap</div>
+              <div id="swapText" style="font-size:13px; line-height:1.5; color:rgba(255,255,255,.84);">
+                —
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="execCost">Execution cost</label>
+              <input id="execCost" type="range" min="5" max="95" value="70" />
+              <span class="pill" id="execCostVal">70</span>
+            </div>
+
+            <div class="btns" style="margin-top:10px;">
+              <button class="primary" id="presetOld">Preset: 2015-style</button>
+              <button class="good" id="presetNew">Preset: AI-native</button>
+              <button id="randomize">Randomize</button>
+            </div>
+
+            <div class="legend">
+              <div class="lg"><span class="sw r"></span>Coordination / rituals</div>
+              <div class="lg"><span class="sw c"></span>Execution / building</div>
+              <div class="lg"><span class="sw b"></span>Learning / iteration</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 2: Bottleneck Migration Map -->
+      <section class="card" id="card-bottlenecks">
+        <div class="hd">
+          <div>
+            <h2>Map: Where the Bottleneck Went</h2>
+            <div class="help">
+              In manufacturing: eliminate a bottleneck and the constraint relocates. In AI-era knowledge work:
+              execution shrinks → constraints move to <b>clarity</b>, <b>ambition</b>, <b>distribution</b>, <b>relationships</b>.
+              Hover nodes to see what “scarce” means now.
+            </div>
+          </div>
+          <div class="pill">Hover • Click to pin</div>
+        </div>
+
+        <div class="twoCol">
+          <div class="viz" id="flowViz" aria-label="Bottleneck migration diagram"></div>
+          <div class="viz">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+              <div>
+                <div style="font-weight:700; margin-bottom:4px;" id="bnTitle">Pick a bottleneck</div>
+                <div class="help" id="bnDesc">Hover a node on the left to see why it matters.</div>
+              </div>
+              <span class="tag good" id="bnTag">scarcity</span>
+            </div>
+
+            <div style="margin-top:12px;" class="split">
+              <div class="box">
+                <div class="k">AI makes cheap</div>
+                <ul id="cheapList">
+                  <li>Prototypes in hours</li>
+                  <li>Refactors in days</li>
+                  <li>Many parallel variants</li>
+                </ul>
+              </div>
+              <div class="box">
+                <div class="k">Humans must supply</div>
+                <ul id="humanList">
+                  <li>What’s worth building</li>
+                  <li>How bold the bet is</li>
+                  <li>Who will adopt it</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="margin-top:12px; border:1px solid var(--stroke); border-radius:14px; padding:12px; background:rgba(0,0,0,.18);">
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:8px;">AI-native move</div>
+              <div id="bnMove" style="font-size:13px; line-height:1.5; color:rgba(255,255,255,.84);">
+                Replace prediction-heavy process with learning-through-shipping. Let demos, not meetings, force clarity.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 3: The 8 Habits -->
+      <section class="card" style="grid-column:1/-1" id="card-habits">
+        <div class="hd">
+          <div>
+            <h2>8 Habits to Break (Risk-Management Rituals From the “Execution Is Scarce” Era)</h2>
+            <div class="help">
+              Each habit has an “old logic” and an “AI-native flip.” Click <b>Copy micro-habit</b> to grab a one-line starter
+              you can try this week.
+            </div>
+          </div>
+          <div class="btns">
+            <button class="primary" id="expandAll">Expand all</button>
+            <button id="collapseAll">Collapse all</button>
+            <button class="good" id="shuffleHabits">Shuffle</button>
+          </div>
+        </div>
+
+        <div class="habits" id="habitsGrid"></div>
+
+        <div class="footer">
+          A quick rule of thumb: if the ritual (meeting, PRD, approval) takes longer than a rough prototype,
+          the ritual is no longer “responsible” — it’s the bottleneck.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="tip" id="tip"></div>
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    // ---------- Utilities ----------
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+    const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+    const toast = (msg) => {
+      const t = $("#toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(()=> t.style.display="none", 2200);
+    };
+
+    const tip = $("#tip");
+    const showTip = (html, x, y) => {
+      tip.innerHTML = html;
+      tip.style.display = "block";
+      const pad = 12;
+      const r = tip.getBoundingClientRect();
+      let left = x + 14;
+      let top = y + 14;
+      if (left + r.width > window.innerWidth - pad) left = x - r.width - 14;
+      if (top + r.height > window.innerHeight - pad) top = y - r.height - 14;
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
+    };
+    const hideTip = ()=> tip.style.display = "none";
+
+    // ---------- CARD 1: Cost Ratio Simulator ----------
+    const execSlider = $("#execCost");
+    const ratioLabel = $("#ratioLabel");
+    const execCostVal = $("#execCostVal");
+    const optExplain = $("#optExplain");
+    const optTag = $("#optTag");
+    const swapText = $("#swapText");
+
+    const costViz = d3.select("#costViz").append("svg");
+    const costG = costViz.append("g");
+
+    function costNarrative(execCost){
+      const coordCost = 100 - execCost;
+
+      // "Learning" rises when execution is cheap: simple proxy
+      const learning = clamp((95 - execCost) * 0.9, 5, 70);
+
+      let tag, explain, swap;
+      if (execCost >= 60){
+        tag = {text:"Protect execution", cls:"bad"};
+        explain = "Execution is expensive → rituals reduce rework risk. Planning & alignment can be net-positive.";
+        swap = "Old-mode OK: write the PRD, pre-align stakeholders, then build once. Optimize for avoiding rework.";
+      } else if (execCost >= 35){
+        tag = {text:"Balance", cls:"warn"};
+        explain = "Execution is falling → some rituals still help, but many become overkill. Default to demos earlier.";
+        swap = "Swap a spec-meeting for a demo-meeting: build a rough prototype first, then align on reality.";
+      } else {
+        tag = {text:"Ship to learn", cls:"good"};
+        explain = "Execution is cheap → coordination becomes the bottleneck. Replace prediction with iteration.";
+        swap = "Replace roadmaps with 10-day cycles: ship v1, v2, v3 and let results create alignment.";
+      }
+      return {coordCost, learning, tag, explain, swap};
+    }
+
+    function renderCostChart(execCost){
+      const {coordCost, learning} = costNarrative(execCost);
+
+      const box = $("#costViz").getBoundingClientRect();
+      const w = Math.max(320, box.width);
+      const h = Math.max(300, box.height);
+
+      costViz.attr("viewBox", `0 0 ${w} ${h}`);
+      costG.selectAll("*").remove();
+
+      const pad = {l:14, r:14, t:18, b:18};
+      const innerW = w - pad.l - pad.r;
+      const innerH = h - pad.t - pad.b;
+
+      const x = d3.scaleLinear().domain([0,100]).range([pad.l, pad.l + innerW]);
+      const y = d3.scaleBand().domain(["Coordination / Rituals","Execution / Building","Learning / Iteration"])
+        .range([pad.t, pad.t + innerH]).padding(0.22);
+
+      const series = [
+        {k:"Coordination / Rituals", v:coordCost, c:"var(--bad)"},
+        {k:"Execution / Building", v:execCost, c:"var(--good)"},
+        {k:"Learning / Iteration", v:learning, c:"var(--b)"}
+      ];
+
+      // Axis-ish labels
+      costG.append("text")
+        .attr("x", pad.l)
+        .attr("y", 14)
+        .attr("fill", "rgba(255,255,255,.78)")
+        .attr("font-size", 12)
+        .attr("font-family", "var(--mono)")
+        .text("Relative cost / emphasis (0 → 100)");
+
+      // Bars
+      const bars = costG.selectAll("g.bar")
+        .data(series)
+        .enter().append("g")
+        .attr("class","bar")
+        .attr("transform", d => `translate(0, ${y(d.k)})`);
+
+      bars.append("rect")
+        .attr("x", x(0))
+        .attr("y", 0)
+        .attr("height", y.bandwidth())
+        .attr("width", innerW)
+        .attr("rx", 12)
+        .attr("fill", "rgba(255,255,255,.03)")
+        .attr("stroke", "rgba(255,255,255,.08)");
+
+      bars.append("rect")
+        .attr("x", x(0))
+        .attr("y", 0)
+        .attr("height", y.bandwidth())
+        .attr("width", d => x(d.v) - x(0))
+        .attr("rx", 12)
+        .attr("fill", d => d.c)
+        .attr("opacity", .55);
+
+      bars.append("text")
+        .attr("x", pad.l + 12)
+        .attr("y", y.bandwidth()/2 + 4)
+        .attr("fill", "rgba(255,255,255,.88)")
+        .attr("font-size", 12.5)
+        .text(d => d.k);
+
+      bars.append("text")
+        .attr("x", d => x(d.v) + 8)
+        .attr("y", y.bandwidth()/2 + 4)
+        .attr("fill", "rgba(255,255,255,.78)")
+        .attr("font-size", 12)
+        .attr("font-family", "var(--mono)")
+        .text(d => Math.round(d.v));
+
+      // Marker line at execution cost
+      costG.append("line")
+        .attr("x1", x(execCost))
+        .attr("x2", x(execCost))
+        .attr("y1", pad.t)
+        .attr("y2", pad.t + innerH)
+        .attr("stroke", "rgba(255,255,255,.14)")
+        .attr("stroke-dasharray", "4 6");
+
+      costG.append("text")
+        .attr("x", x(execCost))
+        .attr("y", pad.t + innerH + 14)
+        .attr("text-anchor", "middle")
+        .attr("fill", "rgba(255,255,255,.70)")
+        .attr("font-size", 11)
+        .attr("font-family","var(--mono)")
+        .text("execution");
+    }
+
+    function updateCostUI(execCost){
+      const coordCost = 100 - execCost;
+      ratioLabel.textContent = `Execution cost: ${execCost} • Coordination cost: ${coordCost}`;
+      execCostVal.textContent = execCost;
+
+      const n = costNarrative(execCost);
+      optExplain.textContent = n.explain;
+      optTag.textContent = n.tag.text;
+      optTag.className = "tag " + (n.tag.cls === "good" ? "good" : n.tag.cls === "warn" ? "warn" : "bad");
+      swapText.textContent = n.swap;
+
+      renderCostChart(execCost);
+    }
+
+    execSlider.addEventListener("input", e => updateCostUI(+e.target.value));
+    $("#presetOld").addEventListener("click", ()=> { execSlider.value = 75; updateCostUI(75); toast("Preset: 2015-style loaded"); });
+    $("#presetNew").addEventListener("click", ()=> { execSlider.value = 22; updateCostUI(22); toast("Preset: AI-native loaded"); });
+    $("#randomize").addEventListener("click", ()=> {
+      const v = Math.floor(5 + Math.random()*91);
+      execSlider.value = v;
+      updateCostUI(v);
+      toast("Randomized the cost ratio");
+    });
+
+    // ---------- CARD 2: Bottleneck Migration Map ----------
+    const flowViz = d3.select("#flowViz").append("svg");
+    const flowG = flowViz.append("g");
+
+    const bottlenecks = [
+      {
+        id:"Execution (old bottleneck)",
+        group:"old",
+        color:"var(--good)",
+        why:"Used to be scarce: skilled hours, slow build cycles, expensive rework.",
+        now:"AI compresses build time; execution becomes abundant.",
+        move:"Stop designing the org around protecting engineers. Design around tight feedback loops."
+      },
+      {
+        id:"Clarity",
+        group:"new",
+        color:"var(--a)",
+        why:"Scarce now: knowing what’s worth building when you can build anything fast.",
+        now:"PRDs often acted as a hedge. Now they can cost more than v1.",
+        move:"Replace prediction with prototypes. Demos force clarity faster than docs."
+      },
+      {
+        id:"Ambition",
+        group:"new",
+        color:"var(--b)",
+        why:"Scarce now: the courage to swing at 10× outcomes when you have 50 swings/year.",
+        now:"The risk shifts from 'wrong bet' → 'timid bets' (horseless carriages).",
+        move:"Set a bold direction, then ship many small steps toward it."
+      },
+      {
+        id:"Distribution",
+        group:"new",
+        color:"var(--warn)",
+        why:"Scarce now: getting into customers’ hands when everyone can ship product.",
+        now:"Moats move from product → channels, partnerships, enterprise relationships.",
+        move:"Treat GTM as a first-class design problem. Ship to distribution, not just to code."
+      },
+      {
+        id:"Relationships",
+        group:"new",
+        color:"var(--good)",
+        why:"Durable now: trust compounds when tools and tactics churn quarterly.",
+        now:"You can’t 'vibe code' trust. It’s sticky and human.",
+        move:"Invest consistently: reliability, follow-through, generosity, and shared wins."
+      },
+      {
+        id:"Coordination Rituals",
+        group:"ritual",
+        color:"var(--bad)",
+        why:"They used to de-risk expensive execution; now they can become the bottleneck.",
+        now:"Meetings, approvals, consensus, decks can cost more than a prototype.",
+        move:"Keep only what’s required. Everything else should be optional-by-default."
+      }
+    ];
+
+    const links = [
+      {source:"Execution (old bottleneck)", target:"Clarity"},
+      {source:"Execution (old bottleneck)", target:"Ambition"},
+      {source:"Execution (old bottleneck)", target:"Distribution"},
+      {source:"Execution (old bottleneck)", target:"Relationships"},
+      {source:"Coordination Rituals", target:"Clarity"},
+      {source:"Coordination Rituals", target:"Ambition"},
+      {source:"Coordination Rituals", target:"Distribution"}
+    ];
+
+    const pinned = new Set();
+
+    function renderFlow(){
+      const box = $("#flowViz").getBoundingClientRect();
+      const w = Math.max(360, box.width);
+      const h = Math.max(320, box.height);
+      flowViz.attr("viewBox", `0 0 ${w} ${h}`);
+      flowG.selectAll("*").remove();
+
+      const nodes = bottlenecks.map(d=>({...d}));
+      const edges = links.map(l=>({...l}));
+
+      const sim = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(edges).id(d=>d.id).distance(130).strength(0.7))
+        .force("charge", d3.forceManyBody().strength(-520))
+        .force("center", d3.forceCenter(w/2, h/2))
+        .force("collide", d3.forceCollide().radius(d=> d.group==="old" ? 52 : 46).strength(1))
+        .on("tick", ticked);
+
+      const link = flowG.append("g")
+        .attr("stroke","rgba(255,255,255,.14)")
+        .attr("stroke-width",1.5)
+        .selectAll("line")
+        .data(edges)
+        .enter().append("line")
+        .attr("stroke-dasharray", d => d.source==="Coordination Rituals" ? "3 6" : null)
+        .attr("opacity", d => d.source==="Coordination Rituals" ? 0.55 : 0.75);
+
+      const node = flowG.append("g")
+        .selectAll("g")
+        .data(nodes)
+        .enter().append("g")
+        .style("cursor","pointer")
+        .on("mousemove", (event, d)=>{
+          showTip(
+            `<div class="t">${escapeHtml(d.id)}</div>
+             <div>${escapeHtml(d.why)}</div>
+             <div style="margin-top:6px;" class="muted"><b>Now:</b> ${escapeHtml(d.now)}</div>
+             <div style="margin-top:6px;" class="muted"><b>Move:</b> ${escapeHtml(d.move)}</div>`,
+            event.clientX, event.clientY
+          );
+          updateDetails(d);
+        })
+        .on("mouseleave", ()=> hideTip())
+        .on("click", (event, d)=>{
+          if (pinned.has(d.id)) pinned.delete(d.id);
+          else pinned.add(d.id);
+          toast(pinned.has(d.id) ? `Pinned: ${d.id}` : `Unpinned: ${d.id}`);
+          // Nudge sim so pinned nodes stay where they are.
+          sim.alpha(0.5).restart();
+        })
+        .call(
+          d3.drag()
+            .on("start", (event, d)=>{
+              if (!event.active) sim.alphaTarget(0.22).restart();
+              d.fx = d.x; d.fy = d.y;
+            })
+            .on("drag", (event, d)=>{
+              d.fx = event.x; d.fy = event.y;
+            })
+            .on("end", (event, d)=>{
+              if (!event.active) sim.alphaTarget(0);
+              if (!pinned.has(d.id)){
+                d.fx = null; d.fy = null;
+              } else {
+                d.fx = d.x; d.fy = d.y;
+              }
+            })
+        );
+
+      node.append("circle")
+        .attr("r", d=> d.group==="old" ? 42 : 36)
+        .attr("fill", d=> d.color)
+        .attr("opacity", d=> d.group==="ritual" ? .30 : .38)
+        .attr("stroke", "rgba(255,255,255,.22)")
+        .attr("stroke-width", 1.2);
+
+      node.append("circle")
+        .attr("r", d=> d.group==="old" ? 46 : 40)
+        .attr("fill","transparent")
+        .attr("stroke", d=> d.color)
+        .attr("stroke-width", 1.2)
+        .attr("opacity", d=> d.group==="ritual" ? .55 : .75);
+
+      node.append("text")
+        .attr("text-anchor","middle")
+        .attr("font-size", 12.5)
+        .attr("fill","rgba(255,255,255,.92)")
+        .attr("font-weight", 650)
+        .attr("dy", 4)
+        .text(d=> shortLabel(d.id));
+
+      node.append("text")
+        .attr("text-anchor","middle")
+        .attr("font-size", 10.5)
+        .attr("fill","rgba(255,255,255,.72)")
+        .attr("font-family","var(--mono)")
+        .attr("dy", 20)
+        .text(d=> d.group==="old" ? "old scarcity" : d.group==="ritual" ? "ritual" : "new scarcity");
+
+      function ticked(){
+        nodes.forEach(n=>{
+          if (pinned.has(n.id)){
+            n.fx = n.x; n.fy = n.y;
+          }
+          // Keep within bounds
+          n.x = clamp(n.x, 52, w-52);
+          n.y = clamp(n.y, 52, h-52);
+        });
+
+        link
+          .attr("x1", d=> d.source.x)
+          .attr("y1", d=> d.source.y)
+          .attr("x2", d=> d.target.x)
+          .attr("y2", d=> d.target.y);
+
+        node.attr("transform", d=> `translate(${d.x},${d.y})`);
+      }
+
+      // Initial details
+      updateDetails(bottlenecks[1]); // Clarity default
+    }
+
+    function updateDetails(d){
+      $("#bnTitle").textContent = d.id;
+      $("#bnDesc").textContent = d.why;
+      $("#bnMove").textContent = d.move;
+
+      const cheapList = $("#cheapList");
+      const humanList = $("#humanList");
+      // Lightly tailor lists per node
+      const cheap = {
+        "Execution (old bottleneck)": ["Code generation", "Prototypes in hours", "Automated refactors"],
+        "Clarity": ["Rapid A/B prototypes", "Fast user research drafts", "Instant instrumentation"],
+        "Ambition": ["Many small releases", "Parallel experiments", "Cheap iteration"],
+        "Distribution": ["Landing pages & funnels quickly", "Content variants instantly", "Automated outreach drafts"],
+        "Relationships": ["Follow-ups automated", "Context recall summarized", "Routine updates drafted"],
+        "Coordination Rituals": ["Meeting notes auto-generated", "Decks auto-created", "Status updates auto-written"]
+      }[d.id] || ["Prototypes in hours","Refactors in days","Many variants"];
+
+      const human = {
+        "Execution (old bottleneck)": ["Pick the right problem", "Set success metrics", "Ship with taste"],
+        "Clarity": ["Customer pain intuition", "Prioritization judgment", "Saying 'no' confidently"],
+        "Ambition": ["A 10× vision", "Courage to swing", "Taste for what matters"],
+        "Distribution": ["Channel strategy", "Partnership trust", "Positioning in the market"],
+        "Relationships": ["Trust & reliability", "Cross-team influence", "Reputation compounding"],
+        "Coordination Rituals": ["Cut what’s optional", "Keep compliance-required steps", "Replace talk with demos"]
+      }[d.id] || ["What’s worth building","How bold to be","Who will adopt it"];
+
+      cheapList.innerHTML = cheap.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+      humanList.innerHTML = human.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+    }
+
+    function shortLabel(s){
+      if (s.length <= 18) return s;
+      if (s.startsWith("Execution")) return "Execution";
+      if (s.startsWith("Coordination")) return "Rituals";
+      return s;
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    // ---------- CARD 3: Habits ----------
+    const HABITS = [
+      {
+        n:1,
+        title:"The permission loop",
+        old:"Execution was costly → ask before you do, get buy-in, reduce risk of wasted build time.",
+        flip:"Doing is cheaper than asking. Prototype first, show fast, ask forgiveness only if needed.",
+        micro:"Build a rough v0 in 2 hours and show 3 people before asking for approval."
+      },
+      {
+        n:2,
+        title:"Polish as procrastination",
+        old:"You get one shot → polish hard, perfect the last 20% so the review lands.",
+        flip:"The rough version that exists beats the polished version that doesn’t. Iterate into polish.",
+        micro:"Ship ugly v1 today; schedule 'polish sprint' only after real usage feedback."
+      },
+      {
+        n:3,
+        title:"Meetings as default",
+        old:"Align before action to avoid expensive rework.",
+        flip:"Replace a meeting with a demo. If you can build it in the meeting’s time, build it.",
+        micro:"Before you book a meeting, try building the prototype that would have been discussed."
+      },
+      {
+        n:4,
+        title:"Structured waiting",
+        old:"Respect process → wait for feedback, unblocks, and the next sync.",
+        flip:"Stop outsourcing momentum to calendars. Make a provisional decision and keep moving.",
+        micro:"If blocked, pick a direction, announce it as provisional, and ship the next step."
+      },
+      {
+        n:5,
+        title:"Planning before doing (inverted)",
+        old:"Measure twice, cut once. Planning is cheap; execution is expensive.",
+        flip:"Prediction is now the luxury. Replace planning with learning-through-prototyping.",
+        micro:"Cut the plan by 90%: timebox planning to 30 minutes, then build something."
+      },
+      {
+        n:6,
+        title:"The deck instead of the demo",
+        old:"Decks build consensus safely and communicate the vision.",
+        flip:"A working demo resolves debates faster than slides. Reality beats rhetoric.",
+        micro:"For the next update, ship a clickable demo + 5 bullets instead of a full deck."
+      },
+      {
+        n:7,
+        title:"Consensus before action",
+        old:"Get everyone aligned so we don’t waste execution time.",
+        flip:"Consensus is too expensive. Let results create alignment. Run the experiment first.",
+        micro:"Try it first, then report: “I tried X, here’s what happened.”"
+      },
+      {
+        n:8,
+        title:"Hoarding until ready",
+        old:"Don’t show half-finished work; it wastes others’ time and risks looking bad.",
+        flip:"Show early to get feedback before investing. Ego death pays velocity dividends.",
+        micro:"Share the messy draft/prototype at 30% complete with a specific question."
+      }
+    ];
+
+    function habitCard(h){
+      const id = `habit-${h.n}`;
+      return `
+        <div class="habit" data-habit="${h.n}">
+          <div class="top">
+            <div style="display:flex; gap:10px; align-items:flex-start;">
+              <div class="num">#${h.n}</div>
+              <div>
+                <h3>${escapeHtml(h.title)}</h3>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                  <span class="tag bad">old logic</span>
+                  <span class="tag good">AI-native flip</span>
+                </div>
+              </div>
+            </div>
+            <div class="btns">
+              <button class="primary" data-action="toggle" data-target="${id}">Toggle</button>
+              <button class="good" data-action="copy" data-copy="${escapeHtml(h.micro)}">Copy micro-habit</button>
+            </div>
+          </div>
+
+          <div id="${id}" class="split">
+            <div class="box">
+              <div class="k">Old model</div>
+              <ul>
+                <li>${escapeHtml(h.old)}</li>
+              </ul>
+            </div>
+            <div class="box">
+              <div class="k">AI-native</div>
+              <ul>
+                <li>${escapeHtml(h.flip)}</li>
+                <li><b>Starter:</b> ${escapeHtml(h.micro)}</li>
+              </ul>
+            </div>
+          </div>
+
+          <p style="margin-top:10px; color:rgba(255,255,255,.72)">
+            <span class="muted">Signal to watch:</span>
+            If the ritual takes longer than a rough prototype, the ritual is the bottleneck.
+          </p>
+        </div>
+      `;
+    }
+
+    function renderHabits(list){
+      const grid = $("#habitsGrid");
+      grid.innerHTML = list.map(habitCard).join("");
+      wireHabitButtons();
+    }
+
+    function wireHabitButtons(){
+      $$("#habitsGrid button").forEach(btn=>{
+        const action = btn.dataset.action;
+        if (action === "toggle"){
+          btn.addEventListener("click", ()=>{
+            const target = btn.dataset.target;
+            const el = document.getElementById(target);
+            const isHidden = el.style.display === "none";
+            el.style.display = isHidden ? "grid" : "none";
+          });
+        }
+        if (action === "copy"){
+          btn.addEventListener("click", async ()=>{
+            const text = btn.dataset.copy;
+            try{
+              await navigator.clipboard.writeText(text);
+              toast("Copied micro-habit to clipboard");
+            }catch(e){
+              toast("Couldn’t access clipboard. Select + copy manually: " + text);
+            }
+          });
+        }
+      });
+    }
+
+    $("#expandAll").addEventListener("click", ()=>{
+      $$(`#habitsGrid .split`).forEach(el=> el.style.display="grid");
+      toast("Expanded all habits");
+    });
+    $("#collapseAll").addEventListener("click", ()=>{
+      $$(`#habitsGrid .split`).forEach(el=> el.style.display="none");
+      toast("Collapsed all habits");
+    });
+    $("#shuffleHabits").addEventListener("click", ()=>{
+      const shuffled = [...HABITS].sort(()=>Math.random()-0.5);
+      renderHabits(shuffled);
+      toast("Shuffled habits");
+    });
+
+    // ---------- Init ----------
+    function init(){
+      updateCostUI(+execSlider.value);
+      renderFlow();
+      renderHabits(HABITS);
+
+      // Responsive re-render on resize
+      let rAF = null;
+      window.addEventListener("resize", ()=>{
+        cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(()=>{
+          updateCostUI(+execSlider.value);
+          renderFlow();
+        });
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

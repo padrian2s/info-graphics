@@ -334,6 +334,33 @@
             line-height: 1.5;
         }
 
+        .page-card .search-match {
+            background: rgba(46,229,157,.08);
+            border: 1px solid rgba(46,229,157,.2);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .page-card .search-match mark {
+            background: rgba(46,229,157,.25);
+            color: var(--good);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .page-card .search-match::before {
+            content: "Match: ";
+            color: var(--muted2);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .page-card .tags {
             display: flex;
             flex-wrap: wrap;
@@ -1582,6 +1609,33 @@
             margin-top: 12px;
         }
 
+        .folder-card .search-match {
+            background: rgba(46,229,157,.08);
+            border: 1px solid rgba(46,229,157,.2);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .folder-card .search-match mark {
+            background: rgba(46,229,157,.25);
+            color: var(--good);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .folder-card .search-match::before {
+            content: "Match in collection: ";
+            color: var(--muted2);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .folders-section {
             margin-bottom: 32px;
         }
@@ -1671,10 +1725,12 @@
          */
         const htmlFiles = [
             "2026_AI_Strategy_Comparison.html",
+            "2026-bets-from-zach.html",
             "2026-brain2.html",
             "2026-predictions.html",
             "agents-domain-memory.html",
             "ai-factory-era.html",
+            "ai-native-execution-cheap.html",
             "ai-strategy.html",
             "ai-strategy2.html",
             "ai-talent-market.html",
@@ -1692,7 +1748,7 @@
         /**
          * FOLDERS LIST - each folder has its own index.html
          */
-        const folders = [
+        let folders = [
             {
                 id: "social-ai",
                 name: "Social AI",
@@ -1700,8 +1756,18 @@
                 description: "Global AI & Prompt Engineering Readiness Reports - Interactive infographics analyzing country readiness for AI coding agents.",
                 icon: "public",
                 tags: ["Interactive", "Reports", "Global Analysis"],
-                fileCount: 6,
-                image: "image_5.png"
+                fileCount: 8,
+                image: "image_5.png",
+                files: [
+                    "social-ai/Global_Readiness.html",
+                    "social-ai/global-ai-readiness-report.html",
+                    "social-ai/india.html",
+                    "social-ai/italy.html",
+                    "social-ai/romania.html",
+                    "social-ai/spain.html",
+                    "social-ai/world-ai-simulator.html"
+                ],
+                textContent: "" // Will be populated on load
             }
         ];
 
@@ -1761,6 +1827,38 @@
             return doc.body ? doc.body.textContent.replace(/\s+/g, ' ').trim() : "";
         }
 
+        function getSearchSnippet(text, query, contextChars = 60) {
+            if (!query || !text) return null;
+            const lowerText = text.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const index = lowerText.indexOf(lowerQuery);
+            if (index === -1) return null;
+
+            // Find word boundaries for cleaner snippets
+            let start = Math.max(0, index - contextChars);
+            let end = Math.min(text.length, index + query.length + contextChars);
+
+            // Extend to word boundaries
+            if (start > 0) {
+                const spaceIndex = text.lastIndexOf(' ', start + 10);
+                if (spaceIndex > start - 20) start = spaceIndex + 1;
+            }
+            if (end < text.length) {
+                const spaceIndex = text.indexOf(' ', end - 10);
+                if (spaceIndex !== -1 && spaceIndex < end + 20) end = spaceIndex;
+            }
+
+            let snippet = text.slice(start, end);
+            if (start > 0) snippet = '...' + snippet;
+            if (end < text.length) snippet = snippet + '...';
+
+            // Highlight all matches (case insensitive)
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            snippet = snippet.replace(regex, '<mark>$1</mark>');
+
+            return snippet;
+        }
+
         async function fetchPageMeta(filename, order) {
             try {
                 const response = await fetch(filename);
@@ -1794,9 +1892,31 @@
             }
         }
 
+        async function loadFolderContents() {
+            for (const folder of folders) {
+                if (!folder.files || folder.files.length === 0) continue;
+
+                const contentPromises = folder.files.map(async (file) => {
+                    try {
+                        const response = await fetch(file);
+                        if (!response.ok) return "";
+                        const html = await response.text();
+                        return extractTextContent(html);
+                    } catch (e) {
+                        console.error(`Failed to load folder file ${file}:`, e);
+                        return "";
+                    }
+                });
+
+                const contents = await Promise.all(contentPromises);
+                folder.textContent = contents.join(" ");
+            }
+        }
+
         async function loadPages() {
             const results = await Promise.all(htmlFiles.map((filename, index) => fetchPageMeta(filename, index)));
             pages = results.filter(p => p !== null).sort((a, b) => a.order - b.order);
+            await loadFolderContents();
             initFilters();
             render();
         }
@@ -1875,12 +1995,22 @@
                 ? `<span class="category-badge">${page.category}</span>`
                 : '';
 
+            // Generate search match snippet if searching
+            let searchMatchHtml = '';
+            if (searchQuery.trim()) {
+                const snippet = getSearchSnippet(page.textContent, searchQuery.trim());
+                if (snippet) {
+                    searchMatchHtml = `<div class="search-match">${snippet}</div>`;
+                }
+            }
+
             return `
                 <a href="${page.href}" class="page-card">
                     <h3><span class="material-symbols-rounded" aria-hidden="true">${page.icon}</span> ${page.title}</h3>
                     ${dateHtml}
                     ${categoryBadgeHtml}
                     <p>${page.description}</p>
+                    ${searchMatchHtml}
                     <div class="tags">
                         ${page.tags.map(t => `<span class="tag">${t}</span>`).join("")}
                     </div>
@@ -2651,6 +2781,15 @@
                    </div>`
                 : '';
 
+            // Generate search match snippet if searching
+            let searchMatchHtml = '';
+            if (searchQuery.trim() && folder.textContent) {
+                const snippet = getSearchSnippet(folder.textContent, searchQuery.trim());
+                if (snippet) {
+                    searchMatchHtml = `<div class="search-match">${snippet}</div>`;
+                }
+            }
+
             return `
                 <a href="${folder.path}" class="folder-card">
                     ${imageHtml}
@@ -2662,6 +2801,7 @@
                             <h3>${folder.name}</h3>
                         </div>
                         <p class="folder-desc">${folder.description}</p>
+                        ${searchMatchHtml}
                         <div class="folder-meta">
                             <div class="folder-stat">
                                 <span class="material-symbols-rounded">description</span>
@@ -2684,7 +2824,8 @@
                 const searchable = [
                     folder.name,
                     folder.description,
-                    ...folder.tags
+                    ...folder.tags,
+                    folder.textContent || ""
                 ].join(" ").toLowerCase();
                 return searchable.includes(query);
             });
