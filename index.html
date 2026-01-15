@@ -1009,14 +1009,6 @@
             font-size: 1rem;
         }
 
-        .reel-number {
-            font-size: 0.75rem;
-            color: var(--muted2);
-            margin-bottom: 12px;
-            font-family: var(--sans);
-            letter-spacing: 0.1em;
-        }
-
         .reel-title {
             font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 800;
@@ -1092,50 +1084,231 @@
             letter-spacing: 0.05em;
         }
 
-        .reel-tags {
+        /* Decorative floating icons with entropy support */
+        .reels-container {
+            --entropy: 0;
+            --entropy-scale: 1;
+            --entropy-rotation: 0deg;
+            --entropy-hue: 0deg;
+        }
+
+        .reel-deco {
+            position: absolute;
+            z-index: 1;
+            opacity: calc(0.08 + var(--entropy) * 0.15);
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+            transition: opacity 0.3s, filter 0.3s;
+            filter: hue-rotate(var(--entropy-hue)) blur(calc(var(--entropy) * 2px));
+        }
+
+        .reel-deco .material-symbols-rounded {
+            font-size: calc(80px + var(--entropy) * 40px);
+            color: #fff;
+            transition: font-size 0.3s;
+        }
+
+        .reel-deco-1 {
+            top: 10%;
+            right: 8%;
+            animation-delay: 0s;
+            animation-duration: calc(8s - var(--entropy) * 5s);
+        }
+
+        .reel-deco-2 {
+            bottom: 20%;
+            left: 5%;
+            animation-delay: -2.5s;
+            animation-duration: calc(8s - var(--entropy) * 4s);
+        }
+
+        .reel-deco-3 {
+            top: 50%;
+            right: 15%;
+            animation-delay: -5s;
+            animation-duration: calc(8s - var(--entropy) * 6s);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(var(--entropy-scale)); }
+            25% { transform: translateY(calc(-10px - var(--entropy) * 30px)) rotate(calc(5deg + var(--entropy-rotation))) scale(var(--entropy-scale)); }
+            50% { transform: translateY(calc(-20px - var(--entropy) * 20px)) rotate(calc(0deg - var(--entropy-rotation) * 0.5)) scale(var(--entropy-scale)); }
+            75% { transform: translateY(calc(-5px - var(--entropy) * 25px)) rotate(calc(-3deg + var(--entropy-rotation) * 0.7)) scale(var(--entropy-scale)); }
+        }
+
+        /* Entropy visual effects */
+        .reel-card {
+            transition: filter 0.2s;
+        }
+
+        .reels-container.entropy-low .reel-card::before {
+            animation-duration: 20s;
+        }
+
+        .reels-container.entropy-medium .reel-card::before {
+            animation-duration: 10s;
+        }
+
+        .reels-container.entropy-high .reel-card::before {
+            animation-duration: 4s;
+        }
+
+        .reels-container.entropy-extreme .reel-card::before {
+            animation-duration: 2s;
+        }
+
+        .reels-container.entropy-extreme .reel-deco {
+            animation: float-chaos 1s ease-in-out infinite;
+        }
+
+        @keyframes float-chaos {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            20% { transform: translateY(-30px) rotate(15deg) scale(1.2); }
+            40% { transform: translateY(10px) rotate(-10deg) scale(0.9); }
+            60% { transform: translateY(-20px) rotate(8deg) scale(1.1); }
+            80% { transform: translateY(5px) rotate(-5deg) scale(1.05); }
+        }
+
+        /* Entropy indicator */
+        .entropy-meter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1002;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        .reel-tag {
-            padding: 6px 14px;
-            border-radius: 999px;
-            background: rgba(255,255,255,.08);
-            border: 1px solid rgba(255,255,255,.12);
-            font-size: 0.8rem;
-            color: var(--muted);
-        }
-
-        .reel-cta {
-            margin-top: 32px;
-        }
-
-        .reel-cta a {
-            display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 14px 28px;
+            padding: 10px 16px;
             border-radius: 999px;
-            background: linear-gradient(135deg, rgba(102,163,255,.9), rgba(179,140,255,.9));
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.25s;
-            box-shadow: 0 8px 30px rgba(102,163,255,.3);
+            background: rgba(0,0,0,.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.1);
+            font-size: 0.75rem;
+            color: var(--muted);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .reel-cta a:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(102,163,255,.4);
+        .entropy-meter.visible {
+            opacity: 1;
         }
 
-        .reel-cta a .material-symbols-rounded {
-            font-size: 1.2rem;
+        .entropy-meter .material-symbols-rounded {
+            font-size: 1.1rem;
+            transition: color 0.2s;
         }
+
+        .entropy-meter.level-low .material-symbols-rounded { color: var(--good); }
+        .entropy-meter.level-medium .material-symbols-rounded { color: var(--teal); }
+        .entropy-meter.level-high .material-symbols-rounded { color: var(--warn); }
+        .entropy-meter.level-extreme .material-symbols-rounded { color: var(--bad); }
+
+        .entropy-bar {
+            width: 60px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,.1);
+            overflow: hidden;
+        }
+
+        .entropy-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--teal);
+            transition: width 0.15s, background 0.2s;
+        }
+
+        .entropy-meter.level-low .entropy-fill { background: var(--good); }
+        .entropy-meter.level-medium .entropy-fill { background: var(--teal); }
+        .entropy-meter.level-high .entropy-fill { background: var(--warn); }
+        .entropy-meter.level-extreme .entropy-fill { background: linear-gradient(90deg, var(--warn), var(--bad)); }
+
+        /* Layout variant specific styles */
+        .layout-center {
+            text-align: center;
+        }
+
+        .layout-left {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .layout-left .reel-stats {
+            justify-content: flex-start;
+        }
+
+        .layout-left .reel-big-icon {
+            position: absolute;
+            top: -40px;
+            right: -20px;
+            opacity: 0.1;
+        }
+
+        .layout-left .reel-big-icon .material-symbols-rounded {
+            font-size: 200px;
+        }
+
+        .layout-right {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .layout-right .reel-stats {
+            justify-content: flex-end;
+        }
+
+        .layout-stats-top .reel-stats-large {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .layout-stats-top .reel-stats-large .reel-stat-value {
+            font-size: 2.5rem;
+        }
+
+        .layout-split {
+            display: flex;
+            gap: 30px;
+            text-align: left;
+            align-items: center;
+        }
+
+        .reel-split-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.1);
+        }
+
+        .reel-split-icons .material-symbols-rounded {
+            font-size: 32px;
+            color: var(--teal);
+            opacity: 0.8;
+        }
+
+        .reel-split-content {
+            flex: 1;
+        }
+
+        .reel-split-content .reel-stats {
+            justify-content: flex-start;
+        }
+
+        /* Variant-specific background tweaks */
+        .layout-variant-1 .reel-deco-1 { top: 5%; left: 10%; right: auto; }
+        .layout-variant-1 .reel-deco-2 { bottom: 10%; right: 10%; left: auto; }
+
+        .layout-variant-2 .reel-deco-1 { top: 60%; }
+        .layout-variant-2 .reel-deco-2 { bottom: 5%; }
+
+        .layout-variant-3 .reel-deco-1 { left: 10%; right: auto; }
+        .layout-variant-3 .reel-deco-3 { left: 20%; right: auto; }
+
+        .layout-variant-4 .reel-deco { display: none; }
 
         /* Reels sidebar */
         .reels-sidebar {
@@ -1178,37 +1351,6 @@
             background: linear-gradient(135deg, rgba(255,107,107,.8), rgba(255,140,83,.8));
         }
 
-        /* Progress indicator */
-        .reels-progress {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .reels-progress-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.2);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .reels-progress-dot.active {
-            background: var(--teal);
-            box-shadow: 0 0 10px var(--teal);
-            transform: scale(1.3);
-        }
-
-        .reels-progress-dot:hover {
-            background: rgba(255,255,255,.5);
-        }
-
         /* Close button */
         .reels-close {
             position: fixed;
@@ -1232,22 +1374,6 @@
         .reels-close:hover {
             background: rgba(255,255,255,.2);
             transform: scale(1.1);
-        }
-
-        /* Counter */
-        .reels-counter {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1002;
-            padding: 10px 18px;
-            border-radius: 999px;
-            background: rgba(0,0,0,.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,.15);
-            font-size: 0.9rem;
-            color: var(--text);
-            font-weight: 600;
         }
 
         /* Swipe hint */
@@ -1306,9 +1432,6 @@
             .reels-sidebar-btn {
                 width: 40px;
                 height: 40px;
-            }
-            .reels-progress {
-                right: 10px;
             }
             .reel-content {
                 padding: 0 10px;
@@ -2121,46 +2244,142 @@
             };
         }
 
+        // Decorative icons pool for random selection
+        const decorativeIcons = [
+            'auto_awesome', 'bolt', 'rocket_launch', 'lightbulb', 'trending_up',
+            'psychology', 'hub', 'scatter_plot', 'insights', 'speed',
+            'token', 'stars', 'flare', 'blur_on', 'grain',
+            'diamond', 'hexagon', 'change_history', 'category', 'widgets'
+        ];
+
+        // Seeded random for consistent layouts per page
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function getLayoutVariant(index, pageId) {
+            const seed = pageId.split('').reduce((a, c) => a + c.charCodeAt(0), 0) + index;
+            return Math.floor(seededRandom(seed) * 5);
+        }
+
+        function getRandomIcons(pageId, count = 3) {
+            const seed = pageId.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+            const icons = [];
+            for (let i = 0; i < count; i++) {
+                const idx = Math.floor(seededRandom(seed + i * 7) * decorativeIcons.length);
+                icons.push(decorativeIcons[idx]);
+            }
+            return icons;
+        }
+
         function renderReelCard(page, index, total) {
             const temp = getTemperature(page);
             const content = getReelContent(page);
             const catMeta = categoryMeta[page.category] || { icon: "folder" };
+            const variant = getLayoutVariant(index, page.id);
+            const icons = getRandomIcons(page.id);
 
-            return `
-                <div class="reel-card" data-index="${index}">
-                    <div class="reel-temp ${temp.class}">
-                        <span class="material-symbols-rounded">${temp.icon}</span>
-                        ${temp.label}
-                    </div>
-                    <div class="reel-content">
+            const statsHtml = content.stats.map(s => `
+                <div class="reel-stat">
+                    <div class="reel-stat-value">${s.value}</div>
+                    <div class="reel-stat-label">${s.label}</div>
+                </div>
+            `).join('');
+
+            const decorativeHtml = `
+                <div class="reel-deco reel-deco-1"><span class="material-symbols-rounded">${icons[0]}</span></div>
+                <div class="reel-deco reel-deco-2"><span class="material-symbols-rounded">${icons[1]}</span></div>
+                <div class="reel-deco reel-deco-3"><span class="material-symbols-rounded">${icons[2]}</span></div>
+            `;
+
+            // Layout variants
+            const layouts = {
+                // Variant 0: Classic centered
+                0: `
+                    <div class="reel-content layout-center">
                         <div class="reel-category">
                             <span class="material-symbols-rounded">${catMeta.icon}</span>
                             ${page.category}
                         </div>
-                        <div class="reel-number">${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}</div>
                         <h2 class="reel-title">${page.title}</h2>
                         <div class="reel-highlight">${content.highlight}</div>
-                        <div class="reel-quote">
-                            "${content.quote}"
-                        </div>
-                        <div class="reel-stats">
-                            ${content.stats.map(s => `
-                                <div class="reel-stat">
-                                    <div class="reel-stat-value">${s.value}</div>
-                                    <div class="reel-stat-label">${s.label}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="reel-tags">
-                            ${page.tags.slice(0, 4).map(t => `<span class="reel-tag">${t}</span>`).join('')}
-                        </div>
-                        <div class="reel-cta">
-                            <a href="${page.href}">
-                                <span class="material-symbols-rounded">arrow_forward</span>
-                                Explore Full Infographic
-                            </a>
-                        </div>
+                        <div class="reel-quote">"${content.quote}"</div>
+                        <div class="reel-stats">${statsHtml}</div>
                     </div>
+                `,
+                // Variant 1: Left-aligned with big icon
+                1: `
+                    <div class="reel-content layout-left">
+                        <div class="reel-big-icon">
+                            <span class="material-symbols-rounded">${catMeta.icon}</span>
+                        </div>
+                        <div class="reel-category">
+                            <span class="material-symbols-rounded">${catMeta.icon}</span>
+                            ${page.category}
+                        </div>
+                        <h2 class="reel-title">${page.title}</h2>
+                        <div class="reel-quote">"${content.quote}"</div>
+                        <div class="reel-highlight">${content.highlight}</div>
+                        <div class="reel-stats">${statsHtml}</div>
+                    </div>
+                `,
+                // Variant 2: Stats first, highlight bottom
+                2: `
+                    <div class="reel-content layout-stats-top">
+                        <div class="reel-stats reel-stats-large">${statsHtml}</div>
+                        <div class="reel-category">
+                            <span class="material-symbols-rounded">${catMeta.icon}</span>
+                            ${page.category}
+                        </div>
+                        <h2 class="reel-title">${page.title}</h2>
+                        <div class="reel-quote">"${content.quote}"</div>
+                        <div class="reel-highlight">${content.highlight}</div>
+                    </div>
+                `,
+                // Variant 3: Right-aligned compact
+                3: `
+                    <div class="reel-content layout-right">
+                        <h2 class="reel-title">${page.title}</h2>
+                        <div class="reel-highlight">${content.highlight}</div>
+                        <div class="reel-category">
+                            <span class="material-symbols-rounded">${catMeta.icon}</span>
+                            ${page.category}
+                        </div>
+                        <div class="reel-quote">"${content.quote}"</div>
+                        <div class="reel-stats">${statsHtml}</div>
+                    </div>
+                `,
+                // Variant 4: Split layout with icon column
+                4: `
+                    <div class="reel-content layout-split">
+                        <div class="reel-split-icons">
+                            <span class="material-symbols-rounded">${icons[0]}</span>
+                            <span class="material-symbols-rounded">${icons[1]}</span>
+                            <span class="material-symbols-rounded">${icons[2]}</span>
+                        </div>
+                        <div class="reel-split-content">
+                            <div class="reel-category">
+                                <span class="material-symbols-rounded">${catMeta.icon}</span>
+                                ${page.category}
+                            </div>
+                            <h2 class="reel-title">${page.title}</h2>
+                            <div class="reel-highlight">${content.highlight}</div>
+                            <div class="reel-quote">"${content.quote}"</div>
+                            <div class="reel-stats">${statsHtml}</div>
+                                </div>
+                    </div>
+                `
+            };
+
+            return `
+                <div class="reel-card layout-variant-${variant}" data-index="${index}" onclick="window.location.href='${page.href}'" style="cursor: pointer;">
+                    <div class="reel-temp ${temp.class}">
+                        <span class="material-symbols-rounded">${temp.icon}</span>
+                        ${temp.label}
+                    </div>
+                    ${decorativeHtml}
+                    ${layouts[variant]}
                 </div>
             `;
         }
@@ -2183,10 +2402,6 @@
                 <button class="reels-close" onclick="closeReelsView()">
                     <span class="material-symbols-rounded">close</span>
                 </button>
-                <div class="reels-counter" id="reelsCounter">1 / ${sorted.length}</div>
-                <div class="reels-progress" id="reelsProgress">
-                    ${sorted.map((_, i) => `<div class="reels-progress-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`).join('')}
-                </div>
                 <div class="reels-scroll" id="reelsScroll">
                     ${extendedPages.map((page, i) => renderReelCard(page, i % sorted.length, sorted.length)).join('')}
                 </div>
@@ -2194,15 +2409,21 @@
                     <span class="material-symbols-rounded">swipe_up</span>
                     Swipe to explore
                 </div>
+                <div class="entropy-meter" id="entropyMeter">
+                    <span class="material-symbols-rounded">bolt</span>
+                    <div class="entropy-bar">
+                        <div class="entropy-fill" id="entropyFill"></div>
+                    </div>
+                </div>
             `;
 
             document.body.appendChild(container);
             document.body.style.overflow = 'hidden';
 
             const scrollEl = document.getElementById('reelsScroll');
-            const counterEl = document.getElementById('reelsCounter');
-            const progressEl = document.getElementById('reelsProgress');
             const hintEl = document.getElementById('reelsHint');
+            const entropyMeter = document.getElementById('entropyMeter');
+            const entropyFill = document.getElementById('entropyFill');
             const totalOriginal = sorted.length;
 
             // Start in the middle set for infinite scroll
@@ -2213,6 +2434,69 @@
             let lastIndex = startIndex;
             let hideHintTimeout;
 
+            // Entropy tracking
+            let lastScrollTop = scrollEl.scrollTop;
+            let lastScrollTime = Date.now();
+            let currentEntropy = 0;
+            let entropyDecayInterval;
+            let entropyHideTimeout;
+
+            function updateEntropy(speed) {
+                // Calculate entropy based on scroll speed (pixels per ms)
+                // Normal scroll: ~0.5-2 px/ms, fast scroll: 5+ px/ms
+                const normalizedSpeed = Math.min(speed / 8, 1); // Cap at 1
+                const targetEntropy = normalizedSpeed;
+
+                // Smoothly increase entropy
+                currentEntropy = Math.min(1, currentEntropy + (targetEntropy - currentEntropy) * 0.3);
+
+                applyEntropy(currentEntropy);
+            }
+
+            function applyEntropy(entropy) {
+                // Update CSS custom properties
+                container.style.setProperty('--entropy', entropy.toFixed(3));
+                container.style.setProperty('--entropy-scale', (1 + entropy * 0.3).toFixed(3));
+                container.style.setProperty('--entropy-rotation', (entropy * 20) + 'deg');
+                container.style.setProperty('--entropy-hue', (entropy * 60) + 'deg');
+
+                // Update entropy level classes
+                container.classList.remove('entropy-low', 'entropy-medium', 'entropy-high', 'entropy-extreme');
+                entropyMeter.classList.remove('level-low', 'level-medium', 'level-high', 'level-extreme');
+
+                let levelClass;
+                if (entropy < 0.25) levelClass = 'low';
+                else if (entropy < 0.5) levelClass = 'medium';
+                else if (entropy < 0.75) levelClass = 'high';
+                else levelClass = 'extreme';
+
+                container.classList.add('entropy-' + levelClass);
+                entropyMeter.classList.add('level-' + levelClass);
+
+                // Update meter fill
+                entropyFill.style.width = (entropy * 100) + '%';
+
+                // Show meter when there's entropy
+                if (entropy > 0.05) {
+                    entropyMeter.classList.add('visible');
+                    clearTimeout(entropyHideTimeout);
+                    entropyHideTimeout = setTimeout(() => {
+                        if (currentEntropy < 0.1) {
+                            entropyMeter.classList.remove('visible');
+                        }
+                    }, 1500);
+                }
+            }
+
+            // Decay entropy over time
+            entropyDecayInterval = setInterval(() => {
+                if (currentEntropy > 0) {
+                    currentEntropy = Math.max(0, currentEntropy - 0.02);
+                    applyEntropy(currentEntropy);
+                }
+            }, 50);
+            window.reelsEntropyInterval = entropyDecayInterval;
+
             // Hide hint after first scroll
             hideHintTimeout = setTimeout(() => {
                 if (hintEl) hintEl.style.opacity = '0';
@@ -2222,15 +2506,21 @@
                 const scrollTop = scrollEl.scrollTop;
                 const currentCard = Math.round(scrollTop / cardHeight);
                 const realIndex = currentCard % totalOriginal;
+                const now = Date.now();
 
-                // Update counter and progress
+                // Calculate scroll speed
+                const timeDelta = now - lastScrollTime;
+                const scrollDelta = Math.abs(scrollTop - lastScrollTop);
+                if (timeDelta > 0) {
+                    const speed = scrollDelta / timeDelta; // pixels per ms
+                    updateEntropy(speed);
+                }
+                lastScrollTop = scrollTop;
+                lastScrollTime = now;
+
+                // Update index and hide hint
                 if (realIndex !== lastIndex) {
                     lastIndex = realIndex;
-                    counterEl.textContent = `${realIndex + 1} / ${totalOriginal}`;
-
-                    progressEl.querySelectorAll('.reels-progress-dot').forEach((dot, i) => {
-                        dot.classList.toggle('active', i === realIndex);
-                    });
 
                     // Hide hint on first scroll
                     if (hintEl && hintEl.style.opacity !== '0') {
@@ -2244,19 +2534,6 @@
                     scrollEl.scrollTop = scrollTop + (totalOriginal * cardHeight);
                 } else if (currentCard > totalOriginal * 2.5) {
                     scrollEl.scrollTop = scrollTop - (totalOriginal * cardHeight);
-                }
-            });
-
-            // Progress dot click navigation
-            progressEl.addEventListener('click', (e) => {
-                const dot = e.target.closest('.reels-progress-dot');
-                if (dot) {
-                    const targetIndex = parseInt(dot.dataset.index);
-                    const currentScroll = scrollEl.scrollTop;
-                    const currentCard = Math.round(currentScroll / cardHeight);
-                    const currentSet = Math.floor(currentCard / totalOriginal);
-                    const targetScroll = (currentSet * totalOriginal + targetIndex) * cardHeight;
-                    scrollEl.scrollTo({ top: targetScroll, behavior: 'smooth' });
                 }
             });
 
@@ -2284,6 +2561,9 @@
                 document.body.style.overflow = '';
                 if (window.reelsKeyHandler) {
                     document.removeEventListener('keydown', window.reelsKeyHandler);
+                }
+                if (window.reelsEntropyInterval) {
+                    clearInterval(window.reelsEntropyInterval);
                 }
                 // Reset view to folder
                 currentView = 'folder';
