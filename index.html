@@ -1688,7 +1688,7 @@
             </div>
             <div class="controls-right">
                 <div class="view-switcher" id="viewSwitcher">
-                    <button class="view-btn active" data-view="folder" title="Folders">
+                    <button class="view-btn" data-view="folder" title="Folders">
                         <span class="material-symbols-rounded">folder_open</span>
                     </button>
                     <button class="view-btn" data-view="reels" title="Reels Mode">
@@ -1700,7 +1700,7 @@
                     <button class="view-btn" data-view="category" title="By Category">
                         <span class="material-symbols-rounded">category</span>
                     </button>
-                    <button class="view-btn" data-view="date" title="By Date">
+                    <button class="view-btn active" data-view="date" title="By Date">
                         <span class="material-symbols-rounded">calendar_month</span>
                     </button>
                     <button class="view-btn" data-view="grid" title="Grid View">
@@ -1808,7 +1808,7 @@
         let pages = [];
         let activeCategory = "all";
         let searchQuery = "";
-        let currentView = "folder";
+        let currentView = "date";
 
         function extractMeta(html, name) {
             const match = html.match(new RegExp(`<meta\\s+name="${name}"\\s+content="([^"]*)"`, 'i'));
