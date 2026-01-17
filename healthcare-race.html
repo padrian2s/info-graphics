@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="5 structural AI shifts: healthcare verticalization, Meta/LLaMA credibility, robotics flywheels, training-data scarcity, and agentic-work tipping points." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Healthcare, Vertical Integration, Robotics, Data Strategy, Agents" />
+  <meta name="icon" content="🏭" />
+  <meta name="created" content="2026-01-17" />
+  <title>AI Under-the-Headlines: 5 Shifts That Matter</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+
+    .slider{
+      display:grid;gap:8px;margin-top:10px
+    }
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+
+    /* SVG look */
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>INFographic • January 2026 vibes • “What actually changed?”</span></div>
+          <h1>5 AI shifts underneath the headlines</h1>
+          <p class="sub">
+            This page turns a week of signal-hunting into a map: not “AI news,” but the structural moves that
+            change markets—healthcare verticalization, the Meta/LLaMA credibility fracture, robotics flywheels,
+            training-data scarcity, and the agentic-work tipping point.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Theme</b> Vertical apps + distribution</div>
+            <div class="chip"><b>Theme</b> Flywheels (data → better models → more data)</div>
+            <div class="chip"><b>Theme</b> Public-market narratives forming early</div>
+            <div class="chip"><b>Theme</b> “Real work” data becomes the moat</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any story below to expand. Use the mini simulators to stress-test the logic (build vs buy, flywheel speed, data risk).
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the week’s “shape”</h2>
+          <small>5 signals • 1 map</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Signal type</small>
+              <b>Verticalization</b>
+              <span>Foundation model companies moving down-stack into apps (healthcare now; others next).</span>
+            </div>
+            <div class="kpi">
+              <small>Constraint</small>
+              <b>Data scarcity</b>
+              <span>Public internet is “done”; the next boost wants internal docs, workflows, and embodied traces.</span>
+            </div>
+            <div class="kpi">
+              <small>Tipping point</small>
+              <b>Agentic build speed</b>
+              <span>Long-run coding tasks + sandboxed action tools put pressure on “ambiguous” knowledge work.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Market structure</div>
+            <div class="key"><span class="sq c2"></span> Capability + scaling</div>
+            <div class="key"><span class="sq c3"></span> Data + flywheels</div>
+            <div class="key"><span class="sq c4"></span> Regulation + narrative</div>
+            <div class="key"><span class="sq c5"></span> Risk + ethics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 stories that matter</h2>
+          <div class="pill">Click to expand • skim fast</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 Healthcare race -->
+          <details class="story" open data-story="health">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">1</div>
+                <div class="titleBlock">
+                  <b>Healthcare race: not “AI comes to medicine” — it’s IPO narrative + vertical integration</b>
+                  <span>HIPAA APIs + hospital integrations → “seriousness” story + build-vs-buy reset for startups</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                The surface story is consumer health chats and compliance. The deeper story is positioning:
+                regulated-industry credibility, enterprise partnerships, and a revenue-adjacent narrative that takes
+                years to grow—useful if public markets are in the future. Meanwhile, healthcare startups face a new
+                baseline: “Why not buy direct from the model provider?”
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>What changed structurally</h4>
+                  <ul>
+                    <li><span class="mono">Compliance</span> becomes productized (HIPAA) — not a side quest.</li>
+                    <li>Distribution + fast feature shipping compresses startup differentiation windows.</li>
+                    <li>Healthcare becomes a <span class="mono">narrative asset</span> (credibility + spend category).</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why it matters next</h4>
+                  <ul>
+                    <li>Hospital procurement flips: <span class="mono">platform-first</span> unless a startup is uniquely embedded.</li>
+                    <li>More verticals will see the same move: “API → app layer.”</li>
+                    <li>Startups need <span class="mono">non-replicable moats</span> (workflow lock-in, data rights, outcomes).</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Heuristic:</b> if a vertical’s value is “turn documents into decisions,” expect model providers to ship it once the pattern is proven.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 Lacun departure -->
+          <details class="story" data-story="meta">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>Yann LeCun departure: credibility fracture + the “LLMs are a dead end” fork becomes explicit</b>
+                  <span>Benchmarks, trust, leadership resets — and a widening bet on “beyond LLMs” paths</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                This is less about one person leaving and more about what it reveals: internal confidence, benchmark integrity,
+                and a real philosophical split among top minds on whether LLM scaling reaches AGI or hits a wall.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Two competing theses</h4>
+                  <ul>
+                    <li><b>Scaling thesis:</b> keep going; agents get longer; generalization improves.</li>
+                    <li><b>Dead-end thesis:</b> LLMs lack world models; need a new approach to intelligence.</li>
+                    <li>Both can coexist for a while — until a wall appears (or doesn’t).</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What to watch</h4>
+                  <ul>
+                    <li>Independent evals that punish benchmark gaming.</li>
+                    <li>Agent reliability in the wild (not just demos).</li>
+                    <li>“New path” startups (and what data/compute they demand).</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Practical read:</b> uncertainty at the frontier increases the value of optionality—teams hedge with multi-model + multi-approach stacks.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 Physical AI -->
+          <details class="story" data-story="physical">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">3</div>
+                <div class="titleBlock">
+                  <b>Physical AI: “ChatGPT moment for robotics” = convergence of multimodal + sim + edge chips</b>
+                  <span>Embodied data flywheel starts; first movers compound; Nvidia positions as the full-stack platform</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Robots were “coming soon” for years because perception was brittle and data was hard. The new ingredient is foundation models
+                doing real multimodal reasoning—plus simulation to generate scenarios, plus edge inference powerful enough to act locally.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Convergence stack</h4>
+                  <ul>
+                    <li><span class="mono">Perception & planning</span>: multimodal foundation models.</li>
+                    <li><span class="mono">Data</span>: simulation environments (synthetic → real transfer).</li>
+                    <li><span class="mono">Latency</span>: edge chips run models on-device.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Flywheel risk / reward</h4>
+                  <ul>
+                    <li>Deploy robots → collect embodied data → improve models → deploy more.</li>
+                    <li>Early factory deployments become training pipelines.</li>
+                    <li>Infrastructure providers win regardless of which robot brand dominates.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Operator takeaway:</b> if you touch physical operations, shift from “robots are coming” to “when do we start the data flywheel?”
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 Training data exhausted -->
+          <details class="story" data-story="data">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">4</div>
+                <div class="titleBlock">
+                  <b>Training data is exhausted: the next frontier is “real work” artifacts (docs, spreadsheets, repos)</b>
+                  <span>Internal corpuses become strategic assets; legal/ethical risk rises as incentives shift</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                If the public internet is fully scraped, capability gains want the stuff that never gets published:
+                internal documents, project files, operational workflows. That implies a market for “work traces” —
+                and a new class of leakage/consent problems.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Why this is huge</h4>
+                  <ul>
+                    <li>Most economic value lives in <span class="mono">private</span> artifacts.</li>
+                    <li>Training on “written to be read” ≠ training on “written to get work done.”</li>
+                    <li>Whoever has the best work corpus gets an advantage in doing real knowledge work.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Company implications</h4>
+                  <ul>
+                    <li>Data governance becomes product strategy, not compliance theater.</li>
+                    <li>“Protect vs monetize” your internal traces.</li>
+                    <li>Zero-trust + DLP + vendor contracts get more important.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>New moat:</b> rights to high-quality, high-signal work artifacts + feedback loops that keep them current.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 Agentic tipping point -->
+          <details class="story" data-story="agents">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">5</div>
+                <div class="titleBlock">
+                  <b>Agentic tipping point: parallel instances + rule files + sandboxed actions push beyond “chat”</b>
+                  <span>Coding loops are easy; the next challenge is ambiguous knowledge work (define success criteria)</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                The excitement isn’t “one tool vs another.” It’s that models can now run longer tasks, retry cheaply,
+                and converge via feedback loops (tests, build steps, PR checks). The hard part is translating that to
+                the rest of knowledge work where correctness is fuzzy and users are vague.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Patterns that scale</h4>
+                  <ul>
+                    <li><span class="mono">Parallelism</span>: run 5–10 agents in competition.</li>
+                    <li><span class="mono">Rules-as-memory</span>: convert failures into a living checklist.</li>
+                    <li><span class="mono">Sandboxed actions</span>: tools that read files + execute steps.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>The bottleneck</h4>
+                  <ul>
+                    <li>Ambiguous tasks: “help me with my email” vs “pass unit tests.”</li>
+                    <li>Need better <span class="mono">specs</span>, examples, and evaluation for knowledge work.</li>
+                    <li>Training on real work artifacts makes vague prompts produce usable drafts.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Skill shift:</b> the advantage moves to people who can define outputs + correctness fast (even for non-coding work).
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive strategy map</h2>
+          <small>Play with assumptions</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="health"><span class="sw o"></span>Focus: Healthcare</button>
+            <button class="btn" data-focus="meta"><span class="sw p"></span>Focus: Meta / Scaling fork</button>
+            <button class="btn" data-focus="physical"><span class="sw"></span>Focus: Physical AI</button>
+            <button class="btn" data-focus="data"><span class="sw r"></span>Focus: Data scarcity</button>
+            <button class="btn" data-focus="agents"><span class="sw b"></span>Focus: Agents</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 420" width="100%" height="auto" role="img" aria-label="Strategy map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-health-narr" d="M160,95 C240,70 300,70 385,95" />
+                <path id="l-health-vert" d="M160,95 C260,130 310,150 410,175" />
+                <path id="l-vert-start" d="M410,175 C470,190 510,220 520,265" />
+                <path id="l-data-agents" d="M160,270 C240,260 290,250 370,255" />
+                <path id="l-data-phys" d="M160,270 C240,290 320,315 430,330" />
+                <path id="l-agents-vert" d="M370,255 C410,235 430,215 410,175" />
+                <path id="l-phys-fly" d="M430,330 C480,330 515,315 525,292" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <g class="node" id="n-health" data-node="health">
+                  <rect x="60" y="60" rx="14" ry="14" width="200" height="70" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.30)"/>
+                  <text x="78" y="90" fill="#EAF0FF" font-weight="700">Healthcare products</text>
+                  <text x="78" y="112" fill="rgba(234,240,255,.75)" font-size="12">HIPAA + integrations</text>
+                </g>
+
+                <g class="node" id="n-narr" data-node="narrative">
+                  <rect x="340" y="60" rx="14" ry="14" width="240" height="70" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.14)"/>
+                  <text x="358" y="90" fill="#EAF0FF" font-weight="700">Public-market narrative</text>
+                  <text x="358" y="112" fill="rgba(234,240,255,.70)" font-size="12">“regulated + serious” story</text>
+                </g>
+
+                <g class="node" id="n-vert" data-node="vertical">
+                  <rect x="320" y="145" rx="14" ry="14" width="260" height="78" fill="rgba(59,130,246,.12)" stroke="rgba(59,130,246,.28)"/>
+                  <text x="338" y="176" fill="#EAF0FF" font-weight="700">Vertical integration</text>
+                  <text x="338" y="198" fill="rgba(234,240,255,.75)" font-size="12">model provider ships the app</text>
+                </g>
+
+                <g class="node" id="n-start" data-node="startup">
+                  <rect x="420" y="245" rx="14" ry="14" width="170" height="76" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="438" y="277" fill="#EAF0FF" font-weight="700">Startup squeeze</text>
+                  <text x="438" y="299" fill="rgba(234,240,255,.75)" font-size="12">build vs buy resets</text>
+                </g>
+
+                <g class="node" id="n-data" data-node="data">
+                  <rect x="60" y="240" rx="14" ry="14" width="230" height="82" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="78" y="272" fill="#EAF0FF" font-weight="700">Training data scarcity</text>
+                  <text x="78" y="294" fill="rgba(234,240,255,.75)" font-size="12">internal “work artifacts”</text>
+                </g>
+
+                <g class="node" id="n-agents" data-node="agents">
+                  <rect x="300" y="230" rx="14" ry="14" width="210" height="82" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.24)"/>
+                  <text x="318" y="262" fill="#EAF0FF" font-weight="700">Agentic work tools</text>
+                  <text x="318" y="284" fill="rgba(234,240,255,.75)" font-size="12">sandbox + actions + retries</text>
+                </g>
+
+                <g class="node" id="n-phys" data-node="physical">
+                  <rect x="340" y="325" rx="14" ry="14" width="240" height="74" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="358" y="356" fill="#EAF0FF" font-weight="700">Physical AI flywheel</text>
+                  <text x="358" y="378" fill="rgba(234,240,255,.75)" font-size="12">deploy → data → better robots</text>
+                </g>
+
+                <!-- Flywheel ring -->
+                <g id="fly" opacity="0.85">
+                  <circle cx="555" cy="292" r="42" fill="rgba(20,184,166,.06)" stroke="rgba(20,184,166,.24)" stroke-width="2"/>
+                  <path d="M555 250 A42 42 0 1 1 520 308" stroke="rgba(20,184,166,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M520 308 L531 308 L525.5 318 Z" fill="rgba(20,184,166,.70)"/>
+                  <text x="555" y="296" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="12" font-weight="700">flywheel</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>fast, fuzzy, useful</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Build vs Buy pressure (startup vs platform)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Platform distribution advantage: <span id="distVal" class="mono">7</span>/10
+                  </label>
+                  <input id="dist" type="range" min="0" max="10" value="7" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Your unique workflow moat: <span id="moatVal" class="mono">5</span>/10
+                  </label>
+                  <input id="moat" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Switching cost / integration depth: <span id="switchVal" class="mono">4</span>/10
+                  </label>
+                  <input id="swc" type="range" min="0" max="10" value="4" />
+                </div>
+                <div class="callout" id="bvB" style="margin-top:10px">
+                  <b>Result:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Flywheel speed (robots or knowledge work)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Data capture rate: <span id="dataRateVal" class="mono">6</span>/10
+                  </label>
+                  <input id="dataRate" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Feedback clarity (tests/metrics): <span id="fbVal" class="mono">7</span>/10
+                  </label>
+                  <input id="fb" type="range" min="0" max="10" value="7" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    On-device / latency independence: <span id="edgeVal" class="mono">5</span>/10
+                  </label>
+                  <input id="edge" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="flyRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.9); background:rgba(20,184,166,.10)">
+                  <b>Flywheel:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Internal data risk (leakage / contractor uploads)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Data governance maturity: <span id="govVal" class="mono">4</span>/10
+                  </label>
+                  <input id="gov" type="range" min="0" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Vendor / contractor exposure: <span id="vendVal" class="mono">6</span>/10
+                  </label>
+                  <input id="vend" type="range" min="0" max="10" value="6" />
+                </div>
+                <div class="callout" id="riskRes" style="margin-top:10px; border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                  <b>Risk:</b> —
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally rough. The goal is to force the “so what?” into numbers you can argue with.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this (one-page checklist)</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you’re a startup in a vertical</h4>
+              <ul>
+                <li>Assume the model provider will ship your “core” feature within 6–18 months if it scales.</li>
+                <li>Build moats that are hard to copy: proprietary workflow data rights, deep integrations, outcomes guarantees, trust layer.</li>
+                <li>Design for <span class="mono">coexistence</span>: be the orchestrator/adapter that swaps models and owns customer outcomes.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you’re an enterprise / operator</h4>
+              <ul>
+                <li>Decide whether your internal work artifacts are a liability or an asset — then govern accordingly.</li>
+                <li>Where you can, turn work into structured traces (templates, rubrics, testable definitions of “done”).</li>
+                <li>If you touch physical operations: start at least one robotics pilot that captures useful data (even if small).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Meta-lesson:</b> the next year isn’t about demos; it’s about which loops compound (data loops, distribution loops, compliance loops, tool loops).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      health: ["n-health","n-narr","n-vert","n-start"],
+      meta:   ["n-vert","n-start"],
+      physical:["n-phys","fly"],
+      data:   ["n-data","n-agents","n-phys"],
+      agents: ["n-agents","n-vert"]
+    };
+
+    const linkMap = {
+      health: ["l-health-narr","l-health-vert","l-vert-start"],
+      physical:["l-data-phys","l-phys-fly"],
+      data: ["l-data-agents","l-data-phys"],
+      agents:["l-agents-vert","l-data-agents"],
+      meta:["l-vert-start"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+      $("#fly").style.filter = "";
+      $("#fly").style.opacity = "0.85";
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+
+      // dim everything a bit
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g) || g;
+        if(rect && rect.tagName.toLowerCase()==="rect"){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        } else {
+          g.style.filter = "url(#glow)";
+          g.style.opacity = "1";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        // colorize by focus
+        const col = ({
+          health:"rgba(245,158,11,.75)",
+          meta:"rgba(139,92,246,.70)",
+          physical:"rgba(20,184,166,.75)",
+          data:"rgba(239,68,68,.70)",
+          agents:"rgba(59,130,246,.75)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      toast(`<b>Focus:</b> ${focus.replace(/^\w/,c=>c.toUpperCase())} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        // open the matching story
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full system view.`);
+    });
+
+    // Click nodes to jump to story
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        // map node ids to stories (best-effort)
+        const pick = (id==="vertical"||id==="startup"||id==="narrative") ? "health"
+                    : (id==="physical") ? "physical"
+                    : (id==="agents") ? "agents"
+                    : (id==="data") ? "data"
+                    : "health";
+        highlight(pick);
+        const story = $(`details.story[data-story="${pick}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+    const dist = $("#dist"), moat = $("#moat"), swc = $("#swc");
+    const distVal=$("#distVal"), moatVal=$("#moatVal"), switchVal=$("#switchVal");
+    const bvb = $("#bvB");
+
+    function calcBvB(){
+      const D = +dist.value, M = +moat.value, S = +swc.value;
+      distVal.textContent = D; moatVal.textContent = M; switchVal.textContent = S;
+
+      // crude score: platform pressure grows with D, reduced by (M+S)
+      const pressure = Math.max(0, Math.min(100, Math.round((D*10) - ((M+S)*6))));
+      let verdict, advice;
+      if(pressure >= 60){
+        verdict = "High platform pressure";
+        advice = "Expect the platform to ship your feature. You need deeper integrations + owned outcomes + data rights.";
+      } else if(pressure >= 30){
+        verdict = "Contested zone";
+        advice = "You can win if you specialize: workflow lock-in, compliance niches, or measurable ROI the platform won’t own.";
+      } else {
+        verdict = "Defensible (for now)";
+        advice = "Your moat/integration depth likely beats distribution—keep tightening the loop (data → product → outcomes).";
+      }
+      bvb.innerHTML = `<b>Result:</b> ${verdict} <span class="mono" style="opacity:.85">(${pressure}/100)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [dist, moat, swc].forEach(i=> i.addEventListener("input", calcBvB));
+    calcBvB();
+
+    const dataRate=$("#dataRate"), fb=$("#fb"), edge=$("#edge");
+    const dataRateVal=$("#dataRateVal"), fbVal=$("#fbVal"), edgeVal=$("#edgeVal");
+    const flyRes=$("#flyRes");
+
+    function calcFly(){
+      const A=+dataRate.value, B=+fb.value, C=+edge.value;
+      dataRateVal.textContent=A; fbVal.textContent=B; edgeVal.textContent=C;
+
+      // flywheel index: weighted
+      const idx = Math.round((A*0.42 + B*0.38 + C*0.20) * 10);
+      let label, note;
+      if(idx >= 75){
+        label = "Fast compounding loop";
+        note = "This is where first movers run away. Invest aggressively: instrumentation, evaluation, and deployment volume.";
+      } else if(idx >= 45){
+        label = "Moderate loop";
+        note = "You’ll see progress, but bottlenecks will be organizational (data plumbing, evals, and safety constraints).";
+      } else {
+        label = "Slow / fragile loop";
+        note = "Improve feedback clarity or data capture. Without tight evals, agents/robots won’t reliably get better.";
+      }
+      flyRes.innerHTML = `<b>Flywheel:</b> ${label} <span class="mono" style="opacity:.85">(${idx}/100)</span><br><span style="color:var(--muted)">${note}</span>`;
+    }
+    [dataRate, fb, edge].forEach(i=> i.addEventListener("input", calcFly));
+    calcFly();
+
+    const gov=$("#gov"), vend=$("#vend");
+    const govVal=$("#govVal"), vendVal=$("#vendVal");
+    const riskRes=$("#riskRes");
+
+    function calcRisk(){
+      const G=+gov.value, V=+vend.value;
+      govVal.textContent=G; vendVal.textContent=V;
+
+      // risk grows with vendor exposure and shrinks with governance
+      const risk = Math.max(0, Math.min(100, Math.round((V*9) - (G*7) + 35)));
+      let level, action;
+      if(risk >= 70){
+        level="High leakage risk";
+        action="Prioritize DLP, tighter access controls, contractor clauses, and audits. Treat internal artifacts as crown jewels.";
+      } else if(risk >= 40){
+        level="Medium risk";
+        action="Create clear policies for sharing, retention, and redaction; add monitoring for unusual exfiltration patterns.";
+      } else {
+        level="Lower risk";
+        action="Keep improving governance and map where sensitive artifacts live; your maturity is a competitive advantage.";
+      }
+      riskRes.innerHTML = `<b>Risk:</b> ${level} <span class="mono" style="opacity:.85">(${risk}/100)</span><br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [gov, vend].forEach(i=> i.addEventListener("input", calcRisk));
+    calcRisk();
+
+    // --- Nice: expand/collapse hint on first interaction
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to connect stories → structure.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
