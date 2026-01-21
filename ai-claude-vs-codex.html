@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="category" content="AI Strategy" />
+  <meta name="created" content="2026-01-21" />
+  <meta name="temperature" content="hot" />
+  <meta name="description" content="Tool-shaped vs colleague-shaped AI: comparing Codex-style long-run agents with Claude Code-style interactive delegation." />
+  <meta name="tags" content="Claude, Codex, AI Agents, Workflow" />
+  <meta name="icon" content="🤖" />
+  <title>Tool-Shaped vs Colleague-Shaped AI (2026) — HTML Infographic</title>
+  <style>
+    :root{
+      --bg:#0a0a0f;
+      --paper:#12121a;
+      --ink:#e8e8ed;
+      --muted:#9898a8;
+      --hair:#2a2a3a;
+      --card:#16161f;
+      --shadow: 0 14px 40px rgba(0,0,0,.4);
+      --shadow2: 0 10px 25px rgba(0,0,0,.35);
+      --r: 18px;
+
+      --a:#60a5fa; /* blue */
+      --b:#a78bfa; /* purple */
+      --c:#2dd4bf; /* teal */
+      --d:#fbbf24; /* amber */
+      --e:#f87171; /* red */
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(59,130,246,.18), transparent 55%),
+        radial-gradient(900px 600px at 80% 15%, rgba(139,92,246,.18), transparent 60%),
+        radial-gradient(900px 700px at 60% 85%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg), #08080c 80%);
+    }
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 60px}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:10px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      padding:9px 12px; border-radius:999px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+      font-size:13px;
+      color:var(--muted);
+    }
+    .dot{width:9px;height:9px;border-radius:50%;}
+    .dot.a{background:var(--a)}
+    .dot.b{background:var(--b)}
+    .dot.c{background:var(--c)}
+    .dot.d{background:var(--d)}
+    .hero{
+      border:1px solid var(--hair);
+      background: linear-gradient(180deg, rgba(22,22,31,.85), rgba(16,16,24,.70));
+      border-radius: calc(var(--r) + 8px);
+      padding:24px 22px 22px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 300px at 5% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(650px 280px at 75% 15%, rgba(139,92,246,.20), transparent 60%),
+        radial-gradient(500px 260px at 60% 90%, rgba(20,184,166,.15), transparent 55%);
+      pointer-events:none;
+      filter:saturate(1.2);
+    }
+    .hero > *{position:relative}
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(255,255,255,.65);
+      margin-bottom:10px;
+    }
+    .kicker .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.08);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size: clamp(14px, 1.4vw, 18px);
+      line-height:1.55;
+      max-width: 88ch;
+    }
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background: rgba(22,22,31,.86);
+      border:1px solid var(--hair);
+      border-radius: var(--r);
+      box-shadow: var(--shadow2);
+      padding:16px 16px 14px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:-0.01em;
+      display:flex; align-items:center; gap:10px;
+    }
+    .chip{
+      font-size:12px;
+      color:rgba(255,255,255,.75);
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .p{
+      margin:0 0 10px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+    }
+    .metricRow{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 520px){ .metricRow{grid-template-columns:1fr} }
+    .metric{
+      border:1px dashed rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 14px;
+      padding:12px;
+    }
+    .metric .label{font-size:12px;color:rgba(255,255,255,.55)}
+    .metric .value{font-size:18px;font-weight:800;margin-top:4px;letter-spacing:-0.01em}
+    .metric .hint{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px}
+    .twoCol{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 720px){ .twoCol{grid-template-columns:1fr} }
+    .lane{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      position:relative;
+      overflow:hidden;
+    }
+    .lane::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(500px 220px at 20% 0%, rgba(59,130,246,.18), transparent 70%);
+      pointer-events:none;
+    }
+    .lane.b::before{ background: radial-gradient(500px 220px at 20% 0%, rgba(139,92,246,.18), transparent 70%); }
+    .lane > *{position:relative}
+    .lane h3{margin:0 0 8px;font-size:15px;display:flex;gap:10px;align-items:center}
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:4px 9px; border-radius:999px;
+      font-size:12px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.08);
+      color:rgba(255,255,255,.75);
+    }
+    ul{
+      margin:0; padding-left:18px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .divider{
+      height:1px; background: var(--hair);
+      margin:14px 0;
+    }
+    .diagramWrap{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,15,.72);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin:10px 0 0;
+      font-size:12px; color:rgba(255,255,255,.65);
+    }
+    .legend .item{display:flex;align-items:center;gap:8px}
+    .key{width:10px;height:10px;border-radius:3px}
+    .key.a{background:var(--a)}
+    .key.b{background:var(--b)}
+    .key.c{background:var(--c)}
+    .key.d{background:var(--d)}
+    .key.e{background:var(--e)}
+
+    /* Simulators */
+    .sim{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .sim .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 900px){ .sim .row{grid-template-columns:1fr} }
+    .control{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(22,22,31,.75);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .control h3{margin:0 0 10px;font-size:15px}
+    label{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:13px;
+      color:rgba(255,255,255,.75);
+      margin:8px 0 6px;
+    }
+    input[type="range"]{width:100%;accent-color:var(--b)}
+    input[type="number"], textarea, select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(10,10,15,.9);
+      color: var(--ink);
+      border-radius: 12px;
+      padding:10px 10px;
+      font: 13px var(--sans);
+      outline:none;
+    }
+    textarea{min-height:118px; font-family: var(--mono); line-height:1.4}
+    .out{
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(22,22,31,.85), rgba(16,16,24,.65));
+      border-radius: 16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .out::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(600px 200px at 20% 0%, rgba(20,184,166,.18), transparent 70%);
+      pointer-events:none;
+    }
+    .out > *{position:relative}
+    .recTitle{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .pill2{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.08);
+      font-size:12px;
+      color:rgba(255,255,255,.72);
+    }
+    .stamp{
+      font-weight:900;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+    }
+    .stamp.good{color:var(--good); border-color: rgba(34,197,94,.45)}
+    .stamp.warn{color:var(--warn); border-color: rgba(245,158,11,.45)}
+    .stamp.bad{color:var(--bad); border-color: rgba(239,68,68,.45)}
+    .mono{
+      font-family:var(--mono);
+      font-size:12px;
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.10);
+      padding:8px 10px;
+      border-radius: 12px;
+      overflow:auto;
+      white-space:pre-wrap;
+      line-height:1.45;
+    }
+    .footer{
+      margin-top:18px;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      line-height:1.55;
+    }
+    .small{font-size:12px;color:rgba(255,255,255,.5)}
+    .warnBox{
+      border:1px solid rgba(245,158,11,.35);
+      background: rgba(245,158,11,.10);
+      border-radius: 16px;
+      padding:12px;
+      color:rgba(255,255,255,.80);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color: var(--ink);
+      border-radius: 999px;
+      padding:9px 12px;
+      font-weight:700;
+      font-size:13px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+    }
+    button:hover{transform: translateY(-1px);background: rgba(255,255,255,.15)}
+    .ghost{background: rgba(255,255,255,.05)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">
+        <span class="dot a"></span>
+        <span class="dot b"></span>
+        <span class="dot c"></span>
+        <span><strong>Infographic:</strong> AI Collaboration Shapes (2026)</span>
+      </div>
+      <div class="badge">
+        <span class="dot d"></span>
+        <span><span id="today"></span> · interactive single-file HTML</span>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="kicker">
+        <span class="pill"><span class="dot a"></span> Tool-shaped</span>
+        <span class="pill"><span class="dot b"></span> Colleague-shaped</span>
+        <span class="pill"><span class="dot c"></span> Org readiness</span>
+      </div>
+      <h1>Is your AI shaped like a colleague<br/>or shaped like a tool?</h1>
+      <p class="sub">
+        In January 2026, Cursor’s CEO Michael Truell described an extreme “long-run agent” experiment:
+        GPT-5.2 ran for ~one week, producing millions of lines of Rust and a functional (but early) browser rendering engine.
+        Whether or not you use that exact stack, the underlying question is now unavoidable:
+        <strong>are you building workflows around iteration &amp; dialogue — or around spec &amp; execution?</strong>
+      </p>
+      <div class="metricRow">
+        <div class="metric">
+          <div class="label">Stress test pattern</div>
+          <div class="value">Long-horizon autonomy</div>
+          <div class="hint">hours → days → week</div>
+        </div>
+        <div class="metric">
+          <div class="label">Core tradeoff</div>
+          <div class="value">Spec vs. intent discovery</div>
+          <div class="hint">precision upfront vs learning mid-flight</div>
+        </div>
+        <div class="metric">
+          <div class="label">Outcome</div>
+          <div class="value">Leverage… or drift</div>
+          <div class="hint">depends on “correctness definition”</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <section class="card">
+        <h2>Two shapes, two philosophies <span class="chip">CNC vs machinist</span></h2>
+        <p class="p">
+          Think manufacturing: a <strong>machinist</strong> shapes material via tight feedback loops. A <strong>CNC machine</strong> executes a program
+          with superhuman fidelity — but will also execute your mistakes faithfully.
+        </p>
+
+        <div class="twoCol">
+          <div class="lane">
+            <h3>
+              <span class="tag"><span class="dot b"></span> Colleague-shaped</span>
+              Claude Code / Cowork-style
+            </h3>
+            <ul>
+              <li><strong>Interactive delegation:</strong> assign → receive → clarify → refine.</li>
+              <li><strong>Human in the loop</strong> is intentional, not overhead.</li>
+              <li><strong>Great when</strong> intent is evolving, requirements are fuzzy, learning matters.</li>
+              <li><strong>Failure mode:</strong> feels “slower” if you already know exactly what you want.</li>
+            </ul>
+          </div>
+          <div class="lane b">
+            <h3>
+              <span class="tag"><span class="dot a"></span> Tool-shaped</span>
+              Codex / long-run agent style
+            </h3>
+            <ul>
+              <li><strong>Spec → execute:</strong> end-to-end runs in a sandbox.</li>
+              <li><strong>Minimize touch points:</strong> human time becomes review + acceptance.</li>
+              <li><strong>Great when</strong> correctness can be specified upfront (senior “spec muscle”).</li>
+              <li><strong>Failure mode:</strong> wrong program = expensive wrong output.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>What changes in 2026 <span class="chip">org design</span></h2>
+        <p class="p">
+          The “AI shape” you pick quietly rewires your team’s operating system:
+          who can use AI effectively, how work is defined, and whether you scale by hiring people or by scaling specs.
+        </p>
+
+        <div class="diagramWrap">
+          <svg viewBox="0 0 980 330" width="100%" height="auto" role="img" aria-label="Decision flow diagram">
+            <defs>
+              <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".12"/>
+              </filter>
+            </defs>
+
+            <!-- Nodes -->
+            <g filter="url(#softShadow)">
+              <rect x="20" y="20" rx="18" ry="18" width="300" height="90" fill="#1a1a24" stroke="#2a2a3a"/>
+              <text x="40" y="54" font-size="16" font-weight="800" fill="#e8e8ed">1) Can you define "correct" upfront?</text>
+              <text x="40" y="80" font-size="12.5" fill="#9898a8">Clear acceptance tests, constraints, edge cases</text>
+
+              <rect x="360" y="20" rx="18" ry="18" width="300" height="90" fill="#1a1a24" stroke="#2a2a3a"/>
+              <text x="380" y="54" font-size="16" font-weight="800" fill="#e8e8ed">2) Do you expect intent to evolve?</text>
+              <text x="380" y="80" font-size="12.5" fill="#9898a8">Discovery, ambiguity, moving requirements</text>
+
+              <rect x="700" y="20" rx="18" ry="18" width="260" height="90" fill="#1a1a24" stroke="#2a2a3a"/>
+              <text x="720" y="54" font-size="16" font-weight="800" fill="#e8e8ed">3) How costly is drift?</text>
+              <text x="720" y="80" font-size="12.5" fill="#9898a8">Tokens, time, reputation, safety</text>
+
+              <rect x="85" y="160" rx="18" ry="18" width="380" height="120" fill="#1a1a24" stroke="#2a2a3a"/>
+              <text x="105" y="194" font-size="16" font-weight="900" fill="#a78bfa">Colleague-shaped fit</text>
+              <text x="105" y="220" font-size="13" fill="#9898a8">Feedback loop is the value</text>
+              <text x="105" y="244" font-size="13" fill="#9898a8">Sharper intent emerges mid-build</text>
+              <text x="105" y="268" font-size="13" fill="#9898a8">Best for juniors + non-technical work</text>
+
+              <rect x="515" y="160" rx="18" ry="18" width="380" height="120" fill="#1a1a24" stroke="#2a2a3a"/>
+              <text x="535" y="194" font-size="16" font-weight="900" fill="#60a5fa">Tool-shaped fit</text>
+              <text x="535" y="220" font-size="13" fill="#9898a8">Spec quality determines success</text>
+              <text x="535" y="244" font-size="13" fill="#9898a8">Parallelism + long runs = leverage</text>
+              <text x="535" y="268" font-size="13" fill="#9898a8">Best for seniors + stable interfaces</text>
+            </g>
+
+            <!-- Arrows -->
+            <g fill="none" stroke="#e8e8ed" stroke-opacity=".25" stroke-width="3" stroke-linecap="round">
+              <path d="M 170 110 C 165 132, 150 135, 140 155" />
+              <path d="M 510 110 C 505 132, 495 135, 515 155" />
+              <path d="M 810 110 C 805 132, 785 135, 760 155" />
+            </g>
+
+            <!-- Labels -->
+            <g font-size="12" fill="#9898a8">
+              <text x="130" y="140">If "no / unsure"</text>
+              <text x="500" y="140">If "yes / stable"</text>
+              <text x="742" y="140">If drift is expensive</text>
+            </g>
+          </svg>
+          <div class="legend">
+            <div class="item"><span class="key b"></span> Colleague loop (dialogue)</div>
+            <div class="item"><span class="key a"></span> Tool run (delegation)</div>
+            <div class="item"><span class="key c"></span> Readiness: spec skill + review discipline</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="warnBox">
+          <strong>Uncomfortable truth:</strong> most teams overestimate their ability to specify precise intent.
+          Colleague-style friction often feels like “slowness,” but it’s also the mechanism that forces clarity early.
+          Tool-style autonomy amplifies your skill — and your blind spots.
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="card">
+        <h2>The Cursor “week-run” story <span class="chip">what was claimed</span></h2>
+        <p class="p">
+          Public posts described Cursor running GPT-5.2 agents continuously for ~a week,
+          producing <strong>millions of lines of Rust</strong> and a from-scratch rendering engine
+          (HTML parsing, CSS cascade/layout, paint, plus a JS VM), “kind of working” as an alpha.
+        </p>
+
+        <div class="metricRow">
+          <div class="metric">
+            <div class="label">Duration</div>
+            <div class="value">~168h</div>
+            <div class="hint">uninterrupted run</div>
+          </div>
+          <div class="metric">
+            <div class="label">Output scale</div>
+            <div class="value">~3M LOC</div>
+            <div class="hint">across thousands of files</div>
+          </div>
+          <div class="metric">
+            <div class="label">Key lesson</div>
+            <div class="value">Plan coherence</div>
+            <div class="hint">long-horizon focus beats “coding tricks”</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Quick decision matrix <span class="chip">pick your shape</span></h2>
+        <ul>
+          <li><strong>Ambiguity high?</strong> colleague-shaped.</li>
+          <li><strong>Spec crisp?</strong> tool-shaped.</li>
+          <li><strong>Risk costly?</strong> colleague-shaped (until tests/spec mature).</li>
+          <li><strong>Parallel tasks?</strong> tool-shaped (spin up multiple runs).</li>
+          <li><strong>Skill distribution wide?</strong> mixed mode (colleague for juniors, tool for seniors).</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <h2>Sources (for the narrative) <span class="chip">links</span></h2>
+        <p class="small" style="margin:0 0 8px">
+          Kept short; you can swap/add links in the footer section of the HTML.
+        </p>
+        <ul>
+          <li>Cursor CEO post about the browser experiment (X)</li>
+          <li>Cursor blog on scaling long-running agents</li>
+          <li>Anthropic: Claude Code announcement + best practices</li>
+          <li>OpenAI: “Introducing Codex”</li>
+        </ul>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top:16px">
+      <h2>Interactive simulators <span class="chip">make the choice concrete</span></h2>
+      <p class="p">
+        Slide the knobs to model a real task. The recommendation updates instantly and generates a “spec skeleton”
+        (what tool-shaped AI needs to succeed).
+      </p>
+
+      <div class="sim">
+        <div class="row">
+          <div class="control">
+            <h3>Task conditions</h3>
+
+            <label>
+              <span>Ambiguity / evolving intent</span>
+              <span class="chip"><span id="ambVal">55</span>/100</span>
+            </label>
+            <input id="amb" type="range" min="0" max="100" value="55" />
+
+            <label>
+              <span>Spec clarity (acceptance tests)</span>
+              <span class="chip"><span id="specVal">45</span>/100</span>
+            </label>
+            <input id="spec" type="range" min="0" max="100" value="45" />
+
+            <label>
+              <span>Domain expertise of requester</span>
+              <span class="chip"><span id="expVal">50</span>/100</span>
+            </label>
+            <input id="exp" type="range" min="0" max="100" value="50" />
+
+            <label>
+              <span>Cost of drift (wrong output)</span>
+              <span class="chip"><span id="riskVal">60</span>/100</span>
+            </label>
+            <input id="risk" type="range" min="0" max="100" value="60" />
+
+            <div class="divider"></div>
+
+            <label>
+              <span>Work type</span>
+              <span class="chip">context</span>
+            </label>
+            <select id="workType">
+              <option value="code">Software engineering</option>
+              <option value="doc">Long-form document / proposal</option>
+              <option value="analysis">Strategy / market analysis</option>
+              <option value="ops">Ops / data cleanup / repetitive tasks</option>
+              <option value="creative">Creative / exploratory</option>
+            </select>
+
+            <div class="btnRow">
+              <button id="presetSenior">Preset: Senior engineer spec</button>
+              <button id="presetJunior" class="ghost">Preset: Junior / learning</button>
+              <button id="presetNonTech" class="ghost">Preset: Non-technical proposal</button>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="recTitle">
+              <div>
+                <div style="font-size:12px;color:rgba(255,255,255,.55);font-weight:800;letter-spacing:.06em;text-transform:uppercase">
+                  Recommendation
+                </div>
+                <div style="font-size:18px;font-weight:900;margin-top:2px;letter-spacing:-.01em" id="recHead">
+                  Hybrid (start colleague → harden spec → run tool)
+                </div>
+              </div>
+              <div class="stamp warn" id="recStamp">HYBRID</div>
+            </div>
+
+            <p class="p" id="recBody" style="margin-bottom:10px">
+              You have meaningful ambiguity and meaningful risk. Use colleague-shaped AI to surface unknowns early,
+              then convert decisions into explicit acceptance tests and run tool-shaped agents for long execution.
+            </p>
+
+            <div class="metricRow">
+              <div class="metric">
+                <div class="label">Best interface</div>
+                <div class="value" id="uiMode">Inbox / threads</div>
+                <div class="hint">iterative review points</div>
+              </div>
+              <div class="metric">
+                <div class="label">Ideal loop</div>
+                <div class="value" id="loop">10–30 min</div>
+                <div class="hint">tight feedback early</div>
+              </div>
+              <div class="metric">
+                <div class="label">Primary constraint</div>
+                <div class="value" id="constraint">Spec muscle</div>
+                <div class="hint">turn intent into tests</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+              <div style="font-size:13px;font-weight:800">Generated “spec skeleton”</div>
+              <div class="pill2"><span class="dot c"></span> copy into your prompt/spec</div>
+            </div>
+            <div class="mono" id="specOut"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="control">
+            <h3>Token-cost roughener (for long runs)</h3>
+            <p class="small" style="margin:0 0 10px">
+              This is a back-of-the-envelope helper for planning reviews &amp; budgets.
+              (Pricing differs by model/plan; plug in your own effective $/1M tokens.)
+            </p>
+
+            <label>
+              <span>Total tokens expected</span>
+              <span class="chip"><span id="tokPretty">3000000000</span></span>
+            </label>
+            <input id="tokens" type="number" value="3000000000" min="0" step="1000000"/>
+
+            <label>
+              <span>Effective cost per 1M tokens (USD)</span>
+              <span class="chip">$<span id="rateVal">10</span></span>
+            </label>
+            <input id="rate" type="range" min="0" max="100" value="10" />
+            <div class="small" style="margin-top:6px;color:rgba(255,255,255,.55)">
+              Tip: set this to your blended cost (prompt + output + tool runs).
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="metricRow">
+              <div class="metric">
+                <div class="label">Estimated spend</div>
+                <div class="value" id="spend">$30,000</div>
+                <div class="hint">tokens × rate</div>
+              </div>
+              <div class="metric">
+                <div class="label">Review checkpoints</div>
+                <div class="value" id="checks">6–12</div>
+                <div class="hint">reduce “silent drift”</div>
+              </div>
+              <div class="metric">
+                <div class="label">Best use case</div>
+                <div class="value" id="bestUse">Parallelizable</div>
+                <div class="hint">multi-agent tasks</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control">
+            <h3>One-minute exercise: “Are we ready?”</h3>
+            <p class="small" style="margin:0 0 10px">
+              Check items your org can consistently do. The meter suggests whether you can safely shift toward tool-shaped autonomy.
+            </p>
+
+            <div style="display:grid;gap:8px">
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" checked /> We write acceptance tests / success criteria first
+              </label>
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" /> We can define constraints (perf, security, UX) precisely
+              </label>
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" checked /> We have CI that catches regressions reliably
+              </label>
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" /> We can review diffs quickly (ownership + code health)
+              </label>
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" /> We have a spec template + examples of “great specs”
+              </label>
+              <label style="justify-content:flex-start;gap:10px">
+                <input class="chk" type="checkbox" checked /> We can sandbox risky runs (limited permissions)
+              </label>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="recTitle">
+              <div style="font-size:13px;font-weight:900">Readiness meter</div>
+              <div class="pill2"><span class="dot d"></span> <span id="readyPct">50%</span></div>
+            </div>
+
+            <div style="border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);border-radius:999px;padding:6px">
+              <div id="bar" style="height:12px;border-radius:999px;width:50%;background:linear-gradient(90deg, rgba(139,92,246,.85), rgba(59,130,246,.85));"></div>
+            </div>
+
+            <p class="p" id="readyText" style="margin-top:10px">
+              You’re in hybrid territory: colleague-shaped loops for discovery + tool-shaped runs when specs/tests exist.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="divider"></div>
+        <strong>Editable Sources (replace as needed):</strong>
+        <div class="small" style="margin-top:8px">
+          • Cursor experiment post (X): https://x.com/mntruell/status/2011562190286045552<br/>
+          • Cursor blog on long-running agents: https://cursor.com/blog/scaling-agents<br/>
+          • Anthropic: Claude Code announcement: https://www.anthropic.com/news/claude-3-7-sonnet<br/>
+          • Anthropic: Claude Code best practices: https://www.anthropic.com/engineering/claude-code-best-practices<br/>
+          • OpenAI: Introducing Codex: https://openai.com/index/introducing-codex/
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Date
+    const d = new Date();
+    const fmt = new Intl.DateTimeFormat(undefined, { year:'numeric', month:'short', day:'2-digit' });
+    document.getElementById('today').textContent = fmt.format(d);
+
+    // Helpers
+    const $ = (id)=>document.getElementById(id);
+    const clamp=(x,min,max)=>Math.max(min,Math.min(max,x));
+    const comma=(n)=> (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // Inputs
+    const amb=$('amb'), spec=$('spec'), exp=$('exp'), risk=$('risk'), workType=$('workType');
+    const ambVal=$('ambVal'), specVal=$('specVal'), expVal=$('expVal'), riskVal=$('riskVal');
+
+    // Outputs
+    const recHead=$('recHead'), recBody=$('recBody'), recStamp=$('recStamp');
+    const uiMode=$('uiMode'), loop=$('loop'), constraint=$('constraint');
+    const specOut=$('specOut');
+
+    // Token roughener
+    const tokens=$('tokens'), rate=$('rate');
+    const tokPretty=$('tokPretty'), rateVal=$('rateVal'), spend=$('spend'), checks=$('checks'), bestUse=$('bestUse');
+
+    // Readiness
+    const chks=[...document.querySelectorAll('.chk')];
+    const readyPct=$('readyPct'), bar=$('bar'), readyText=$('readyText');
+
+    function recommendationScore(){
+      // Higher => tool-shaped
+      // Emphasize spec clarity + expertise; penalize ambiguity + risk (risk favors colleague until tests exist)
+      const A=+amb.value, S=+spec.value, E=+exp.value, R=+risk.value;
+
+      // Base scoring (0..100-ish)
+      let tool = (0.42*S + 0.35*E) - (0.33*A + 0.18*R);
+
+      // Work-type nudges
+      const t = workType.value;
+      if(t==='ops') tool += 8;
+      if(t==='code') tool += 4;
+      if(t==='analysis') tool -= 2;
+      if(t==='doc') tool -= 6;
+      if(t==='creative') tool -= 10;
+
+      // Convert to bands
+      return tool;
+    }
+
+    function labelFor(toolScore){
+      // toolScore roughly ranges [-60..+60]
+      if(toolScore > 18) return 'TOOL';
+      if(toolScore < -10) return 'COLLEAGUE';
+      return 'HYBRID';
+    }
+
+    function render(){
+      ambVal.textContent = amb.value;
+      specVal.textContent = spec.value;
+      expVal.textContent = exp.value;
+      riskVal.textContent = risk.value;
+
+      const toolScore = recommendationScore();
+      const mode = labelFor(toolScore);
+
+      // Update recommendation header + stamp
+      if(mode === 'TOOL'){
+        recHead.textContent = 'Tool-shaped (spec → execute → review)';
+        recStamp.textContent = 'TOOL';
+        recStamp.className = 'stamp good';
+        recBody.textContent = 'Your task has clear requirements and you have the expertise to specify them. Use tool-shaped AI for long autonomous runs with periodic reviews.';
+        uiMode.textContent = 'Sandbox / queue';
+        loop.textContent = '1–4 hours';
+        constraint.textContent = 'Review capacity';
+      } else if(mode === 'COLLEAGUE'){
+        recHead.textContent = 'Colleague-shaped (iterate → clarify → refine)';
+        recStamp.textContent = 'COLLEAGUE';
+        recStamp.className = 'stamp bad';
+        recBody.textContent = 'High ambiguity or risk means you need tight feedback loops. Use colleague-shaped AI to discover intent, surface unknowns, and build shared understanding before committing.';
+        uiMode.textContent = 'Chat / IDE';
+        loop.textContent = '2–10 min';
+        constraint.textContent = 'Intent clarity';
+      } else {
+        recHead.textContent = 'Hybrid (colleague → harden spec → tool runs)';
+        recStamp.textContent = 'HYBRID';
+        recStamp.className = 'stamp warn';
+        recBody.textContent = 'You have meaningful ambiguity and meaningful risk. Use colleague-shaped AI to surface unknowns early, then convert decisions into explicit acceptance tests and run tool-shaped agents for long execution.';
+        uiMode.textContent = 'Inbox / threads';
+        loop.textContent = '10–30 min';
+        constraint.textContent = 'Spec muscle';
+      }
+
+      // Generate spec skeleton
+      const wt = workType.value;
+      const wtLabel = {code:'Software engineering',doc:'Document/proposal',analysis:'Strategy analysis',ops:'Ops/data tasks',creative:'Creative work'}[wt];
+      specOut.textContent = `# Spec Skeleton (${wtLabel})
+
+## Goal
+[One sentence: what does "done" look like?]
+
+## Constraints
+- [ ] Performance: [e.g., <200ms response time]
+- [ ] Security: [e.g., no PII in logs]
+- [ ] Scope: [what's explicitly OUT of scope]
+
+## Acceptance tests
+1. Given [precondition], when [action], then [expected result]
+2. ...
+
+## Edge cases
+- [List known edge cases]
+
+## Review checkpoints
+- After ${mode === 'TOOL' ? '4h' : mode === 'COLLEAGUE' ? '10min' : '30min'}: [first milestone]
+- Before merge: [final review criteria]`;
+    }
+
+    // Token cost calculator
+    function renderTokens(){
+      const t = +tokens.value || 0;
+      const r = +rate.value || 0;
+      tokPretty.textContent = comma(t);
+      rateVal.textContent = r;
+
+      const cost = (t / 1_000_000) * r;
+      spend.textContent = '$' + comma(Math.round(cost));
+
+      // Suggest review checkpoints based on spend
+      if(cost < 100){
+        checks.textContent = '1–2';
+        bestUse.textContent = 'Single task';
+      } else if(cost < 1000){
+        checks.textContent = '2–4';
+        bestUse.textContent = 'Small project';
+      } else if(cost < 10000){
+        checks.textContent = '4–8';
+        bestUse.textContent = 'Medium project';
+      } else {
+        checks.textContent = '8–16+';
+        bestUse.textContent = 'Parallelizable';
+      }
+    }
+
+    // Readiness meter
+    function renderReadiness(){
+      const checked = chks.filter(c => c.checked).length;
+      const pct = Math.round((checked / chks.length) * 100);
+      readyPct.textContent = pct + '%';
+      bar.style.width = pct + '%';
+
+      if(pct >= 80){
+        readyText.textContent = 'Strong readiness for tool-shaped autonomy. You have the spec discipline and review infrastructure to delegate long runs safely.';
+        bar.style.background = 'linear-gradient(90deg, rgba(22,163,74,.85), rgba(20,184,166,.85))';
+      } else if(pct >= 50){
+        readyText.textContent = 'You\'re in hybrid territory: colleague-shaped loops for discovery + tool-shaped runs when specs/tests exist.';
+        bar.style.background = 'linear-gradient(90deg, rgba(139,92,246,.85), rgba(59,130,246,.85))';
+      } else {
+        readyText.textContent = 'Colleague-shaped is safer for now. Focus on building spec muscle and review capacity before delegating long autonomous runs.';
+        bar.style.background = 'linear-gradient(90deg, rgba(220,38,38,.85), rgba(245,158,11,.85))';
+      }
+    }
+
+    // Event listeners
+    [amb, spec, exp, risk, workType].forEach(el => {
+      el.addEventListener('input', render);
+    });
+
+    tokens.addEventListener('input', renderTokens);
+    rate.addEventListener('input', renderTokens);
+
+    chks.forEach(c => c.addEventListener('change', renderReadiness));
+
+    // Presets
+    $('presetSenior').addEventListener('click', () => {
+      amb.value = 20; spec.value = 85; exp.value = 90; risk.value = 40;
+      workType.value = 'code';
+      render();
+    });
+
+    $('presetJunior').addEventListener('click', () => {
+      amb.value = 70; spec.value = 30; exp.value = 25; risk.value = 50;
+      workType.value = 'code';
+      render();
+    });
+
+    $('presetNonTech').addEventListener('click', () => {
+      amb.value = 65; spec.value = 25; exp.value = 40; risk.value = 55;
+      workType.value = 'doc';
+      render();
+    });
+
+    // Initial render
+    render();
+    renderTokens();
+    renderReadiness();
+  </script>
+</body>
+</html>
