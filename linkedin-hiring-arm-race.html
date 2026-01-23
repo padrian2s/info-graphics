@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LinkedIn Is Dead? — Escape the Hiring Arms Race (Interactive Infographic)</title>
+  <meta name="description" content="Interactive analysis of the LinkedIn hiring arms race: why traditional job platforms are failing and what strategies work in the AI era." />
+  <meta name="category" content="Industry Analysis" />
+  <meta name="tags" content="Hiring, LinkedIn, Career Strategy, AI Era" />
+  <meta name="icon" content="👔" />
+  <meta name="created" content="2026-01-23" />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1733;
+      --panel2:#0c132b;
+      --text:#e9ecff;
+      --muted:#a9b2e6;
+      --line:rgba(255,255,255,.10);
+      --accent:#7c5cff;
+      --accent2:#20c997;
+      --warn:#ffcc66;
+      --bad:#ff5c7a;
+      --good:#46e6a7;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 700px at 15% 15%, rgba(124,92,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(32,201,151,.14), transparent 55%),
+        radial-gradient(900px 600px at 60% 95%, rgba(255,92,122,.10), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    a{ color:inherit; }
+    .wrap{
+      max-width:1180px;
+      margin:0 auto;
+      padding:28px 18px 80px;
+    }
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      padding:18px 18px 6px;
+    }
+    .title{
+      flex:1;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      padding:6px 10px;
+      border-radius:999px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    h1{
+      margin:12px 0 10px;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      max-width:880px;
+      color:var(--muted);
+      font-size:15.5px;
+      line-height:1.6;
+      margin: 0 0 10px;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      min-width:260px;
+    }
+    button, .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      font-weight:650;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      text-decoration:none;
+      user-select:none;
+    }
+    button:hover, .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.20);
+      background: rgba(255,255,255,.085);
+    }
+    button:active, .btn:active{ transform: translateY(0px) scale(.99); }
+    .btnPrimary{
+      border-color: rgba(124,92,255,.45);
+      background: linear-gradient(180deg, rgba(124,92,255,.30), rgba(124,92,255,.12));
+    }
+    .btnGreen{
+      border-color: rgba(32,201,151,.45);
+      background: linear-gradient(180deg, rgba(32,201,151,.26), rgba(32,201,151,.10));
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .actions{ justify-content:flex-start; }
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      background: linear-gradient(180deg, rgba(15,23,51,.9), rgba(15,23,51,.55));
+    }
+    .cardHead h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .cardBody{ padding:16px; }
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:stretch;
+    }
+    .stat{
+      flex:1;
+      min-width: 180px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.12);
+      padding:12px 12px 10px;
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .stat .value{
+      margin-top:8px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .stat .hint{
+      color:var(--muted);
+      font-size:12.5px;
+      margin-top:6px;
+      line-height:1.45;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.15);
+    }
+    .dot.g{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(32,201,151,.14); }
+    .dot.w{ background: var(--warn); box-shadow: 0 0 0 4px rgba(255,204,102,.14); }
+    .dot.r{ background: var(--bad); box-shadow: 0 0 0 4px rgba(255,92,122,.14); }
+
+    .timeline{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top: 6px;
+    }
+    .step{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.10);
+      padding: 12px 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .step strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:14px;
+      letter-spacing:.01em;
+    }
+    .step p{
+      margin:0;
+      color: var(--muted);
+      line-height:1.55;
+      font-size:13.5px;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.08);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding:6px 10px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    /* Arms race sim */
+    .simWrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .simPanel{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.14);
+      padding: 12px;
+    }
+    .simPanel h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing:.01em;
+    }
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 620px){ .controls{ grid-template-columns: 1fr; } }
+    .ctrl{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 10px 8px;
+      background: rgba(255,255,255,.04);
+    }
+    .ctrl label{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    input[type="range"]{
+      width:100%;
+      margin-top:10px;
+      accent-color: var(--accent);
+    }
+    .meter{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 999px;
+      height: 12px;
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:30%;
+      background: linear-gradient(90deg, rgba(124,92,255,.95), rgba(32,201,151,.85));
+      border-radius: 999px;
+      transition: width .18s ease;
+    }
+    .simOut{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      align-items:center;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 750;
+      font-size: 12.5px;
+      color: rgba(255,255,255,.9);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    /* Interface demo */
+    .demoGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){ .demoGrid{ grid-template-columns: 1fr; } }
+
+    .profile{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .avatar{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(124,92,255,.9), rgba(32,201,151,.85));
+      box-shadow: 0 10px 25px rgba(0,0,0,.28);
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+      font-weight: 950;
+      letter-spacing:-.03em;
+    }
+    .profile h3{
+      margin:0;
+      font-size: 16px;
+      letter-spacing:-.01em;
+    }
+    .profile .meta{
+      margin-top:3px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.9);
+      border-radius: 999px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      user-select:none;
+    }
+    .tab.active{
+      border-color: rgba(124,92,255,.55);
+      background: rgba(124,92,255,.18);
+    }
+    .pane{ display:none; margin-top:12px; }
+    .pane.active{ display:block; }
+
+    .resumeBullets{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .resumeBullets ul{ margin: 8px 0 0 18px; color:var(--muted); }
+    .resumeBullets li{ margin: 8px 0; line-height:1.5; }
+    details{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.10);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top:10px;
+    }
+    details summary{
+      cursor:pointer;
+      font-weight:850;
+      letter-spacing:.01em;
+      list-style:none;
+      outline:none;
+    }
+    details summary::-webkit-details-marker{ display:none; }
+    .context{
+      margin-top:10px;
+      color: var(--muted);
+      line-height:1.6;
+      font-size: 13.5px;
+    }
+
+    .chat{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 340px;
+    }
+    .msgs{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .msg{
+      max-width: 92%;
+      padding: 10px 11px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.92);
+      line-height:1.55;
+      font-size: 13.5px;
+      white-space: pre-wrap;
+    }
+    .msg.ai{
+      align-self:flex-start;
+      background: rgba(124,92,255,.14);
+      border-color: rgba(124,92,255,.35);
+    }
+    .msg.user{
+      align-self:flex-end;
+      background: rgba(32,201,151,.12);
+      border-color: rgba(32,201,151,.28);
+    }
+    .composer{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .composer input{
+      flex:1;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 10px 10px;
+      border-radius: 12px;
+      outline:none;
+    }
+    .composer input::placeholder{ color: rgba(169,178,230,.7); }
+
+    .fitTool{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    textarea{
+      width:100%;
+      min-height: 130px;
+      resize:vertical;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 10px 10px;
+      border-radius: 12px;
+      outline:none;
+      font-family: var(--sans);
+      line-height:1.5;
+    }
+    .fitOut{
+      margin-top:10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .fitScore{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .score{
+      font-weight:950;
+      letter-spacing:-.02em;
+      font-size: 22px;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+    .score small{
+      font-size:12px;
+      font-weight:900;
+      color: var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .fitOut ul{
+      margin: 8px 0 0 18px;
+      color: var(--muted);
+      line-height:1.55;
+    }
+    .divider{
+      height:1px;
+      background: var(--line);
+      margin:12px 0;
+    }
+    .foot{
+      margin-top:16px;
+      color: rgba(169,178,230,.75);
+      font-size: 12.5px;
+      line-height:1.6;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="top">
+    <header>
+      <div class="title">
+        <div class="kicker">
+          <span class="pill"><span class="dot"></span> Hiring in the AI era</span>
+          <span class="pill"><span class="dot g"></span> Interactive infographic</span>
+        </div>
+        <h1>Stop optimizing for a broken pipeline.</h1>
+        <p class="sub">
+          If the “apply → ATS → 6-second scan” loop feels like an arms race, it is.
+          This page turns the argument into a <b>systems view</b> + a <b>new move</b>:
+          build your own point of contact—an interface employers can query, explore, and evaluate on your terms.
+        </p>
+      </div>
+      <div class="actions">
+        <a class="btn btnPrimary" href="#armsRace">⚔️ Arms Race Simulator</a>
+        <a class="btn btnGreen" href="#interface">🧩 Build the Interface</a>
+        <button id="copyLink">🔗 Copy section link</button>
+      </div>
+    </header>
+
+    <!-- TOP STATS -->
+    <section class="grid">
+      <div class="card">
+        <div class="cardHead">
+          <h2>What’s failing</h2>
+          <span class="badge">Attention is the bottleneck</span>
+        </div>
+        <div class="cardBody">
+          <div class="row">
+            <div class="stat">
+              <div class="label"><span class="dot r"></span> Human scan time</div>
+              <div class="value">~6 seconds <span class="badge">filter mode</span></div>
+              <div class="hint">In volume-heavy roles, recruiters/managers optimize for “fast no,” not deep evaluation.</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="dot w"></span> Application success</div>
+              <div class="value"><span id="srVal">0.4%</span> <span class="badge">clogged pipes</span></div>
+              <div class="hint">Use this as a “feel” number: the point is that the funnel is structurally hostile to being seen.</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="dot"></span> The core mismatch</div>
+              <div class="value">Filtering ≠ Understanding</div>
+              <div class="hint">ATS + job boards are built to handle volume, not to represent a whole person.</div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="step">
+              <strong>1) Candidate becomes “keyword object”</strong>
+              <p>Years of work compress into bullets. AI makes “polished claims” cheap → polish stops meaning anything.</p>
+            </div>
+            <div class="step">
+              <strong>2) Employer becomes “filter machine”</strong>
+              <p>Hundreds to thousands of applicants → evaluation time collapses → pattern matching replaces judgment.</p>
+            </div>
+            <div class="step">
+              <strong>3) Everyone escalates</strong>
+              <p>Candidates optimize harder for filters. Companies build smarter filters. Result: more effort, less signal.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardHead">
+          <h2>The strategic reframing</h2>
+          <span class="badge">“Don’t be in the pile.”</span>
+        </div>
+        <div class="cardBody">
+          <div class="step">
+            <strong>Old premise: You’re a supplicant</strong>
+            <p>You squeeze through their gates (LinkedIn/ATS), hoping your document survives automated + rushed human filters.</p>
+          </div>
+          <div class="step" style="margin-top:10px;">
+            <strong>New premise: You control the point of contact</strong>
+            <p>
+              Build a surface that shifts the evaluator from <b>filtering mode</b> to <b>investigation mode</b>:
+              queryable experience, expandable context, and a fit tool that saves them time.
+            </p>
+          </div>
+          <div class="divider"></div>
+          <div class="step">
+            <strong>Key idea: “Show” beats “tell”</strong>
+            <p>
+              A resume makes claims. An interface demonstrates capability through interaction.
+              Depth is harder to fake in multi-turn questioning (especially with a domain expert on the other end).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARMS RACE SIM -->
+    <section class="card" id="armsRace" style="margin-top:14px;">
+      <div class="cardHead">
+        <h2>Arms Race Simulator</h2>
+        <span class="badge">Escalation reduces signal</span>
+      </div>
+      <div class="cardBody">
+        <p class="sub" style="margin:0 0 10px;">
+          Move the sliders. Notice what happens: as <b>candidate gaming</b> and <b>company filtering</b> climb together,
+          the system looks “smarter” but <b>human attention</b> and <b>meaningful evaluation</b> stay scarce.
+        </p>
+
+        <div class="simWrap">
+          <div class="simPanel">
+            <h3>System dials</h3>
+            <div class="controls">
+              <div class="ctrl">
+                <label>
+                  Candidate optimization
+                  <span class="badge"><span id="candVal">55</span>/100</span>
+                </label>
+                <input id="cand" type="range" min="0" max="100" value="55"/>
+              </div>
+              <div class="ctrl">
+                <label>
+                  Company filtering
+                  <span class="badge"><span id="compVal">65</span>/100</span>
+                </label>
+                <input id="comp" type="range" min="0" max="100" value="65"/>
+              </div>
+              <div class="ctrl">
+                <label>
+                  Applicant volume
+                  <span class="badge"><span id="volVal">70</span>/100</span>
+                </label>
+                <input id="vol" type="range" min="0" max="100" value="70"/>
+              </div>
+              <div class="ctrl">
+                <label>
+                  Your “interface factor”
+                  <span class="badge"><span id="ifaceVal">20</span>/100</span>
+                </label>
+                <input id="iface" type="range" min="0" max="100" value="20"/>
+              </div>
+            </div>
+
+            <div class="simOut">
+              <span class="chip">🧠 Human attention earned: <b><span id="attn">1.6</span> min</b></span>
+              <span class="chip">🧾 “Document trust” level: <b><span id="trust">Low</span></b></span>
+              <span class="chip">🎯 Chance of real evaluation: <b><span id="eval">8%</span></b></span>
+              <span class="chip">🛠️ Time saved for manager: <b><span id="save">0</span> min</b></span>
+            </div>
+
+            <div style="margin-top:12px;">
+              <div class="label" style="margin-bottom:8px;"><span class="dot"></span> Signal quality (how much “truth” survives the system)</div>
+              <div class="meter"><div class="bar" id="signalBar" style="width:40%"></div></div>
+              <div class="hint" style="margin-top:8px;">
+                Interpretation: more gaming + more filtering + more volume → lower signal. An interface increases signal by switching the interaction mode.
+              </div>
+            </div>
+          </div>
+
+          <div class="simPanel">
+            <h3>What to learn from the sim</h3>
+            <div class="timeline">
+              <div class="step">
+                <strong>Filters don’t create truth</strong>
+                <p>They remove volume. When polish is cheap (AI), “polish” becomes noise.</p>
+              </div>
+              <div class="step">
+                <strong>Scarcity is human attention</strong>
+                <p>If you can earn 5 minutes of investigation mode, you’ve done something the pile cannot offer.</p>
+              </div>
+              <div class="step">
+                <strong>Utility converts better than novelty</strong>
+                <p>A fit tool that honestly saves time makes you valuable before you’re even interviewed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot">
+          Note: The numbers are a toy model meant to visualize the argument—not a scientific estimate.
+        </div>
+      </div>
+    </section>
+
+    <!-- BUILD THE INTERFACE -->
+    <section class="card" id="interface" style="margin-top:14px;">
+      <div class="cardHead">
+        <h2>The “New Move”</h2>
+        <span class="badge">Create the point of contact</span>
+      </div>
+      <div class="cardBody">
+        <div class="demoGrid">
+          <!-- LEFT: Narrative + components -->
+          <div>
+            <div class="step">
+              <strong>Goal</strong>
+              <p>
+                Replace “resume as a claim” with “interface as proof.” Not to be gimmicky—just to unflatten your real work.
+              </p>
+            </div>
+
+            <div class="step" style="margin-top:10px;">
+              <strong>Minimum viable interface (3 modules)</strong>
+              <p>
+                <b>1) Queryable AI</b> (chat about your work), <b>2) Expandable context</b> (full story behind bullets),
+                <b>3) Fit assessment</b> (JD → honest mapping + “don’t waste your time” when weak).
+              </p>
+            </div>
+
+            <div class="step" style="margin-top:10px;">
+              <strong>Why it works</strong>
+              <p>
+                It shifts the evaluator’s cognitive mode:
+                from <b>filtering</b> (“find reasons to reject”) to <b>investigating</b> (“learn what’s true”).
+              </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="step">
+              <strong>Two-way credibility (the power inversion)</strong>
+              <p>
+                You’re not only asking to be evaluated—you’re evaluating fit too. Saying “not my role” can signal confidence,
+                save time, and increase trust.
+              </p>
+            </div>
+
+            <div class="foot">
+              Tip: Even if you still apply via normal channels, treat this as <b>conversion optimization</b>:
+              when someone clicks your site, the experience is fundamentally different than a PDF.
+            </div>
+          </div>
+
+          <!-- RIGHT: Interactive demo -->
+          <div class="card" style="box-shadow:none; background:rgba(0,0,0,.10);">
+            <div class="cardHead">
+              <h2>Demo surface (fictional)</h2>
+              <span class="badge">Try the interface</span>
+            </div>
+            <div class="cardBody">
+              <div class="profile">
+                <div class="avatar">MC</div>
+                <div>
+                  <h3>Marcus Chen</h3>
+                  <div class="meta">Staff Platform / Infrastructure — ex Stripe · Datadog<br/>Focus: platform architecture, cost, reliability, cross-functional leadership</div>
+                  <div class="tabs">
+                    <div class="tab active" data-tab="resume">Resume</div>
+                    <div class="tab" data-tab="chat">Ask AI</div>
+                    <div class="tab" data-tab="fit">Fit Tool</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pane active" id="pane-resume">
+                <div class="resumeBullets">
+                  <div class="label"><span class="dot"></span> Standard bullets (cheap to generate, hard to trust)</div>
+                  <ul>
+                    <li>Reduced infrastructure costs by $1.2M/year through AWS optimization.</li>
+                    <li>Led cross-functional platform initiative improving reliability from 99.90% → 99.98%.</li>
+                    <li>Designed internal API platform used by 12 product teams.</li>
+                  </ul>
+                </div>
+
+                <details>
+                  <summary>View AI context behind “$1.2M/year” (expandable story)</summary>
+                  <div class="context">
+                    Situation: inherited ~$4M/year AWS spend with low visibility.<br/>
+                    Actions: built cost transparency in 2 weeks; tagged ownership; spotted idle clusters; shifted non-critical workloads to spot; right-sized instances using utilization data; introduced budgets & alerts.<br/>
+                    Result: ~$1.2M/year savings + faster incident response because ownership was explicit.<br/>
+                    Lesson: “Visibility precedes optimization.”
+                  </div>
+                </details>
+
+                <details>
+                  <summary>Skills map (confidence + clarity)</summary>
+                  <div class="context">
+                    <b>Strong:</b> platform architecture, API design, reliability, cost optimization, incident leadership<br/>
+                    <b>Moderate:</b> data pipelines, security review, developer experience<br/>
+                    <b>Gaps:</b> consumer growth, mobile, large-scale consumer experimentation
+                  </div>
+                </details>
+
+                <div class="foot">
+                  The point: bullets compress; context restores shape. An interface lets evaluators pull depth on demand.
+                </div>
+              </div>
+
+              <div class="pane" id="pane-chat">
+                <div class="chat">
+                  <div class="msgs" id="msgs" aria-live="polite"></div>
+                  <div class="composer">
+                    <input id="chatInput" placeholder="Ask about leadership, architecture decisions, incidents, tradeoffs…" />
+                    <button class="btnPrimary" id="sendBtn">Send</button>
+                  </div>
+                  <div class="foot">
+                    Try: “What leadership style do you have?” · “Explain the AWS savings in detail.” · “What are your gaps?”
+                  </div>
+                </div>
+              </div>
+
+              <div class="pane" id="pane-fit">
+                <div class="fitTool">
+                  <div class="label"><span class="dot g"></span> Paste a job description (demo)</div>
+                  <textarea id="jd" placeholder="Paste a job description here…"></textarea>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <button class="btnGreen" id="analyzeBtn">Analyze fit</button>
+                    <button id="loadStrong">Load strong-fit JD</button>
+                    <button id="loadWeak">Load weak-fit JD</button>
+                  </div>
+
+                  <div class="fitOut" id="fitOut" style="display:none;">
+                    <div class="fitScore">
+                      <div class="score"><span id="fitPct">—%</span> <small>fit</small></div>
+                      <span class="badge" id="fitTag">—</span>
+                    </div>
+                    <div class="meter"><div class="bar" id="fitBar" style="width:0%"></div></div>
+                    <div class="divider"></div>
+                    <div id="fitText" class="context"></div>
+                    <div class="divider"></div>
+                    <div class="label"><span class="dot"></span> Evidence & mapping</div>
+                    <ul id="fitBullets"></ul>
+                  </div>
+
+                  <div class="foot">
+                    The “power inversion”: a weak fit should say so plainly. That saves time and signals confidence.
+                  </div>
+                </div>
+              </div>
+
+              <div class="foot">
+                Keyboard: <span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span> + <span class="kbd">K</span> to jump to the simulator ·
+                <span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span> + <span class="kbd">Enter</span> to send chat.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSE -->
+    <section class="card" id="playbook" style="margin-top:14px;">
+      <div class="cardHead">
+        <h2>Practical playbook</h2>
+        <span class="badge">Do this this week</span>
+      </div>
+      <div class="cardBody">
+        <div class="row">
+          <div class="stat" style="min-width:240px;">
+            <div class="label"><span class="dot"></span> Step 1</div>
+            <div class="value">Collect substance</div>
+            <div class="hint">Project writeups, docs, posts, demos, designs, “what I learned,” tradeoffs, incidents, metrics + context.</div>
+          </div>
+          <div class="stat" style="min-width:240px;">
+            <div class="label"><span class="dot g"></span> Step 2</div>
+            <div class="value">Build the surface</div>
+            <div class="hint">A clean personal site + query box + expandable stories + fit tool. Start simple, iterate weekly.</div>
+          </div>
+          <div class="stat" style="min-width:240px;">
+            <div class="label"><span class="dot w"></span> Step 3</div>
+            <div class="value">Distribution</div>
+            <div class="hint">Communities, writing in public, targeted outreach. The interface improves conversion—not lead gen.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="timeline">
+          <div class="step">
+            <strong>What this approach is</strong>
+            <p>A competence amplifier for people whose depth gets flattened into bullet points.</p>
+          </div>
+          <div class="step">
+            <strong>What this approach isn’t</strong>
+            <p>A hack for faking expertise. Multi-turn questioning tends to surface what’s actually there.</p>
+          </div>
+          <div class="step">
+            <strong>When it’s not the right move</strong>
+            <p>Very early career with little substance, or very traditional industries where an AI interface feels misaligned.</p>
+          </div>
+        </div>
+
+        <div class="foot">
+          If you want to repurpose this page: replace “Marcus Chen” with you, swap in your stories, and rewrite the chat responses
+          to reflect your real work. The structure is the point.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ---------- Small UX helpers ----------
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+    $("#copyLink").addEventListener("click", async () => {
+      const hash = location.hash || "#top";
+      const url = location.origin + location.pathname + hash;
+      try{
+        await navigator.clipboard.writeText(url);
+        $("#copyLink").textContent = "✅ Link copied";
+        setTimeout(()=> $("#copyLink").textContent = "🔗 Copy section link", 1200);
+      }catch(e){
+        alert("Could not copy. Here it is:\n" + url);
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+      const mod = isMac ? e.metaKey : e.ctrlKey;
+      if(mod && e.key.toLowerCase() === "k"){
+        e.preventDefault();
+        location.hash = "#armsRace";
+      }
+      if(mod && e.key === "Enter"){
+        const chatPaneActive = $("#pane-chat").classList.contains("active");
+        if(chatPaneActive) sendChat();
+      }
+    });
+
+    // ---------- Tabs ----------
+    $$(".tab").forEach(t => {
+      t.addEventListener("click", () => {
+        $$(".tab").forEach(x => x.classList.remove("active"));
+        t.classList.add("active");
+        const key = t.dataset.tab;
+        $("#pane-resume").classList.toggle("active", key === "resume");
+        $("#pane-chat").classList.toggle("active", key === "chat");
+        $("#pane-fit").classList.toggle("active", key === "fit");
+      });
+    });
+
+    // ---------- Arms race toy model ----------
+    const sliders = {
+      cand: $("#cand"),
+      comp: $("#comp"),
+      vol: $("#vol"),
+      iface: $("#iface"),
+    };
+
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    function updateSim(){
+      const c = +sliders.cand.value;
+      const f = +sliders.comp.value;
+      const v = +sliders.vol.value;
+      const i = +sliders.iface.value;
+
+      $("#candVal").textContent = c;
+      $("#compVal").textContent = f;
+      $("#volVal").textContent = v;
+      $("#ifaceVal").textContent = i;
+
+      // Signal quality: decreases with (candidate gaming + filtering + volume), increases with interface
+      // (Toy model, shaped to feel plausible.)
+      let signal = 70
+        - 0.28*c
+        - 0.30*f
+        - 0.22*v
+        + 0.45*i;
+
+      signal = clamp(signal, 2, 95);
+
+      // Human attention earned: base tiny, grows with interface; shrinks with volume & filtering
+      let attentionMin = 0.6 + (i/100)*6.0 - (v/100)*2.2 - (f/100)*1.2;
+      attentionMin = clamp(attentionMin, 0.2, 7.5);
+
+      // Trust level of documents collapses as gaming rises and filtering rises; interface helps slightly
+      const trustScore = clamp(60 - 0.35*c - 0.25*f + 0.18*i, 0, 100);
+      let trustLabel = "Low";
+      if(trustScore > 70) trustLabel = "High";
+      else if(trustScore > 45) trustLabel = "Medium";
+
+      // Chance of real evaluation: depends heavily on attention + signal; volume hurts
+      let evalChance = (attentionMin*10) + (signal*0.55) - (v*0.45);
+      evalChance = clamp(evalChance, 1, 80);
+
+      // Time saved for manager: mostly from interface utility (fit tool)
+      let saved = clamp((i/100)*18 - (v/100)*4, 0, 18);
+
+      $("#attn").textContent = attentionMin.toFixed(1);
+      $("#trust").textContent = trustLabel;
+      $("#eval").textContent = Math.round(evalChance) + "%";
+      $("#save").textContent = Math.round(saved);
+
+      $("#signalBar").style.width = signal.toFixed(0) + "%";
+
+      // update the "application success" display to match the vibe (still illustrative)
+      // small bump from interface factor; hit by volume/filter
+      let sr = 0.15 + (i/100)*1.2 - (v/100)*0.7 - (f/100)*0.3;
+      sr = clamp(sr, 0.05, 2.5);
+      $("#srVal").textContent = sr.toFixed(2) + "%";
+    }
+
+    Object.values(sliders).forEach(s => s.addEventListener("input", updateSim));
+    updateSim();
+
+    // ---------- Chat demo (rule-based, grounded in the narrative) ----------
+    const msgs = $("#msgs");
+    function addMsg(text, who){
+      const el = document.createElement("div");
+      el.className = "msg " + who;
+      el.textContent = text;
+      msgs.appendChild(el);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    const demoFacts = {
+      leadership:
+        "Leadership style: player-coach. At Stripe I mentored 6 engineers, drove incident retros, and set clear ownership boundaries so teams moved faster without ambiguity.\n\nI’m strongest when the problem is messy (cost, reliability, platform), and the path is “make reality visible → create leverage → ship guardrails.”",
+      aws:
+        "AWS savings (the real story):\n1) Built spend visibility (tags/ownership/dashboards) in 2 weeks.\n2) Found idle + over-provisioned clusters via utilization.\n3) Shifted non-critical workloads to spot; right-sized instances.\n4) Added budgets/alerts to keep savings sticky.\n\nResult: ~$1.2M/year + improved incident response because ownership became explicit.",
+      gaps:
+        "Gaps (intentionally public): I’m not a consumer growth / mobile specialist. I understand the concepts, but my track record is B2B infra/platform.\n\nIf the role needs deep consumer product shipping, I’ll likely be a weak fit. If it needs platform architecture + cross-functional execution, I’m strong.",
+      distro:
+        "Distributed systems: I design for failure first. I’ll ask: what are the invariants? how do we degrade gracefully? what’s our blast radius? how do we observe the system?\n\nI’m comfortable choosing boring tech if it reduces operational risk, and I’ll document tradeoffs so future teams can reason about the system.",
+      default:
+        "I can answer about: leadership, platform architecture, cost/reliability work, incidents, and where I’m not a fit.\n\nTry asking something specific (e.g., “How did you cut AWS costs?” or “What are your gaps?”)."
+    };
+
+    function answerFor(q){
+      const s = q.toLowerCase();
+      if(s.includes("lead") || s.includes("mentor") || s.includes("manage")) return demoFacts.leadership;
+      if(s.includes("aws") || s.includes("cost") || s.includes("1.2") || s.includes("spend")) return demoFacts.aws;
+      if(s.includes("gap") || s.includes("weak") || s.includes("not fit")) return demoFacts.gaps;
+      if(s.includes("distributed") || s.includes("consistency") || s.includes("latency") || s.includes("reliability")) return demoFacts.distro;
+      return demoFacts.default;
+    }
+
+    function seedChat(){
+      msgs.innerHTML = "";
+      addMsg("Hi — I’m a demo AI trained on Marcus’s work artifacts.\nAsk anything about platform/infra leadership, cost optimization, reliability, or fit.\n\n(Goal: help you investigate, not scan.)", "ai");
+      addMsg("What kind of leadership do you have?", "user");
+      addMsg(answerFor("leadership"), "ai");
+    }
+    seedChat();
+
+    function sendChat(){
+      const input = $("#chatInput");
+      const q = input.value.trim();
+      if(!q) return;
+      addMsg(q, "user");
+      input.value = "";
+      // tiny delay for vibe
+      setTimeout(() => addMsg(answerFor(q), "ai"), 120);
+    }
+
+    $("#sendBtn").addEventListener("click", sendChat);
+    $("#chatInput").addEventListener("keydown", (e) => {
+      if(e.key === "Enter") sendChat();
+    });
+
+    // ---------- Fit assessment tool (toy but useful) ----------
+    const strongJD =
+`Senior Platform Engineer (Fintech)
+- Build and operate internal platform services (APIs, tooling, reliability).
+- Improve incident response, observability, and SLAs.
+- Reduce infrastructure cost and increase efficiency.
+- Partner with product teams; lead cross-functional initiatives.
+- Experience with AWS, Kubernetes, service ownership, on-call.`;
+
+    const weakJD =
+`Head of Product (Consumer)
+- Own consumer acquisition and growth loops.
+- Lead mobile app roadmap and experimentation.
+- Ship consumer product features with rapid iteration.
+- Deep experience with consumer analytics, funnels, A/B testing, marketing collaboration.`;
+
+    $("#loadStrong").addEventListener("click", () => { $("#jd").value = strongJD; });
+    $("#loadWeak").addEventListener("click", () => { $("#jd").value = weakJD; });
+
+    function scoreFit(text){
+      const t = text.toLowerCase();
+      const keywordsStrong = [
+        ["platform", 12],
+        ["infrastructure", 10],
+        ["reliability", 10],
+        ["sla", 8],
+        ["incident", 10],
+        ["observability", 10],
+        ["aws", 10],
+        ["kubernetes", 10],
+        ["api", 8],
+        ["cost", 10],
+        ["efficiency", 7],
+        ["cross-functional", 7],
+        ["on-call", 8],
+        ["tooling", 6],
+      ];
+      const keywordsWeak = [
+        ["consumer", 10],
+        ["mobile", 10],
+        ["growth", 12],
+        ["acquisition", 10],
+        ["funnels", 8],
+        ["a/b", 8],
+        ["experimentation", 9],
+        ["marketing", 7],
+        ["product roadmap", 8],
+      ];
+
+      let s = 0;
+      let hits = [];
+      let misses = [];
+
+      // strong signals
+      for(const [k,w] of keywordsStrong){
+        if(t.includes(k)){ s += w; hits.push(k); }
+        else misses.push(k);
+      }
+      // weak-fit signals (subtract)
+      for(const [k,w] of keywordsWeak){
+        if(t.includes(k)){ s -= w; hits.push("⚠ " + k); }
+      }
+
+      // normalize to 0..100
+      let pct = clamp(35 + s, 0, 100);
+
+      // narrative tag
+      let tag = "Mixed";
+      if(pct >= 75) tag = "Strong fit";
+      else if(pct >= 50) tag = "Moderate fit";
+      else tag = "Weak fit";
+
+      return { pct, tag, hits, misses };
+    }
+
+    function renderFit(){
+      const jd = $("#jd").value.trim();
+      if(!jd){
+        alert("Paste a job description first (or click Load strong/weak).");
+        return;
+      }
+
+      const { pct, tag, hits } = scoreFit(jd);
+      $("#fitOut").style.display = "block";
+      $("#fitPct").textContent = Math.round(pct) + "%";
+      $("#fitTag").textContent = tag;
+
+      $("#fitBar").style.width = Math.round(pct) + "%";
+
+      // color-ish via classless: set gradient by tweaking bar background
+      const bar = $("#fitBar");
+      if(pct >= 75){
+        bar.style.background = "linear-gradient(90deg, rgba(32,201,151,.95), rgba(124,92,255,.85))";
+      }else if(pct >= 50){
+        bar.style.background = "linear-gradient(90deg, rgba(255,204,102,.95), rgba(124,92,255,.85))";
+      }else{
+        bar.style.background = "linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,204,102,.85))";
+      }
+
+      const fitText = $("#fitText");
+      const fitBullets = $("#fitBullets");
+      fitBullets.innerHTML = "";
+
+      const evidence = [
+        { k:"Platform & API design", ok: jd.toLowerCase().match(/platform|api|internal platform|tooling/g) },
+        { k:"Cost optimization", ok: jd.toLowerCase().match(/cost|efficien|spend|budget/g) },
+        { k:"Reliability & incidents", ok: jd.toLowerCase().match(/reliab|sla|incident|on-call|observab/g) },
+        { k:"Cloud/infra (AWS/K8s)", ok: jd.toLowerCase().match(/aws|kubernetes|k8s/g) },
+        { k:"Consumer growth/mobile", ok: jd.toLowerCase().match(/consumer|growth|mobile|acquisition|funnels|experimentation/g) },
+      ];
+
+      if(tag === "Strong fit"){
+        fitText.textContent =
+          "Assessment: This role aligns with Marcus’s strongest lane (platform, reliability, cost, cross-functional execution). " +
+          "Next step would be a quick call to validate scope, on-call expectations, and the platform’s current pain points.";
+      }else if(tag === "Moderate fit"){
+        fitText.textContent =
+          "Assessment: There’s meaningful overlap, but also risk of mismatch. The role likely contains platform work plus adjacent areas. " +
+          "Clarify what success looks like in 90 days and whether the team expects deep consumer/product growth expertise.";
+      }else{
+        fitText.textContent =
+          "Assessment: This looks like a weak fit. The description emphasizes consumer/mobile/growth signals that are outside Marcus’s proven track record. " +
+          "Recommendation: don’t waste time unless the role’s actual work is platform-heavy in practice.";
+      }
+
+      evidence.forEach(({k, ok}) => {
+        const li = document.createElement("li");
+        if(ok){
+          li.textContent = k + " — supported by the JD keywords";
+        }else{
+          li.textContent = k + " — not clearly required in the JD";
+        }
+        fitBullets.appendChild(li);
+      });
+
+      // add a final bullet with transparency
+      const li2 = document.createElement("li");
+      li2.textContent = "Transparency signal: the interface should state gaps plainly when the JD points elsewhere.";
+      fitBullets.appendChild(li2);
+    }
+
+    $("#analyzeBtn").addEventListener("click", renderFit);
+
+  </script>
+</body>
+</html>
