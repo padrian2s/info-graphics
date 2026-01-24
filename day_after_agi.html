@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Day After AGI — Dario Amodei vs Demis Hassabis (Infographic)</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1730;
+      --panel2:#0c1328;
+      --text:#e9eefc;
+      --muted:#a9b5dd;
+      --faint:#7280b8;
+      --line:#22315f;
+      --accent:#8b5cf6;
+      --accent2:#14b8a6;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --paper:rgba(255,255,255,.04);
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(139,92,246,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(20,184,166,.16), transparent 55%),
+        radial-gradient(800px 900px at 50% 120%, rgba(245,158,11,.10), transparent 60%),
+        var(--bg);
+      letter-spacing:.2px;
+    }
+
+    a{ color:inherit; }
+    .wrap{ max-width:1180px; margin:0 auto; padding:28px 18px 64px; }
+    header{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+      margin-bottom:18px;
+    }
+    .hero{
+      padding:22px 22px 18px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(800px 220px at 20% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(700px 260px at 80% 30%, rgba(20,184,166,.18), transparent 60%);
+      pointer-events:none;
+      filter:saturate(1.1);
+      opacity:.8;
+    }
+    .hero > *{ position:relative; z-index:1; }
+    .kicker{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      font-size:12px; color:var(--muted);
+      text-transform:uppercase; letter-spacing: .18em;
+    }
+    .pill{
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      text-transform:none;
+      letter-spacing:.02em;
+      color:var(--text);
+      font-size:12px;
+    }
+    h1{
+      margin:10px 0 10px;
+      font-size:36px;
+      line-height:1.1;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14.5px;
+      line-height:1.55;
+      max-width:68ch;
+    }
+    .meta{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .meta .dot{ opacity:.7; }
+
+    .side{
+      display:grid;
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      padding:16px 16px 14px;
+    }
+    .card h3{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .miniGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .mini{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+    }
+    .mini .t{ font-size:12px; color:var(--muted); margin-bottom:6px; }
+    .mini .v{ font-size:20px; font-weight:700; }
+    .mini .s{ margin-top:6px; font-size:12px; color:var(--faint); line-height:1.35; }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      header{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+      .miniGrid{ grid-template-columns:1fr; }
+      h1{ font-size:32px; }
+    }
+
+    .sectionTitle{
+      margin:18px 0 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.02em;
+    }
+    .sectionTitle p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+      max-width:70ch;
+    }
+
+    .row2{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .row2{ grid-template-columns:1fr; }
+    }
+
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+    }
+    button{
+      font-family:inherit;
+    }
+    .tabBtn{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
+    }
+    .tabBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
+    .tabBtn[aria-pressed="true"]{
+      border-color: rgba(139,92,246,.7);
+      box-shadow: 0 0 0 3px rgba(139,92,246,.18);
+      background: rgba(139,92,246,.14);
+    }
+
+    .timeline{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:14px 14px 10px;
+      background: rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+    .tlBar{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:6px;
+      margin-top:10px;
+    }
+    .tlNode{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .tlNode.on{
+      background: linear-gradient(90deg, rgba(20,184,166,.28), rgba(139,92,246,.28));
+      border-color: rgba(139,92,246,.30);
+    }
+    .tlLabels{
+      display:flex; justify-content:space-between; margin-top:8px;
+      color:var(--muted); font-size:12px;
+    }
+    .quoteBox{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .quote{
+      margin:0;
+      font-size:14px;
+      line-height:1.55;
+      color: var(--text);
+    }
+    .attrib{
+      margin-top:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size:11px;
+      padding:5px 8px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+
+    .diagram{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.14);
+      padding:14px;
+      overflow:hidden;
+    }
+    .diagram svg{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .controls{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .control{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:10px 10px 8px;
+      background: rgba(255,255,255,.03);
+    }
+    .control label{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      font-size:13px; color:var(--muted);
+      margin-bottom:6px;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color: var(--accent);
+    }
+    .out{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .out .mini{ background: rgba(0,0,0,.18); }
+    .hint{
+      margin:10px 0 0;
+      color: var(--faint);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .matrix{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){
+      .matrix{ grid-template-columns:1fr; }
+    }
+    .risk{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:14px;
+      background: rgba(0,0,0,.14);
+    }
+    .riskHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:8px;
+    }
+    .riskHead .name{
+      font-weight:700; font-size:14px;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .tag.danger{ border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.10); color: #ffd1d1; }
+    .tag.warn{ border-color: rgba(245,158,11,.45); background: rgba(245,158,11,.10); color: #ffe7c2; }
+    .tag.ok{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.10); color: #d6ffe6; }
+    .risk p{
+      margin:0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .risk ul{
+      margin:10px 0 0;
+      padding-left:16px;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .risk li{ margin:6px 0; }
+
+    .footer{
+      margin-top:18px;
+      color: var(--faint);
+      font-size:12px;
+      line-height:1.5;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size:11px;
+      padding:2px 6px;
+      border:1px solid var(--line);
+      border-bottom-color: rgba(255,255,255,.12);
+      border-radius:8px;
+      background: rgba(0,0,0,.22);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hero">
+        <div class="kicker">
+          <span class="pill">Infographic</span>
+          <span class="pill">“The Day After AGI” conversation</span>
+          <span class="pill">Themes: loop-closure, science, jobs, geopolitics, safety</span>
+        </div>
+        <h1>The Day After AGI</h1>
+        <p class="sub">
+          A visual map of a high-level on-stage conversation between <b>Dario Amodei</b> (Anthropic) and
+          <b>Demis Hassabis</b> (Google DeepMind): timelines, the “AI builds AI” loop, why coding is easier than
+          natural science, the job shock debate, geopolitical chip constraints, and the safety question
+          (deception, misuse, autonomy).
+        </p>
+        <div class="meta">
+          <span>Format: <span class="dot">•</span> cards + interactive widgets</span>
+          <span class="dot">•</span>
+          <span>Use: <span class="kbd">1</span> switch tabs, <span class="kbd">2</span> drag sliders</span>
+          <span class="dot">•</span>
+          <span>Built as a single self-contained HTML file</span>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="card">
+          <h3>Core disagreement (compressed)</h3>
+          <div class="miniGrid">
+            <div class="mini">
+              <div class="t">Amodei: pace</div>
+              <div class="v">Fast</div>
+              <div class="s">“Hard to see it taking longer than a few years.” Loop closure via coding + research.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Hassabis: pace</div>
+              <div class="v">Cautious</div>
+              <div class="s">Science/experiments are slower; missing ingredients for “asking the question”.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>What both broadly share</h3>
+          <div class="miniGrid">
+            <div class="mini">
+              <div class="t">Upside thesis</div>
+              <div class="v">Huge</div>
+              <div class="s">AI as a “tool for science,” cures/disease, discovery, understanding.</div>
+            </div>
+            <div class="mini">
+              <div class="t">Risk thesis</div>
+              <div class="v">Real</div>
+              <div class="s">Misuse, autonomy, guardrails, and “time + coordination” constraints.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Three lenses used repeatedly</h3>
+        <div class="mini">
+          <div class="t">1) Verifiability</div>
+          <div class="s">Coding/math are “checkable”; natural science needs experiments → slower feedback loops.</div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">2) Loop-closure</div>
+          <div class="s">If models build better models end-to-end, timelines compress; hardware & training bottlenecks remain.</div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">3) Institutions</div>
+          <div class="s">Even with technical success: policy, distribution, and meaning/purpose challenges.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Key “hinge variable”</h3>
+        <div class="mini">
+          <div class="t">AI systems building AI systems</div>
+          <div class="v" style="font-size:18px;">Does the self-improvement loop close?</div>
+          <div class="s">They both point to this as the single biggest determinant of near-term acceleration.</div>
+        </div>
+        <p class="hint">
+          In the conversation, this is treated as the threshold separating “normal tech diffusion” from a
+          qualitatively different regime.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Conversation “aftertaste”</h3>
+        <div class="mini">
+          <div class="t">Optimism + urgency</div>
+          <div class="s">
+            A recurring vibe: “extraordinary capability is coming,” paired with “we are not institutionally ready.”
+          </div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">Contact framing</div>
+          <div class="s">
+            “Technological adolescence” as the pivotal era: can a civilization survive its own tools?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sectionTitle">
+      <div>
+        <h2>Timeline & stance explorer</h2>
+        <p>Switch between lenses and see the underlying logic: “fast loop” vs “science friction.”</p>
+      </div>
+      <div class="tabs" role="group" aria-label="Timeline tabs">
+        <button class="tabBtn" id="tabBoth" aria-pressed="true">Both</button>
+        <button class="tabBtn" id="tabDario" aria-pressed="false">Amodei lens</button>
+        <button class="tabBtn" id="tabDemis" aria-pressed="false">Hassabis lens</button>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="timeline" id="timelineBox">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div style="font-weight:800; font-size:15px;">“How soon?” (qualitative)</div>
+            <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.45;">
+              A simplified band from “near-term acceleration” to “end-of-decade probability.”
+            </div>
+          </div>
+          <div class="badge" id="modeBadge">Mode: BOTH</div>
+        </div>
+
+        <div class="tlBar" id="tlBar" aria-label="timeline bar (2026 → 2035)">
+          <!-- filled via JS -->
+        </div>
+        <div class="tlLabels">
+          <span>2026</span><span>2028</span><span>2030</span><span>2032</span><span>2035+</span>
+        </div>
+
+        <div class="quoteBox" id="quoteBox">
+          <p class="quote" id="quote">
+            Select a lens to see the “why” behind each timeline.
+          </p>
+          <div class="attrib">
+            <span id="attrib">—</span>
+            <span class="badge" id="tagline">driver: loop closure</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Why coding is the accelerant</h3>
+        <div class="mini">
+          <div class="t">Fast feedback → compounding</div>
+          <div class="s">
+            When outputs are verifiable (tests, proofs, compilers), models can iterate quickly,
+            making “AI helps build better AI” more plausible in the near term.
+          </div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">Why science is sticky</div>
+          <div class="s">
+            Experiments are slow, noisy, and expensive; “coming up with the question” is a different capability class.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sectionTitle">
+      <div>
+        <h2>Loop-closure simulator</h2>
+        <p>
+          A toy model (not a forecast): explore how “code/research acceleration” fights “hardware + verification friction.”
+          It outputs an <i>acceleration index</i> and a rough “ETA band” label.
+        </p>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="diagram">
+        <svg viewBox="0 0 1100 520" role="img" aria-label="Self-improvement loop diagram">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0" stop-color="rgba(20,184,166,.55)"/>
+              <stop offset="1" stop-color="rgba(139,92,246,.55)"/>
+            </linearGradient>
+            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feColorMatrix in="b" type="matrix"
+                values="1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 .35 0" result="s"/>
+              <feMerge>
+                <feMergeNode in="s"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- nodes -->
+          <g filter="url(#soft)">
+            <rect x="60" y="70" rx="22" ry="22" width="300" height="120" fill="rgba(0,0,0,.20)" stroke="rgba(34,49,95,.95)" />
+            <rect x="400" y="70" rx="22" ry="22" width="300" height="120" fill="rgba(0,0,0,.20)" stroke="rgba(34,49,95,.95)" />
+            <rect x="740" y="70" rx="22" ry="22" width="300" height="120" fill="rgba(0,0,0,.20)" stroke="rgba(34,49,95,.95)" />
+
+            <rect x="220" y="320" rx="22" ry="22" width="320" height="120" fill="rgba(0,0,0,.20)" stroke="rgba(34,49,95,.95)" />
+            <rect x="600" y="320" rx="22" ry="22" width="320" height="120" fill="rgba(0,0,0,.20)" stroke="rgba(34,49,95,.95)" />
+          </g>
+
+          <!-- arrows -->
+          <path d="M360 130 C 380 130, 390 130, 400 130" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M700 130 C 720 130, 730 130, 740 130" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+          <path d="M890 190 C 930 240, 940 260, 850 320" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M760 380 C 650 450, 560 455, 450 440" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M380 320 C 300 260, 260 240, 220 190" stroke="url(#g1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+          <!-- arrowheads -->
+          <g fill="rgba(233,238,252,.75)">
+            <polygon points="400,130 385,120 385,140"/>
+            <polygon points="740,130 725,120 725,140"/>
+            <polygon points="850,320 864,308 872,322"/>
+            <polygon points="450,440 468,434 462,452"/>
+            <polygon points="220,190 234,202 242,188"/>
+          </g>
+
+          <!-- labels -->
+          <g fill="rgba(233,238,252,.95)" font-family="var(--sans)">
+            <text x="90" y="110" font-size="18" font-weight="800">Models get good at coding</text>
+            <text x="90" y="140" font-size="14" fill="rgba(169,181,221,.95)">Verifiable outputs → fast iteration</text>
+
+            <text x="430" y="110" font-size="18" font-weight="800">Models assist AI research</text>
+            <text x="430" y="140" font-size="14" fill="rgba(169,181,221,.95)">Design, evals, tools, experiments (partial)</text>
+
+            <text x="770" y="110" font-size="18" font-weight="800">Next-gen model training</text>
+            <text x="770" y="140" font-size="14" fill="rgba(169,181,221,.95)">Compute, data, pipelines, tuning</text>
+
+            <text x="250" y="360" font-size="18" font-weight="800">Hardware & time bottlenecks</text>
+            <text x="250" y="390" font-size="14" fill="rgba(169,181,221,.95)">Chips, manufacturing, training duration</text>
+
+            <text x="630" y="360" font-size="18" font-weight="800">Verification friction</text>
+            <text x="630" y="390" font-size="14" fill="rgba(169,181,221,.95)">Natural science needs experiments</text>
+          </g>
+
+          <!-- subtitle -->
+          <text x="60" y="30" font-size="14" fill="rgba(169,181,221,.95)" font-family="var(--mono)">
+            Loop-closure: coding → research acceleration → new models (bounded by hardware + verification)
+          </text>
+        </svg>
+
+        <p class="hint">
+          This diagram encodes the conversation’s core mechanism: near-term acceleration comes from domains with tight feedback loops
+          (code/math), while real-world science & hardware slow the “full closure.”
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Toy parameters</h3>
+
+        <div class="controls" aria-label="simulator controls">
+          <div class="control">
+            <label>
+              <span>Code automation strength</span>
+              <span class="badge"><span id="vCode">70</span>/100</span>
+            </label>
+            <input id="rCode" type="range" min="0" max="100" value="70" />
+          </div>
+
+          <div class="control">
+            <label>
+              <span>Research assistance depth</span>
+              <span class="badge"><span id="vRes">55</span>/100</span>
+            </label>
+            <input id="rRes" type="range" min="0" max="100" value="55" />
+          </div>
+
+          <div class="control">
+            <label>
+              <span>Hardware bottleneck (higher = slower)</span>
+              <span class="badge"><span id="vHW">45</span>/100</span>
+            </label>
+            <input id="rHW" type="range" min="0" max="100" value="45" />
+          </div>
+
+          <div class="control">
+            <label>
+              <span>Verification friction (higher = slower)</span>
+              <span class="badge"><span id="vVer">60</span>/100</span>
+            </label>
+            <input id="rVer" type="range" min="0" max="100" value="60" />
+          </div>
+        </div>
+
+        <div class="out">
+          <div class="mini">
+            <div class="t">Acceleration index</div>
+            <div class="v" id="accIdx">—</div>
+            <div class="s">Higher means “loop closes faster” in this toy model.</div>
+          </div>
+          <div class="mini">
+            <div class="t">ETA band (label)</div>
+            <div class="v" id="etaBand">—</div>
+            <div class="s">A qualitative band based on the index.</div>
+          </div>
+        </div>
+
+        <p class="hint">
+          Interpret this as a thought tool, not a prediction. It exists to highlight the debate:
+          <b>compounding</b> vs <b>friction</b>.
+        </p>
+      </div>
+    </div>
+
+    <div class="sectionTitle">
+      <div>
+        <h2>Risk & consequence map</h2>
+        <p>Four clusters that dominated the back half: jobs, geopolitics, misuse/autonomy, and “meaning & purpose.”</p>
+      </div>
+    </div>
+
+    <div class="matrix">
+      <div class="risk">
+        <div class="riskHead">
+          <div class="name">Labor shock (entry-level first)</div>
+          <div class="tag warn">disruption risk</div>
+        </div>
+        <p>
+          The debate isn’t whether the labor market adapts; it’s whether the exponential pace overwhelms adaptation.
+        </p>
+        <ul>
+          <li><b>Near-term:</b> junior roles/internships may compress first.</li>
+          <li><b>Lag effect:</b> capability can precede adoption → “impact shows later.”</li>
+          <li><b>Policy gap:</b> institutions may not be preparing at required scale.</li>
+        </ul>
+      </div>
+
+      <div class="risk">
+        <div class="riskHead">
+          <div class="name">Geopolitics & chips</div>
+          <div class="tag danger">strategic risk</div>
+        </div>
+        <p>
+          A key claim: if you can’t coordinate globally, limiting frontier compute diffusion becomes the lever.
+        </p>
+        <ul>
+          <li><b>Coordination problem:</b> “slow down” is hard without enforcement.</li>
+          <li><b>Competition layers:</b> company race + state competition.</li>
+          <li><b>Minimum safety standards:</b> proposed as cross-border baseline.</li>
+        </ul>
+      </div>
+
+      <div class="risk">
+        <div class="riskHead">
+          <div class="name">Misuse & autonomy (deception, duplicity)</div>
+          <div class="tag danger">safety risk</div>
+        </div>
+        <p>
+          Not “doom is inevitable,” but “racing without guardrails” creates real tail risks.
+        </p>
+        <ul>
+          <li><b>Misuse:</b> biosecurity, bad actors, nation states.</li>
+          <li><b>Alignment:</b> interpretability and control as an active research agenda.</li>
+          <li><b>Deployment:</b> incentives may under-provision safety work without coordination.</li>
+        </ul>
+      </div>
+
+      <div class="risk">
+        <div class="riskHead">
+          <div class="name">Meaning & purpose (post-scarcity vibes)</div>
+          <div class="tag ok">human challenge</div>
+        </div>
+        <p>
+          Even if wealth distribution is solved, the “human condition” question remains:
+          what anchors purpose when jobs don’t?
+        </p>
+        <ul>
+          <li><b>New meaning spaces:</b> art, sport, exploration, community, learning.</li>
+          <li><b>Opportunity:</b> “capability overhang” lets individuals leapfrog skills.</li>
+          <li><b>Time pressure:</b> 5–10 years is not long for social adaptation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sectionTitle">
+      <div>
+        <h2>“What changes by next year?”</h2>
+        <p>The closing notes point to a watchlist of breakthroughs that would shift the entire landscape.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Watchlist: self-improvement</h3>
+        <div class="mini">
+          <div class="t">Signal</div>
+          <div class="s">Models increasingly doing end-to-end engineering & research loops with minimal human intervention.</div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">Counter-signal</div>
+          <div class="s">Hardware/training or verification becomes the limiting reagent → slows compounding.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Watchlist: missing ingredients</h3>
+        <div class="mini">
+          <div class="t">World models / continual learning</div>
+          <div class="s">Richer internal models of reality + learning beyond static training runs.</div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">Scientific creativity</div>
+          <div class="s">Not just solving problems—forming hypotheses, selecting questions, building theories.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Watchlist: robotics breakout</h3>
+        <div class="mini">
+          <div class="t">Physical AI</div>
+          <div class="s">Autonomy meets the messy world → may be the next “hard frontier.”</div>
+        </div>
+        <div class="mini" style="margin-top:10px;">
+          <div class="t">Societal pacing</div>
+          <div class="s">Both implicitly prefer “more time” to get governance and safety right.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+        <div>
+          <b>Note:</b> This infographic is based on the user-provided transcript excerpt and paraphrases key ideas.
+          It is not a verbatim record and should not be treated as a formal policy statement by any party.
+        </div>
+        <div class="badge">Single-file • No external deps • Copy-paste ready</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Timeline rendering ----------
+    const tlBar = document.getElementById("tlBar");
+    const modeBadge = document.getElementById("modeBadge");
+    const quoteEl = document.getElementById("quote");
+    const attribEl = document.getElementById("attrib");
+    const taglineEl = document.getElementById("tagline");
+
+    const YEARS = ["2026","2027","2028","2029","2030","2031","2032","2033","2034","2035","2036","2037+"];
+
+    // Which nodes "light up" for each lens (qualitative band)
+    const bands = {
+      BOTH:  { on:[0,1,2,3,4,5,6], badge:"Mode: BOTH",
+        quote:"Shared hinge: if the “AI builds AI” loop closes in code/math first, acceleration is plausible; science + hardware add friction.",
+        attrib:"— Synthesis of both speakers’ constraints",
+        tag:"driver: loop closure + friction"
+      },
+      DARIO: { on:[0,1,2,3,4], badge:"Mode: AMODEI LENS",
+        quote:"Core claim: coding and parts of AI research are compounding fast; hard to imagine the timeline stretching very long beyond “a few years.”",
+        attrib:"— Amodei-style reasoning: compounding via code → faster model dev",
+        tag:"driver: exponential compounding"
+      },
+      DEMIS: { on:[2,3,4,5,6,7], badge:"Mode: HASSABIS LENS",
+        quote:"Core caution: verifiable domains move fastest, but natural science requires experiments and “asking the question” may be a missing ingredient—pushing timelines out.",
+        attrib:"— Hassabis-style reasoning: verification + creativity bottlenecks",
+        tag:"driver: verification & creativity"
+      }
+    };
+
+    function renderTimeline(mode){
+      tlBar.innerHTML = "";
+      const set = new Set(bands[mode].on);
+      YEARS.forEach((y, i) => {
+        const node = document.createElement("div");
+        node.className = "tlNode" + (set.has(i) ? " on" : "");
+        node.title = y;
+        tlBar.appendChild(node);
+      });
+
+      modeBadge.textContent = bands[mode].badge;
+      quoteEl.textContent = bands[mode].quote;
+      attribEl.textContent = bands[mode].attrib;
+      taglineEl.textContent = bands[mode].tag;
+    }
+
+    // ---------- Tabs ----------
+    const tabBoth = document.getElementById("tabBoth");
+    const tabDario = document.getElementById("tabDario");
+    const tabDemis = document.getElementById("tabDemis");
+
+    function setPressed(activeBtn){
+      [tabBoth, tabDario, tabDemis].forEach(b => b.setAttribute("aria-pressed","false"));
+      activeBtn.setAttribute("aria-pressed","true");
+    }
+
+    tabBoth.addEventListener("click", () => { setPressed(tabBoth); renderTimeline("BOTH"); });
+    tabDario.addEventListener("click", () => { setPressed(tabDario); renderTimeline("DARIO"); });
+    tabDemis.addEventListener("click", () => { setPressed(tabDemis); renderTimeline("DEMIS"); });
+
+    // Initial render
+    renderTimeline("BOTH");
+
+    // ---------- Simulator ----------
+    const rCode = document.getElementById("rCode");
+    const rRes  = document.getElementById("rRes");
+    const rHW   = document.getElementById("rHW");
+    const rVer  = document.getElementById("rVer");
+
+    const vCode = document.getElementById("vCode");
+    const vRes  = document.getElementById("vRes");
+    const vHW   = document.getElementById("vHW");
+    const vVer  = document.getElementById("vVer");
+
+    const accIdx = document.getElementById("accIdx");
+    const etaBand = document.getElementById("etaBand");
+
+    // Toy math: acceleration rises with code+research, falls with hardware+verification.
+    // Nonlinear to emphasize compounding and friction.
+    function compute(){
+      const C = +rCode.value / 100;
+      const R = +rRes.value  / 100;
+      const H = +rHW.value   / 100;
+      const V = +rVer.value  / 100;
+
+      vCode.textContent = Math.round(C*100);
+      vRes.textContent  = Math.round(R*100);
+      vHW.textContent   = Math.round(H*100);
+      vVer.textContent  = Math.round(V*100);
+
+      // "compounding" term (bounded)
+      const comp = Math.pow(0.55*C + 0.45*R, 1.35);
+
+      // "friction" term (bounded)
+      const fric = Math.pow(0.50*H + 0.50*V, 1.20);
+
+      // Index in [0..200]-ish
+      const idx = Math.max(0, Math.min(2, (0.15 + 1.85*comp) * (1.05 - 0.85*fric))) * 100;
+
+      accIdx.textContent = idx.toFixed(0);
+
+      let band;
+      if (idx >= 130) band = "Near-term surge (≈1–2y)";
+      else if (idx >= 95) band = "Fast (≈2–4y)";
+      else if (idx >= 65) band = "Moderate (≈4–7y)";
+      else if (idx >= 40) band = "Slow (≈7–12y)";
+      else band = "Stalled / friction-dominated";
+
+      etaBand.textContent = band;
+    }
+
+    [rCode, rRes, rHW, rVer].forEach(el => el.addEventListener("input", compute));
+    compute();
+  </script>
+</body>
+</html>

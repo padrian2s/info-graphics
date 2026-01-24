@@ -1,0 +1,1533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Age of Disposable Software — Interactive Infographic</title>
+  <meta name="description" content="An interactive infographic explaining what 'disposable software' really means: code cost collapsing, attention as the true constraint, and why strategy diverges for developer tools vs enterprise SaaS." />
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1222;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+      --stroke2: rgba(255,255,255,.22);
+      --text:#EAF0FF;
+      --muted: rgba(234,240,255,.72);
+      --muted2: rgba(234,240,255,.55);
+      --good:#57E3A7;
+      --warn:#FFCE5C;
+      --bad:#FF6B8B;
+      --accent:#7C5CFF;
+      --accent2:#17C3FF;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(124,92,255,.20), transparent 55%),
+        radial-gradient(800px 520px at 85% 18%, rgba(23,195,255,.16), transparent 55%),
+        radial-gradient(900px 700px at 40% 100%, rgba(87,227,167,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 70%, #090C16);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px 80px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(7,10,18,.92), rgba(7,10,18,.60));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar-inner{
+      max-width:1200px; margin:0 auto; padding:14px 20px;
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+    }
+    .brand{display:flex; gap:10px; align-items:center}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background:
+        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.0) 60%),
+        linear-gradient(135deg, rgba(124,92,255,.9), rgba(23,195,255,.9));
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .brand h1{
+      font-size:14px; margin:0; letter-spacing:.2px;
+      color:rgba(234,240,255,.92);
+      font-weight:700;
+    }
+    .brand .sub{font-size:12px; color:var(--muted2); margin-top:2px}
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav a{
+      text-decoration:none;
+      font-size:12px;
+      color:var(--muted);
+      padding:8px 10px;
+      border:1px solid transparent;
+      border-radius:999px;
+      transition:.18s ease;
+    }
+    .nav a:hover{border-color:rgba(255,255,255,.18); background:rgba(255,255,255,.04)}
+    .nav a.active{border-color:rgba(124,92,255,.55); background:rgba(124,92,255,.10); color:rgba(234,240,255,.95)}
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.92);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:12px;
+      cursor:pointer;
+      transition:.18s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.22)}
+    .btn.primary{
+      border-color: rgba(124,92,255,.55);
+      background: linear-gradient(135deg, rgba(124,92,255,.22), rgba(23,195,255,.14));
+    }
+
+    header.hero{
+      padding:52px 0 26px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      header.hero{grid-template-columns:1fr; padding-top:36px}
+      .actions{display:none}
+    }
+    .hero-card{
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: var(--radius2);
+      padding:26px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(600px 220px at 20% 10%, rgba(124,92,255,.18), transparent 60%),
+                  radial-gradient(540px 220px at 80% 0%, rgba(23,195,255,.14), transparent 60%);
+      pointer-events:none;
+      filter:saturate(1.15);
+    }
+    .hero-card > *{position:relative; z-index:1}
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(234,240,255,.80);
+      border:1px solid rgba(255,255,255,.16);
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.18);
+      margin-bottom:14px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:99px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 5px rgba(124,92,255,.10);
+    }
+    .hero-title{
+      margin:0 0 10px;
+      font-size:44px;
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .hero-title span{
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(23,195,255,.90), rgba(87,227,167,.88));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .lede{
+      margin:0;
+      font-size:15px;
+      line-height:1.55;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+    .pill-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .pill{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      border-radius:999px;
+      padding:9px 10px;
+      font-size:12px;
+      color: rgba(234,240,255,.86);
+      display:inline-flex; gap:8px; align-items:center;
+    }
+    .pill b{font-family:var(--mono); font-weight:700; color:rgba(234,240,255,.92)}
+    .hero-side{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius2);
+      padding:20px;
+      box-shadow: var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-side:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(520px 260px at 60% 20%, rgba(87,227,167,.14), transparent 60%);
+      pointer-events:none;
+    }
+    .hero-side > *{position:relative; z-index:1}
+    .mini-title{font-size:13px; margin:0; color:rgba(234,240,255,.88)}
+    .mini{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background: rgba(0,0,0,.12);
+      padding:14px;
+    }
+    .mini p{margin:8px 0 0; color:var(--muted2); font-size:12px; line-height:1.55}
+    .metric-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .metric{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background: rgba(255,255,255,.04);
+      padding:12px;
+    }
+    .metric .label{font-size:11px; color:var(--muted2); margin-bottom:6px}
+    .metric .value{font-size:16px; font-family:var(--mono); letter-spacing:.2px}
+    .value.good{color:rgba(87,227,167,.92)}
+    .value.warn{color:rgba(255,206,92,.95)}
+    .value.bad{color:rgba(255,107,139,.95)}
+
+    section{margin-top:22px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card.soft{
+      box-shadow:none;
+      background: rgba(255,255,255,.04);
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+    .subgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){
+      .subgrid{grid-template-columns:1fr}
+    }
+
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px; font-family:var(--mono);
+      padding:7px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color: rgba(234,240,255,.84);
+      margin-bottom:10px;
+    }
+    .badge .sq{
+      width:10px; height:10px; border-radius:4px;
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(23,195,255,.95));
+    }
+
+    .canvas-wrap{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius: 16px;
+      padding:12px;
+      margin-top:12px;
+    }
+    canvas{width:100%; height:230px; display:block}
+    .controls{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .controls label{
+      font-size:12px;
+      color: var(--muted2);
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    input[type="range"]{
+      width:180px;
+      accent-color: var(--accent2);
+    }
+    .seg{
+      display:inline-flex;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      overflow:hidden;
+      background: rgba(255,255,255,.04);
+    }
+    .seg button{
+      border:0;
+      background:transparent;
+      color: rgba(234,240,255,.72);
+      font-size:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .seg button.active{
+      background: rgba(124,92,255,.18);
+      color: rgba(234,240,255,.92);
+    }
+
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:12px 14px;
+    }
+    details + details{margin-top:10px}
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:13px;
+      color: rgba(234,240,255,.88);
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{opacity:.7; font-family:var(--mono)}
+    details[open] .chev{transform: rotate(90deg)}
+    .note{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .compare{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){ .compare{grid-template-columns:1fr} }
+    .box{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .box h3{margin:0 0 6px; font-size:13px}
+    .box .meta{font-family:var(--mono); font-size:12px; color:rgba(234,240,255,.80)}
+    .box ul{margin:10px 0 0 18px; padding:0; color:var(--muted); font-size:12px; line-height:1.6}
+    .box .tag{
+      position:absolute; top:10px; right:10px;
+      font-family:var(--mono);
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.78);
+    }
+
+    .tabs{
+      margin-top:12px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .tab{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      padding:10px 12px;
+      border-radius: 999px;
+      font-size:12px;
+      cursor:pointer;
+      color: rgba(234,240,255,.80);
+      transition:.18s ease;
+    }
+    .tab.active{
+      border-color: rgba(23,195,255,.55);
+      background: rgba(23,195,255,.12);
+      color: rgba(234,240,255,.95);
+    }
+    .panel{
+      margin-top:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .panel h3{margin:0 0 6px; font-size:14px}
+    .panel p{margin:0; color:var(--muted); font-size:12.5px; line-height:1.65}
+    .panel .examples{
+      margin-top:10px;
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .chip{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:7px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.80);
+    }
+
+    .bar-wrap{
+      margin-top:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .bars{display:grid; gap:10px}
+    .bar{
+      display:grid;
+      grid-template-columns: 140px 1fr 66px;
+      gap:12px;
+      align-items:center;
+    }
+    @media (max-width:680px){ .bar{grid-template-columns: 110px 1fr 54px} }
+    .bar .name{font-size:12px; color:rgba(234,240,255,.84)}
+    .track{
+      height:12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .fill{
+      height:100%;
+      width:40%;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(124,92,255,.85), rgba(23,195,255,.85));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.10) inset;
+    }
+    .pct{font-family:var(--mono); font-size:12px; color:rgba(234,240,255,.75); text-align:right}
+
+    .sim{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width:980px){ .sim{grid-template-columns:1fr} }
+    .form{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width:680px){ .row{grid-template-columns:1fr} }
+    .field label{
+      display:block;
+      font-size:11px;
+      color: var(--muted2);
+      margin-bottom:6px;
+    }
+    .field input, .field select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.92);
+      padding:10px 10px;
+      border-radius: 12px;
+      outline:none;
+      font-size:12.5px;
+    }
+    .field input:focus, .field select:focus{border-color: rgba(23,195,255,.55)}
+    .results{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .callout{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      padding:12px;
+    }
+    .callout .h{
+      font-size:12px;
+      font-family:var(--mono);
+      color: rgba(234,240,255,.84);
+      margin-bottom:6px;
+    }
+    .callout .v{
+      font-size:18px;
+      font-family:var(--mono);
+      letter-spacing:.2px;
+    }
+    .callout small{display:block; margin-top:6px; font-size:11px; color:var(--muted2); line-height:1.5}
+    .hr{height:1px; background: rgba(255,255,255,.10); margin:10px 0}
+
+    .ladder{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      display:grid;
+      grid-template-columns: 34px 1fr;
+      gap:10px;
+      align-items:start;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .num{
+      width:34px; height:34px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(234,240,255,.92);
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(124,92,255,.18), rgba(23,195,255,.10));
+    }
+    .step h4{margin:0; font-size:13px}
+    .step p{margin:6px 0 0; color:var(--muted); font-size:12.5px; line-height:1.65}
+
+    .quiz{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width:980px){ .quiz{grid-template-columns:1fr} }
+    .q{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .q h3{margin:0 0 8px; font-size:14px}
+    .opt{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      cursor:pointer;
+      margin-top:10px;
+      transition:.16s ease;
+    }
+    .opt:hover{border-color: rgba(255,255,255,.18); transform: translateY(-1px)}
+    .opt input{margin-top:2px}
+    .feedback{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,255,255,.18);
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      font-size:12px;
+      line-height:1.6;
+      display:none;
+    }
+    .feedback.good{border-color: rgba(87,227,167,.45)}
+    .feedback.bad{border-color: rgba(255,107,139,.45)}
+    .footer{
+      margin-top:24px;
+      padding:18px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+    .footer b{color: rgba(234,240,255,.90)}
+    .muted{color: var(--muted2)}
+    .tiny{font-size:11px; color: var(--muted2)}
+    .mono{font-family:var(--mono)}
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Disposable Software Era</h1>
+          <div class="sub">Code cost collapses • Attention stays scarce</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Section navigation">
+        <a href="#inversion">Inversion</a>
+        <a href="#two-kinds">Two Kinds</a>
+        <a href="#attention">Attention</a>
+        <a href="#buyers">Buyers</a>
+        <a href="#strategy">Strategy</a>
+      </nav>
+
+      <div class="actions">
+        <button class="btn" id="collapseAll">Collapse</button>
+        <button class="btn primary" id="printBtn">Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="hero-card">
+        <div class="kicker"><span class="dot"></span><span class="mono">THESIS</span> • “Disposable” is economics, not vibes</div>
+        <h2 class="hero-title">When software cost → <span>~0</span>, the bottleneck becomes <span>attention</span>.</h2>
+        <p class="lede">
+          The current discourse often treats “disposable software” as a single thing. It isn’t.
+          It splits into <b>personal throwaway apps</b> and <b>disposable features inside products</b>.
+          Those two modes have different winners, different org shapes, and different failure modes.
+        </p>
+
+        <div class="pill-row">
+          <div class="pill"><b>Cost of code</b> <span class="muted">collapsing</span></div>
+          <div class="pill"><b>Cost of attention</b> <span class="muted">unchanged</span></div>
+          <div class="pill"><b>Enterprise buyers</b> <span class="muted">buy reliability</span></div>
+          <div class="pill"><b>Next edge</b> <span class="muted">proactively reliable agents</span></div>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <div class="mini">
+          <p class="mini-title"><b>Map of the argument</b></p>
+          <p>
+            1) Industry inversion (code is cheap) → 2) Attention is the constraint →
+            3) Two different “disposable” phenomena → 4) Developer tolerance vs enterprise trust →
+            5) Strategy diverges: <b>speed</b> vs <b>reliability → proactivity</b>.
+          </p>
+        </div>
+
+        <div class="metric-row" aria-label="Key contrasts">
+          <div class="metric">
+            <div class="label">Cheap now</div>
+            <div class="value good">Generating code</div>
+          </div>
+          <div class="metric">
+            <div class="label">Still scarce</div>
+            <div class="value warn">Directing attention</div>
+          </div>
+          <div class="metric">
+            <div class="label">Developer tools</div>
+            <div class="value good">Tolerate change</div>
+          </div>
+          <div class="metric">
+            <div class="label">Enterprise SaaS</div>
+            <div class="value bad">Punish breakage</div>
+          </div>
+        </div>
+
+        <div class="mini">
+          <p class="mini-title"><b>One sentence</b></p>
+          <p>
+            <span class="mono">Disposable software</span> means you can produce alternatives cheaply,
+            but you still pay (hard) for <b>choosing goals</b>, <b>maintaining</b>, and <b>earning trust</b>.
+          </p>
+        </div>
+      </aside>
+    </header>
+
+    <!-- INVERSION -->
+    <section id="inversion" class="grid">
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>INDUSTRY INVERSION</span></div>
+        <h2>What changed: the cost curve flipped</h2>
+        <p>
+          For decades, software cost mostly meant engineering cost. If engineering is expensive, you plan heavily.
+          When code generation becomes cheap, the planning layer can become overhead — <i>but only in contexts where users tolerate variance</i>.
+        </p>
+
+        <div class="canvas-wrap" role="img" aria-label="Chart: code cost collapses, attention cost stays high">
+          <canvas id="costCanvas" width="980" height="260"></canvas>
+        </div>
+
+        <div class="controls">
+          <label>
+            AI leverage
+            <input id="aiLever" type="range" min="0" max="100" value="78" />
+            <span class="mono" id="aiLeverVal">78</span>
+          </label>
+
+          <div class="seg" role="tablist" aria-label="Era toggle">
+            <button class="active" id="eraOld" type="button">1970–2023</button>
+            <button id="eraNew" type="button">2024–2026</button>
+          </div>
+
+          <button class="btn" id="reroll">Animate</button>
+        </div>
+
+        <div class="note">
+          <b class="mono">Reading the chart:</b> As AI leverage rises, <b>code cost</b> drops rapidly.
+          <b>Attention cost</b> (goal-setting, reviewing, maintaining, building trust) stays stubbornly high.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>THE “BROWSER” PARABLE</span></div>
+        <h2>Code can appear fast — but attention still pays the bill</h2>
+        <p>
+          Even if agents can generate massive codebases quickly, someone still must decide the goal,
+          configure the run, review outcomes, and keep the system correct as reality changes.
+        </p>
+
+        <div class="compare" aria-label="Comparison: agent-swarm alpha vs classic engineering beta">
+          <div class="box">
+            <div class="tag">Agent swarm</div>
+            <h3>“One-week alpha”</h3>
+            <div class="meta">Output: lots of code • Input: sustained attention</div>
+            <ul>
+              <li>Task setup + coordination</li>
+              <li>Review, debug, harden</li>
+              <li>Maintenance as standards evolve</li>
+            </ul>
+          </div>
+          <div class="box">
+            <div class="tag">Classic build</div>
+            <h3>“Two-year beta”</h3>
+            <div class="meta">Output: polished product • Input: many engineers</div>
+            <ul>
+              <li>Specs, testing, tooling</li>
+              <li>Long feedback loops</li>
+              <li>Stability as a default</li>
+            </ul>
+          </div>
+        </div>
+
+        <details style="margin-top:12px" open>
+          <summary>Key distinction: <b>generation</b> vs <b>direction</b> <span class="chev">›</span></summary>
+          <div class="note">
+            <b>Generation collapsed.</b> Directing attention toward a goal did not.
+            When people say “software is free now,” they often mean “typing code is cheap now.”
+            But choosing what to build, validating it, and owning it over time is still expensive.
+          </div>
+        </details>
+
+        <details>
+          <summary>Why this matters: disposability changes rituals <span class="chev">›</span></summary>
+          <div class="note">
+            Heavy planning, alignment meetings, and long roadmaps were insurance against expensive mistakes.
+            When features are cheap to try, insurance can become drag — <i>but only where the customer accepts change</i>.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- TWO KINDS -->
+    <section id="two-kinds" class="grid">
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>DISPOSABLE ≠ ONE THING</span></div>
+        <h2>Two phenomena wearing the same name</h2>
+        <p>
+          Click to switch modes. Each has different “what good looks like,” different risks, and different winners.
+        </p>
+
+        <div class="tabs" role="tablist" aria-label="Disposable modes tabs">
+          <button class="tab active" data-mode="personal" type="button">1) Personal throwaway software</button>
+          <button class="tab" data-mode="features" type="button">2) Disposable features in products</button>
+        </div>
+
+        <div class="panel" id="modePanel" role="region" aria-live="polite">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="note">
+          <b class="mono">Rule of thumb:</b> Personal disposability is democratization. Product-feature disposability is a strategy bet —
+          it can win in developer markets and fail spectacularly in trust markets.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>RITUALS THAT DIE</span></div>
+        <h2>When software is cheap, “planning as insurance” changes</h2>
+        <p>
+          Not “no planning.” But many rituals grew around expensive software. Cheap iteration shifts the balance from
+          <b>predict</b> → <b>probe</b>.
+        </p>
+
+        <details open>
+          <summary>What becomes overhead in high-variance markets <span class="chev">›</span></summary>
+          <div class="note">
+            Long design docs, heavyweight specs, alignment meetings, and fixed roadmaps can become less useful
+            when you can ship and learn quickly. The “insurance” premium starts to look like waste.
+          </div>
+        </details>
+
+        <details>
+          <summary>What still matters everywhere: vision <span class="chev">›</span></summary>
+          <div class="note">
+            A compelling product direction is not optional. Disposability changes execution cadence,
+            not the need for taste, priorities, and clarity about what game you’re playing.
+          </div>
+        </details>
+
+        <details>
+          <summary>Structural tension: iteration vs stability <span class="chev">›</span></summary>
+          <div class="note">
+            Maximum iteration speed demands churn. Stability demands continuity.
+            You can’t fully maximize both at the same time; your customer decides which one pays.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ATTENTION SIM -->
+    <section id="attention" class="card">
+      <div class="badge"><span class="sq"></span><span>THE REAL CONSTRAINT</span></div>
+      <h2>Attention budget simulator: “free software” still has opportunity cost</h2>
+      <p>
+        This toy model helps make the argument concrete: even if code generation is cheap, building internal systems
+        competes with higher-value work for the same people’s time.
+      </p>
+
+      <div class="sim">
+        <div class="form" aria-label="Simulator inputs">
+          <div class="row">
+            <div class="field">
+              <label>Builder fully-loaded cost (per hour)</label>
+              <input id="costPerHour" type="number" min="10" step="10" value="120" />
+            </div>
+            <div class="field">
+              <label>Hours/week diverted to “vibe-coded internal tool”</label>
+              <input id="hoursDiverted" type="number" min="1" step="1" value="25" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Value created per builder hour on core product</label>
+              <input id="coreValue" type="number" min="0" step="50" value="900" />
+            </div>
+            <div class="field">
+              <label>Seats you’d “save” by replacing SaaS</label>
+              <input id="seats" type="number" min="1" step="1" value="120" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>SaaS cost per seat / month</label>
+              <input id="seatCost" type="number" min="1" step="1" value="85" />
+            </div>
+            <div class="field">
+              <label>Maintenance burden (hours/week)</label>
+              <input id="maintHours" type="number" min="0" step="1" value="10" />
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn primary" id="calcBtn" type="button">Recalculate</button>
+            <button class="btn" id="resetBtn" type="button">Reset</button>
+            <span class="tiny">Tip: push core value up and watch “free” tools get expensive.</span>
+          </div>
+
+          <div class="note">
+            <b class="mono">Interpretation:</b> If core work produces asymmetric value, diverting attention to internal tools rarely pencils out —
+            even when the tool is “cheap to build.”
+          </div>
+        </div>
+
+        <div class="results" aria-label="Simulator results">
+          <div class="callout">
+            <div class="h">Annual SaaS spend avoided</div>
+            <div class="v" id="saasAvoided">—</div>
+            <small>Seats × cost/seat/month × 12</small>
+          </div>
+
+          <div class="callout">
+            <div class="h">Annual attention cost (diverted + maintenance)</div>
+            <div class="v" id="attentionCost">—</div>
+            <small>(Hours diverted + maint) × builder cost × 52</small>
+          </div>
+
+          <div class="callout">
+            <div class="h">Annual opportunity cost (foregone core value)</div>
+            <div class="v" id="oppCost">—</div>
+            <small>(Hours diverted + maint) × core value × 52</small>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="callout">
+            <div class="h">Verdict</div>
+            <div class="v" id="verdict">—</div>
+            <small id="verdictNote">—</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUYERS / TOLERANCE -->
+    <section id="buyers" class="grid">
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>WHO TOLERATES CHANGE?</span></div>
+        <h2>The tolerance gap is structural</h2>
+        <p>
+          Disposability works when customers accept variance. It fails when customers are paying for peace of mind.
+          Here’s a simple “tolerance to instability” sketch.
+        </p>
+
+        <div class="bar-wrap" aria-label="Tolerance bars">
+          <div class="bars" id="toleranceBars"></div>
+          <div class="note">
+            <b class="mono">Why it matters:</b> If even the most change-tolerant users complain at full speed,
+            the strategy won’t generalize to buyers whose job is avoiding risk.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>ENTERPRISE ≠ FEATURES</span></div>
+        <h2>Enterprise buyers are buying reliability</h2>
+        <p>
+          They want software they can ignore. That’s why contracts come with SLAs, uptime promises,
+          and “someone to call” when the system is down.
+        </p>
+
+        <details open>
+          <summary>Why “we’ll all vibe-code our own Salesforce” breaks <span class="chev">›</span></summary>
+          <div class="note">
+            The flaw isn’t code generation. It’s attention + maintenance.
+            Building internal replacements pulls your best people away from higher-value work,
+            then traps them in an ongoing security/maintenance loop on a non-core system.
+          </div>
+        </details>
+
+        <details>
+          <summary>Disposable features clash with trust markets <span class="chev">›</span></summary>
+          <div class="note">
+            Finance and HR teams don’t want the interface rearranging itself every week.
+            They want Tuesday to look like Monday, and next quarter to look like this quarter.
+            Reliability is the product.
+          </div>
+        </details>
+
+        <details>
+          <summary>So what’s the AI edge for enterprise? <span class="chev">›</span></summary>
+          <div class="note">
+            Not “a chatbot.” Reactive AI waits to be asked.
+            The compelling edge is <b>proactive</b> capability — but only after reliability earns trust.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- STRATEGY -->
+    <section id="strategy" class="grid">
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>PLAY THE RIGHT GAME</span></div>
+        <h2>Choose your market → get your operating system</h2>
+        <p>
+          Pick a buyer type and interface style. This generator will suggest an execution philosophy aligned with the argument.
+        </p>
+
+        <div class="form" style="margin-top:12px">
+          <div class="row">
+            <div class="field">
+              <label>Primary buyer persona</label>
+              <select id="buyerType">
+                <option value="dev" selected>Developers / frontier adopters</option>
+                <option value="biz">CIO / enterprise risk owner</option>
+                <option value="mixed">Mixed audience (dev + non-dev)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Interface shape</label>
+              <select id="uiShape">
+                <option value="terminal" selected>Simple / stable (terminal-like)</option>
+                <option value="gui">Complex GUI (many knobs, visible changes)</option>
+                <option value="workflow">Workflow UI (plan + actions visible)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn primary" id="genStrategy" type="button">Generate strategy</button>
+            <span class="tiny">Aim: align speed vs trust, then align interface to change rate.</span>
+          </div>
+        </div>
+
+        <div class="panel" id="strategyOut" style="margin-top:12px">
+          <h3>Suggested operating model</h3>
+          <p class="muted">Select inputs and click “Generate strategy”.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="badge"><span class="sq"></span><span>PROACTIVELY RELIABLE</span></div>
+        <h2>The enterprise ladder: reliability → autonomy</h2>
+        <p>
+          Proactive agents create value users didn’t know they were missing — but only when trust is deep enough
+          that users don’t feel forced to supervise every action.
+        </p>
+
+        <div class="ladder" aria-label="Proactive reliability ladder">
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <h4>Reliability baseline</h4>
+              <p>Uptime, security hygiene, predictable UX, support. Trust comes first.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <h4>Suggest, don’t act</h4>
+              <p>Agent surfaces insights and drafts actions — user approves. Build a track record.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <h4>Low-stakes autonomy</h4>
+              <p>Autonomous actions where mistakes are reversible (drafts, alerts, safe updates).</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">4</div>
+            <div>
+              <h4>Expand scope with guardrails</h4>
+              <p>Policies, audit logs, explainable plans, rollbacks. Autonomy increases with proof.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">5</div>
+            <div>
+              <h4>Quiet competence</h4>
+              <p>The agent just does the right thing. Users stop “checking” because it’s never wrong.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          <b class="mono">Interface hint:</b> Simpler, stable surfaces (terminal, workflow “show your work”) absorb fast backend change
+          without constantly re-teaching users.
+        </div>
+      </div>
+    </section>
+
+    <!-- FOUR MISTAKES QUIZ -->
+    <section class="card">
+      <div class="badge"><span class="sq"></span><span>THE DISCOURSE FAILS HERE</span></div>
+      <h2>Mini-quiz: spot the 4 common mistakes</h2>
+      <p>
+        Choose the answer that matches the argument. You’ll get instant feedback.
+      </p>
+
+      <div class="quiz" id="quiz">
+        <div class="q" data-q="1">
+          <h3>1) “If you can vibe-code a vacation app, you can vibe-code enterprise SaaS replacements.”</h3>
+          <div class="opt"><input type="radio" name="q1" value="a" /><div><b>A</b> • True, software is basically free now.</div></div>
+          <div class="opt"><input type="radio" name="q1" value="b" /><div><b>B</b> • False, categories differ; enterprise buys reliability + attention costs remain.</div></div>
+          <div class="feedback" id="f1"></div>
+        </div>
+
+        <div class="q" data-q="2">
+          <h3>2) What stayed scarce even as code generation got cheap?</h3>
+          <div class="opt"><input type="radio" name="q2" value="a" /><div><b>A</b> • GPUs.</div></div>
+          <div class="opt"><input type="radio" name="q2" value="b" /><div><b>B</b> • Attention: goal-setting, review, maintenance, trust building.</div></div>
+          <div class="feedback" id="f2"></div>
+        </div>
+
+        <div class="q" data-q="3">
+          <h3>3) Why does “ship constantly” work best in a small market slice?</h3>
+          <div class="opt"><input type="radio" name="q3" value="a" /><div><b>A</b> • Because only developers tolerate rapid changes and breakage.</div></div>
+          <div class="opt"><input type="radio" name="q3" value="b" /><div><b>B</b> • Because VCs don’t like roadmaps.</div></div>
+          <div class="feedback" id="f3"></div>
+        </div>
+
+        <div class="q" data-q="4">
+          <h3>4) What is the durable enterprise AI edge (beyond chatbots)?</h3>
+          <div class="opt"><input type="radio" name="q4" value="a" /><div><b>A</b> • Proactively reliable agents that take correct action with earned trust.</div></div>
+          <div class="opt"><input type="radio" name="q4" value="b" /><div><b>B</b> • More frequent UI redesigns to prove innovation.</div></div>
+          <div class="feedback" id="f4"></div>
+        </div>
+      </div>
+
+      <div class="note">
+        <b class="mono">Takeaway:</b> “Disposable” is not a universal strategy. It’s context-dependent. Know your buyer, then optimize for the constraint they pay for.
+      </div>
+    </section>
+
+    <div class="footer">
+      <b>Use this as a page template:</b> This HTML is self-contained and offline-friendly (no external fonts/libraries).
+      You can paste it into a file like <span class="mono">disposable-software.html</span> and open it in your browser.
+      <div class="hr"></div>
+      <div class="tiny">
+        <b>Note:</b> The narrative includes examples/claims (valuations, adoption stats, security assertions) as part of the argument text you provided.
+        If you want this page to be “source-backed,” you can add citations and links in the relevant cards.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const fmtMoney = (n) => {
+      const sign = n < 0 ? "-" : "";
+      n = Math.abs(n);
+      if (!isFinite(n)) return "—";
+      return sign + n.toLocaleString(undefined, {style:"currency", currency:"USD", maximumFractionDigits:0});
+    };
+
+    // ---------- Sticky nav active state ----------
+    const navLinks = $$(".nav a");
+    const sections = navLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+        }
+      });
+    }, {root: null, threshold: 0.35});
+    sections.forEach(s => io.observe(s));
+
+    // ---------- Collapse / Print ----------
+    $("#collapseAll").addEventListener("click", () => {
+      $$("details").forEach(d => d.open = false);
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+    $("#printBtn").addEventListener("click", () => window.print());
+
+    // ---------- Cost chart ----------
+    const c = $("#costCanvas");
+    const ctx = c.getContext("2d");
+    let era = "old"; // old | new
+    let t = 0;
+
+    function resizeCanvas(){
+      // Keep crisp on HiDPI
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      const rect = c.getBoundingClientRect();
+      c.width = Math.floor(rect.width * dpr);
+      c.height = Math.floor(230 * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+      drawChart(true);
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+    function drawAxes(w,h){
+      ctx.clearRect(0,0,w,h);
+      // background
+      ctx.fillStyle = "rgba(0,0,0,0.08)";
+      ctx.fillRect(0,0,w,h);
+
+      // grid
+      ctx.strokeStyle = "rgba(255,255,255,0.10)";
+      ctx.lineWidth = 1;
+      for (let i=0;i<=4;i++){
+        const y = 18 + i*(h-46)/4;
+        ctx.beginPath(); ctx.moveTo(12,y); ctx.lineTo(w-12,y); ctx.stroke();
+      }
+
+      // axis label
+      ctx.fillStyle = "rgba(234,240,255,0.60)";
+      ctx.font = "12px " + getComputedStyle(document.documentElement).getPropertyValue("--mono");
+      ctx.fillText("relative cost", 14, 14);
+      ctx.fillText("time →", w-78, h-10);
+    }
+
+    function plotLine(points, strokeStyle, width=2){
+      ctx.strokeStyle = strokeStyle;
+      ctx.lineWidth = width;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      points.forEach((p,i)=> {
+        if(i===0) ctx.moveTo(p.x,p.y);
+        else ctx.lineTo(p.x,p.y);
+      });
+      ctx.stroke();
+    }
+
+    function drawChart(instant=false){
+      const w = c.getBoundingClientRect().width;
+      const h = 230;
+
+      drawAxes(w,h);
+
+      const lever = Number($("#aiLever").value) / 100; // 0..1
+      const baseNoise = (Math.sin(t*0.9)*0.5 + Math.cos(t*0.7)*0.5) * 0.5;
+
+      // Construct curves (0..1) -> y
+      const x0 = 20, x1 = w - 20;
+      const yTop = 26, yBottom = h - 26;
+
+      const N = 44;
+      const codePts = [];
+      const attnPts = [];
+
+      // Old era: code cost high and declines slowly
+      // New era: code cost collapses sharply with lever
+      for (let i=0;i<N;i++){
+        const u = i/(N-1); // 0..1
+        const x = x0 + u*(x1-x0);
+
+        let code; // 0..1
+        let attn; // 0..1
+
+        if (era === "old"){
+          // slow decline; leverage has modest impact
+          code = 0.86 - 0.38*u - 0.08*lever + 0.02*Math.sin(6*u + t*0.2);
+        } else {
+          // sharp collapse; leverage increases collapse
+          // use exponential curve
+          const k = 2.8 + 4.4*lever;
+          code = 0.92 * Math.exp(-k*u) + 0.06 + 0.01*Math.sin(8*u + t*0.35);
+        }
+
+        // attention: stays high; slight improvement with leverage but asymptotes
+        attn = 0.82 - 0.14*(1 - Math.exp(-2.2*u)) - 0.06*lever + 0.01*Math.cos(7*u + t*0.25);
+
+        // clamp
+        code = Math.max(0.05, Math.min(0.95, code));
+        attn = Math.max(0.10, Math.min(0.92, attn));
+
+        const yCode = yTop + (1 - code)*(yBottom - yTop);
+        const yAttn = yTop + (1 - attn)*(yBottom - yTop);
+
+        codePts.push({x, y: yCode});
+        attnPts.push({x, y: yAttn});
+      }
+
+      // subtle glow
+      plotLine(codePts, "rgba(124,92,255,0.22)", 8);
+      plotLine(attnPts, "rgba(87,227,167,0.18)", 8);
+
+      plotLine(codePts, "rgba(124,92,255,0.88)", 2.5);
+      plotLine(attnPts, "rgba(87,227,167,0.78)", 2.5);
+
+      // legend
+      ctx.fillStyle = "rgba(234,240,255,0.86)";
+      ctx.font = "12px " + getComputedStyle(document.documentElement).getPropertyValue("--mono");
+      ctx.fillText("code cost", 18, h-44);
+      ctx.fillText("attention cost", 18, h-26);
+
+      ctx.fillStyle = "rgba(124,92,255,0.9)";
+      ctx.fillRect(110, h-53, 14, 4);
+      ctx.fillStyle = "rgba(87,227,167,0.85)";
+      ctx.fillRect(142, h-35, 14, 4);
+
+      // marker that shows "now" effect
+      const markerX = x0 + 0.78*(x1-x0);
+      const idx = Math.round(0.78*(N-1));
+      const codeY = codePts[idx].y;
+      const attnY = attnPts[idx].y;
+
+      ctx.fillStyle = "rgba(255,255,255,0.16)";
+      ctx.beginPath(); ctx.arc(markerX, codeY, 5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(markerX, attnY, 5, 0, Math.PI*2); ctx.fill();
+
+      ctx.fillStyle = "rgba(234,240,255,0.65)";
+      ctx.fillText(era === "old" ? "classic era" : "agent era", markerX+10, 18);
+    }
+
+    function animate(){
+      const start = performance.now();
+      const dur = 900;
+      function frame(now){
+        const p = Math.min(1, (now-start)/dur);
+        t = p * 6.0;
+        drawChart();
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    $("#aiLever").addEventListener("input", (e)=>{
+      $("#aiLeverVal").textContent = e.target.value;
+      drawChart(true);
+    });
+
+    $("#eraOld").addEventListener("click", ()=>{
+      era = "old";
+      $("#eraOld").classList.add("active");
+      $("#eraNew").classList.remove("active");
+      drawChart(true);
+    });
+
+    $("#eraNew").addEventListener("click", ()=>{
+      era = "new";
+      $("#eraNew").classList.add("active");
+      $("#eraOld").classList.remove("active");
+      drawChart(true);
+    });
+
+    $("#reroll").addEventListener("click", animate);
+
+    // ---------- Two kinds panel ----------
+    const modeContent = {
+      personal: {
+        title: "1) Personal throwaway software (democratization)",
+        text:
+          "A new category: software that wouldn’t have existed before, because building it wasn’t worth the effort. " +
+          "Now a non-coder can describe a need and get a working artifact. The ‘disposable’ part is that you can remake it anytime.",
+        examples: ["one-off dashboards", "vacation planner", "personal tracker", "weekend game", "quick visualization"]
+      },
+      features: {
+        title: "2) Disposable features inside products (strategy bet)",
+        text:
+          "Ship lots of variants fast, learn empirically, and only harden what sticks. " +
+          "This can be powerful in frontier markets, but it collides with reliability expectations in enterprise contexts.",
+        examples: ["rapid experiments", "A/B features", "daily shipping", "fast deprecations", "harden winners later"]
+      }
+    };
+
+    function renderMode(mode){
+      const m = modeContent[mode];
+      const panel = $("#modePanel");
+      panel.innerHTML = `
+        <h3>${m.title}</h3>
+        <p>${m.text}</p>
+        <div class="examples">
+          ${m.examples.map(x=> `<span class="chip">${x}</span>`).join("")}
+        </div>
+      `;
+    }
+
+    $$(".tab").forEach(b => b.addEventListener("click", ()=>{
+      $$(".tab").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      renderMode(b.dataset.mode);
+    }));
+    renderMode("personal");
+
+    // ---------- Tolerance bars ----------
+    const tolerance = [
+      {name:"Developers", pct:82},
+      {name:"Design teams", pct:55},
+      {name:"Ops / RevOps", pct:44},
+      {name:"Finance", pct:28},
+      {name:"HR / Payroll", pct:22},
+      {name:"CIO / Risk owner", pct:18},
+    ];
+    const bars = $("#toleranceBars");
+    bars.innerHTML = tolerance.map(t => `
+      <div class="bar">
+        <div class="name">${t.name}</div>
+        <div class="track"><div class="fill" style="width:${t.pct}%"></div></div>
+        <div class="pct">${t.pct}%</div>
+      </div>
+    `).join("");
+
+    // ---------- Attention simulator ----------
+    const defaults = {
+      costPerHour: 120,
+      hoursDiverted: 25,
+      coreValue: 900,
+      seats: 120,
+      seatCost: 85,
+      maintHours: 10
+    };
+
+    function readNum(id){
+      const v = Number($(id).value);
+      return isFinite(v) ? v : 0;
+    }
+
+    function calc(){
+      const costPerHour = readNum("#costPerHour");
+      const hoursDiverted = readNum("#hoursDiverted");
+      const coreValue = readNum("#coreValue");
+      const seats = readNum("#seats");
+      const seatCost = readNum("#seatCost");
+      const maintHours = readNum("#maintHours");
+
+      const saasAvoided = seats * seatCost * 12;
+      const attentionCost = (hoursDiverted + maintHours) * costPerHour * 52;
+      const oppCost = (hoursDiverted + maintHours) * coreValue * 52;
+
+      $("#saasAvoided").textContent = fmtMoney(saasAvoided);
+      $("#attentionCost").textContent = fmtMoney(attentionCost);
+      $("#oppCost").textContent = fmtMoney(oppCost);
+
+      // Verdict logic
+      let verdict, note;
+      const totalCost = attentionCost + oppCost;
+      const ratio = saasAvoided / Math.max(1, totalCost);
+
+      if (ratio > 1.2){
+        verdict = "Maybe worth it";
+        note = "Savings exceed attention + opportunity costs (rare if core value is high). Still consider security + long-term ownership.";
+      } else if (ratio > 0.7){
+        verdict = "Borderline";
+        note = "It depends: only pursue if the tool is strategically differentiating or if the diverted hours are truly low.";
+      } else {
+        verdict = "Don’t do it";
+        note = "You’re ‘saving’ SaaS spend by paying far more in scarce attention and foregone core value. Buy reliability instead.";
+      }
+
+      $("#verdict").textContent = verdict;
+      $("#verdictNote").textContent = note;
+    }
+
+    $("#calcBtn").addEventListener("click", calc);
+    $("#resetBtn").addEventListener("click", ()=>{
+      $("#costPerHour").value = defaults.costPerHour;
+      $("#hoursDiverted").value = defaults.hoursDiverted;
+      $("#coreValue").value = defaults.coreValue;
+      $("#seats").value = defaults.seats;
+      $("#seatCost").value = defaults.seatCost;
+      $("#maintHours").value = defaults.maintHours;
+      calc();
+    });
+
+    // live recalc on change
+    ["#costPerHour","#hoursDiverted","#coreValue","#seats","#seatCost","#maintHours"].forEach(id=>{
+      $(id).addEventListener("input", ()=> calc());
+    });
+    calc();
+
+    // ---------- Strategy generator ----------
+    function generateStrategy(){
+      const buyer = $("#buyerType").value;
+      const ui = $("#uiShape").value;
+
+      let title = "";
+      let bullets = [];
+      let caution = "";
+      let interfaceTip = "";
+
+      if (buyer === "dev"){
+        title = "Frontier market operating system: maximum speed";
+        bullets = [
+          "Ship constantly. Treat releases as experiments; harden only what sticks.",
+          "Minimize rituals whose primary function was insuring against expensive code.",
+          "Expect user churn from instability; compete on execution speed and learning loops."
+        ];
+        caution = "Speed creates structural tension with stability — even developers will push back if change becomes unpredictable.";
+      } else if (buyer === "biz"){
+        title = "Trust market operating system: reliability → proactivity";
+        bullets = [
+          "Win on reliability first (uptime, security, predictable UX, human support).",
+          "Use AI to become proactively useful (agents that act correctly without being asked).",
+          "Expand autonomy gradually: suggest → low-stakes act → broader scope with audit + rollback."
+        ];
+        caution = "If you try to be proactive before trust is earned, users will supervise everything — autonomy becomes anxiety.";
+      } else {
+        title = "Mixed market operating system: split the product in two";
+        bullets = [
+          "Define two lanes: (A) stable core with strict reliability, (B) sandbox/preview lane for fast experiments.",
+          "Make change optional: toggles, channels, and strong migration paths.",
+          "Let developers absorb variance while protecting non-dev workflows from weekly churn."
+        ];
+        caution = "Without a clear split, you’ll disappoint both groups: too slow for frontier users, too unstable for enterprise users.";
+      }
+
+      if (ui === "terminal"){
+        interfaceTip = "Interface guidance: a simple, stable surface absorbs rapid backend evolution with minimal user re-training.";
+      } else if (ui === "gui"){
+        interfaceTip = "Interface guidance: rich GUIs magnify change pain. If you ship fast, add strong preference persistence and change management.";
+      } else {
+        interfaceTip = "Interface guidance: workflow UIs that show the plan + actions build trust for proactive agents and make autonomy legible.";
+      }
+
+      const out = $("#strategyOut");
+      out.innerHTML = `
+        <h3>${title}</h3>
+        <p style="margin-top:6px">${bullets.map(b=>`• ${b}`).join("<br/>")}</p>
+        <div class="note" style="margin-top:10px"><b class="mono">Caution:</b> ${caution}</div>
+        <div class="note" style="margin-top:10px"><b class="mono">UI:</b> ${interfaceTip}</div>
+      `;
+    }
+    $("#genStrategy").addEventListener("click", generateStrategy);
+    generateStrategy();
+
+    // ---------- Quiz ----------
+    const answers = {
+      q1: {correct:"b", good:"Correct. Personal throwaway apps don’t imply enterprise SaaS replacements; attention + trust + maintenance dominate.", bad:"Not quite. The argument says categories differ; enterprise buyers pay for reliability and attention is the constraint."},
+      q2: {correct:"b", good:"Correct. Attention remains scarce: choosing goals, reviewing, maintaining, and building trust.", bad:"Nope. The point isn’t “more GPUs,” it’s that attention didn’t become abundant."},
+      q3: {correct:"a", good:"Correct. High-variance shipping generalizes poorly because most buyers punish breakage.", bad:"No — the argument is about customer tolerance and risk, not VC preferences."},
+      q4: {correct:"a", good:"Correct. The edge is proactively reliable agents, earned through trust — not reactive chatbots or constant redesign.", bad:"Not quite. Frequent UI redesigns erode trust; proactivity only works when reliability is proven."},
+    };
+
+    function bindQuestion(qNum){
+      const name = "q" + qNum;
+      $$(`input[name="${name}"]`).forEach(inp=>{
+        inp.addEventListener("change", ()=>{
+          const f = $("#f"+qNum);
+          const a = answers[name];
+          const ok = inp.value === a.correct;
+          f.style.display = "block";
+          f.classList.toggle("good", ok);
+          f.classList.toggle("bad", !ok);
+          f.textContent = ok ? a.good : a.bad;
+        });
+      });
+    }
+    [1,2,3,4].forEach(bindQuestion);
+
+    // ---------- init chart ----------
+    function init(){
+      $("#aiLeverVal").textContent = $("#aiLever").value;
+      // delay canvas sizing until layout
+      requestAnimationFrame(()=> {
+        resizeCanvas();
+        animate();
+      });
+    }
+    init();
+  </script>
+</body>
+</html>
