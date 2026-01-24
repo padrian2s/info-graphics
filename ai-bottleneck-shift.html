@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026 Builder OS — From Capability to Cognitive Architecture (Infographic)</title>
+  <meta name="description" content="An interactive infographic: why the AI bottleneck shifted from capability to systems thinking—and the 6 practices top builders use in 2026." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Systems Thinking, Cognitive Architecture, 2026, Builder Practices" />
+  <meta name="icon" content="🧠" />
+  <meta name="created" content="2026-01-23" />
+
+  <style>
+    :root{
+      --bg: #fbf7f0;
+      --paper: #fffaf2;
+      --ink: #111827;
+      --muted: #4b5563;
+      --muted2:#6b7280;
+      --line: rgba(17, 24, 39, .12);
+      --shadow: 0 18px 40px rgba(17, 24, 39, .12);
+
+      --blue:#3b82f6;
+      --purple:#8b5cf6;
+      --teal:#14b8a6;
+      --amber:#f59e0b;
+      --rose:#fb7185;
+
+      --radius: 22px;
+      --radius2: 16px;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* Subtle paper texture (no external files) */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.35;
+      background-image:
+        radial-gradient(1200px 800px at 20% 0%, rgba(59,130,246,.12), transparent 60%),
+        radial-gradient(900px 600px at 90% 12%, rgba(139,92,246,.10), transparent 60%),
+        radial-gradient(900px 700px at 20% 90%, rgba(20,184,166,.10), transparent 60%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    .wrap{ max-width: 1180px; margin: 0 auto; padding: 28px 18px 72px; position:relative; }
+
+    /* Top bar */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      padding: 14px 16px;
+      border:1px solid var(--line);
+      background: rgba(255, 250, 242, .86);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(17,24,39,.06);
+      position:sticky; top:14px; z-index:30;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 260px;
+    }
+    .logo{
+      width:40px; height:40px; border-radius: 14px;
+      background:
+        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.9), transparent 60%),
+        linear-gradient(135deg, rgba(59,130,246,.95), rgba(139,92,246,.92));
+      box-shadow: 0 14px 26px rgba(139,92,246,.22);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+      transform: rotate(25deg);
+      animation: shine 5.4s ease-in-out infinite;
+      opacity:.6;
+    }
+    @keyframes shine{
+      0%, 78% { transform: translateX(-20%) rotate(25deg); opacity:0; }
+      84% { opacity:.55; }
+      100% { transform: translateX(40%) rotate(25deg); opacity:0; }
+    }
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .brand .sub{
+      margin-top:2px;
+      font-size: 13px;
+      color: var(--muted2);
+      letter-spacing:.01em;
+    }
+    .actions{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 9px 11px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .chip b{ color: var(--ink); font-weight:700; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,.16);
+      background: rgba(255,255,255,.7);
+      cursor:pointer;
+      font-size: 13px;
+      color: var(--ink);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      box-shadow: 0 10px 24px rgba(17,24,39,.06);
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(17,24,39,.10); }
+    .btn:active{ transform: translateY(0px); box-shadow: 0 10px 24px rgba(17,24,39,.07); }
+    .btn.primary{
+      border-color: rgba(59,130,246,.35);
+      background: linear-gradient(135deg, rgba(59,130,246,.92), rgba(139,92,246,.88));
+      color:#fff;
+      box-shadow: 0 18px 40px rgba(59,130,246,.20);
+    }
+    .btn.primary:hover{ box-shadow: 0 22px 52px rgba(59,130,246,.26); }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.12);
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(255, 250, 242, .86);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card.soft{
+      box-shadow: 0 14px 34px rgba(17,24,39,.09);
+    }
+
+    .heroTitle{
+      margin:0 0 10px;
+      font-size: clamp(28px, 3.2vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .heroTitle .grad{
+      background: linear-gradient(90deg, var(--blue), var(--purple), var(--teal));
+      -webkit-background-clip:text; background-clip:text;
+      color: transparent;
+    }
+    .lede{
+      margin: 0 0 14px;
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 66ch;
+    }
+    .bulletRow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 12px;
+    }
+    .pill{
+      border:1px dashed rgba(17,24,39,.18);
+      background: rgba(255,255,255,.55);
+      padding: 9px 11px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .pill i{
+      font-style: normal;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.7);
+      color: var(--ink);
+      margin-right: 8px;
+    }
+
+    /* Right-side mini map */
+    .miniMap{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .miniHeader{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      margin-bottom: 8px;
+    }
+    .miniHeader h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .miniHeader .badge{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.55);
+      color: var(--muted);
+    }
+
+    .mapBox{
+      border-radius: 18px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.58);
+      padding: 12px;
+      overflow:hidden;
+    }
+    .mapSvg{
+      width:100%; height:auto; display:block;
+      filter: drop-shadow(0 10px 18px rgba(17,24,39,.08));
+    }
+    .mapLegend{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top: 10px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius: 50%;
+      display:inline-block; margin-right: 8px;
+    }
+    .legendItem{
+      display:flex; align-items:center; gap:8px;
+      font-size: 12.5px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.55);
+    }
+
+    /* Section layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    .sectionTitle{
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .h2{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing:-.02em;
+    }
+    .p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14.5px;
+    }
+
+    /* Bottleneck slider */
+    .meter{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.6);
+    }
+    .meterTop{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .meterTop .label{
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .meterTop .value{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted2);
+    }
+    input[type="range"]{
+      width: 100%;
+      accent-color: var(--purple);
+    }
+    .bar{
+      margin-top: 12px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,.12);
+      background: linear-gradient(90deg, rgba(59,130,246,.35), rgba(139,92,246,.35), rgba(20,184,166,.35));
+      position: relative;
+      overflow:hidden;
+    }
+    .needle{
+      position:absolute; top:-6px; width: 0; height: 26px;
+      border-left: 2px solid rgba(17,24,39,.6);
+      left: 50%;
+    }
+    .barLabels{
+      display:flex; justify-content:space-between;
+      margin-top: 10px;
+      font-size: 12.5px;
+      color: var(--muted2);
+    }
+    .callout{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 13.8px;
+    }
+    .callout b{ color: var(--ink); }
+
+    /* Practices */
+    .accordion{
+      display:flex; flex-direction:column; gap:10px;
+      margin-top: 10px;
+    }
+    details{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.58);
+      border-radius: 18px;
+      overflow:hidden;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sumLeft{
+      display:flex; align-items:center; gap:12px;
+      min-width: 0;
+    }
+    .num{
+      width:30px; height:30px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 12px;
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+      flex: 0 0 auto;
+    }
+    .sumTitle{
+      font-size: 14.5px;
+      font-weight: 750;
+      letter-spacing:-.01em;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .sumTag{
+      font-size: 12px;
+      color: var(--muted);
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.6);
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      flex: 0 0 auto;
+    }
+    .sumIcon{
+      width: 28px; height: 28px;
+      border-radius: 12px;
+      border: 1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.65);
+      display:inline-flex; align-items:center; justify-content:center;
+      flex: 0 0 auto;
+      color: rgba(17,24,39,.72);
+      transition: transform .2s ease;
+    }
+    details[open] .sumIcon{ transform: rotate(90deg); }
+    .detailBody{
+      border-top:1px solid rgba(17,24,39,.10);
+      padding: 12px 14px 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 720px){
+      .detailBody{ grid-template-columns: 1fr; }
+    }
+    .miniCard{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.58);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .miniCard h4{
+      margin:0 0 8px;
+      font-size: 13px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    ul.clean{
+      margin: 0; padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 13.8px;
+    }
+    .template{
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(17,24,39,.84);
+      white-space: pre-wrap;
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(17,24,39,.12);
+      padding: 10px;
+      border-radius: 14px;
+    }
+
+    /* Altitude control */
+    .altitude{
+      display:grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 860px){
+      .altitude{ grid-template-columns: 1fr; }
+    }
+    .altButtons{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .altBtn{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 12px;
+      border-radius: 18px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.58);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .altBtn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(17,24,39,.10); }
+    .altBtn.active{
+      border-color: rgba(59,130,246,.35);
+      box-shadow: 0 20px 46px rgba(59,130,246,.14);
+      background:
+        radial-gradient(300px 180px at 20% 0%, rgba(59,130,246,.12), transparent 60%),
+        rgba(255,255,255,.66);
+    }
+    .altIcon{
+      width:34px; height:34px;
+      border-radius: 14px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.72);
+      flex: 0 0 auto;
+    }
+    .altBtn h4{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:-.01em;
+    }
+    .altBtn p{
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .altPanel{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.62);
+      border-radius: 18px;
+      padding: 14px;
+      overflow:hidden;
+      position:relative;
+    }
+    .altPanel:before{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(closest-side at 30% 20%, rgba(20,184,166,.14), transparent 60%);
+      transform: rotate(-8deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .altPanel > *{ position:relative; z-index:2; }
+    .altPanel h3{
+      margin:0 0 8px;
+      font-size: 16px;
+      letter-spacing:-.01em;
+    }
+    .altPanel .hint{
+      color: var(--muted);
+      font-size: 13.6px;
+      line-height: 1.5;
+      margin: 0 0 12px;
+    }
+    .checkRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 620px){
+      .checkRow{ grid-template-columns: 1fr; }
+    }
+    .check{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.7);
+      border-radius: 16px;
+      padding: 10px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .check input{ margin-top: 2px; }
+    .check label{
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+      cursor:pointer;
+    }
+    .check label b{ color: var(--ink); }
+
+    /* Architecture duality */
+    .twoArch{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    @media (max-width: 720px){
+      .twoArch{ grid-template-columns: 1fr; }
+    }
+    .arch{
+      border-radius: 18px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.6);
+      padding: 14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .arch:before{
+      content:"";
+      position:absolute;
+      width:240px; height:240px;
+      border-radius: 999px;
+      filter: blur(0px);
+      opacity:.18;
+      right:-120px; top:-120px;
+      background: radial-gradient(circle at 30% 30%, var(--blue), transparent 60%);
+      pointer-events:none;
+    }
+    .arch.taste:before{
+      background: radial-gradient(circle at 30% 30%, var(--amber), transparent 60%);
+      left:-120px; right:auto; top:-120px;
+    }
+    .arch h3{
+      margin:0 0 6px;
+      font-size: 15px;
+      letter-spacing:-.01em;
+    }
+    .arch .tagline{
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+    .arch .k{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+    }
+
+    /* Plan builder */
+    .formRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 860px){
+      .formRow{ grid-template-columns: 1fr; }
+    }
+    .field{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.6);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .field label{
+      display:block;
+      font-size: 12.5px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 8px;
+    }
+    select, textarea{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.72);
+      padding: 10px 10px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink);
+      outline:none;
+    }
+    textarea{
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .choices{
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .choice{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.66);
+      font-size: 13px;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .choice:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(17,24,39,.10); }
+    .choice.active{
+      border-color: rgba(20,184,166,.35);
+      box-shadow: 0 18px 40px rgba(20,184,166,.14);
+      background:
+        radial-gradient(220px 120px at 20% 0%, rgba(20,184,166,.12), transparent 60%),
+        rgba(255,255,255,.70);
+      color: var(--ink);
+    }
+    .planOut{
+      margin-top: 12px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.62);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .planOutHeader{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .planOutHeader h3{
+      margin:0;
+      font-size: 15px;
+    }
+    .planText{
+      font-family: var(--mono);
+      font-size: 12.2px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      color: rgba(17,24,39,.82);
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(17,24,39,.12);
+      border-radius: 14px;
+      padding: 10px;
+      margin:0;
+    }
+
+    /* Footer note */
+    .footer{
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.58);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .footer b{ color: var(--ink); }
+
+    /* Print */
+    @media print{
+      .topbar, .actions, .btn, .chip{ display:none !important; }
+      body:before{ display:none; }
+      body{ background:#fff; }
+      .card{ box-shadow:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>2026 Builder OS</h1>
+          <div class="sub">The bottleneck moved: <b>capability → cognitive architecture</b></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="chip"><span class="dot" style="background:var(--blue)"></span><b>Shift</b> bottleneck</div>
+        <div class="chip"><span class="dot" style="background:var(--teal)"></span><b>6</b> practices</div>
+        <div class="chip"><span class="dot" style="background:var(--amber)"></span><b>2</b> architectures</div>
+        <button class="btn" id="btnPrint" title="Print / Save as PDF">
+          <span aria-hidden="true">🖨️</span> Print
+        </button>
+        <button class="btn primary" id="btnExport" title="Export your plan as a Markdown file">
+          <span aria-hidden="true">⬇️</span> Export Plan <span class="kbd">.md</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <h2 class="heroTitle">
+          We solved the <span class="grad">wrong problem</span>.
+        </h2>
+        <p class="lede">
+          For two years we optimized for <b>capability</b>—prompting, tools, workflows. It worked.
+          The ceiling lifted. But the frustration stayed… because the bottleneck moved.
+          In 2026, top builders aren’t winning with a secret toolset or a “magic prompt”.
+          They’re winning with <b>systems thinking</b>: a stronger <b>cognitive architecture</b> for working with agents.
+        </p>
+
+        <div class="bulletRow">
+          <div class="pill"><i>Old</i> “Prompt better”</div>
+          <div class="pill"><i>New</i> “Manage systems”</div>
+          <div class="pill"><i>Reality</i> Agents are tireless + confidently wrong</div>
+          <div class="pill"><i>Edge</i> Correctness + coherence</div>
+        </div>
+
+        <!-- Bottleneck Meter -->
+        <div class="meter" aria-label="Bottleneck shift meter">
+          <div class="meterTop">
+            <div>
+              <div class="label"><b>Bottleneck Meter</b> — where are you feeling stuck?</div>
+              <div class="value" id="meterValue">50% Capability · 50% Cognitive Architecture</div>
+            </div>
+            <div class="chip" title="Move the slider">
+              <span aria-hidden="true">🎛️</span> tune
+            </div>
+          </div>
+
+          <input id="meter" type="range" min="0" max="100" value="50" />
+          <div class="bar" aria-hidden="true">
+            <div class="needle" id="needle"></div>
+          </div>
+          <div class="barLabels">
+            <div>Capability skills</div>
+            <div>Cognitive architecture</div>
+          </div>
+
+          <div class="callout" id="meterCallout">
+            At the midpoint: you have baseline AI fluency, but your leverage depends on
+            <b>how you structure missions, checkpoints, review loops, and taste</b>.
+          </div>
+        </div>
+      </div>
+
+      <div class="miniMap">
+        <div class="card soft">
+          <div class="miniHeader">
+            <h3>System Map</h3>
+            <div class="badge">Infographic</div>
+          </div>
+
+          <div class="mapBox">
+            <svg class="mapSvg" viewBox="0 0 560 340" role="img" aria-label="Diagram: capability to cognitive architecture shift">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="rgba(59,130,246,.95)"/>
+                  <stop offset=".55" stop-color="rgba(139,92,246,.92)"/>
+                  <stop offset="1" stop-color="rgba(20,184,166,.90)"/>
+                </linearGradient>
+                <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="rgba(17,24,39,.22)"/>
+                </filter>
+              </defs>
+
+              <!-- Lanes -->
+              <rect x="24" y="26" width="512" height="288" rx="22" fill="rgba(255,255,255,.66)" stroke="rgba(17,24,39,.14)"/>
+              <path d="M54 92 H506" stroke="rgba(17,24,39,.12)" stroke-width="1"/>
+              <path d="M54 172 H506" stroke="rgba(17,24,39,.12)" stroke-width="1"/>
+              <path d="M54 252 H506" stroke="rgba(17,24,39,.12)" stroke-width="1"/>
+
+              <!-- Nodes -->
+              <g filter="url(#softShadow)">
+                <rect x="58" y="52" width="170" height="64" rx="16" fill="rgba(255,255,255,.82)" stroke="rgba(17,24,39,.16)"/>
+                <text x="78" y="80" font-family="ui-sans-serif,system-ui" font-size="15" fill="rgba(17,24,39,.92)" font-weight="700">Capability</text>
+                <text x="78" y="102" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">prompts · tools · fluency</text>
+
+                <rect x="332" y="52" width="174" height="64" rx="16" fill="rgba(255,255,255,.82)" stroke="rgba(17,24,39,.16)"/>
+                <text x="352" y="80" font-family="ui-sans-serif,system-ui" font-size="15" fill="rgba(17,24,39,.92)" font-weight="700">Cognitive OS</text>
+                <text x="352" y="102" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">systems · coordination · taste</text>
+
+                <rect x="58" y="132" width="448" height="64" rx="18" fill="url(#g1)" opacity=".92" stroke="rgba(255,255,255,.35)"/>
+                <text x="80" y="162" font-family="ui-sans-serif,system-ui" font-size="15" fill="white" font-weight="800">2026 Bottleneck Shift</text>
+                <text x="80" y="184" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(255,255,255,.92)">capability is baseline → architecture is leverage</text>
+
+                <rect x="58" y="212" width="218" height="76" rx="18" fill="rgba(255,255,255,.82)" stroke="rgba(17,24,39,.16)"/>
+                <text x="78" y="242" font-family="ui-sans-serif,system-ui" font-size="14" fill="rgba(17,24,39,.92)" font-weight="750">Agents scale speed</text>
+                <text x="78" y="262" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">tireless · fast · confident</text>
+                <text x="78" y="280" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">but need guardrails</text>
+
+                <rect x="288" y="212" width="218" height="76" rx="18" fill="rgba(255,255,255,.82)" stroke="rgba(17,24,39,.16)"/>
+                <text x="308" y="242" font-family="ui-sans-serif,system-ui" font-size="14" fill="rgba(17,24,39,.92)" font-weight="750">Humans scale coherence</text>
+                <text x="308" y="262" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">judgment · vision · taste</text>
+                <text x="308" y="280" font-family="ui-monospace,SFMono-Regular,Menlo" font-size="12" fill="rgba(75,85,99,.95)">“quality w/out a name”</text>
+              </g>
+
+              <!-- Arrows -->
+              <path d="M232 84 H322" stroke="rgba(17,24,39,.45)" stroke-width="2" stroke-linecap="round"/>
+              <path d="M320 84 l-10 -7 l0 14 z" fill="rgba(17,24,39,.45)"/>
+            </svg>
+
+            <div class="mapLegend">
+              <div class="legendItem"><span class="dot" style="background:var(--blue)"></span>Capability (baseline)</div>
+              <div class="legendItem"><span class="dot" style="background:var(--purple)"></span>Shift (2026)</div>
+              <div class="legendItem"><span class="dot" style="background:var(--teal)"></span>Cognitive OS (leverage)</div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <b>Core idea:</b> the “AI skill pack” still matters — but it no longer differentiates.
+            Differentiation comes from your <b>operating model</b>: missions, constraints, reviews, and taste.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID: Practices + Altitude -->
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">The 6 Practices</div>
+        <h3 class="h2">What top 1% builders do (beyond prompting)</h3>
+        <p class="p">
+          You can keep your current tools. The upgrade is how you allocate attention, define work, review it,
+          and preserve coherence while agents scale execution.
+        </p>
+
+        <div class="accordion" id="practices">
+          <details open>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">1</div>
+                <div>
+                  <div class="sumTitle">Adopt the Engineering Manager mindset (operationally)</div>
+                </div>
+              </div>
+              <div class="sumTag">Direction · Quality · Throughput</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>What changes</h4>
+                <ul class="clean">
+                  <li>You’re responsible for <b>team output</b> (agents), not personal craftsmanship.</li>
+                  <li>Define <b>guardrails</b>, <b>mission</b>, <b>definition of done</b>, and <b>review gates</b>.</li>
+                  <li>Assume agents can be fast and wrong → design for <b>verification</b>.</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Team charter template</h4>
+                <div class="template">MISSION:
+- What are we shipping, for whom, and why now?
+
+SCOPE:
+- In scope:
+- Out of scope:
+
+GUARDRAILS:
+- Safety / compliance:
+- Style / conventions:
+- Constraints (time, cost, stack):
+
+DEFINITION OF DONE:
+- Tests/evals:
+- UX/quality checks:
+- Docs/hand-off:
+
+CHECKPOINTS:
+- When to report:
+- When to stop & ask:
+</div>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">2</div>
+                <div>
+                  <div class="sumTitle">Kill the “contribution badge”</div>
+                </div>
+              </div>
+              <div class="sumTag">Early intent · Less pre-work</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>Anti-pattern</h4>
+                <ul class="clean">
+                  <li>Doing heavy “pre-thinking” to feel ownership.</li>
+                  <li>Bringing premature structure that becomes noise.</li>
+                  <li>Waiting for the “perfect prompt” instead of iterating.</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Replace with</h4>
+                <div class="template">Start messy, on purpose:
+1) Dump context (bullets, raw notes, screenshots if available)
+2) Ask the model to extract intent + propose a plan
+3) Confirm the plan + constraints
+4) Run small, fast cycles
+
+Starter prompt:
+"Here’s messy context. Extract what I’m trying to do, propose 2 approaches, and ask me 5 questions you need answered before execution."</div>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">3</div>
+                <div>
+                  <div class="sumTitle">Develop strategic deep-diving (change altitude)</div>
+                </div>
+              </div>
+              <div class="sumTag">High ↔ Low abstraction</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>Why it matters</h4>
+                <ul class="clean">
+                  <li>Staying too high-level → “archaeological programming” and experience debt.</li>
+                  <li>Staying too low-level → throughput ceiling and missed leverage.</li>
+                  <li>Best builders move fluidly and review <b>critical paths</b>.</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Deep-dive target</h4>
+                <div class="template">Pick one “critical path” per cycle:
+- Checkout broken → descend into code/logs
+- Spreadsheet numbers off → verify formulas + source data
+- Proposal unclear → trace claims → evidence → narrative
+
+Then ascend:
+- What pattern in my prompting/agent setup produced this?
+- How do we prevent it next time?</div>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">4</div>
+                <div>
+                  <div class="sumTitle">Create temporal separation (build mode vs reflect mode)</div>
+                </div>
+              </div>
+              <div class="sumTag">Correctness · Learning</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>Two modes</h4>
+                <ul class="clean">
+                  <li><b>Build mode:</b> fast coordination, lots of agent outputs, context switching.</li>
+                  <li><b>Reflect mode:</b> review prompts, failures, wasted time, quality gaps.</li>
+                  <li>Without reflection: you get faster… but not better.</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Weekly cadence</h4>
+                <div class="template">Daily (10 min):
+- What shipped?
+- What broke?
+- One prompt to keep, one to fix
+
+Weekly (45 min):
+- Where did I lose time?
+- Which agents got stuck and why?
+- Update: guardrails, checklists, evals, templates</div>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">5</div>
+                <div>
+                  <div class="sumTitle">Build two architectures: rules + taste</div>
+                </div>
+              </div>
+              <div class="sumTag">Conventions · Coherence</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>Why two</h4>
+                <ul class="clean">
+                  <li><b>Rule architecture:</b> standards agents can follow.</li>
+                  <li><b>Taste architecture:</b> coherence, “quality without a name”.</li>
+                  <li>Rules don’t automatically create taste (not yet).</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Practical move</h4>
+                <div class="template">Create a “Taste Brief” (human-owned):
+- 3 examples we want to feel like
+- 3 examples we must not feel like
+- 5 words describing the experience
+- The one thing we never compromise
+
+Use rules to scale execution.
+Use taste to scale coherence.</div>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              <div class="sumLeft">
+                <div class="num">6</div>
+                <div>
+                  <div class="sumTitle">Accept: experience is not compressible</div>
+                </div>
+              </div>
+              <div class="sumTag">Reality loop</div>
+              <div class="sumIcon" aria-hidden="true">›</div>
+            </summary>
+            <div class="detailBody">
+              <div class="miniCard">
+                <h4>The trap</h4>
+                <ul class="clean">
+                  <li>You can speedrun building.</li>
+                  <li>You can’t speedrun <b>judgment</b> or <b>product sense</b>.</li>
+                  <li>Vision needs time + iteration with reality.</li>
+                </ul>
+              </div>
+              <div class="miniCard">
+                <h4>Protect the loop</h4>
+                <div class="template">Keep one “experiential anchor”:
+- Talk to customers / users
+- Use the thing yourself weekly
+- Review real failures, not hypotheticals
+
+Prompting alone ≠ understanding.
+Reality is the teacher.</div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">Altitude Control</div>
+        <h3 class="h2">Train your brain to change levels</h3>
+        <p class="p">
+          In 2026 you need to fly: descend to verify critical paths, ascend to manage agent systems.
+          Use this panel as a “mental joystick”.
+        </p>
+
+        <div class="altitude" style="margin-top:12px;">
+          <div class="altButtons" role="tablist" aria-label="Altitude levels">
+            <div class="altBtn active" role="tab" tabindex="0" data-alt="high" aria-selected="true">
+              <div class="altIcon" aria-hidden="true">🛰️</div>
+              <div>
+                <h4>High altitude</h4>
+                <p>System design: workflows, roles, constraints, evals.</p>
+              </div>
+            </div>
+            <div class="altBtn" role="tab" tabindex="0" data-alt="mid" aria-selected="false">
+              <div class="altIcon" aria-hidden="true">🧭</div>
+              <div>
+                <h4>Mid altitude</h4>
+                <p>Product intent: experience, priorities, trade-offs.</p>
+              </div>
+            </div>
+            <div class="altBtn" role="tab" tabindex="0" data-alt="low" aria-selected="false">
+              <div class="altIcon" aria-hidden="true">🔎</div>
+              <div>
+                <h4>Low altitude</h4>
+                <p>Reality check: code, formulas, numbers, edge cases.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="altPanel" role="tabpanel" id="altPanel">
+            <h3 id="altTitle">High altitude — run the system</h3>
+            <p class="hint" id="altHint">
+              Treat agents like a team: define missions, guardrails, and review gates.
+              Optimize throughput without losing correctness.
+            </p>
+
+            <div class="checkRow" id="altChecks">
+              <!-- JS injects -->
+            </div>
+
+            <div class="callout" id="altCallout" style="margin-top:12px;">
+              Tip: When you feel stuck, ask: <b>Do I need clarity (low)? direction (mid)? or structure (high)?</b>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div class="sectionTitle">Two architectures</div>
+          <div class="twoArch">
+            <div class="arch">
+              <h3>1) Civil engineering (rules)</h3>
+              <p class="tagline">
+                The stuff you write down: conventions, checklists, constraints.
+                Great for agents. Think: <span class="k">CLAUDE.md</span> / <span class="k">AGENTS.md</span> / standards.
+              </p>
+              <ul class="clean">
+                <li>“Always write tests for X.”</li>
+                <li>“Use these data sources.”</li>
+                <li>“Definition of done = A + B + C.”</li>
+              </ul>
+            </div>
+
+            <div class="arch taste">
+              <h3>2) “Quality without a name” (taste)</h3>
+              <p class="tagline">
+                Coherence, vision, judgment. Still mainly human work.
+                It’s why some products feel <b>inevitable</b>.
+              </p>
+              <ul class="clean">
+                <li>“Does this feel right?”</li>
+                <li>“Does it match the product’s philosophy?”</li>
+                <li>“What’s the one thing we won’t compromise?”</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN BUILDER -->
+    <div class="card" style="margin-top:18px;">
+      <div class="sectionTitle">Personal upgrade</div>
+      <h3 class="h2">Generate your 2026 Builder OS plan</h3>
+      <p class="p">
+        Pick your role, select what’s frustrating you, and produce a short operating plan:
+        guardrails, review loops, and one “taste anchor”.
+      </p>
+
+      <div class="formRow">
+        <div class="field">
+          <label for="role">Role</label>
+          <select id="role">
+            <option value="Engineer">Engineer</option>
+            <option value="PM">Product / PM</option>
+            <option value="Designer">Design / Creative</option>
+            <option value="Ops">Ops / Customer / Marketing</option>
+            <option value="Student">Student / Learning</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>What hurts right now?</label>
+          <div class="choices" id="painChoices">
+            <div class="choice" data-pain="Agents ship fast but break things">Agents ship fast but break things</div>
+            <div class="choice" data-pain="I don’t trust outputs">I don’t trust outputs</div>
+            <div class="choice" data-pain="I feel behind everyone else">I feel behind everyone else</div>
+            <div class="choice" data-pain="I get lost in tabs / context switching">I get lost in tabs / context switching</div>
+            <div class="choice" data-pain="My work feels incoherent / inconsistent">My work feels incoherent / inconsistent</div>
+            <div class="choice" data-pain="I overthink before asking AI">I overthink before asking AI</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="formRow">
+        <div class="field">
+          <label for="project">Your current project (messy is fine)</label>
+          <textarea id="project" placeholder="Example: building a small SaaS dashboard; agents are generating code fast but UX is inconsistent; I’m not sure what to review."></textarea>
+        </div>
+        <div class="field">
+          <label for="taste">Taste anchor (what “good” feels like)</label>
+          <textarea id="taste" placeholder="Example: calm, minimal UI; fast first load; clear error messages; predictable navigation; no surprise modals."></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <button class="btn primary" id="btnPlan"><span aria-hidden="true">🧠</span> Generate plan</button>
+        <button class="btn" id="btnClear"><span aria-hidden="true">🧼</span> Clear</button>
+        <div class="chip" title="This plan is generated locally in your browser"><span aria-hidden="true">🔒</span> local-only</div>
+      </div>
+
+      <div class="planOut" id="planOut" style="display:none;">
+        <div class="planOutHeader">
+          <h3>Generated plan</h3>
+          <div class="chip"><span aria-hidden="true">✅</span> copy-friendly</div>
+        </div>
+        <pre class="planText" id="planText"></pre>
+      </div>
+
+      <div class="footer">
+        <b>North star:</b> keep capability skills as baseline — but invest your “upgrade budget” into
+        <b>systems thinking</b>, <b>review loops</b>, and <b>taste</b>. That’s where the leverage lives in 2026.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Print / Export ----------
+    const btnPrint = document.getElementById('btnPrint');
+    btnPrint.addEventListener('click', () => window.print());
+
+    const btnExport = document.getElementById('btnExport');
+    btnExport.addEventListener('click', () => {
+      const plan = document.getElementById('planText')?.textContent?.trim();
+      const role = document.getElementById('role')?.value || "Role";
+      const now = new Date();
+      const stamp = now.toISOString().slice(0,10);
+      const content =
+`# 2026 Builder OS — Plan (${stamp})
+
+${plan && plan.length ? plan : `No plan generated yet.
+
+Tip:
+1) Fill the Plan Builder fields
+2) Click "Generate plan"
+3) Export again`}
+
+---
+
+Exported from the interactive infographic.
+`;
+      const blob = new Blob([content], {type: "text/markdown;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `2026-builder-os-plan_${role.toLowerCase().replace(/[^a-z0-9]+/g,'-')}_${stamp}.md`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 500);
+    });
+
+    // ---------- Bottleneck Meter ----------
+    const meter = document.getElementById('meter');
+    const meterValue = document.getElementById('meterValue');
+    const needle = document.getElementById('needle');
+    const meterCallout = document.getElementById('meterCallout');
+
+    function meterText(v){
+      const cap = Math.max(0, Math.min(100, 100 - v));
+      const cog = v;
+
+      let msg = "";
+      if (v <= 20){
+        msg = "You’re mostly blocked on <b>capability basics</b>. Tighten fundamentals: consistent prompting, tool choice, and small feedback loops.";
+      } else if (v <= 45){
+        msg = "You’ve got working fluency. Start adding <b>guardrails</b>, <b>definition of done</b>, and lightweight review gates to reduce rework.";
+      } else if (v <= 65){
+        msg = "You’re in the main 2026 zone: differentiation is <b>cognitive architecture</b>—systems thinking, altitude control, and taste coherence.";
+      } else if (v <= 85){
+        msg = "Your bottleneck is mostly <b>systems</b>: coordination, verification, and coherence across many agent outputs. Build stronger checklists + reflection loops.";
+      } else {
+        msg = "You’re operating like an org: treat agents as teams, invest in <b>evals</b>, <b>review ritual</b>, and a clear <b>taste anchor</b> to avoid chaos.";
+      }
+
+      meterValue.textContent = `${cap}% Capability · ${cog}% Cognitive Architecture`;
+      needle.style.left = `${v}%`;
+      meterCallout.innerHTML = msg;
+    }
+
+    meter.addEventListener('input', () => meterText(+meter.value));
+    meterText(+meter.value);
+
+    // ---------- Altitude Panel ----------
+    const altButtons = Array.from(document.querySelectorAll('.altBtn'));
+    const altTitle = document.getElementById('altTitle');
+    const altHint = document.getElementById('altHint');
+    const altChecks = document.getElementById('altChecks');
+    const altCallout = document.getElementById('altCallout');
+
+    const altitudeData = {
+      high: {
+        title: "High altitude — run the system",
+        hint: "Design the workflow: roles, constraints, checkpoints, and verification. Think like an EM for a team of agents.",
+        callout: "When speed increases, your job becomes <b>correctness and coherence</b>. System design is how you keep both.",
+        checks: [
+          {t:"Set mission + endpoint", d:"Write a clear objective and what “done” means."},
+          {t:"Define guardrails", d:"Constraints, style, safety, and what not to do."},
+          {t:"Add checkpoints", d:"When should the agent stop and ask vs continue?"},
+          {t:"Evals / tests", d:"How do you detect confident wrongness quickly?"}
+        ]
+      },
+      mid: {
+        title: "Mid altitude — protect product intent",
+        hint: "Clarify priorities and experience. You’re shaping what the work *means* to the user/customer.",
+        callout: "If outputs feel noisy, don’t prompt harder—tighten <b>priorities</b> and <b>trade-offs</b>.",
+        checks: [
+          {t:"Pick the critical path", d:"What matters most to the user right now?"},
+          {t:"Define trade-offs", d:"Speed vs quality vs scope—choose explicitly."},
+          {t:"Taste brief", d:"3 do’s, 3 don’ts, 5 words describing the experience."},
+          {t:"Ship small slices", d:"Iterate with reality, not hypotheticals."}
+        ]
+      },
+      low: {
+        title: "Low altitude — verify reality",
+        hint: "Drop into details only where it matters: logs, formulas, edge cases, numbers, UX seams.",
+        callout: "You don’t have to understand everything—just the <b>critical paths</b> where failure is expensive.",
+        checks: [
+          {t:"Reproduce the issue", d:"Can you trigger the bug / mismatch consistently?"},
+          {t:"Trace inputs → outputs", d:"What data or code path causes the behavior?"},
+          {t:"Add a guardrail", d:"Turn a one-off fix into a reusable rule/test."},
+          {t:"Document the seam", d:"Leave a breadcrumb for future you (or agents)."}
+        ]
+      }
+    };
+
+    function setAltitude(key){
+      altButtons.forEach(b => {
+        const active = b.dataset.alt === key;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+
+      const d = altitudeData[key];
+      altTitle.textContent = d.title;
+      altHint.textContent = d.hint;
+      altCallout.innerHTML = d.callout;
+
+      altChecks.innerHTML = d.checks.map((c, idx) => {
+        const id = `chk_${key}_${idx}`;
+        return `
+          <div class="check">
+            <input type="checkbox" id="${id}">
+            <label for="${id}">
+              <b>${c.t}</b><br/>${c.d}
+            </label>
+          </div>
+        `;
+      }).join("");
+    }
+
+    altButtons.forEach(btn => {
+      btn.addEventListener('click', () => setAltitude(btn.dataset.alt));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setAltitude(btn.dataset.alt); }
+      });
+    });
+    setAltitude('high');
+
+    // ---------- Plan Builder ----------
+    const painChoices = Array.from(document.querySelectorAll('#painChoices .choice'));
+    const selectedPains = new Set();
+
+    painChoices.forEach(ch => {
+      ch.addEventListener('click', () => {
+        const p = ch.dataset.pain;
+        if (selectedPains.has(p)) selectedPains.delete(p);
+        else selectedPains.add(p);
+        ch.classList.toggle('active', selectedPains.has(p));
+      });
+    });
+
+    const btnPlan = document.getElementById('btnPlan');
+    const btnClear = document.getElementById('btnClear');
+    const planOut = document.getElementById('planOut');
+    const planText = document.getElementById('planText');
+
+    function recommend(role, pains){
+      // Simple mapping: pains → practices + routines
+      const picks = new Set();
+      const notes = [];
+
+      function addPractice(n, why){ picks.add(n); if (why) notes.push(`- ${why}`); }
+
+      if (pains.has("I overthink before asking AI")) addPractice(2, "Practice 2: start earlier with messy context; let the model discover intent.");
+      if (pains.has("Agents ship fast but break things")) addPractice(1, "Practice 1: define guardrails + definition of done; you own output quality.");
+      if (pains.has("I don’t trust outputs")) { addPractice(3, "Practice 3: deep-dive critical paths; verify reality."); addPractice(4, "Practice 4: reflect on failure modes and fix the system."); }
+      if (pains.has("I get lost in tabs / context switching")) { addPractice(1, "Practice 1: run agents like a team with checkpoints."); addPractice(4, "Practice 4: add reflect mode; reduce churn."); }
+      if (pains.has("My work feels incoherent / inconsistent")) { addPractice(5, "Practice 5: separate rules (agents) from taste (human)."); addPractice(4, "Practice 4: review for coherence, not just speed."); }
+      if (pains.has("I feel behind everyone else")) { addPractice(4, "Practice 4: reflection converts activity into learning."); addPractice(6, "Practice 6: keep a reality loop; experience compounds."); }
+
+      // If none selected, provide default
+      if (picks.size === 0){
+        [1,3,4,5].forEach(n => picks.add(n));
+      }
+
+      // Role-specific emphasis
+      let roleAngle = "";
+      if (role === "Engineer") roleAngle = "Emphasize evals/tests, critical-path deep dives, and agent checklists.";
+      if (role === "PM") roleAngle = "Emphasize intent clarity, trade-offs, and coherence across artifacts.";
+      if (role === "Designer") roleAngle = "Emphasize taste brief, experience consistency, and review loops.";
+      if (role === "Ops") roleAngle = "Emphasize repeatable templates, verification of outcomes, and scalable playbooks.";
+      if (role === "Student") roleAngle = "Emphasize learning loops: small builds + reflection + deliberate deep dives.";
+
+      return { picks: Array.from(picks).sort((a,b)=>a-b), notes, roleAngle };
+    }
+
+    function generatePlan(){
+      const role = document.getElementById('role').value;
+      const project = document.getElementById('project').value.trim();
+      const taste = document.getElementById('taste').value.trim();
+      const pains = new Set(selectedPains);
+
+      const rec = recommend(role, pains);
+
+      const painList = pains.size ? Array.from(pains).map(p => `- ${p}`).join("\n") : "- (none selected — using a strong default set)";
+      const picks = rec.picks.map(n => {
+        const name = ({
+          1:"EM mindset",
+          2:"Kill contribution badge",
+          3:"Strategic deep-diving (altitude)",
+          4:"Temporal separation (reflect)",
+          5:"Two architectures (rules + taste)",
+          6:"Experience not compressible"
+        })[n] || `Practice ${n}`;
+        return `- Practice ${n}: ${name}`;
+      }).join("\n");
+
+      const guardrails =
+`GUARDRAILS (copy/paste and edit):
+- In scope: ___________________________
+- Out of scope: _______________________
+- Constraints: time / budget / tools / style
+- “Stop & ask” triggers: uncertainty, missing data, safety risk, ambiguous requirement
+- Definition of done: tests/evals + user-facing check + documentation`;
+
+      const weekly =
+`WEEKLY LOOP (minimal):
+- Daily 10 min: review outputs → keep 1 prompt, fix 1 prompt
+- Weekly 45 min: analyze failures → update guardrails/checklists/taste brief
+- One reality anchor: talk to users / use the artifact / verify data`;
+
+      const tasteBrief =
+`TASTE BRIEF (human-owned):
+- 5 words describing “good”: ___________________________
+- 3 do’s: _____________________________________________
+- 3 don’ts: ___________________________________________
+- Non-negotiable: _____________________________________`;
+
+      const plan =
+`ROLE: ${role}
+FOCUS: ${rec.roleAngle}
+
+PAINS:
+${painList}
+
+PRACTICES TO APPLY THIS WEEK:
+${picks}
+
+WHY THESE:
+${rec.notes.length ? rec.notes.join("\n") : "- These practices move the bottleneck from “better prompts” to a better operating system."}
+
+CURRENT PROJECT (messy):
+${project || "(add context above to get a sharper plan)"}
+
+TASTE ANCHOR:
+${taste || "(add a taste anchor so speed doesn’t destroy coherence)"}
+
+--- ACTION PLAN (7 days) ---
+DAY 1: Write a Team Charter (mission, scope, guardrails, definition of done).
+DAY 2: Run an early messy-context cycle (kill contribution badge).
+DAY 3: Pick ONE critical path → deep-dive until verified.
+DAY 4: Add a guardrail/test/checklist based on what broke.
+DAY 5: Do a “taste review” pass (coherence, not just correctness).
+DAY 6: Reality loop (use it / show it / validate with a human).
+DAY 7: Reflect: what to keep, what to change, what to template.
+
+${guardrails}
+
+${tasteBrief}
+
+${weekly}`;
+
+      planText.textContent = plan;
+      planOut.style.display = "block";
+      planOut.scrollIntoView({behavior:"smooth", block:"nearest"});
+    }
+
+    btnPlan.addEventListener('click', generatePlan);
+
+    btnClear.addEventListener('click', () => {
+      document.getElementById('project').value = "";
+      document.getElementById('taste').value = "";
+      selectedPains.clear();
+      painChoices.forEach(c => c.classList.remove('active'));
+      planOut.style.display = "none";
+      planText.textContent = "";
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    // Keyboard shortcut: Cmd/Ctrl + Enter to generate plan
+    document.addEventListener('keydown', (e) => {
+      const isMac = navigator.platform.toUpperCase().includes('MAC');
+      if ((isMac ? e.metaKey : e.ctrlKey) && e.key === 'Enter') {
+        generatePlan();
+      }
+    });
+  </script>
+</body>
+</html>
