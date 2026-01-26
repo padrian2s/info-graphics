@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flood the Zone → Techno-Feudalism: Interview Map (Infographic)</title>
+  <meta name="description" content="Interactive infographic summarizing the Democracy Now interview segment with Yanis Varoufakis: 'flooding the zone', 'Board of Peace', and 'techno-feudalism' framing." />
+  <meta name="category" content="Political Economy" />
+  <meta name="tags" content="Techno-feudalism, Varoufakis, Geopolitics, Attention Economy, Private Governance, Interview" />
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0E1630;
+      --text:#EAF0FF;
+      --muted:#A9B4D0;
+      --faint:#7180A6;
+      --line:rgba(255,255,255,.10);
+      --chip:rgba(255,255,255,.06);
+
+      --a:#3b82f6;   /* blue */
+      --b:#8b5cf6;   /* purple */
+      --c:#14b8a6;   /* teal */
+      --d:#f59e0b;   /* amber */
+      --e:#ef4444;   /* red */
+      --ok:#22c55e;  /* green */
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(20,184,166,.18), transparent 55%),
+        radial-gradient(900px 700px at 50% 85%, rgba(59,130,246,.16), transparent 55%),
+        linear-gradient(180deg, #050610, #060A18 40%, #050610);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 72px}
+    .top{
+      display:grid;
+      grid-template-columns: 1.35fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .top{grid-template-columns:1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .inner{padding:20px}
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(700px 280px at 15% 0%, rgba(59,130,246,.18), transparent 60%),
+        radial-gradient(700px 280px at 85% 0%, rgba(139,92,246,.16), transparent 60%),
+        radial-gradient(800px 420px at 50% 110%, rgba(20,184,166,.10), transparent 55%);
+      pointer-events:none;
+      z-index:0;
+      opacity:.9;
+    }
+    .card > *{position:relative; z-index:1}
+
+    .kicker{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--c);box-shadow:0 0 0 5px rgba(20,184,166,.12)}
+    h1{
+      margin:10px 0 10px;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+      max-width:70ch;
+    }
+
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--chip);
+      border:1px solid var(--line);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .badge .pill{
+      width:10px;height:10px;border-radius:999px;background:var(--a);
+      box-shadow:0 0 0 4px rgba(59,130,246,.12);
+    }
+    .badge[data-tone="b"] .pill{background:var(--b); box-shadow:0 0 0 4px rgba(139,92,246,.12)}
+    .badge[data-tone="c"] .pill{background:var(--c); box-shadow:0 0 0 4px rgba(20,184,166,.12)}
+    .badge[data-tone="d"] .pill{background:var(--d); box-shadow:0 0 0 4px rgba(245,158,11,.12)}
+    .badge[data-tone="e"] .pill{background:var(--e); box-shadow:0 0 0 4px rgba(239,68,68,.12)}
+
+    .controls{
+      display:flex; flex-wrap:wrap;
+      gap:10px; margin-top:14px;
+    }
+    button, .toggle{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    button:hover, .toggle:hover{transform:translateY(-1px); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16)}
+    button:active, .toggle:active{transform:translateY(0px)}
+    .toggle{
+      display:flex;align-items:center;gap:10px;
+    }
+    .switch{
+      width:42px;height:24px;border-radius:999px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.12);
+      position:relative;
+      flex:none;
+    }
+    .knob{
+      position:absolute; top:50%; left:3px; transform:translateY(-50%);
+      width:18px;height:18px;border-radius:999px;
+      background:rgba(255,255,255,.85);
+      transition:left .16s ease, background .16s ease;
+    }
+    .toggle[data-on="true"] .switch{background:rgba(34,197,94,.22); border-color:rgba(34,197,94,.35)}
+    .toggle[data-on="true"] .knob{left:21px; background:#EFFFF1}
+
+    .side-grid{
+      display:grid; gap:18px;
+      grid-template-rows: auto auto 1fr;
+    }
+    .mini{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:16px;
+    }
+    .mini h3{margin:0 0 8px; font-size:14px; letter-spacing:.01em}
+    .mini p{margin:0; color:var(--muted); font-size:13px; line-height:1.55}
+    .statrow{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px}
+    .stat{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:12px;
+    }
+    .stat .n{font-size:22px; font-weight:700; letter-spacing:-.02em}
+    .stat .l{font-size:12px; color:var(--muted); margin-top:3px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
+    .section-title{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      margin:22px 0 10px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.01em;
+    }
+    .hint{color:var(--faint); font-size:12px}
+
+    .quote{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding:14px 14px 12px;
+      position:relative;
+      overflow:hidden;
+      min-height:132px;
+    }
+    .quote:before{
+      content:"“";
+      position:absolute;
+      top:-26px; left:10px;
+      font-size:92px;
+      color:rgba(255,255,255,.06);
+      font-weight:900;
+    }
+    .quote p{
+      margin:0;
+      color:var(--text);
+      font-size:13px;
+      line-height:1.55;
+      padding-top:6px;
+    }
+    .quote .src{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .chip{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+    }
+    .chip[data-c="a"]{border-color:rgba(59,130,246,.35); background:rgba(59,130,246,.10)}
+    .chip[data-c="b"]{border-color:rgba(139,92,246,.35); background:rgba(139,92,246,.10)}
+    .chip[data-c="c"]{border-color:rgba(20,184,166,.35); background:rgba(20,184,166,.10)}
+    .chip[data-c="e"]{border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.10)}
+    .chip[data-c="d"]{border-color:rgba(245,158,11,.38); background:rgba(245,158,11,.10)}
+
+    .timeline{
+      margin-top:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+    .tl-head{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .tl-head strong{font-size:13px; letter-spacing:.02em}
+    .tl-head span{font-size:12px; color:var(--muted)}
+    .tl-body{padding:10px 12px 14px}
+    .step{
+      display:grid;
+      grid-template-columns: 110px 1fr;
+      gap:12px;
+      padding:10px 6px;
+      border-bottom:1px dashed rgba(255,255,255,.10);
+    }
+    .step:last-child{border-bottom:none}
+    .t{
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .d{
+      font-size:13px;
+      line-height:1.5;
+      color:var(--text);
+    }
+    .d em{color:var(--muted); font-style:normal}
+    .tagline{margin-top:8px;color:var(--muted);font-size:12px}
+
+    .diagram{
+      margin-top:18px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      overflow:hidden;
+    }
+    .diagram .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .legend{display:flex;gap:8px;flex-wrap:wrap}
+    .legend .chip{user-select:none}
+    .canvas{
+      padding:14px;
+    }
+    .nodes{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){ .nodes{grid-template-columns:1fr} }
+
+    .node{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+      min-height:150px;
+    }
+    .node h4{margin:0 0 6px; font-size:13px; letter-spacing:.01em}
+    .node ul{margin:8px 0 0 18px; padding:0; color:var(--muted); font-size:12.5px; line-height:1.6}
+    .node .bar{
+      position:absolute; inset:auto 0 0 0; height:6px; opacity:.9;
+      background:linear-gradient(90deg, var(--a), var(--b), var(--c));
+    }
+    .node[data-tone="a"] .bar{background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(59,130,246,.1))}
+    .node[data-tone="b"] .bar{background:linear-gradient(90deg, rgba(139,92,246,.9), rgba(139,92,246,.1))}
+    .node[data-tone="c"] .bar{background:linear-gradient(90deg, rgba(20,184,166,.9), rgba(20,184,166,.1))}
+    .node[data-tone="d"] .bar{background:linear-gradient(90deg, rgba(245,158,11,.92), rgba(245,158,11,.10))}
+    .node[data-tone="e"] .bar{background:linear-gradient(90deg, rgba(239,68,68,.92), rgba(239,68,68,.10))}
+
+    .foot{
+      margin-top:22px;
+      color:var(--faint);
+      font-size:12px;
+      line-height:1.6;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:11px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+
+    /* “focus mode” */
+    .focus .muted-hide{display:none !important}
+    .focus .grid{grid-template-columns: 1fr}
+    .focus .nodes{grid-template-columns: 1fr}
+
+    /* highlight */
+    .hl{
+      outline:2px solid rgba(59,130,246,.40);
+      box-shadow: 0 0 0 6px rgba(59,130,246,.12);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <section class="card">
+        <div class="inner">
+          <div class="kicker">
+            <span class="dot"></span>
+            <span>Interactive Interview Infographic</span>
+            <span class="chip" data-c="c">Athens → Davos → Brussels</span>
+            <span class="chip" data-c="b">“Flood the zone”</span>
+            <span class="chip" data-c="a">“Techno-feudalism” frame</span>
+          </div>
+
+          <h1>Flooding the Zone → Replacing the Post-1945 Order</h1>
+          <p class="sub">
+            A visual map of the segment featuring <strong>Yanis Varoufakis</strong> (former Greek finance minister),
+            interpreting fast-shifting announcements (Greenland, tariffs, “Board of Peace”) as a strategy:
+            <em>overwhelm attention</em> while consolidating power with a “tech lords” ruling coalition.
+          </p>
+
+          <div class="badges">
+            <div class="badge" data-tone="b"><span class="pill"></span><strong>Mechanism:</strong>&nbsp;attention overload</div>
+            <div class="badge" data-tone="a"><span class="pill"></span><strong>Target:</strong>&nbsp;UN / international law</div>
+            <div class="badge" data-tone="c"><span class="pill"></span><strong>Vehicle:</strong>&nbsp;private governance</div>
+            <div class="badge" data-tone="e"><span class="pill"></span><strong>Risk:</strong>&nbsp;normalizing force + impunity</div>
+          </div>
+
+          <div class="controls">
+            <div id="toggleFocus" class="toggle" role="button" tabindex="0" aria-pressed="false" data-on="false">
+              <div class="switch" aria-hidden="true"><div class="knob"></div></div>
+              <div>
+                <div style="font-weight:700; font-size:13px;">Focus Mode</div>
+                <div style="color:var(--muted); font-size:12px; margin-top:1px;">Hide extras, keep core claims</div>
+              </div>
+            </div>
+
+            <button id="btnPulse" title="Highlight the main causal chain">
+              Highlight causal chain <span class="kbd">H</span>
+            </button>
+
+            <button id="btnReset" title="Reset highlights & toggles">
+              Reset <span class="kbd">R</span>
+            </button>
+          </div>
+
+          <div class="tagline muted-hide">
+            Tip: Press <span class="kbd">H</span> to highlight the “attention → uncertainty → consolidation” chain.
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-grid">
+        <div class="mini card" style="box-shadow: var(--shadow);">
+          <div class="inner" style="padding:16px;">
+            <h3>Who’s speaking?</h3>
+            <p>
+              <strong>Yanis Varoufakis</strong> frames the story through his “techno-feudalism” lens:
+              corporations behaving like quasi-sovereigns, reminiscent of historical charter companies.
+            </p>
+            <div class="statrow">
+              <div class="stat">
+                <div class="n">3</div>
+                <div class="l">Recurring themes</div>
+              </div>
+              <div class="stat">
+                <div class="n">1945</div>
+                <div class="l">Order referenced (post-WWII)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini">
+          <h3>Core claim (one line)</h3>
+          <p>
+            Rapid, contradictory announcements can function as a <em>governance tactic</em>:
+            keep institutions reactive, while shifting power into private, controllable structures.
+          </p>
+        </div>
+
+        <div class="mini muted-hide">
+          <h3>How to read this page</h3>
+          <p>
+            Use the timeline for “what happened”, the quotes for “what was argued”, and the diagram for
+            “how the argument connects attention tactics to institutional displacement”.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="section-title">
+      <h2>Key Quotes & Frames</h2>
+      <div class="hint muted-hide">Curated paraphrase-level snippets (not verbatim transcript)</div>
+    </div>
+
+    <section class="grid">
+      <div class="quote" id="qFlood">
+        <p>
+          The pattern resembles “flooding the zone”: constant shocks and reversals create a black hole of uncertainty,
+          making it harder to form coherent opposition while power consolidates.
+        </p>
+        <div class="src">
+          <span class="chip" data-c="b">Attention tactic</span>
+          <span class="chip" data-c="a">Steve Bannon reference</span>
+        </div>
+      </div>
+
+      <div class="quote" id="qCharter">
+        <p>
+          A “Board of Peace” styled as crisis management can operate as a substitute for multilateral institutions,
+          especially if its chair has veto control and the charter is vague or selectively scoped.
+        </p>
+        <div class="src">
+          <span class="chip" data-c="c">Private governance</span>
+          <span class="chip" data-c="a">UN displacement</span>
+        </div>
+      </div>
+
+      <div class="quote" id="qEastIndia">
+        <p>
+          A pay-to-join structure echoes early capitalist charter companies (e.g., East India companies):
+          pooled capital + private military/political force → quasi-sovereign power.
+        </p>
+        <div class="src">
+          <span class="chip" data-c="d">Historical analogy</span>
+          <span class="chip" data-c="b">“Techno-feudalism” vibe</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>Event Stream → “Fire Hose” Timeline</h2>
+      <div class="hint muted-hide">A compressed ordering of the segment’s mentioned moves</div>
+    </div>
+
+    <section class="timeline" id="timeline">
+      <div class="tl-head">
+        <strong>Rapid sequence</strong>
+        <span>announcements • walk-backs • ceremonies • counter-summits</span>
+      </div>
+      <div class="tl-body">
+        <div class="step">
+          <div class="t">shock</div>
+          <div class="d">
+            Announcements framed as extreme: threats (e.g., Greenland), sanctions/tariffs, and symbolic gestures.
+            <em>Creates urgency + confusion.</em>
+          </div>
+        </div>
+        <div class="step">
+          <div class="t">reversal</div>
+          <div class="d">
+            Walk-backs and reframes (“not invasion, maybe lease/freehold”), shifting the baseline of “normal”.
+            <em>Reduces accountability through moving targets.</em>
+          </div>
+        </div>
+        <div class="step">
+          <div class="t">new body</div>
+          <div class="d">
+            “Board of Peace” ceremony positioning a private-ish structure as global conflict arbiter.
+            <em>Competes with UN legitimacy.</em>
+          </div>
+        </div>
+        <div class="step">
+          <div class="t">coalition</div>
+          <div class="d">
+            High-profile names (political + business) appear as executive committee; veto power centralizes control.
+            <em>Governance becomes personalizable.</em>
+          </div>
+        </div>
+        <div class="step">
+          <div class="t">spillover</div>
+          <div class="d">
+            Europe reacts late; criticism rises after prior complicity in weakening international law norms.
+            <em>Institutions discover the blast radius.</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>Argument Diagram</h2>
+      <div class="hint muted-hide">Three-layer causal chain: tactic → institutional drift → end state</div>
+    </div>
+
+    <section class="diagram" id="diagram">
+      <div class="topbar">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <strong style="font-size:13px; letter-spacing:.02em;">Causal chain</strong>
+          <span style="color:var(--muted); font-size:12px;">(click cards to highlight)</span>
+        </div>
+        <div class="legend muted-hide">
+          <span class="chip" data-c="b">Tactic</span>
+          <span class="chip" data-c="a">Institutions</span>
+          <span class="chip" data-c="c">Private governance</span>
+          <span class="chip" data-c="e">Human cost / conflict</span>
+          <span class="chip" data-c="d">Historical analogy</span>
+        </div>
+      </div>
+
+      <div class="canvas">
+        <div class="nodes">
+          <div class="node" data-tone="b" id="n1" tabindex="0" role="button" aria-label="Tactic: Flood the zone">
+            <h4>1) Tactic: Flood the zone</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              High-frequency shocks + reversals → attention saturation.
+            </div>
+            <ul>
+              <li>Contradictions reset “normal”</li>
+              <li>Opposition stays reactive</li>
+              <li>Public uncertainty increases</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+
+          <div class="node" data-tone="a" id="n2" tabindex="0" role="button" aria-label="Institutional drift: UN and law weakened">
+            <h4>2) Institutional drift: post-1945 order erodes</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              When norms are already weakened, replacement structures face less resistance.
+            </div>
+            <ul>
+              <li>Selective enforcement of international law</li>
+              <li>Veto politics block “serious peace proposals”</li>
+              <li>Credibility gap widens</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+
+          <div class="node" data-tone="c" id="n3" tabindex="0" role="button" aria-label="Replacement: Board of Peace as private governance">
+            <h4>3) Replacement: private governance body</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              A chartered “board” with veto power and pay-to-join incentives resembles corporate sovereignty.
+            </div>
+            <ul>
+              <li>Centralized veto → centralized outcomes</li>
+              <li>Membership fee → alignment filter</li>
+              <li>UN becomes “rubber stamp”</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+
+          <div class="node muted-hide" data-tone="d" id="n4" tabindex="0" role="button" aria-label="Analogy: East India companies">
+            <h4>Historical analogy: charter companies</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              Early capitalism’s power moves: pooled capital → quasi-state power → later state capture.
+            </div>
+            <ul>
+              <li>Company as colonizer</li>
+              <li>Private interest → public coercion</li>
+              <li>“Tech lords” as modern charter elites</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+
+          <div class="node" data-tone="e" id="n5" tabindex="0" role="button" aria-label="Gaza frame: real estate logic">
+            <h4>Conflict frame: “real estate” logic</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              Treating territory as property reduces people to obstacles or labor.
+            </div>
+            <ul>
+              <li>Erasure of political subjecthood</li>
+              <li>“Completion” logic: displacement</li>
+              <li>Impunity incentives grow</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+
+          <div class="node muted-hide" data-tone="a" id="n6" tabindex="0" role="button" aria-label="Europe: late alarm">
+            <h4>Europe: late alarm, thin plan</h4>
+            <div style="color:var(--muted); font-size:12.5px; line-height:1.55">
+              Criticism rises when consequences reach “core” states—but strategy remains unclear.
+            </div>
+            <ul>
+              <li>Dependency on dollar zone</li>
+              <li>Reactive posture</li>
+              <li>Coordination vs coherence gap</li>
+            </ul>
+            <div class="bar"></div>
+          </div>
+        </div>
+
+        <div class="mini" style="margin-top:14px;">
+          <h3>Wrap-up signal</h3>
+          <p>
+            The segment ends with a “rupture, not transition” diagnosis (Carney) and Varoufakis’ reaction:
+            good diagnosis, bad recipe. In other words: <em>naming the break is easier than choosing an alternative.</em>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="foot">
+      <div>
+        Built as a single-file HTML infographic. No external libraries. Works offline.
+      </div>
+      <div class="muted-hide">
+        Keyboard: <span class="kbd">H</span> highlight chain • <span class="kbd">R</span> reset • <span class="kbd">F</span> toggle focus
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const body = document.body;
+      const toggleFocus = document.getElementById('toggleFocus');
+      const btnPulse = document.getElementById('btnPulse');
+      const btnReset = document.getElementById('btnReset');
+
+      const chainIds = ['qFlood','n1','n2','n3','qCharter'];
+      const clickables = ['n1','n2','n3','n4','n5','n6','qFlood','qCharter','qEastIndia','timeline','diagram'];
+
+      function setFocus(on){
+        toggleFocus.dataset.on = on ? 'true' : 'false';
+        toggleFocus.setAttribute('aria-pressed', on ? 'true' : 'false');
+        body.classList.toggle('focus', !!on);
+      }
+
+      function clearHighlights(){
+        document.querySelectorAll('.hl').forEach(el => el.classList.remove('hl'));
+      }
+
+      function highlightChain(){
+        clearHighlights();
+        chainIds.forEach(id=>{
+          const el = document.getElementById(id);
+          if(el) el.classList.add('hl');
+        });
+        // brief pulse
+        setTimeout(()=>{ /* keep highlight; no auto-remove */ }, 150);
+      }
+
+      function resetAll(){
+        clearHighlights();
+        setFocus(false);
+      }
+
+      function toggleFocusMode(){
+        const on = toggleFocus.dataset.on !== 'true';
+        setFocus(on);
+      }
+
+      // Toggle focus click + keyboard accessibility
+      toggleFocus.addEventListener('click', toggleFocusMode);
+      toggleFocus.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggleFocusMode();
+        }
+      });
+
+      btnPulse.addEventListener('click', highlightChain);
+      btnReset.addEventListener('click', resetAll);
+
+      // Card click → highlight that card (and clear others)
+      function makeHighlightable(id){
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', ()=>{
+          const already = el.classList.contains('hl');
+          clearHighlights();
+          if(!already) el.classList.add('hl');
+        });
+        el.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){
+            const already = el.classList.contains('hl');
+            clearHighlights();
+            if(!already) el.classList.add('hl');
+          }
+        });
+      }
+      clickables.forEach(makeHighlightable);
+
+      // Global shortcuts
+      window.addEventListener('keydown', (e)=>{
+        const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+        const typing = (tag === 'input' || tag === 'textarea');
+        if(typing) return;
+
+        if(e.key.toLowerCase() === 'h') highlightChain();
+        if(e.key.toLowerCase() === 'r') resetAll();
+        if(e.key.toLowerCase() === 'f') toggleFocusMode();
+      });
+    })();
+  </script>
+</body>
+</html>
