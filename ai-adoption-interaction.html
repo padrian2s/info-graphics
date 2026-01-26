@@ -1,0 +1,2020 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Adoption: The Missing Middle (201 Level) — Interactive Infographic</title>
+  <meta name="description" content="An interactive infographic explaining why AI adoption stalls, and how the 201-level 'management skills' unlock durable productivity." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="AI Adoption, Enterprise, Productivity, Training Gap, Interactive" />
+  <meta name="icon" content="🎯" />
+  <meta name="created" content="2026-01-26" />
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1223;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#AAB4D6;
+      --faint:#7E89B5;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+
+      --blue:#3b82f6;
+      --purple:#8b5cf6;
+      --teal:#14b8a6;
+      --amber:#f59e0b;
+      --rose:#fb7185;
+      --lime:#a3e635;
+      --red:#ef4444;
+
+      --radius: 20px;
+      --radius2: 14px;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 15%, rgba(59,130,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 85% 20%, rgba(139,92,246,.16), transparent 52%),
+        radial-gradient(1000px 900px at 60% 90%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050712 0%, #070A12 35%, #050712 100%);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{
+      width:min(1200px, calc(100% - 44px));
+      margin: 28px auto 80px;
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      margin: -28px auto 18px;
+      padding: 14px 0;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(7,10,18,.90) 0%, rgba(7,10,18,.55) 80%, rgba(7,10,18,0) 100%);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar .inner{
+      width:min(1200px, calc(100% - 44px));
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 270px;
+    }
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:
+        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(135deg, rgba(59,130,246,.95), rgba(139,92,246,.95));
+      box-shadow: 0 16px 40px rgba(59,130,246,.18);
+      border:1px solid rgba(255,255,255,.14);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 180deg, rgba(255,255,255,.16), transparent, rgba(255,255,255,.08), transparent);
+      animation: spin 9s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(234,240,255,.92);
+    }
+    .brand .sub{
+      margin:3px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+    .pill label{font-size:12px;color:var(--muted)}
+    .pill input[type="range"]{width:140px}
+    .btn{
+      cursor:pointer;
+      user-select:none;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(234,240,255,.92);
+      font-weight:600;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover{background: rgba(255,255,255,.085); border-color: rgba(255,255,255,.18)}
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(59,130,246,.22), rgba(139,92,246,.18));
+      border-color: rgba(59,130,246,.28);
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 7px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: rgba(234,240,255,.80);
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .brand{min-width:unset}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .pad{padding:20px}
+    .card .title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color: rgba(234,240,255,.88);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      white-space:nowrap;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--teal); box-shadow: 0 0 0 4px rgba(20,184,166,.18)}
+    .h2{
+      margin:0;
+      font-size: 22px;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .lead{
+      margin:8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.55;
+      max-width: 70ch;
+    }
+
+    .heroGrid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns:1fr}
+    }
+    .mini{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      padding: 12px;
+      box-shadow: var(--shadow2);
+      min-height: 92px;
+    }
+    .mini .k{
+      font-size:12px;
+      color: var(--faint);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .mini .v{
+      margin-top:6px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .mini .s{
+      margin-top:4px;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+
+    .spark{
+      position:absolute;
+      inset:auto -60px -90px auto;
+      width: 240px; height: 240px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.30), transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(139,92,246,.22), transparent 55%),
+                  radial-gradient(circle at 50% 50%, rgba(20,184,166,.10), transparent 55%);
+      filter: blur(2px);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    /* Section layout */
+    .grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .sectionTitle{
+      margin: 26px 0 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .sectionTitle h3{
+      margin:0;
+      font-size: 15px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      color: rgba(234,240,255,.86);
+    }
+    .sectionTitle p{
+      margin:0;
+      font-size:12px;
+      color: var(--muted);
+      max-width: 72ch;
+      line-height:1.4;
+      text-align:right;
+    }
+    @media (max-width: 980px){
+      .sectionTitle{align-items:flex-start; flex-direction:column}
+      .sectionTitle p{text-align:left}
+    }
+
+    /* Charts */
+    .chartWrap{
+      padding: 18px 20px 16px;
+      border-top:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,0));
+    }
+    svg{display:block; width:100%; height:auto}
+    .legend{
+      margin-top: 10px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .legItem{display:inline-flex; align-items:center; gap:8px}
+    .sw{
+      width:10px;height:10px;border-radius:3px;
+      background: var(--blue);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 0 0 4px rgba(59,130,246,.14);
+    }
+    .sw.purple{background: var(--purple); box-shadow: 0 0 0 4px rgba(139,92,246,.14)}
+    .sw.teal{background: var(--teal); box-shadow: 0 0 0 4px rgba(20,184,166,.14)}
+    .sw.amber{background: var(--amber); box-shadow: 0 0 0 4px rgba(245,158,11,.14)}
+    .sw.rose{background: var(--rose); box-shadow: 0 0 0 4px rgba(251,113,133,.12)}
+    .sw.red{background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.12)}
+
+    .note{
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.5;
+    }
+
+    /* Skill cards */
+    .skills{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      padding: 0 20px 20px;
+    }
+    @media (max-width: 980px){
+      .skills{grid-template-columns:1fr}
+    }
+    .skill{
+      background: rgba(0,0,0,.14);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius2);
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .skill:before{
+      content:"";
+      position:absolute; inset:-40% -30% auto auto;
+      width: 240px; height: 240px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(20,184,166,.12), transparent 58%),
+                  radial-gradient(circle at 70% 70%, rgba(59,130,246,.10), transparent 60%);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .skill h4{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:-.01em;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(234,240,255,.72);
+      padding: 4px 7px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      white-space:nowrap;
+    }
+    .skill p{
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.55;
+      position:relative;
+      z-index:1;
+    }
+    .skill ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(234,240,255,.80);
+      font-size: 12px;
+      line-height:1.55;
+      position:relative;
+      z-index:1;
+    }
+    .skill li{margin: 5px 0}
+
+    /* Simulators */
+    .sim{
+      padding: 0 20px 20px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .simRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .simRow{grid-template-columns:1fr}
+    }
+    .field{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      padding: 12px;
+      box-shadow: var(--shadow2);
+    }
+    .field label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      color: var(--muted);
+      margin-bottom:10px;
+    }
+    .field input[type="range"]{width:100%}
+    .field select, .field input[type="number"], .field input[type="text"]{
+      width:100%;
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.20);
+      color: rgba(234,240,255,.92);
+      outline:none;
+    }
+    .field small{color: var(--faint)}
+    .result{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(59,130,246,.11), rgba(139,92,246,.07));
+      padding: 14px;
+      box-shadow: var(--shadow2);
+    }
+    .result .big{
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing:-.03em;
+      margin: 0;
+    }
+    .result .sub{
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: rgba(234,240,255,.78);
+      line-height:1.55;
+    }
+    .chips{
+      margin-top: 10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      font-size: 12px;
+      color: rgba(234,240,255,.86);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+
+    /* Timeline */
+    .timeline{
+      padding: 0 20px 20px;
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      display:grid;
+      grid-template-columns: 110px 1fr;
+      gap:12px;
+      align-items:flex-start;
+      padding: 12px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .step:before{
+      content:"";
+      position:absolute; inset:0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, rgba(20,184,166,.9), rgba(59,130,246,.75), rgba(139,92,246,.65));
+      opacity:.9;
+    }
+    .step .t{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(234,240,255,.75);
+      padding-top: 2px;
+    }
+    .step h5{
+      margin: 0;
+      font-size: 13px;
+      letter-spacing:-.01em;
+    }
+    .step p{
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.55;
+    }
+
+    /* Modes */
+    .modes{
+      padding: 0 20px 20px;
+      display:grid;
+      gap:12px;
+    }
+    .modePick{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      cursor:pointer;
+      user-select:none;
+      font-size: 12px;
+      color: rgba(234,240,255,.86);
+    }
+    .toggle input{accent-color: var(--teal)}
+    .modeCard{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      padding: 14px;
+      box-shadow: var(--shadow2);
+    }
+    .modeCard h4{margin:0;font-size:14px}
+    .modeCard p{margin: 8px 0 0;color: var(--muted);font-size:12px;line-height:1.55}
+    .modeGrid{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 980px){
+      .modeGrid{grid-template-columns:1fr}
+    }
+    .modeMetric{
+      padding: 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.86);
+      font-size:12px;
+    }
+    .modeMetric b{display:block;font-size:12px;color: rgba(234,240,255,.92)}
+    .modeMetric span{display:block;margin-top:5px;color: var(--muted);line-height:1.35}
+
+    /* Playbook */
+    .playbook{
+      padding: 0 20px 20px;
+      display:grid;
+      gap:12px;
+    }
+    .checklist{
+      display:grid;
+      gap:8px;
+    }
+    .item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      box-shadow: var(--shadow2);
+    }
+    .item input{margin-top:2px; accent-color: var(--blue)}
+    .item b{display:block;font-size:12px}
+    .item p{margin:3px 0 0; font-size:12px; color: var(--muted); line-height:1.45}
+    .footer{
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.7;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .footer .right{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,26,.86);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+      color: rgba(234,240,255,.90);
+      font-size: 12px;
+      display:none;
+      z-index: 80;
+      backdrop-filter: blur(10px);
+      max-width: calc(100% - 30px);
+    }
+
+    /* Print */
+    @media print{
+      .topbar{display:none !important}
+      body{background:#fff;color:#111}
+      .card{box-shadow:none}
+      .badge,.btn,.pill{display:none !important}
+      .wrap{width: 100%; margin:0; padding:0}
+      .card{border: 1px solid #ddd}
+      .mini,.skill,.field,.result,.step,.modeCard,.item{border: 1px solid #ddd; background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>AI Adoption • The Missing Middle (201 Level)</h1>
+          <div class="sub">Interactive infographic: from “tool skills” to “management skills”</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="pill" title="Adjust the model 'jaggedness' severity in the frontier simulator">
+          <label>Jaggedness</label>
+          <input id="jagged" type="range" min="0" max="100" value="55" />
+          <span class="kbd" id="jaggedVal">55</span>
+        </div>
+        <div class="pill" title="Adjust how much 'permission' your organization grants (policy clarity + psychological safety)">
+          <label>Permission</label>
+          <input id="perm" type="range" min="0" max="100" value="45" />
+          <span class="kbd" id="permVal">45</span>
+        </div>
+        <button class="btn primary" id="saveBtn" title="Save current settings to your browser (local)">
+          Save <span class="kbd">S</span>
+        </button>
+        <button class="btn" id="resetBtn" title="Reset settings and checklists">
+          Reset <span class="kbd">R</span>
+        </button>
+        <button class="btn" id="printBtn" title="Print to PDF">
+          Print <span class="kbd">P</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot"></span> Core claim: AI is a management skill</div>
+              <h2 class="h2">Most AI rollouts fail in the same place: the “missing middle.”</h2>
+              <p class="lead">
+                Early excitement spikes, then usage collapses. The people who keep going aren’t the best prompt writers —
+                they’re the best managers: they assemble context, break work into pieces, set standards, verify outputs,
+                and create repeatable playbooks that teammates can follow.
+              </p>
+            </div>
+            <div class="badge" title="A simple mental model for the adoption crater">
+              Trough ≈ 3 weeks → quiet drop-off
+            </div>
+          </div>
+
+          <div class="heroGrid">
+            <div class="mini">
+              <div class="k">Adoption Pattern</div>
+              <div class="v" id="heroPattern">Spike → Crater</div>
+              <div class="s">The first “tool tour” rarely creates durable habits.</div>
+            </div>
+            <div class="mini">
+              <div class="k">Typical Outcome</div>
+              <div class="v"><span id="heroMAU">20%</span> MAU</div>
+              <div class="s">Most seats go dormant after initial training.</div>
+            </div>
+            <div class="mini">
+              <div class="k">Unlock Layer</div>
+              <div class="v">201 Level</div>
+              <div class="s">Applied judgment + workflow integration + verification.</div>
+            </div>
+          </div>
+        </div>
+        <div class="spark" aria-hidden="true"></div>
+
+        <div class="chartWrap">
+          <svg viewBox="0 0 920 220" role="img" aria-label="Adoption over time chart showing excitement spike then drop-off">
+            <defs>
+              <linearGradient id="gLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="rgba(20,184,166,.95)"/>
+                <stop offset=".5" stop-color="rgba(59,130,246,.95)"/>
+                <stop offset="1" stop-color="rgba(139,92,246,.95)"/>
+              </linearGradient>
+              <linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="rgba(59,130,246,.18)"/>
+                <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- grid -->
+            <g opacity=".35" stroke="rgba(255,255,255,.10)">
+              <line x1="40" y1="30" x2="40" y2="190"/>
+              <line x1="40" y1="190" x2="890" y2="190"/>
+              <line x1="40" y1="150" x2="890" y2="150"/>
+              <line x1="40" y1="110" x2="890" y2="110"/>
+              <line x1="40" y1="70" x2="890" y2="70"/>
+            </g>
+
+            <!-- labels -->
+            <g fill="rgba(234,240,255,.70)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace" font-size="11">
+              <text x="40" y="208">Week 0</text>
+              <text x="260" y="208">Week 1</text>
+              <text x="480" y="208">Week 3</text>
+              <text x="700" y="208">Month 2</text>
+              <text x="850" y="208" text-anchor="end">Month 6</text>
+              <text x="14" y="75" transform="rotate(-90 14 75)">Usage</text>
+            </g>
+
+            <!-- area -->
+            <path id="adoptArea" d=""
+              fill="url(#gFill)" stroke="none"></path>
+
+            <!-- line -->
+            <path id="adoptLine" d=""
+              fill="none" stroke="url(#gLine)" stroke-width="4" filter="url(#glow)" stroke-linecap="round" stroke-linejoin="round"></path>
+
+            <!-- marker -->
+            <g id="adoptMarker"></g>
+
+            <!-- annotations -->
+            <g fill="rgba(234,240,255,.85)" font-size="12">
+              <text x="232" y="52">Excitement peak</text>
+              <text x="462" y="132">Trough / drop-off</text>
+              <text x="710" y="170">Survivors build habit</text>
+            </g>
+            <g stroke="rgba(255,255,255,.20)" stroke-width="1">
+              <line x1="260" y1="58" x2="260" y2="190"/>
+              <line x1="480" y1="138" x2="480" y2="190"/>
+              <line x1="700" y1="176" x2="700" y2="190"/>
+            </g>
+          </svg>
+
+          <div class="legend">
+            <span class="legItem"><span class="sw teal"></span> Early novelty</span>
+            <span class="legItem"><span class="sw"></span> Tool-only training</span>
+            <span class="legItem"><span class="sw purple"></span> 201-level workflow skill</span>
+          </div>
+
+          <div class="note">
+            This infographic focuses on the “missing middle”: the point where the question shifts from
+            <b>“How do I use the tool?”</b> to <b>“Where does it fit in my workflow, and when do I trust it?”</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT HERO PANEL -->
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--amber); box-shadow:0 0 0 4px rgba(245,158,11,.16)"></span> The real bottleneck</div>
+              <h2 class="h2">AI adoption isn’t “tech adoption.” It’s capability building.</h2>
+              <p class="lead">
+                Organizations often invest in the extremes:
+                <b>101 basics</b> (prompting + tool tour) and <b>401 technical implementation</b> (APIs, RAG, fine-tuning).
+                But most productivity for most people comes from the <b>201 layer</b>: judgment, decomposition, verification,
+                and embedding AI into repeatable workflows.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chartWrap">
+          <svg viewBox="0 0 520 270" role="img" aria-label="Training landscape ladder 101 201 401">
+            <defs>
+              <linearGradient id="g101" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(59,130,246,.35)"/>
+                <stop offset="1" stop-color="rgba(59,130,246,.10)"/>
+              </linearGradient>
+              <linearGradient id="g201" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(20,184,166,.36)"/>
+                <stop offset="1" stop-color="rgba(20,184,166,.10)"/>
+              </linearGradient>
+              <linearGradient id="g401" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(139,92,246,.34)"/>
+                <stop offset="1" stop-color="rgba(139,92,246,.10)"/>
+              </linearGradient>
+            </defs>
+
+            <g fill="rgba(234,240,255,.85)" font-size="12">
+              <text x="20" y="24">Training Market: where teams spend time</text>
+            </g>
+
+            <!-- rails -->
+            <g stroke="rgba(255,255,255,.10)">
+              <line x1="20" y1="240" x2="500" y2="240"/>
+              <line x1="20" y1="70" x2="500" y2="70"/>
+            </g>
+
+            <!-- blocks -->
+            <g>
+              <rect x="20" y="110" width="150" height="130" rx="18" fill="url(#g101)" stroke="rgba(255,255,255,.12)"/>
+              <rect x="185" y="80" width="150" height="160" rx="18" fill="url(#g201)" stroke="rgba(255,255,255,.12)"/>
+              <rect x="350" y="130" width="150" height="110" rx="18" fill="url(#g401)" stroke="rgba(255,255,255,.12)"/>
+            </g>
+
+            <!-- labels -->
+            <g fill="rgba(234,240,255,.92)" font-weight="700">
+              <text x="40" y="140">101</text>
+              <text x="205" y="110">201</text>
+              <text x="370" y="160">401</text>
+            </g>
+            <g fill="rgba(234,240,255,.76)" font-size="12">
+              <text x="40" y="160">Tool tours</text>
+              <text x="40" y="178">Prompt basics</text>
+              <text x="40" y="196">Generic use cases</text>
+
+              <text x="205" y="130">Workflow fit</text>
+              <text x="205" y="148">Trust & verification</text>
+              <text x="205" y="166">Task decomposition</text>
+              <text x="205" y="184">Iterative refinement</text>
+
+              <text x="370" y="180">APIs & RAG</text>
+              <text x="370" y="198">Fine-tuning</text>
+              <text x="370" y="216">Integrations</text>
+            </g>
+
+            <!-- "missing" highlight -->
+            <g>
+              <path d="M185 80 L335 80 L335 240 L185 240 Z" fill="none" stroke="rgba(20,184,166,.85)" stroke-width="2" stroke-dasharray="6 6"/>
+              <text x="205" y="260" fill="rgba(234,240,255,.72)" font-size="11">“Missing middle” is where most gains live</text>
+            </g>
+          </svg>
+
+          <div class="note">
+            The 201 layer behaves less like “software usage” and more like “managing an intern”: you set scope,
+            supply context, define quality, review results, and iterate until it’s correct.
+          </div>
+        </div>
+
+        <div class="playbook">
+          <div class="sectionTitle" style="margin:0">
+            <h3>One-sentence reframe</h3>
+            <p>AI is powerful, but inconsistent — management turns it into a reliable teammate.</p>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="reframeChk" />
+            <div>
+              <b>Adoption reframe</b>
+              <p>
+                If the majority stops using AI after a few tries, it’s rarely because the model is “bad” —
+                it’s because people lack workflow judgment, verification habits, and permission clarity.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: WHAT HAPPENS TO THE 80% -->
+    <div class="sectionTitle">
+      <h3>Why the 80% give up</h3>
+      <p>Three attempts: generic → confident & wrong → “faster to do it myself.” The missing skill is not prompting; it’s applied judgment.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--rose); box-shadow:0 0 0 4px rgba(251,113,133,.14)"></span> Common failure loop</div>
+              <h2 class="h2">A predictable “3-try churn” pattern</h2>
+              <p class="lead">
+                Most first-time users treat AI like a vending machine: insert a prompt, receive an answer.
+                When the output is mediocre or wrong, they blame the tool and stop. Survivors do the opposite:
+                they <b>change the management approach</b>, not the tool.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="timeline">
+          <div class="step">
+            <div class="t">TRY #1</div>
+            <div>
+              <h5>“Help me with this report.”</h5>
+              <p>Too vague → generic output. AI cannot read your mind, and “default” context produces “default” results.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="t">TRY #2</div>
+            <div>
+              <h5>Add a bit more detail</h5>
+              <p>Still missing constraints, audience, format, examples → output becomes confident, sometimes wrong.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="t">TRY #3</div>
+            <div>
+              <h5>“This is risky.”</h5>
+              <p>User chooses speed + certainty: “I’ll just do it myself.” Habit never forms.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="t">SURVIVOR</div>
+            <div>
+              <h5>Manage it like a collaborator</h5>
+              <p>Provide context, break tasks into chunks, verify, refine, and convert wins into a repeatable playbook.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--red); box-shadow:0 0 0 4px rgba(239,68,68,.14)"></span> The jagged frontier</div>
+              <h2 class="h2">AI helps inside the frontier — harms outside it</h2>
+              <p class="lead">
+                AI capability is “jagged”: it can be strong at some tasks and unexpectedly weak at adjacent ones.
+                The 201 skill is not believing AI is a universal upgrade, but learning <b>where it’s safe</b>, and
+                <b>where verification must be strict</b>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chartWrap">
+          <svg viewBox="0 0 920 260" role="img" aria-label="Frontier chart showing safe zone and risky zone with jagged boundary">
+            <defs>
+              <linearGradient id="frontSafe" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(20,184,166,.18)"/>
+                <stop offset="1" stop-color="rgba(59,130,246,.10)"/>
+              </linearGradient>
+              <linearGradient id="frontRisk" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(239,68,68,.18)"/>
+                <stop offset="1" stop-color="rgba(245,158,11,.10)"/>
+              </linearGradient>
+              <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="2" />
+              </filter>
+            </defs>
+
+            <!-- axes -->
+            <g stroke="rgba(255,255,255,.10)">
+              <line x1="50" y1="220" x2="880" y2="220"/>
+              <line x1="50" y1="40" x2="50" y2="220"/>
+            </g>
+
+            <g fill="rgba(234,240,255,.72)" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace">
+              <text x="50" y="245">Task novelty / ambiguity →</text>
+              <text x="8" y="120" transform="rotate(-90 8 120)">Stakes / verification needs ↑</text>
+              <text x="60" y="55">High</text>
+              <text x="60" y="216">Low</text>
+            </g>
+
+            <!-- safe and risk panels -->
+            <path id="safeZone" d="" fill="url(#frontSafe)" stroke="rgba(20,184,166,.35)"/>
+            <path id="riskZone" d="" fill="url(#frontRisk)" stroke="rgba(239,68,68,.35)"/>
+
+            <!-- frontier boundary -->
+            <path id="frontier" d="" fill="none" stroke="rgba(234,240,255,.55)" stroke-width="2.2" stroke-dasharray="6 7" filter="url(#soft)"/>
+
+            <!-- labels -->
+            <g fill="rgba(234,240,255,.88)" font-size="12">
+              <text x="90" y="85">Inside frontier: speed-ups</text>
+              <text x="560" y="115">Outside frontier: hidden quality risk</text>
+            </g>
+
+            <!-- example points -->
+            <g id="frontPoints"></g>
+          </svg>
+
+          <div class="legend">
+            <span class="legItem"><span class="sw teal"></span> Likely safe (with light review)</span>
+            <span class="legItem"><span class="sw red"></span> Risky (needs strict verification)</span>
+            <span class="legItem"><span class="sw amber"></span> “Looks easy” trap zone</span>
+          </div>
+
+          <div class="note">
+            Frontier recognition prevents “quality regressions”: cases where AI causes people to be less correct on work they previously did well.
+          </div>
+        </div>
+
+        <div class="sim">
+          <div class="sectionTitle" style="margin:0">
+            <h3>Frontier simulator</h3>
+            <p>Adjust jaggedness & see which tasks are safe vs risky. Use it to teach your org what “management” means.</p>
+          </div>
+
+          <div class="simRow">
+            <div class="field">
+              <label>
+                Task type
+                <span class="kbd" id="taskHint">Creative draft</span>
+              </label>
+              <select id="taskType">
+                <option value="draft">Creative draft (low stakes)</option>
+                <option value="summary">Summarize known material</option>
+                <option value="analysis">Analytical memo / reasoning</option>
+                <option value="spreadsheet">Spreadsheet logic / formulas</option>
+                <option value="legal">Legal / compliance language</option>
+                <option value="medical">Medical / safety-critical info</option>
+                <option value="coding">Coding with tests</option>
+                <option value="rfp">100-page RFP response</option>
+              </select>
+              <small>Tasks differ in stakes and verification requirements.</small>
+            </div>
+
+            <div class="field">
+              <label>
+                Verification protocol
+                <span class="kbd" id="verifyHint">Light review</span>
+              </label>
+              <select id="verifyLevel">
+                <option value="light">Light review (editing / tone)</option>
+                <option value="medium">Medium (spot-check facts / logic)</option>
+                <option value="strict">Strict (sources, tests, citations, peer review)</option>
+              </select>
+              <small>201 skill = match verification to risk.</small>
+            </div>
+          </div>
+
+          <div class="result" id="frontResult">
+            <p class="big">Moderate Risk</p>
+            <p class="sub">
+              With current settings, this task sits near a jagged boundary. Use tighter constraints, split into chunks,
+              and validate the most failure-prone sections (facts, numbers, edge cases).
+            </p>
+            <div class="chips" id="frontChips"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: THE 201 SKILLS -->
+    <div class="sectionTitle">
+      <h3>The 201 skills</h3>
+      <p>Six skills — none of them are “prompt tricks.” These are transferable across tools and survive model upgrades.</p>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="title">
+          <div>
+            <div class="badge"><span class="dot"></span> The “manager” toolkit</div>
+            <h2 class="h2">201 level = task decomposition + judgment + repeatable workflows</h2>
+            <p class="lead">
+              Think of AI as a capable but inexperienced collaborator. You don’t hand them a giant task and hope.
+              You define the goal, supply context, split the work, review outputs, give feedback, and institutionalize what works.
+            </p>
+          </div>
+          <div class="badge" title="What 201 is not">
+            Not: prompt engineering
+          </div>
+        </div>
+      </div>
+
+      <div class="skills">
+        <div class="skill">
+          <h4>1) Context assembly <span class="tag">Input quality</span></h4>
+          <p>Provide the right background, constraints, and examples — not “everything” and not “nothing.”</p>
+          <ul>
+            <li>Define audience, intent, format, and “definition of done.”</li>
+            <li>Add constraints: time, tone, length, exclusions, compliance rules.</li>
+            <li>Include 1–2 high-quality examples (“do it like this”).</li>
+          </ul>
+        </div>
+
+        <div class="skill">
+          <h4>2) Quality judgment <span class="tag">Trust calibration</span></h4>
+          <p>Detect which parts are reliable vs risky — often within the same paragraph.</p>
+          <ul>
+            <li>Separate “style polish” from “truth claims.”</li>
+            <li>Use checklists: numbers, dates, names, assumptions, edge cases.</li>
+            <li>Escalate verification with stakes (legal/medical ≠ drafts).</li>
+          </ul>
+        </div>
+
+        <div class="skill">
+          <h4>3) Task decomposition <span class="tag">Scope control</span></h4>
+          <p>Break the work into AI-appropriate chunks rather than throwing a whole project at the tool.</p>
+          <ul>
+            <li>Split: outline → sections → examples → risk review → final assembly.</li>
+            <li>Delegate clearly: “You draft options; I pick and edit.”</li>
+            <li>Use staged deliverables with checkpoints.</li>
+          </ul>
+        </div>
+
+        <div class="skill">
+          <h4>4) Iterative refinement <span class="tag">70 → 95%</span></h4>
+          <p>First output is a starting point. Improvement happens via structured passes.</p>
+          <ul>
+            <li>Pass 1: structure & coverage, Pass 2: accuracy, Pass 3: tone & polish.</li>
+            <li>Request alternatives: “Give 3 approaches; explain tradeoffs.”</li>
+            <li>Force self-critique: “List weak points and fix them.”</li>
+          </ul>
+        </div>
+
+        <div class="skill">
+          <h4>5) Workflow integration <span class="tag">Habit formation</span></h4>
+          <p>AI stops being “a side tool” and becomes “how we do this here.”</p>
+          <ul>
+            <li>Turn wins into templates + playbooks.</li>
+            <li>Make outputs portable: checklists, prompts, examples, rubric.</li>
+            <li>Onboard new hires into the workflow, not into the tool.</li>
+          </ul>
+        </div>
+
+        <div class="skill">
+          <h4>6) Frontier recognition <span class="tag">Avoid traps</span></h4>
+          <p>Know when you’re outside the capability boundary and must change tactics.</p>
+          <ul>
+            <li>Share failure cases: “Here’s where it breaks.”</li>
+            <li>Use strict protocols for high-risk outputs.</li>
+            <li>Maintain a living map: safe tasks, risky tasks, banned tasks.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: CENTAUR vs CYBORG -->
+    <div class="sectionTitle">
+      <h3>Two winning work patterns</h3>
+      <p>Centaurs split responsibilities cleanly; cyborgs integrate continuously. The 201 skill is choosing the right mode per task.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--blue); box-shadow:0 0 0 4px rgba(59,130,246,.14)"></span> Centaur mode</div>
+              <h2 class="h2">Clear boundaries, clear accountability</h2>
+              <p class="lead">
+                Best for high-stakes work. The human owns framing, decisions, and verification checkpoints.
+                The AI generates options, drafts, and summaries within controlled scope.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modes">
+          <div class="modeCard">
+            <h4>When centaur wins</h4>
+            <p>
+              Legal language, policy documents, compliance-sensitive writing, medical or safety-critical communications,
+              executive decisions, and anywhere “who is responsible?” must be unambiguous.
+            </p>
+            <div class="modeGrid">
+              <div class="modeMetric"><b>Strength</b><span>Strong human judgment + controlled delegation</span></div>
+              <div class="modeMetric"><b>Risk control</b><span>Explicit checkpoints and verification gates</span></div>
+              <div class="modeMetric"><b>Failure mode</b><span>Over-delegation, vague constraints, skipped review</span></div>
+            </div>
+          </div>
+
+          <div class="modeCard">
+            <h4>Micro-playbook</h4>
+            <p>
+              1) Human frames + constraints. 2) AI produces 2–4 options. 3) Human selects. 4) AI drafts.
+              5) Human verifies high-risk claims. 6) AI revises with feedback. 7) Final human sign-off.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--purple); box-shadow:0 0 0 4px rgba(139,92,246,.14)"></span> Cyborg mode</div>
+              <h2 class="h2">Continuous collaboration, fluid boundaries</h2>
+              <p class="lead">
+                Best for creative and iterative work. The human and AI co-create: brainstorm, draft, critique, reframe,
+                and refine in many small turns.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modes">
+          <div class="modeCard">
+            <h4>When cyborg wins</h4>
+            <p>
+              Product drafts, marketing copy, ideation, design exploration, code prototyping with tests,
+              content generation where quality improves through iteration.
+            </p>
+            <div class="modeGrid">
+              <div class="modeMetric"><b>Strength</b><span>Fast iteration loops and exploration</span></div>
+              <div class="modeMetric"><b>Speed</b><span>High throughput via micro-feedback cycles</span></div>
+              <div class="modeMetric"><b>Failure mode</b><span>Drift, hidden errors, vague “good enough”</span></div>
+            </div>
+          </div>
+
+          <div class="modeCard">
+            <h4>Micro-playbook</h4>
+            <p>
+              1) Start with a rough idea. 2) AI drafts. 3) Human critiques specific sections. 4) AI revises.
+              5) Repeat until structure holds. 6) Run a “truth pass” for facts and claims. 7) Final polish.
+            </p>
+          </div>
+
+          <div class="modePick">
+            <label class="toggle" title="Use this switch to see recommended mode by task + verification">
+              <input type="checkbox" id="modeAuto" checked />
+              Auto-recommend mode by task & verification level
+            </label>
+            <span class="toggle" id="modeHint" aria-live="polite">Recommended: <b>Centaur</b> for high stakes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: THE ORGANIZATIONAL MOVES -->
+    <div class="sectionTitle">
+      <h3>Organizational moves that unlock 201</h3>
+      <p>Adoption fails when policy is only “red stop signs” and learning is individual. Fix permission, protocols, and shared playbooks.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--amber); box-shadow:0 0 0 4px rgba(245,158,11,.16)"></span> Permission gap</div>
+              <h2 class="h2">The most conscientious employees opt out first</h2>
+              <p class="lead">
+                If the first question is “are we allowed to do that?” adoption collapses.
+                Permission clarity (what data is allowed, how to disclose usage, what “good” looks like) is a capability multiplier.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="playbook">
+          <div class="sectionTitle" style="margin:0">
+            <h3>Permission checklist</h3>
+            <p>Make “yes” easy and safe.</p>
+          </div>
+          <div class="checklist" id="permList">
+            <div class="item"><input type="checkbox" data-k="dataRules"><div><b>Clear data rules</b><p>What can be pasted? What must be redacted? What is banned?</p></div></div>
+            <div class="item"><input type="checkbox" data-k="disclosure"><div><b>Disclosure norms</b><p>When do we label AI assistance? What is acceptable attribution?</p></div></div>
+            <div class="item"><input type="checkbox" data-k="review"><div><b>Verification expectations</b><p>What tasks require strict review? Who approves?</p></div></div>
+            <div class="item"><input type="checkbox" data-k="examples"><div><b>Positive examples</b><p>Show what good AI usage looks like, not only what’s forbidden.</p></div></div>
+            <div class="item"><input type="checkbox" data-k="safeSandbox"><div><b>Safe sandbox workflows</b><p>Provide approved tools/workspaces so users don’t default to shadow IT.</p></div></div>
+          </div>
+
+          <div class="result">
+            <p class="big" id="permScore">Permission Score: 45</p>
+            <p class="sub" id="permSub">
+              Low permission clarity creates a “giant red stop sign” in people’s heads. Raise clarity and adoption becomes easier to sustain.
+            </p>
+            <div class="chips" id="permChips"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pad">
+          <div class="title">
+            <div>
+              <div class="badge"><span class="dot" style="background:var(--teal); box-shadow:0 0 0 4px rgba(20,184,166,.16)"></span> Scaling learning</div>
+              <h2 class="h2">Individual mastery doesn’t automatically transfer</h2>
+              <p class="lead">
+                Generic tools are flexible, but that flexibility makes enterprise scaling hard: interactions reset each time.
+                The organization must capture and distribute 201 practices via playbooks, guardrails, and shared failure cases.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim">
+          <div class="sectionTitle" style="margin:0">
+            <h3>Training planner</h3>
+            <p>Estimate how many users become “regular” based on training hours + playbooks.</p>
+          </div>
+
+          <div class="simRow">
+            <div class="field">
+              <label>People trained <span class="kbd" id="nUsersVal">500</span></label>
+              <input id="nUsers" type="range" min="50" max="5000" value="500" />
+              <small>Size of the cohort that received access + any training.</small>
+            </div>
+            <div class="field">
+              <label>Formal training hours per person <span class="kbd" id="hoursVal">6</span></label>
+              <input id="hours" type="range" min="0" max="20" value="6" />
+              <small>Hours focused on workflow, verification, and domain playbooks.</small>
+            </div>
+          </div>
+
+          <div class="simRow">
+            <div class="field">
+              <label>Playbook maturity <span class="kbd" id="pbVal">2</span></label>
+              <input id="playbooks" type="range" min="0" max="5" value="2" />
+              <small>0 = none, 5 = strong templates + guardrails across functions.</small>
+            </div>
+            <div class="field">
+              <label>Frontier mapping coverage <span class="kbd" id="fmVal">2</span></label>
+              <input id="frontierMap" type="range" min="0" max="5" value="2" />
+              <small>How well experts mapped safe vs risky tasks, with verification protocols.</small>
+            </div>
+          </div>
+
+          <div class="result" id="plannerRes">
+            <p class="big"><span id="regularUsers">105</span> regular users</p>
+            <p class="sub" id="plannerSub">
+              This model suggests regular usage grows when training targets 201 skills (not just tool tours), and when playbooks spread wins to non-experts.
+            </p>
+            <div class="chips" id="plannerChips"></div>
+          </div>
+
+          <div class="note">
+            The point isn’t the exact math — it’s the directional truth: <b>hours + playbooks + permission</b> compound.
+            Tool access alone rarely does.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: THE TIME BOMB -->
+    <div class="sectionTitle">
+      <h3>The hidden time bomb</h3>
+      <p>When routine work moves to AI, the apprenticeship path collapses. Without rebuilding it, organizations accumulate a judgment deficit.</p>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="title">
+          <div>
+            <div class="badge"><span class="dot" style="background:var(--lime); box-shadow:0 0 0 4px rgba(163,230,53,.14)"></span> Judgment pipeline</div>
+            <h2 class="h2">If juniors don’t practice, seniors can’t scale frontier mapping forever</h2>
+            <p class="lead">
+              In many domains, juniors learn judgment by doing drafts, research, and routine analysis. If those steps are
+              delegated to AI without replacing the learning pathway, future managers won’t know where the frontier is —
+              and the organization’s AI advantage decays.
+            </p>
+          </div>
+          <div class="badge" title="A practical fix">
+            Build “AI apprenticeship” loops
+          </div>
+        </div>
+      </div>
+
+      <div class="playbook">
+        <div class="sectionTitle" style="margin:0">
+          <h3>Practical moves</h3>
+          <p>Turn AI into a teaching tool, not a replacement for learning.</p>
+        </div>
+
+        <div class="checklist">
+          <div class="item">
+            <input type="checkbox" data-k="apprentice1" />
+            <div>
+              <b>Require “explain your verification”</b>
+              <p>Juniors must show how they checked claims, not just produce an output.</p>
+            </div>
+          </div>
+          <div class="item">
+            <input type="checkbox" data-k="apprentice2" />
+            <div>
+              <b>Keep a “failure case” library</b>
+              <p>Real examples of where AI breaks in your domain — and how to detect it.</p>
+            </div>
+          </div>
+          <div class="item">
+            <input type="checkbox" data-k="apprentice3" />
+            <div>
+              <b>Pair juniors with frontier mappers</b>
+              <p>Experts teach boundaries by reviewing AI-assisted work together.</p>
+            </div>
+          </div>
+          <div class="item">
+            <input type="checkbox" data-k="apprentice4" />
+            <div>
+              <b>Make “templates” a deliverable</b>
+              <p>Every successful workflow ends in a template, rubric, and verification checklist.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          The long-term win is not “more tokens.” It’s durable organizational judgment that makes AI outputs trustworthy at scale.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: QUICK START PLAYBOOK -->
+    <div class="sectionTitle">
+      <h3>Quick-start: turn a workflow into a 201 playbook</h3>
+      <p>Pick one high-volume workflow (e.g., RFP responses) and build a repeatable, verifiable process your whole team can use.</p>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="title">
+          <div>
+            <div class="badge"><span class="dot"></span> 7-step blueprint</div>
+            <h2 class="h2">From “some people use AI” to “this is how we do it”</h2>
+            <p class="lead">
+              The goal is to convert isolated expert behavior into a shared operating system:
+              clear guardrails, clear steps, and predictable verification so non-experts can work safely within boundaries.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="step"><div class="t">STEP 1</div><div><h5>Select a workflow</h5><p>Choose a high-frequency task with visible outputs (RFPs, weekly reports, customer emails, analysis memos).</p></div></div>
+        <div class="step"><div class="t">STEP 2</div><div><h5>Define “good” (rubric)</h5><p>Write a simple scoring rubric: accuracy, coverage, tone, compliance, and required sections.</p></div></div>
+        <div class="step"><div class="t">STEP 3</div><div><h5>Map the frontier</h5><p>Experts identify what AI does well vs poorly, plus “trap zones” that look easy but fail often.</p></div></div>
+        <div class="step"><div class="t">STEP 4</div><div><h5>Create guardrails</h5><p>Data rules + disclosure norms + verification protocols for each risk level.</p></div></div>
+        <div class="step"><div class="t">STEP 5</div><div><h5>Template the process</h5><p>Turn steps into a checklist + reusable prompt skeletons + example inputs and outputs.</p></div></div>
+        <div class="step"><div class="t">STEP 6</div><div><h5>Run “low-stakes” competitions</h5><p>Make wins visible. Social proof increases adoption faster than directives.</p></div></div>
+        <div class="step"><div class="t">STEP 7</div><div><h5>Share failures systematically</h5><p>Build a mechanism to publish “what didn’t work” so others avoid repeating traps.</p></div></div>
+      </div>
+
+      <div class="playbook">
+        <div class="sectionTitle" style="margin:0">
+          <h3>Mini prompt skeleton</h3>
+          <p>A 201 prompt is less “clever wording,” more “management brief.”</p>
+        </div>
+
+        <div class="item">
+          <input type="checkbox" id="promptSkeletonChk" />
+          <div>
+            <b>Management brief format</b>
+            <p style="margin-top:6px">
+              <span class="tag">Goal</span> What are we producing, for whom, and why?<br/>
+              <span class="tag">Constraints</span> Tone, length, compliance rules, what to avoid.<br/>
+              <span class="tag">Context</span> Only the needed facts, sources, examples, definitions.<br/>
+              <span class="tag">Deliverables</span> Outline → draft → risk review → final.<br/>
+              <span class="tag">Verification</span> List claims needing checks; ask for uncertainty flags.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>
+        <b style="color:rgba(234,240,255,.88)">Key idea:</b> AI fluency is not “tool usage.” It’s the judgment layer that makes AI reliable — and that layer looks like management.
+      </div>
+      <div class="right">
+        <span class="kbd">S</span> Save
+        <span class="kbd">R</span> Reset
+        <span class="kbd">P</span> Print
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // -----------------------------
+    // Tiny utility helpers
+    // -----------------------------
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+    function toast(msg){
+      const el = $("#toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=>{ el.style.display = "none"; }, 1800);
+    }
+
+    // -----------------------------
+    // Adoption curve (hero chart)
+    // -----------------------------
+    function buildAdoptionCurve(){
+      // normalized points: x in [0..1], y in [0..1]
+      // spike then crater then low stable usage with small recovery
+      const pts = [
+        [0.00, 0.15],
+        [0.12, 0.72],
+        [0.22, 0.90],
+        [0.34, 0.45],
+        [0.46, 0.26],
+        [0.60, 0.22],
+        [0.78, 0.28],
+        [1.00, 0.30]
+      ];
+      const W = 850, H = 160, ox=40, oy=30; // viewbox mapping
+      const mapX = t => ox + t*W;
+      const mapY = y => oy + (1-y)*H;
+
+      // Build smooth-ish path using quadratic beziers
+      let d = `M ${mapX(pts[0][0]).toFixed(2)} ${mapY(pts[0][1]).toFixed(2)}`;
+      for(let i=1;i<pts.length;i++){
+        const [x,y]=pts[i];
+        const [px,py]=pts[i-1];
+        const cx = mapX((px+x)/2);
+        const cy = mapY(py);
+        d += ` Q ${cx.toFixed(2)} ${cy.toFixed(2)} ${mapX(x).toFixed(2)} ${mapY(y).toFixed(2)}`;
+      }
+
+      // area
+      const area = `${d} L ${mapX(1).toFixed(2)} ${mapY(0).toFixed(2)} L ${mapX(0).toFixed(2)} ${mapY(0).toFixed(2)} Z`;
+
+      $("#adoptLine").setAttribute("d", d);
+      $("#adoptArea").setAttribute("d", area);
+
+      // marker at "trough" approx x=0.46
+      const mx = mapX(pts[4][0]), my = mapY(pts[4][1]);
+      $("#adoptMarker").innerHTML = `
+        <circle cx="${mx}" cy="${my}" r="5.5" fill="rgba(234,240,255,.90)" />
+        <circle cx="${mx}" cy="${my}" r="12" fill="rgba(59,130,246,.12)" stroke="rgba(255,255,255,.16)" />
+      `;
+    }
+
+    // -----------------------------
+    // Frontier chart (jagged boundary)
+    // -----------------------------
+    function frontierBoundary(jag){
+      // jag in [0..100], higher => more jagged
+      const W = 830, H = 180, ox=50, oy=40; // mapping
+      const steps = 16;
+      const amp = 0.06 + (jag/100)*0.12; // amplitude in normalized units
+      const base = 0.55; // baseline y (normalized)
+      const pts = [];
+
+      for(let i=0;i<=steps;i++){
+        const x = i/steps;
+        // create a boundary that slopes down with x, plus jagged noise
+        const slope = base - 0.22*x;
+        const noise =
+          Math.sin(x*7.2*Math.PI) * amp * 0.55 +
+          Math.sin(x*3.3*Math.PI + 0.8) * amp * 0.35 +
+          (Math.cos(x*11.1*Math.PI + 0.2) * amp * 0.25);
+        const y = clamp(slope + noise, 0.18, 0.85);
+        pts.push([x,y]);
+      }
+
+      const mapX = t => ox + t*W;
+      const mapY = y => oy + (1-y)*H;
+
+      let d = `M ${mapX(pts[0][0]).toFixed(2)} ${mapY(pts[0][1]).toFixed(2)}`;
+      for(let i=1;i<pts.length;i++){
+        const [x,y]=pts[i];
+        d += ` L ${mapX(x).toFixed(2)} ${mapY(y).toFixed(2)}`;
+      }
+      return {pts, d, mapX, mapY, ox, oy, W, H};
+    }
+
+    function renderFrontier(){
+      const jag = +$("#jagged").value;
+      $("#jaggedVal").textContent = jag;
+
+      const F = frontierBoundary(jag);
+      $("#frontier").setAttribute("d", F.d);
+
+      // safe zone: left/below boundary to bottom-left corner
+      // We'll define safe as "under" the boundary curve (lower stakes / lower novelty),
+      // risk as "above/right" (higher stakes, more novelty).
+      // We'll build two polygons by closing with chart corners.
+      const start = F.pts[0], end = F.pts[F.pts.length-1];
+      const sx = F.mapX(start[0]), sy = F.mapY(start[1]);
+      const ex = F.mapX(end[0]), ey = F.mapY(end[1]);
+
+      // safe polygon: from boundary -> bottom right -> bottom left
+      // But visually we want safe on lower-left; we’ll fill under boundary down to bottom axis.
+      let safeD = `M ${sx.toFixed(2)} ${sy.toFixed(2)}`;
+      for(let i=1;i<F.pts.length;i++){
+        safeD += ` L ${F.mapX(F.pts[i][0]).toFixed(2)} ${F.mapY(F.pts[i][1]).toFixed(2)}`;
+      }
+      safeD += ` L ${F.mapX(1).toFixed(2)} ${F.mapY(0).toFixed(2)} L ${F.mapX(0).toFixed(2)} ${F.mapY(0).toFixed(2)} Z`;
+
+      // risk polygon: from boundary back to top-right and top-left
+      let riskD = `M ${sx.toFixed(2)} ${sy.toFixed(2)}`;
+      for(let i=1;i<F.pts.length;i++){
+        riskD += ` L ${F.mapX(F.pts[i][0]).toFixed(2)} ${F.mapY(F.pts[i][1]).toFixed(2)}`;
+      }
+      riskD += ` L ${F.mapX(1).toFixed(2)} ${F.mapY(1).toFixed(2)} L ${F.mapX(0).toFixed(2)} ${F.mapY(1).toFixed(2)} Z`;
+
+      $("#safeZone").setAttribute("d", safeD);
+      $("#riskZone").setAttribute("d", riskD);
+
+      // Example task points
+      const points = [
+        {name:"Draft email", x:.18, y:.22, type:"safe"},
+        {name:"Summarize doc", x:.30, y:.32, type:"safe"},
+        {name:"Analytical memo", x:.48, y:.55, type:"trap"},
+        {name:"Spreadsheet logic", x:.62, y:.50, type:"trap"},
+        {name:"Legal clause", x:.70, y:.78, type:"risk"},
+        {name:"Medical advice", x:.82, y:.86, type:"risk"},
+      ];
+
+      const html = points.map(p=>{
+        const cx = F.mapX(p.x), cy = F.mapY(p.y);
+        let fill = "rgba(20,184,166,.95)", ring = "rgba(20,184,166,.15)";
+        if(p.type==="risk"){ fill="rgba(239,68,68,.95)"; ring="rgba(239,68,68,.14)"; }
+        if(p.type==="trap"){ fill="rgba(245,158,11,.95)"; ring="rgba(245,158,11,.14)"; }
+        return `
+          <g>
+            <circle cx="${cx}" cy="${cy}" r="10" fill="${ring}" stroke="rgba(255,255,255,.16)"/>
+            <circle cx="${cx}" cy="${cy}" r="4.8" fill="${fill}"/>
+            <text x="${cx+12}" y="${cy+4}" fill="rgba(234,240,255,.75)" font-size="11">${p.name}</text>
+          </g>
+        `;
+      }).join("");
+      $("#frontPoints").innerHTML = html;
+
+      // Update simulator recommendation
+      updateFrontierRecommendation();
+    }
+
+    // -----------------------------
+    // Frontier Simulator: risk scoring
+    // -----------------------------
+    const TASKS = {
+      draft:      {label:"Creative draft", novelty:0.25, stakes:0.20, notes:["Great for iteration","Verify brand facts","Use cyborg for refinement"]},
+      summary:    {label:"Summarize known material", novelty:0.35, stakes:0.25, notes:["Provide source text","Check omissions","Ask for structure"]},
+      analysis:   {label:"Analytical memo / reasoning", novelty:0.55, stakes:0.55, notes:["Watch hidden assumptions","Ask for counterarguments","Spot-check key claims"]},
+      spreadsheet:{label:"Spreadsheet logic / formulas", novelty:0.65, stakes:0.50, notes:["Validate with test cases","Check edge conditions","Beware confident wrong math"]},
+      legal:      {label:"Legal / compliance language", novelty:0.68, stakes:0.82, notes:["Strict verification","Use citations / counsel review","Centaur mode preferred"]},
+      medical:    {label:"Medical / safety-critical info", novelty:0.75, stakes:0.90, notes:["Treat as high-risk","Use authoritative sources","Human review mandatory"]},
+      coding:     {label:"Coding with tests", novelty:0.55, stakes:0.45, notes:["Require tests","Use small commits","Verify behavior not prose"]},
+      rfp:        {label:"100-page RFP response", novelty:0.72, stakes:0.72, notes:["Decompose into sections","Use rubric for scoring","Track claims & evidence"]},
+    };
+
+    const VERIFY = {
+      light:  {label:"Light review", strictness:0.20},
+      medium: {label:"Medium", strictness:0.52},
+      strict: {label:"Strict", strictness:0.85},
+    };
+
+    function boundaryAtX(x, jag){
+      // Must match frontierBoundary construction closely enough.
+      const amp = 0.06 + (jag/100)*0.12;
+      const base = 0.55;
+      const slope = base - 0.22*x;
+      const noise =
+        Math.sin(x*7.2*Math.PI) * amp * 0.55 +
+        Math.sin(x*3.3*Math.PI + 0.8) * amp * 0.35 +
+        (Math.cos(x*11.1*Math.PI + 0.2) * amp * 0.25);
+      return clamp(slope + noise, 0.18, 0.85);
+    }
+
+    function updateFrontierRecommendation(){
+      const jag = +$("#jagged").value;
+      const taskKey = $("#taskType").value;
+      const verKey = $("#verifyLevel").value;
+      const t = TASKS[taskKey];
+      const v = VERIFY[verKey];
+
+      $("#taskHint").textContent = t.label;
+      $("#verifyHint").textContent = v.label;
+
+      // Determine how far above/below boundary the task sits
+      const b = boundaryAtX(t.novelty, jag);
+      const delta = t.stakes - b; // positive = above boundary => risky
+
+      // Risk score:
+      // - baseline: delta
+      // - mitigated by verification strictness
+      // - permission clarity helps adoption but not truth; we use it for "operational friction"
+      const perm = +$("#perm").value;
+      $("#permVal").textContent = perm;
+
+      const mitigation = (v.strictness * 0.55) + 0.10; // verification helps reduce risk
+      let effective = delta - mitigation;
+
+      // add "trap sensitivity" when jaggedness high and task near boundary
+      const trap = Math.abs(delta) < 0.08 ? (jag/100)*0.10 : 0;
+      effective += trap;
+
+      // classify
+      let label = "Low Risk";
+      let color = "var(--teal)";
+      let desc = "This task is likely inside the capability frontier. Use quick review and keep constraints clear.";
+      if(effective > 0.18){
+        label = "High Risk";
+        color = "var(--red)";
+        desc = "This is outside (or far above) the frontier. Decompose aggressively, apply strict verification, and consider expert review.";
+      } else if(effective > 0.06){
+        label = "Moderate Risk";
+        color = "var(--amber)";
+        desc = "This sits near a jagged boundary. Use tighter constraints, split into chunks, and validate the most failure-prone sections.";
+      }
+
+      // Operational friction from permission
+      const friction = clamp((55 - perm)/55, 0, 1); // 0..1
+      const frictionMsg = friction > 0.55
+        ? "Permission clarity is low — expect conscientious users to hesitate or opt out."
+        : friction > 0.25
+          ? "Permission clarity is moderate — adoption improves if you publish explicit rules and positive examples."
+          : "Permission clarity is strong — users can focus on workflow and verification, not fear."
+
+      const chips = [];
+      chips.push(`Task: ${t.label}`);
+      chips.push(`Verification: ${v.label}`);
+      chips.push(`Jaggedness: ${jag}/100`);
+      chips.push(`Frontier delta: ${delta >= 0 ? "+" : ""}${delta.toFixed(2)}`);
+      chips.push(`Operational friction: ${Math.round(friction*100)}%`);
+
+      const res = $("#frontResult");
+      res.querySelector(".big").textContent = label;
+      res.querySelector(".big").style.color = `rgba(234,240,255,.96)`;
+      res.style.borderColor = "rgba(255,255,255,.12)";
+      res.style.background = `linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.06)), linear-gradient(135deg, ${hexToRgba(color, 0.20)}, ${hexToRgba(color, 0.06)})`;
+
+      res.querySelector(".sub").innerHTML =
+        `${desc}<br/><br/><b>Operational note:</b> ${frictionMsg}<br/><br/><b>Signals / tips:</b> ${t.notes.join(" • ")}`;
+
+      const chipWrap = $("#frontChips");
+      chipWrap.innerHTML = chips.map(c=>`<span class="chip">${escapeHtml(c)}</span>`).join("");
+
+      // Mode recommendation
+      if($("#modeAuto").checked){
+        const recommended = recommendMode(taskKey, verKey);
+        $("#modeHint").innerHTML = `Recommended: <b>${recommended}</b> — based on task stakes + verification`;
+      }
+    }
+
+    function recommendMode(taskKey, verKey){
+      const t = TASKS[taskKey];
+      const v = VERIFY[verKey];
+      // high stakes or strict verification -> centaur
+      if(t.stakes >= 0.70 || v.strictness >= 0.80) return "Centaur";
+      // creative / low stakes -> cyborg
+      if(taskKey === "draft" || taskKey === "coding" || taskKey === "summary") return "Cyborg";
+      // otherwise, depends
+      return (t.novelty > 0.60) ? "Cyborg" : "Centaur";
+    }
+
+    // -----------------------------
+    // Permission score & checklist
+    // -----------------------------
+    function updatePermission(){
+      const perm = +$("#perm").value;
+      $("#permVal").textContent = perm;
+
+      const checks = $$("#permList input[type='checkbox']");
+      const checked = checks.filter(c=>c.checked).length;
+      const checklistBoost = checked * 6; // up to +30
+
+      const score = clamp(Math.round(perm*0.70 + checklistBoost), 0, 100);
+      $("#permScore").textContent = `Permission Score: ${score}`;
+
+      const chips = [];
+      if(score < 40){
+        chips.push("High fear of doing it wrong");
+        chips.push("Shadow IT likely");
+        chips.push("Conscientious users opt out");
+      } else if(score < 70){
+        chips.push("Some clarity, still uneven");
+        chips.push("Adoption depends on local managers");
+        chips.push("Need positive examples");
+      } else {
+        chips.push("Clear rules + psychological safety");
+        chips.push("Faster habit formation");
+        chips.push("Lower risk of silent drop-off");
+      }
+      $("#permChips").innerHTML = chips.map(c=>`<span class="chip">${escapeHtml(c)}</span>`).join("");
+
+      $("#permSub").textContent =
+        score < 40
+          ? "Low permission clarity turns AI into a perceived risk. Publish clear rules, show positive examples, and define verification expectations."
+          : score < 70
+            ? "Moderate clarity helps, but adoption remains patchy. Standardize workflows and make successful usage visible."
+            : "Strong clarity supports adoption: users can focus on workflow judgment and verification rather than fear of policy violations.";
+
+      // also update frontier simulator
+      updateFrontierRecommendation();
+    }
+
+    // -----------------------------
+    // Training planner
+    // -----------------------------
+    function updatePlanner(){
+      const n = +$("#nUsers").value;
+      const hours = +$("#hours").value;
+      const pb = +$("#playbooks").value;
+      const fm = +$("#frontierMap").value;
+
+      $("#nUsersVal").textContent = n;
+      $("#hoursVal").textContent = hours;
+      $("#pbVal").textContent = pb;
+      $("#fmVal").textContent = fm;
+
+      // Model: baseline activation from tool tour ~ 0.18..0.22
+      // Add contributions:
+      // - hours: sigmoid-ish
+      // - playbooks: linear
+      // - frontier mapping: linear
+      // - permission clarity: linear multiplier
+      const perm = +$("#perm").value / 100;
+
+      const hourBoost = 1/(1+Math.exp(-(hours-5)/2.2)); // ~0.25 at 2h, ~0.5 at 5h, ~0.8 at 9h
+      const pbBoost = pb * 0.07; // up to 0.35
+      const fmBoost = fm * 0.06; // up to 0.30
+
+      let rate = 0.18 + (hourBoost*0.26) + pbBoost + fmBoost; // raw
+      rate = rate * (0.75 + perm*0.35); // permission multiplier 0.75..1.10
+      rate = clamp(rate, 0.05, 0.85);
+
+      const regular = Math.round(n * rate);
+      $("#regularUsers").textContent = regular.toLocaleString();
+
+      const chips = [];
+      chips.push(`Activation rate: ${(rate*100).toFixed(1)}%`);
+      chips.push(`Cohort: ${n.toLocaleString()}`);
+      chips.push(`Hours: ${hours}`);
+      chips.push(`Playbooks: ${pb}/5`);
+      chips.push(`Frontier map: ${fm}/5`);
+      chips.push(`Permission: ${Math.round(perm*100)}%`);
+
+      $("#plannerChips").innerHTML = chips.map(c=>`<span class="chip">${escapeHtml(c)}</span>`).join("");
+
+      const sub =
+        rate < 0.25
+          ? "Expect a small minority of regular users. Increase workflow-focused hours, publish guardrails, and create shareable playbooks."
+          : rate < 0.45
+            ? "Regular usage is plausible but uneven. Focus on frontier mapping + verification protocols so non-experts can work safely."
+            : "You’re building durable adoption. The next step is institutionalizing wins: templates, rubrics, and systematic failure sharing.";
+
+      $("#plannerSub").textContent = sub;
+    }
+
+    // -----------------------------
+    // Persistence (localStorage)
+    // -----------------------------
+    const KEY = "ai201_infographic_v1";
+    function saveState(){
+      const state = {
+        jagged: +$("#jagged").value,
+        perm: +$("#perm").value,
+        taskType: $("#taskType").value,
+        verifyLevel: $("#verifyLevel").value,
+        nUsers: +$("#nUsers").value,
+        hours: +$("#hours").value,
+        playbooks: +$("#playbooks").value,
+        frontierMap: +$("#frontierMap").value,
+        modeAuto: $("#modeAuto").checked,
+        checks: Object.fromEntries($$("input[type='checkbox'][data-k]").map(c=>[c.dataset.k, c.checked])),
+        reframeChk: $("#reframeChk").checked,
+        promptSkeletonChk: $("#promptSkeletonChk").checked
+      };
+      localStorage.setItem(KEY, JSON.stringify(state));
+      toast("Saved.");
+    }
+
+    function loadState(){
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return false;
+      try{
+        const s = JSON.parse(raw);
+
+        if(typeof s.jagged==="number") $("#jagged").value = s.jagged;
+        if(typeof s.perm==="number") $("#perm").value = s.perm;
+        if(s.taskType) $("#taskType").value = s.taskType;
+        if(s.verifyLevel) $("#verifyLevel").value = s.verifyLevel;
+
+        if(typeof s.nUsers==="number") $("#nUsers").value = s.nUsers;
+        if(typeof s.hours==="number") $("#hours").value = s.hours;
+        if(typeof s.playbooks==="number") $("#playbooks").value = s.playbooks;
+        if(typeof s.frontierMap==="number") $("#frontierMap").value = s.frontierMap;
+
+        if(typeof s.modeAuto==="boolean") $("#modeAuto").checked = s.modeAuto;
+
+        if(s.checks){
+          $$("input[type='checkbox'][data-k]").forEach(c=>{
+            if(Object.prototype.hasOwnProperty.call(s.checks, c.dataset.k)){
+              c.checked = !!s.checks[c.dataset.k];
+            }
+          });
+        }
+        if(typeof s.reframeChk==="boolean") $("#reframeChk").checked = s.reframeChk;
+        if(typeof s.promptSkeletonChk==="boolean") $("#promptSkeletonChk").checked = s.promptSkeletonChk;
+
+        toast("Loaded saved settings.");
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    function resetState(){
+      localStorage.removeItem(KEY);
+
+      $("#jagged").value = 55;
+      $("#perm").value = 45;
+      $("#taskType").value = "draft";
+      $("#verifyLevel").value = "light";
+      $("#nUsers").value = 500;
+      $("#hours").value = 6;
+      $("#playbooks").value = 2;
+      $("#frontierMap").value = 2;
+      $("#modeAuto").checked = true;
+
+      $$("input[type='checkbox']").forEach(c=>c.checked=false);
+
+      toast("Reset.");
+      renderAll();
+    }
+
+    // -----------------------------
+    // Misc helpers
+    // -----------------------------
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, (m)=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+    function hexToRgba(hex, a){
+      // supports CSS var names; fallback for hex only
+      if(!hex || hex.startsWith("var(")) return `rgba(59,130,246,${a})`;
+      const h = hex.replace("#","").trim();
+      if(h.length !== 6) return `rgba(59,130,246,${a})`;
+      const r = parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    // -----------------------------
+    // Wiring
+    // -----------------------------
+    function renderAll(){
+      buildAdoptionCurve();
+      renderFrontier();
+      updatePermission();
+      updatePlanner();
+      updateFrontierRecommendation();
+
+      // Update mode hint once initially
+      if($("#modeAuto").checked){
+        $("#modeHint").innerHTML = `Recommended: <b>${recommendMode($("#taskType").value, $("#verifyLevel").value)}</b> — based on task stakes + verification`;
+      }
+    }
+
+    $("#jagged").addEventListener("input", renderFrontier);
+    $("#perm").addEventListener("input", ()=>{ updatePermission(); updatePlanner(); });
+
+    $("#taskType").addEventListener("change", updateFrontierRecommendation);
+    $("#verifyLevel").addEventListener("change", updateFrontierRecommendation);
+
+    $$("input[type='checkbox'][data-k]").forEach(c=>{
+      c.addEventListener("change", updatePermission);
+    });
+
+    $("#nUsers").addEventListener("input", updatePlanner);
+    $("#hours").addEventListener("input", updatePlanner);
+    $("#playbooks").addEventListener("input", updatePlanner);
+    $("#frontierMap").addEventListener("input", updatePlanner);
+
+    $("#modeAuto").addEventListener("change", updateFrontierRecommendation);
+
+    $("#saveBtn").addEventListener("click", saveState);
+    $("#resetBtn").addEventListener("click", resetState);
+    $("#printBtn").addEventListener("click", ()=>window.print());
+
+    // Keyboard shortcuts
+    window.addEventListener("keydown", (e)=>{
+      if(e.target && (e.target.tagName==="INPUT" || e.target.tagName==="SELECT" || e.target.tagName==="TEXTAREA")) return;
+      if(e.key.toLowerCase()==="s"){ e.preventDefault(); saveState(); }
+      if(e.key.toLowerCase()==="r"){ e.preventDefault(); resetState(); }
+      if(e.key.toLowerCase()==="p"){ e.preventDefault(); window.print(); }
+    });
+
+    // Load on start
+    loadState();
+    renderAll();
+  </script>
+</body>
+</html>

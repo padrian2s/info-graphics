@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Missing Middle (201-level): AI as a Management Skill</title>
+  <meta name="description" content="Interactive infographic exploring why AI adoption isn't a tool skill but a management skill - the missing 201-level training gap." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="AI Adoption, Management Skills, Training, Enterprise, 201-Level" />
+  <meta name="icon" content="🧑‍💼" />
+  <meta name="created" content="2026-01-26" />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.09);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --faint:rgba(255,255,255,.45);
+      --line:rgba(255,255,255,.12);
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --blue:#3b82f6;
+      --purple:#8b5cf6;
+      --teal:#14b8a6;
+      --pink:#ec4899;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.26), transparent 60%),
+        radial-gradient(1200px 800px at 88% 20%, rgba(139,92,246,.25), transparent 60%),
+        radial-gradient(900px 700px at 60% 92%, rgba(20,184,166,.22), transparent 55%),
+        linear-gradient(180deg, #050816 0%, #0b1020 55%, #070a16 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1200px; margin:0 auto; padding:28px 18px 56px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      position:sticky; top:0; z-index:10;
+      padding:14px 10px;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,32,.82), rgba(11,16,32,.55));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 220px;
+    }
+    .logo{
+      width:38px; height:38px; border-radius: 14px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 52%),
+        conic-gradient(from 200deg, rgba(59,130,246,.95), rgba(139,92,246,.9), rgba(20,184,166,.9), rgba(59,130,246,.95));
+      box-shadow: 0 14px 35px rgba(0,0,0,.4);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.2px;
+      font-weight: 750;
+      line-height: 1.1;
+    }
+    .brand p{
+      margin:2px 0 0;
+      font-size: 12px;
+      color:var(--muted);
+    }
+    .controls{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 10px 35px rgba(0,0,0,.25);
+      user-select:none;
+    }
+    .pill .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(59,130,246,.18);
+    }
+    .pill small{ color:var(--muted); font-weight:650; letter-spacing:.2px; }
+    .btn{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(0,0,0,.28);
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      font-weight:700;
+      font-size: 12px;
+      letter-spacing:.15px;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.secondary{
+      background: rgba(255,255,255,.06);
+      box-shadow:none;
+    }
+
+    header.hero{
+      margin: 26px 0 20px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      header.hero{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    .card{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(700px 200px at 20% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(700px 220px at 80% 0%, rgba(139,92,246,.20), transparent 60%),
+        radial-gradient(700px 260px at 60% 100%, rgba(20,184,166,.18), transparent 60%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .card > *{ position:relative; }
+    .heroLeft{ padding: 20px 20px 18px; }
+    .heroRight{ padding: 18px 18px 16px; display:flex; flex-direction:column; gap:12px; }
+
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-weight: 800;
+      letter-spacing:.22px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .kicker .tag{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .title{
+      margin: 12px 0 10px;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.05;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+    }
+    .subtitle{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.55;
+      max-width: 70ch;
+    }
+    .heroMetrics{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 640px){
+      .heroMetrics{ grid-template-columns: 1fr; }
+    }
+    .metric{
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .metric .num{
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing:-.2px;
+      display:flex; align-items:baseline; gap:8px;
+    }
+    .metric .num .chip{
+      font-size: 11px;
+      padding:4px 8px;
+      border-radius: 999px;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.30);
+      color: rgba(255,255,255,.88);
+      font-weight: 800;
+    }
+    .metric .lbl{ color: var(--muted); font-size: 12px; font-weight:700; }
+
+    .spark{
+      height: 92px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+      position:relative;
+    }
+    .spark canvas{ width:100%; height:100%; display:block; }
+    .spark .legend{
+      position:absolute; inset:auto 10px 10px 10px;
+      display:flex; justify-content:space-between; gap:10px;
+      font-size: 11px; color: rgba(255,255,255,.70);
+      text-shadow: 0 10px 18px rgba(0,0,0,.35);
+    }
+
+    .section{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){ .section{ grid-template-columns: 1fr; } }
+
+    .cardHead{
+      padding: 14px 16px 0;
+      display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    }
+    .cardTitle{
+      margin:0;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing:.1px;
+    }
+    .cardDesc{
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      max-width: 70ch;
+    }
+    .cardBody{ padding: 14px 16px 16px; }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 900px){ .grid3{ grid-template-columns: 1fr; } }
+
+    .mini{
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex; flex-direction:column; gap:8px;
+      min-height: 112px;
+    }
+    .mini .top{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .badge{
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.88);
+      white-space:nowrap;
+    }
+    .badge.blue{ background: rgba(59,130,246,.18); border-color: rgba(59,130,246,.32); }
+    .badge.purple{ background: rgba(139,92,246,.18); border-color: rgba(139,92,246,.32); }
+    .badge.teal{ background: rgba(20,184,166,.18); border-color: rgba(20,184,166,.30); }
+    .badge.warn{ background: rgba(245,158,11,.16); border-color: rgba(245,158,11,.32); }
+    .badge.bad{ background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.30); }
+    .mini h4{ margin:0; font-size: 13px; font-weight: 900; letter-spacing:.1px; }
+    .mini p{ margin:0; font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+    .ladder{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 900px){ .ladder{ grid-template-columns: 1fr; } }
+    .rung{
+      border-radius: 16px;
+      padding: 12px 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      position:relative;
+      overflow:hidden;
+      min-height: 140px;
+    }
+    .rung::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(600px 160px at 20% 0%, rgba(255,255,255,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .rung > *{ position:relative; }
+    .rung .hdr{ display:flex; align-items:center; justify-content:space-between; }
+    .rung .lvl{
+      font-weight: 950;
+      letter-spacing:.3px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.85);
+    }
+    .rung .icon{
+      width: 30px; height: 30px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      font-weight: 950;
+    }
+    .rung h3{ margin: 10px 0 6px; font-size: 14px; font-weight: 900; }
+    .rung ul{ margin: 0; padding-left: 16px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .rung li{ margin: 4px 0; }
+
+    .vizRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+    @media (max-width: 900px){ .vizRow{ grid-template-columns: 1fr; } }
+
+    .gaugeBox{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items:center;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .gauge{
+      width: 120px; height: 120px;
+      border-radius: 999px;
+      display:grid; place-items:center;
+      position:relative;
+      background: conic-gradient(from 210deg, rgba(59,130,246,.95) 0deg, rgba(139,92,246,.92) 110deg, rgba(20,184,166,.92) 220deg, rgba(239,68,68,.85) 330deg, rgba(59,130,246,.95) 360deg);
+      filter: drop-shadow(0 18px 25px rgba(0,0,0,.35));
+      border: 1px solid rgba(255,255,255,.18);
+      overflow:hidden;
+    }
+    .gauge::before{
+      content:"";
+      position:absolute; inset: 10px;
+      border-radius: 999px;
+      background: rgba(11,16,32,.88);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .gauge .needle{
+      position:absolute;
+      width: 2px; height: 52px;
+      background: rgba(255,255,255,.86);
+      top: 16px;
+      left: 50%;
+      transform-origin: 50% 90%;
+      transform: translateX(-50%) rotate(0deg);
+      border-radius: 4px;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.10);
+    }
+    .gauge .center{
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      position:absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.10);
+    }
+    .gauge .pct{
+      position:relative;
+      z-index:2;
+      font-size: 22px;
+      font-weight: 950;
+      letter-spacing:-.4px;
+    }
+    .gaugeMeta h4{ margin:0; font-size: 13px; font-weight: 950; }
+    .gaugeMeta p{ margin:6px 0 0; color: var(--muted); font-size: 12px; line-height:1.5; }
+    .sliderRow{ margin-top: 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    input[type="range"]{
+      width: 220px;
+      accent-color: var(--blue);
+    }
+    .smallNote{ font-size: 11px; color: var(--faint); }
+
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      padding: 10px 12px 0;
+    }
+    .tab{
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.85);
+      font-weight: 850;
+      font-size: 12px;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .tab:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
+    .tab.active{
+      background: rgba(59,130,246,.18);
+      border-color: rgba(59,130,246,.35);
+    }
+
+    .modePanel{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+    @media (max-width: 760px){ .modePanel{ grid-template-columns: 1fr; } }
+    .modeCard{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      padding: 12px;
+      min-height: 150px;
+      position:relative;
+      overflow:hidden;
+    }
+    .modeCard::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(700px 220px at 25% 0%, rgba(255,255,255,.10), transparent 60%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .modeCard > *{ position:relative; }
+    .modeCard h4{ margin:0; font-size: 14px; font-weight: 950; }
+    .modeCard p{ margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height:1.55; }
+    .modeCard ul{ margin: 8px 0 0; padding-left: 16px; color: var(--muted); font-size: 12px; line-height:1.55; }
+    .modeCard li{ margin: 4px 0; }
+
+    .sim{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .simGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 900px){ .simGrid{ grid-template-columns: 1fr; } }
+
+    .simBox{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      padding: 12px;
+    }
+    .simBox h4{ margin:0; font-size: 13px; font-weight: 950; }
+    .simBox p{ margin: 6px 0 10px; color: var(--muted); font-size: 12px; line-height:1.5; }
+    .row{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .select{
+      appearance:none;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(11,16,32,.55);
+      color: rgba(255,255,255,.92);
+      font-weight: 800;
+      font-size: 12px;
+      outline:none;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.86);
+    }
+    .score{
+      display:flex; gap:10px; align-items:stretch;
+      margin-top: 8px;
+    }
+    .score .box{
+      flex:1;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      min-width: 140px;
+    }
+    .score .big{
+      font-weight: 950;
+      font-size: 18px;
+      letter-spacing:-.3px;
+    }
+    .score .lbl{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing:.15px;
+      text-transform: uppercase;
+    }
+    .bar{
+      margin-top: 8px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .bar > i{
+      display:block; height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(59,130,246,.95), rgba(139,92,246,.90), rgba(20,184,166,.90));
+      border-radius: 999px;
+      transition: width .35s ease;
+    }
+    .callout{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.86);
+      font-size: 12px;
+      line-height:1.55;
+    }
+
+    .checklist{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 900px){ .checklist{ grid-template-columns: 1fr; } }
+    .check{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+    }
+    .check input{ margin-top: 2px; transform: scale(1.1); accent-color: var(--teal); }
+    .check b{ display:block; font-size: 12px; letter-spacing:.1px; }
+    .check span{ display:block; color: var(--muted); font-size: 12px; line-height:1.45; margin-top: 3px; }
+
+    footer{
+      margin-top: 18px;
+      color: rgba(255,255,255,.60);
+      font-size: 12px;
+      line-height:1.6;
+      text-align:center;
+    }
+    .sep{ height: 1px; background: rgba(255,255,255,.10); margin: 10px 0; }
+    .hint{ color: rgba(255,255,255,.70); font-weight: 800; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>AI Adoption ≠ Tool Training</h1>
+        <p>The “missing middle” (201-level) is management + judgment.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="pill" title="Interactive infographic">
+        <span class="dot" aria-hidden="true"></span>
+        <small>Interactive</small>
+      </div>
+      <button class="btn secondary" id="btnReset">Reset sims</button>
+      <button class="btn" id="btnExport">Export notes</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <section class="card heroLeft">
+        <div class="kicker">
+          <span class="tag">2025 adoption pattern</span>
+          <span class="tag">“AI is jagged”</span>
+          <span class="tag">201-level gap</span>
+        </div>
+        <h2 class="title">AI isn’t a tool skill. It’s a <span style="color:rgba(255,255,255,.98); background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(139,92,246,.9)); -webkit-background-clip:text; background-clip:text; color:transparent;">management</span> skill.</h2>
+        <p class="subtitle">
+          In large rollouts, excitement spikes early… then most people quietly stop.
+          The “survivors” don’t prompt better. They <span class="hint">delegate, verify, refine, and know the frontier</span>.
+          That’s the missing middle: the 201-level.
+        </p>
+
+        <div class="heroMetrics">
+          <div class="metric">
+            <div class="num"><span id="mEmployees">300,000</span> <span class="chip">tracked</span></div>
+            <div class="lbl">Enterprise users observed</div>
+          </div>
+          <div class="metric">
+            <div class="num"><span id="mPeak">3</span> <span class="chip">weeks</span></div>
+            <div class="lbl">Hype → trough window</div>
+          </div>
+          <div class="metric">
+            <div class="num"><span id="mDormant">80%</span> <span class="chip">seats</span></div>
+            <div class="lbl">Go dormant without 201 skills</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card heroRight">
+        <div>
+          <h3 class="cardTitle">Adoption curve: hype → trough → survivors</h3>
+          <p class="cardDesc">This “crater” is usually blamed on tools. More often it’s missing workflow + verification skill.</p>
+        </div>
+        <div class="spark" title="Simulated adoption curve">
+          <canvas id="spark"></canvas>
+          <div class="legend">
+            <span>Week 0</span>
+            <span>Peak (Week ~3)</span>
+            <span>Week 12</span>
+          </div>
+        </div>
+
+        <div class="gaugeBox">
+          <div class="gauge" aria-label="Monthly active users gauge">
+            <div class="needle" id="needle"></div>
+            <div class="center" aria-hidden="true"></div>
+            <div class="pct" id="pct">20%</div>
+          </div>
+          <div class="gaugeMeta">
+            <h4>Monthly active users</h4>
+            <p>Adjust “training hours” and “permission clarity” to see how the 80/20 adoption pattern shifts.</p>
+            <div class="sliderRow">
+              <label class="smallNote">Hours</label>
+              <input id="hours" type="range" min="0" max="12" step="1" value="2" />
+              <span class="kbd" id="hoursVal">2h</span>
+            </div>
+            <div class="sliderRow">
+              <label class="smallNote">Permission</label>
+              <input id="perm" type="range" min="0" max="10" step="1" value="3" />
+              <span class="kbd" id="permVal">3/10</span>
+            </div>
+            <div class="smallNote">Model: adoption rises with hours + permission, then capped by “workflow playbooks”.</div>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <section class="section">
+      <section class="card">
+        <div class="cardHead">
+          <div>
+            <h3 class="cardTitle">The training market skipped the middle</h3>
+            <p class="cardDesc">Most programs offer 101 (tool tours) or 401 (technical implementation). Productivity for most people lives in 201.</p>
+          </div>
+          <span class="badge warn">Core diagnosis</span>
+        </div>
+        <div class="cardBody">
+          <div class="ladder">
+            <div class="rung">
+              <div class="hdr">
+                <div class="lvl">101</div>
+                <div class="icon">🧰</div>
+              </div>
+              <h3>Tool skill</h3>
+              <ul>
+                <li>Prompt basics + feature tours</li>
+                <li>Generic use cases (“help with report”)</li>
+                <li>Failure mode: generic, confident-wrong, abandon</li>
+              </ul>
+            </div>
+            <div class="rung" style="border-color: rgba(59,130,246,.30); background: rgba(59,130,246,.12);">
+              <div class="hdr">
+                <div class="lvl">201</div>
+                <div class="icon">🧑‍💼</div>
+              </div>
+              <h3>Judgment + management</h3>
+              <ul>
+                <li>Where AI fits in workflow</li>
+                <li>Verification protocols</li>
+                <li>Task decomposition + refinement</li>
+              </ul>
+            </div>
+            <div class="rung">
+              <div class="hdr">
+                <div class="lvl">401</div>
+                <div class="icon">⚙️</div>
+              </div>
+              <h3>Technical builders</h3>
+              <ul>
+                <li>APIs, RAG, fine-tuning, evals</li>
+                <li>Automation + integration</li>
+                <li>Often a small “frontier mapper” group</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="grid3">
+            <div class="mini">
+              <div class="top">
+                <h4>Key reframe</h4>
+                <span class="badge blue">Not adoption</span>
+              </div>
+              <p>
+                This isn’t primarily a technology rollout problem. It’s an <b>organizational capability</b> problem:
+                do people know how to delegate + verify?
+              </p>
+            </div>
+            <div class="mini">
+              <div class="top">
+                <h4>Why leaders over-index</h4>
+                <span class="badge purple">Domain + mgmt</span>
+              </div>
+              <p>
+                Power users often combine <b>domain expertise</b> with <b>management habits</b> (clear specs, reviews, iteration).
+              </p>
+            </div>
+            <div class="mini">
+              <div class="top">
+                <h4>The hidden risk</h4>
+                <span class="badge bad">Apprentice collapse</span>
+              </div>
+              <p>
+                If juniors stop doing “routine work”, they lose the pathway that builds judgment—creating a future <b>expertise deficit</b>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="cardHead">
+          <div>
+            <h3 class="cardTitle">The 6 “201-level” skills (zero are prompt tricks)</h3>
+            <p class="cardDesc">Treat the model like a capable but inexperienced collaborator: you manage it.</p>
+          </div>
+          <span class="badge teal">Playbook</span>
+        </div>
+        <div class="cardBody">
+          <div class="grid3" id="skillsGrid"></div>
+
+          <div class="sep"></div>
+
+          <div class="tabs" aria-label="Work patterns tabs">
+            <div class="tab active" data-tab="modes">Centaurs vs Cyborgs</div>
+            <div class="tab" data-tab="frontier">Frontier recognition</div>
+            <div class="tab" data-tab="permission">Permission gap</div>
+          </div>
+
+          <div id="tab-modes" class="tabPane">
+            <div class="modePanel">
+              <div class="modeCard">
+                <div class="top" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                  <h4>🐎 Centaur mode</h4>
+                  <span class="badge blue">Clear split</span>
+                </div>
+                <p>Human owns framing + accountability. AI generates drafts/options inside checkpoints.</p>
+                <ul>
+                  <li>Best for high-stakes work (legal/medical/compliance)</li>
+                  <li>Explicit verification points</li>
+                  <li>Audit trail + “who decided what”</li>
+                </ul>
+              </div>
+              <div class="modeCard">
+                <div class="top" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                  <h4>🦾 Cyborg mode</h4>
+                  <span class="badge purple">Continuous loop</span>
+                </div>
+                <p>Human and AI co-edit continuously. The boundary becomes fluid through iteration.</p>
+                <ul>
+                  <li>Best for creative/iterative building</li>
+                  <li>Rapid refinement toward quality</li>
+                  <li>Switching modes is the real skill</li>
+                </ul>
+              </div>
+            </div>
+            <div class="callout">
+              <b>Strategic point:</b> Don’t pick one mode for everyone. Train people to choose the mode that matches risk + task type.
+            </div>
+          </div>
+
+          <div id="tab-frontier" class="tabPane" style="display:none;">
+            <div class="sim">
+              <div class="simGrid">
+                <div class="simBox">
+                  <h4>Frontier simulator</h4>
+                  <p>
+                    Pick a task type and set “stakes” + “AI fit”.
+                    The sim recommends: verification intensity, mode (centaur/cyborg), and expected risk.
+                  </p>
+                  <div class="row">
+                    <select class="select" id="taskType">
+                      <option value="draft">Draft writing / summaries</option>
+                      <option value="analysis">Analytical reasoning / strategy memo</option>
+                      <option value="legal">Legal/compliance language</option>
+                      <option value="data">Spreadsheet / data transformation</option>
+                      <option value="coding">Coding / automation</option>
+                      <option value="policy">Org policy / HR guidance</option>
+                    </select>
+                    <span class="kbd">Task</span>
+                  </div>
+                  <div class="row" style="margin-top:10px;">
+                    <label class="smallNote">Stakes</label>
+                    <input id="stakes" type="range" min="1" max="10" value="6" />
+                    <span class="kbd" id="stakesVal">6/10</span>
+                  </div>
+                  <div class="row" style="margin-top:10px;">
+                    <label class="smallNote">AI Fit</label>
+                    <input id="fit" type="range" min="1" max="10" value="6" />
+                    <span class="kbd" id="fitVal">6/10</span>
+                  </div>
+                </div>
+
+                <div class="simBox">
+                  <h4>Recommendation</h4>
+                  <p id="recText" style="margin-bottom:8px;"></p>
+                  <div class="score">
+                    <div class="box">
+                      <div class="big" id="recMode">—</div>
+                      <div class="lbl">Mode</div>
+                    </div>
+                    <div class="box">
+                      <div class="big" id="recVerify">—</div>
+                      <div class="lbl">Verification</div>
+                    </div>
+                    <div class="box">
+                      <div class="big" id="recRisk">—</div>
+                      <div class="lbl">Risk</div>
+                    </div>
+                  </div>
+                  <div class="bar" title="Net expected benefit (higher is better)">
+                    <i id="benefitBar"></i>
+                  </div>
+                  <div class="smallNote" style="margin-top:8px;">
+                    Interpretation: benefit rises with fit, but drops sharply when stakes are high and fit is low (the “jagged edge”).
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Frontier mapping pattern:</b> Experts map “where AI works” + publish guard rails, templates, and verification checklists,
+                so non-experts can safely operate inside the boundary.
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-permission" class="tabPane" style="display:none;">
+            <div class="simBox">
+              <h4>Permission gap checklist</h4>
+              <p>
+                The most conscientious employees opt out if the first thought is “Will I get in trouble?”.
+                Make “yes, safely” explicit.
+              </p>
+              <div class="checklist" id="checks"></div>
+              <div class="score" style="margin-top:10px;">
+                <div class="box">
+                  <div class="big" id="permScore">0%</div>
+                  <div class="lbl">Clarity score</div>
+                </div>
+                <div class="box">
+                  <div class="big" id="permOutcome">Blocked</div>
+                  <div class="lbl">Adoption outcome</div>
+                </div>
+              </div>
+              <div class="callout" id="permAdvice"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </section>
+
+    <section class="section">
+      <section class="card">
+        <div class="cardHead">
+          <div>
+            <h3 class="cardTitle">Org moves that unlock the 201-level</h3>
+            <p class="cardDesc">Shift from “buy seats” to “build capability”: playbooks, hours, guard rails, failure sharing.</p>
+          </div>
+          <span class="badge teal">What to do</span>
+        </div>
+        <div class="cardBody">
+          <div class="grid3" id="movesGrid"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="cardHead">
+          <div>
+            <h3 class="cardTitle">Quick diagnostic: are you stuck at 101?</h3>
+            <p class="cardDesc">Answer honestly. If you can’t, you probably haven’t built the judgment layer.</p>
+          </div>
+          <span class="badge warn">Self-test</span>
+        </div>
+        <div class="cardBody">
+          <div class="checklist" id="diag"></div>
+          <div class="score" style="margin-top:10px;">
+            <div class="box">
+              <div class="big" id="diagScore">0/6</div>
+              <div class="lbl">Yes answers</div>
+            </div>
+            <div class="box">
+              <div class="big" id="diagTier">101</div>
+              <div class="lbl">Likely tier</div>
+            </div>
+          </div>
+          <div class="callout" id="diagAdvice"></div>
+        </div>
+      </section>
+    </section>
+
+    <footer>
+      Built as a single-file infographic (HTML/CSS/JS). You can host it on GitHub Pages or drop it into any static site.
+      <br />
+      Tip: press <span class="kbd">Export notes</span> to download a plain-text summary of your current simulator settings.
+    </footer>
+  </div>
+
+  <script>
+    // --------------------------
+    // Data for the infographic
+    // --------------------------
+    const skills = [
+      {
+        n: "01",
+        title: "Context assembly",
+        badge: { t: "Inputs", c: "blue" },
+        body: "Provide the right background, constraints, examples. Not document-dumping, not zero-context."
+      },
+      {
+        n: "02",
+        title: "Quality judgment",
+        badge: { t: "Trust", c: "warn" },
+        body: "Know when to verify. Spot mixed-quality outputs: accurate + hallucinated can coexist."
+      },
+      {
+        n: "03",
+        title: "Task decomposition",
+        badge: { t: "Delegate", c: "purple" },
+        body: "Break work into AI-appropriate chunks like you would for an intern or teammate."
+      },
+      {
+        n: "04",
+        title: "Iterative refinement",
+        badge: { t: "Improve", c: "teal" },
+        body: "Move from ~70% → 95% via structured passes. Don’t accept the first draft."
+      },
+      {
+        n: "05",
+        title: "Workflow integration",
+        badge: { t: "System", c: "blue" },
+        body: "Make AI part of “how we do work”, not a side activity you try later."
+      },
+      {
+        n: "06",
+        title: "Frontier recognition",
+        badge: { t: "Edges", c: "bad" },
+        body: "Know the jagged boundary: where AI excels vs fails for your domain. Share failure cases."
+      }
+    ];
+
+    const moves = [
+      { title:"AI labs with power users (not only tech)", badge:["Enable", "teal"], body:"Fast-moving workflow experiments that include non-technical roles." },
+      { title:"Systematic discovery across functions", badge:["Surface", "blue"], body:"Interview teams; turn fuzzy ideas into concrete use-cases and playbooks." },
+      { title:"Make success visible", badge:["Social proof", "purple"], body:"Low-stakes competitions; show wins and copyable workflows." },
+      { title:"Invest in hours, not just access", badge:["Time", "warn"], body:"More formal training hours strongly correlate with regular usage." },
+      { title:"Define guard rails explicitly", badge:["Safety", "teal"], body:"What data is allowed? How to disclose AI assistance? What good looks like?" },
+      { title:"Share failure cases systematically", badge:["Learning", "bad"], body:"Publish what doesn’t work; feed it to frontier mappers to improve." }
+    ];
+
+    const permChecks = [
+      { k:"data",  t:"Allowed data rules", d:"Clear guidance on what can/can’t be pasted or summarized." },
+      { k:"disclose", t:"Disclosure norms", d:"How to cite/label AI assistance in outputs." },
+      { k:"verify", t:"Verification protocol", d:"Required checks by task type (stakes-based)." },
+      { k:"templates", t:"Approved templates", d:"Known-good prompts, rubrics, checklists, examples." },
+      { k:"examples", t:"Positive examples", d:"Policy includes what “good AI usage” looks like, not only “don’t”." },
+      { k:"support", t:"Help channel", d:"A place to ask questions quickly without shame (and get answers)." }
+    ];
+
+    const diagQs = [
+      "Can people identify which subtasks AI should do vs humans?",
+      "Do we have a repeatable iteration/refinement culture?",
+      "Is AI integrated into workflows (not optional side work)?",
+      "Do we know where AI fails in our domain (frontier map)?",
+      "Do we share failure cases (so the team learns boundaries)?",
+      "Do we have explicit guard rails and permission clarity?"
+    ];
+
+    // --------------------------
+    // Helpers
+    // --------------------------
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+    function pct(n){ return Math.round(n) + "%"; }
+
+    // --------------------------
+    // Render skill cards
+    // --------------------------
+    const skillsGrid = $("#skillsGrid");
+    skillsGrid.innerHTML = skills.map(s => `
+      <div class="mini">
+        <div class="top">
+          <h4><span class="kbd">${s.n}</span> ${s.title}</h4>
+          <span class="badge ${s.badge.c}">${s.badge.t}</span>
+        </div>
+        <p>${s.body}</p>
+      </div>
+    `).join("");
+
+    // --------------------------
+    // Render org moves
+    // --------------------------
+    const movesGrid = $("#movesGrid");
+    movesGrid.innerHTML = moves.map(m => `
+      <div class="mini" style="min-height:128px;">
+        <div class="top">
+          <h4>${m.title}</h4>
+          <span class="badge ${m.badge[1]}">${m.badge[0]}</span>
+        </div>
+        <p>${m.body}</p>
+      </div>
+    `).join("");
+
+    // --------------------------
+    // Tabs
+    // --------------------------
+    $$(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        $$(".tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const name = tab.dataset.tab;
+        ["modes","frontier","permission"].forEach(x => {
+          $("#tab-" + x).style.display = (x === name) ? "block" : "none";
+        });
+      });
+    });
+
+    // --------------------------
+    // Sparkline adoption curve
+    // --------------------------
+    const spark = $("#spark");
+    const sctx = spark.getContext("2d");
+    function resizeCanvas(c){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = c.getBoundingClientRect();
+      c.width = Math.round(rect.width * dpr);
+      c.height = Math.round(rect.height * dpr);
+      return { w: c.width, h: c.height, dpr };
+    }
+
+    function drawSpark(){
+      const {w,h} = resizeCanvas(spark);
+      sctx.clearRect(0,0,w,h);
+
+      // Background grid
+      sctx.globalAlpha = 1;
+      sctx.strokeStyle = "rgba(255,255,255,0.10)";
+      sctx.lineWidth = 1;
+      for(let i=1;i<5;i++){
+        const y = (h*i/5);
+        sctx.beginPath();
+        sctx.moveTo(0,y);
+        sctx.lineTo(w,y);
+        sctx.stroke();
+      }
+
+      // Sim curve: quick rise to week 3 then crater then slow recovery
+      const pts = [];
+      const N = 60;
+      for(let i=0;i<N;i++){
+        const t = i/(N-1); // 0..1
+        // t ~ weeks 0..12
+        const week = t*12;
+
+        // Build a curve: peak around week 3, drop after, mild recovery
+        let y;
+        const peak = Math.exp(-Math.pow((week-3)/1.2,2)); // gaussian peak
+        const crater = 1/(1+Math.exp(-(week-4.3)*2.0));   // logistic "drop begins"
+        const recovery = 1/(1+Math.exp(-(week-9.0)*1.2)); // logistic recovery
+        // Combine
+        y = 0.22 + 0.55*peak - 0.28*crater + 0.14*recovery;
+        y = clamp(y, 0.06, 0.92);
+
+        pts.push({x: t, y});
+      }
+
+      // Draw gradient line
+      const grad = sctx.createLinearGradient(0,0,w,0);
+      grad.addColorStop(0, "rgba(59,130,246,.95)");
+      grad.addColorStop(.5, "rgba(139,92,246,.95)");
+      grad.addColorStop(1, "rgba(20,184,166,.95)");
+
+      // Fill under curve
+      sctx.beginPath();
+      pts.forEach((p, idx) => {
+        const X = p.x * w;
+        const Y = (1-p.y) * h;
+        if(idx===0) sctx.moveTo(X,Y);
+        else sctx.lineTo(X,Y);
+      });
+      sctx.lineTo(w,h);
+      sctx.lineTo(0,h);
+      sctx.closePath();
+      sctx.fillStyle = "rgba(255,255,255,0.06)";
+      sctx.fill();
+
+      // Stroke curve
+      sctx.beginPath();
+      pts.forEach((p, idx) => {
+        const X = p.x * w;
+        const Y = (1-p.y) * h;
+        if(idx===0) sctx.moveTo(X,Y);
+        else sctx.lineTo(X,Y);
+      });
+      sctx.strokeStyle = grad;
+      sctx.lineWidth = 3;
+      sctx.lineJoin = "round";
+      sctx.lineCap = "round";
+      sctx.stroke();
+
+      // Peak marker ~ week 3
+      const peakX = (3/12)*w;
+      const peakY = (1-pts[Math.round((3/12)*(N-1))].y)*h;
+      sctx.fillStyle = "rgba(255,255,255,.9)";
+      sctx.beginPath(); sctx.arc(peakX, peakY, 4, 0, Math.PI*2); sctx.fill();
+      sctx.fillStyle = "rgba(255,255,255,.7)";
+      sctx.font = `${Math.round(h*0.14)}px ui-sans-serif, system-ui`;
+      sctx.fillText("peak", clamp(peakX+8, 0, w-40), clamp(peakY-8, 14, h-8));
+    }
+    window.addEventListener("resize", drawSpark);
+    drawSpark();
+
+    // --------------------------
+    // Adoption gauge model
+    // --------------------------
+    const hours = $("#hours"), perm = $("#perm");
+    const hoursVal = $("#hoursVal"), permVal = $("#permVal");
+    const pctEl = $("#pct"), needle = $("#needle");
+
+    function adoptionModel(h, p, playbooks=0.35){
+      // h in 0..12, p in 0..10
+      // Base: 16% MAU. Add with hours + permission. Cap by whether org has playbooks (fixed at 0.35).
+      const hN = h/12;         // 0..1
+      const pN = p/10;         // 0..1
+      const lift = 0.58*(1-Math.exp(-2.2*hN)) + 0.52*(1-Math.exp(-2.0*pN));
+      const cap = playbooks; // org playbooks cap how far adoption can go
+      const mau = clamp(0.16 + lift * cap, 0.08, 0.72);
+      return mau;
+    }
+
+    function updateGauge(){
+      const h = +hours.value;
+      const p = +perm.value;
+      hoursVal.textContent = h + "h";
+      permVal.textContent = p + "/10";
+      const mau = adoptionModel(h, p);
+      pctEl.textContent = pct(mau*100);
+      // Needle: 0% -> -90deg, 100% -> +90deg
+      const angle = -90 + mau * 180;
+      needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+    }
+    hours.addEventListener("input", updateGauge);
+    perm.addEventListener("input", updateGauge);
+    updateGauge();
+
+    // --------------------------
+    // Frontier simulator
+    // --------------------------
+    const taskType = $("#taskType"), stakes = $("#stakes"), fit = $("#fit");
+    const stakesVal = $("#stakesVal"), fitVal = $("#fitVal");
+    const recText = $("#recText"), recMode = $("#recMode"), recVerify = $("#recVerify"), recRisk = $("#recRisk"), benefitBar = $("#benefitBar");
+
+    const taskProfiles = {
+      draft:    { baseFit: 8, baseRisk: 2 },
+      analysis: { baseFit: 6, baseRisk: 5 },
+      legal:    { baseFit: 4, baseRisk: 8 },
+      data:     { baseFit: 7, baseRisk: 4 },
+      coding:   { baseFit: 7, baseRisk: 5 },
+      policy:   { baseFit: 5, baseRisk: 7 }
+    };
+
+    function updateFrontier(){
+      const s = +stakes.value;
+      const f = +fit.value;
+      stakesVal.textContent = s + "/10";
+      fitVal.textContent = f + "/10";
+
+      const profile = taskProfiles[taskType.value];
+      const effectiveFit = (f + profile.baseFit) / 2;
+      const effectiveRisk = (s + profile.baseRisk) / 2;
+
+      // Determine mode
+      let mode, verify, risk;
+      if (effectiveRisk > 6) {
+        mode = "Centaur";
+        verify = "High";
+      } else if (effectiveFit > 6 && effectiveRisk < 5) {
+        mode = "Cyborg";
+        verify = "Low";
+      } else {
+        mode = "Mixed";
+        verify = "Medium";
+      }
+
+      // Risk label
+      if (effectiveRisk > 7) risk = "High";
+      else if (effectiveRisk > 4) risk = "Medium";
+      else risk = "Low";
+
+      // Benefit calculation (jagged edge: high stakes + low fit = negative)
+      const benefit = clamp((effectiveFit * 8) - (effectiveRisk * (10 - effectiveFit) * 0.5), 0, 100);
+
+      recMode.textContent = mode;
+      recVerify.textContent = verify;
+      recRisk.textContent = risk;
+      benefitBar.style.width = benefit + "%";
+
+      // Recommendation text
+      if (effectiveRisk > 7 && effectiveFit < 5) {
+        recText.textContent = "⚠️ Jagged edge zone: AI may hurt more than help. Use only for drafts with heavy verification.";
+      } else if (effectiveFit > 7 && effectiveRisk < 4) {
+        recText.textContent = "✅ Sweet spot: AI excels here. Use cyborg mode with light verification.";
+      } else {
+        recText.textContent = "⚖️ Mixed zone: Use checkpoints and verify critical sections. Document what works.";
+      }
+    }
+    taskType.addEventListener("change", updateFrontier);
+    stakes.addEventListener("input", updateFrontier);
+    fit.addEventListener("input", updateFrontier);
+    updateFrontier();
+
+    // --------------------------
+    // Permission checklist
+    // --------------------------
+    const checksEl = $("#checks");
+    checksEl.innerHTML = permChecks.map(c => `
+      <label class="check">
+        <input type="checkbox" data-key="${c.k}" />
+        <div>
+          <b>${c.t}</b>
+          <span>${c.d}</span>
+        </div>
+      </label>
+    `).join("");
+
+    const permScoreEl = $("#permScore"), permOutcomeEl = $("#permOutcome"), permAdviceEl = $("#permAdvice");
+
+    function updatePermission(){
+      const checked = $$('#checks input:checked').length;
+      const total = permChecks.length;
+      const pct = Math.round((checked / total) * 100);
+      permScoreEl.textContent = pct + "%";
+
+      let outcome, advice;
+      if (pct >= 80) {
+        outcome = "Enabled";
+        advice = "🟢 Strong clarity. Conscientious employees feel safe to experiment. Focus on sharing wins and failure cases.";
+      } else if (pct >= 50) {
+        outcome = "Hesitant";
+        advice = "🟡 Partial clarity. Some will try; many will wait. Fill in the remaining gaps to unlock broader adoption.";
+      } else {
+        outcome = "Blocked";
+        advice = "🔴 Low clarity. Most conscientious employees will opt out (\"Will I get in trouble?\"). Fix policy gaps first.";
+      }
+      permOutcomeEl.textContent = outcome;
+      permAdviceEl.innerHTML = advice;
+    }
+    checksEl.addEventListener("change", updatePermission);
+    updatePermission();
+
+    // --------------------------
+    // Diagnostic checklist
+    // --------------------------
+    const diagEl = $("#diag");
+    diagEl.innerHTML = diagQs.map((q, i) => `
+      <label class="check">
+        <input type="checkbox" data-idx="${i}" />
+        <div>
+          <b>${q}</b>
+        </div>
+      </label>
+    `).join("");
+
+    const diagScoreEl = $("#diagScore"), diagTierEl = $("#diagTier"), diagAdviceEl = $("#diagAdvice");
+
+    function updateDiag(){
+      const checked = $$('#diag input:checked').length;
+      diagScoreEl.textContent = checked + "/" + diagQs.length;
+
+      let tier, advice;
+      if (checked >= 5) {
+        tier = "201+";
+        advice = "🟢 Strong 201-level capability. You're treating AI as a management skill. Focus on frontier mapping and sharing playbooks.";
+      } else if (checked >= 3) {
+        tier = "101→201";
+        advice = "🟡 Transitioning. You have some judgment patterns but gaps remain. Pick 1-2 unchecked items to build this week.";
+      } else {
+        tier = "101";
+        advice = "🔴 Still at tool-skill level. The risk: early excitement → trough → abandonment. Prioritize workflow integration and verification protocols.";
+      }
+      diagTierEl.textContent = tier;
+      diagAdviceEl.innerHTML = advice;
+    }
+    diagEl.addEventListener("change", updateDiag);
+    updateDiag();
+
+    // --------------------------
+    // Reset & Export
+    // --------------------------
+    $("#btnReset").addEventListener("click", () => {
+      hours.value = 2; perm.value = 3;
+      stakes.value = 6; fit.value = 6;
+      taskType.value = "draft";
+      $$('#checks input, #diag input').forEach(i => i.checked = false);
+      updateGauge();
+      updateFrontier();
+      updatePermission();
+      updateDiag();
+    });
+
+    $("#btnExport").addEventListener("click", () => {
+      const now = new Date().toISOString().slice(0,10);
+      const diagChecked = $$('#diag input:checked').length;
+      const permChecked = $$('#checks input:checked').length;
+
+      const content = `# AI Management Skill Assessment (${now})
+
+## Adoption Model Settings
+- Training hours: ${hours.value}h
+- Permission clarity: ${perm.value}/10
+- Estimated MAU: ${pctEl.textContent}
+
+## Frontier Simulator
+- Task type: ${taskType.value}
+- Stakes: ${stakes.value}/10
+- AI Fit: ${fit.value}/10
+- Recommended mode: ${recMode.textContent}
+- Verification level: ${recVerify.textContent}
+- Risk level: ${recRisk.textContent}
+
+## Permission Clarity Score
+- Score: ${permScoreEl.textContent}
+- Outcome: ${permOutcomeEl.textContent}
+
+## Diagnostic Score
+- Score: ${diagScoreEl.textContent}
+- Tier: ${diagTierEl.textContent}
+
+---
+Key insight: AI adoption isn't a tool skill. It's a management skill.
+The 201-level = context assembly + quality judgment + task decomposition + iterative refinement + workflow integration + frontier recognition.
+`;
+
+      const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ai-management-skill-notes_${now}.md`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 500);
+    });
+  </script>
+</body>
+</html>
