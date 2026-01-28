@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Infographic — AI as Architecture Vigilance (Entropy vs Judgment)</title>
+  <meta name="description" content="An interactive infographic exploring how AI excels at software architecture through tireless vigilance rather than superior judgment. Systems fail from lost context and entropy, not bad engineers—AI provides consistent rule enforcement while humans handle trade-offs and strategy." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Software Architecture, AI Vigilance, Entropy, Code Quality, Technical Debt, Context Engineering, Human-AI Collaboration" />
+  <meta name="icon" content="🏛️" />
+  <meta name="created" content="2026-01-28" />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1731;
+      --panel2:#0c142b;
+      --ink:#e9ecff;
+      --muted:#aeb7e6;
+      --faint:#7f89c7;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.16);
+      --good:#64f0c8;
+      --warn:#ffd66e;
+      --bad:#ff6b8b;
+      --accent:#7aa7ff;
+      --accent2:#b58cff;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(122,167,255,.20), transparent 60%),
+        radial-gradient(900px 700px at 82% 22%, rgba(181,140,255,.18), transparent 55%),
+        radial-gradient(800px 700px at 45% 90%, rgba(100,240,200,.10), transparent 60%),
+        linear-gradient(180deg, #070b16 0%, var(--bg) 65%, #070b16 100%);
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{
+      width:min(1180px, 92vw);
+      margin:0 auto;
+      padding:28px 0 60px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:calc(var(--r) + 6px);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width:240px;
+    }
+    .badge{
+      width:44px; height:44px; border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(135deg, rgba(122,167,255,.9), rgba(181,140,255,.85));
+      box-shadow:0 18px 40px rgba(122,167,255,.25);
+      position:relative;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .badge:after{
+      content:"";
+      position:absolute; inset:10px;
+      border-radius:12px;
+      border:1px dashed rgba(255,255,255,.35);
+      opacity:.6;
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .brand p{margin:2px 0 0; font-size:13px; color:var(--faint)}
+    .controls{
+      display:flex; flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:13px;
+      user-select:none;
+    }
+    .pill strong{color:var(--ink); font-weight:700}
+    .toggle{
+      cursor:pointer;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .toggle:hover{transform:translateY(-1px); border-color:var(--line2)}
+    .dot{
+      width:10px; height:10px; border-radius:999px; background:rgba(255,255,255,.25);
+      box-shadow:0 0 0 4px rgba(255,255,255,.05);
+    }
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+
+    /* Hero */
+    .hero{
+      margin-top:18px;
+      padding:24px;
+      border:1px solid var(--line);
+      border-radius:calc(var(--r) + 10px);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 300px at 20% 0%, rgba(122,167,255,.22), transparent 65%),
+        radial-gradient(700px 300px at 80% 0%, rgba(181,140,255,.18), transparent 65%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .heroInner{position:relative; z-index:1}
+    .kicker{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-bottom:12px;
+    }
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,49,.55);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .tag b{color:var(--ink)}
+    .hero h2{
+      margin:0;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+    .hero p{
+      margin:12px 0 0;
+      max-width:84ch;
+      color:rgba(233,236,255,.86);
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    /* Layout grid */
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .brand{min-width:unset}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background: rgba(15,23,49,.35);
+    }
+    .cardHeader h3{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .cardBody{padding:16px}
+
+    .callout{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .quote{
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(12,20,43,.55);
+      position:relative;
+    }
+    .quote:before{
+      content:"“";
+      position:absolute;
+      left:12px; top:8px;
+      font-size:28px;
+      opacity:.22;
+    }
+    .quote p{margin:0; color:rgba(233,236,255,.9); line-height:1.55}
+    .quote .meta{
+      margin-top:10px;
+      display:flex; gap:10px; flex-wrap:wrap;
+      color:var(--faint);
+      font-size:12px;
+      font-family:var(--mono);
+    }
+
+    /* Diagram */
+    .diagram{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(8,12,26,.35);
+    }
+    .diagram svg{width:100%; height:auto; display:block}
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .legend .item{display:flex; align-items:center; gap:8px}
+    .legend .sw{width:10px; height:10px; border-radius:3px; background:rgba(255,255,255,.2)}
+
+    /* Example list */
+    .examples{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 820px){ .examples{grid-template-columns:1fr} }
+    .ex{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(12,20,43,.40);
+      transition:transform .12s ease, border-color .12s ease;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .ex:hover{transform:translateY(-1px); border-color:var(--line2)}
+    .ex h4{margin:0 0 8px; font-size:14px; letter-spacing:-.01em}
+    .ex p{margin:0; color:rgba(233,236,255,.82); font-size:13px; line-height:1.55}
+    .ex .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .chip{
+      font-size:11px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      padding:5px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      font-family:var(--mono);
+    }
+    .ex:after{
+      content:"";
+      position:absolute;
+      right:-40px; top:-40px;
+      width:140px; height:140px;
+      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), transparent 60%);
+      opacity:.65;
+    }
+
+    /* Comparison matrix */
+    .matrix{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){ .matrix{grid-template-columns:1fr} }
+    .col{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(12,20,43,.40);
+    }
+    .colTop{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .colTop .title{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:-.01em;
+    }
+    .colTop .title span{opacity:.9}
+    .score{
+      display:flex; gap:6px; align-items:center;
+      font-family:var(--mono); font-size:12px; color:var(--muted);
+    }
+    .bars{
+      display:grid; gap:10px;
+      padding:14px;
+    }
+    .barRow{
+      display:grid;
+      grid-template-columns: 1fr 86px;
+      gap:10px;
+      align-items:center;
+    }
+    .barRow label{
+      font-size:12px;
+      color:rgba(233,236,255,.84);
+    }
+    .bar{
+      height:10px; border-radius:999px;
+      background:rgba(255,255,255,.10);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .bar > i{
+      display:block; height:100%;
+      width:50%;
+      background:linear-gradient(90deg, rgba(122,167,255,.95), rgba(181,140,255,.85));
+      border-radius:999px;
+    }
+    .bar.good > i{background:linear-gradient(90deg, rgba(100,240,200,.95), rgba(122,167,255,.75))}
+    .bar.warn > i{background:linear-gradient(90deg, rgba(255,214,110,.95), rgba(181,140,255,.70))}
+    .bar.bad > i{background:linear-gradient(90deg, rgba(255,107,139,.95), rgba(255,214,110,.70))}
+    .foot{
+      padding:12px 14px;
+      border-top:1px solid var(--line);
+      color:var(--faint);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    /* Build plan */
+    .steps{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .step{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
+      background:rgba(12,20,43,.40);
+      display:grid;
+      grid-template-columns: 34px 1fr;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .num{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:rgba(233,236,255,.92);
+      font-family:var(--mono);
+      font-weight:800;
+    }
+    .step h4{margin:0; font-size:13px}
+    .step p{margin:6px 0 0; color:rgba(233,236,255,.80); font-size:12.8px; line-height:1.55}
+    .kbd{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:rgba(233,236,255,.88);
+      white-space:nowrap;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      padding:18px;
+      background:rgba(0,0,0,.55);
+      z-index:50;
+    }
+    .modal.open{display:grid}
+    .modalCard{
+      width:min(880px, 94vw);
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(180deg, rgba(15,23,49,.92), rgba(10,16,34,.92));
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    }
+    .modalHead h3{margin:0; font-size:14px; letter-spacing:-.01em}
+    .close{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--ink);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:12px;
+    }
+    .close:hover{border-color:var(--line2)}
+    .modalBody{padding:16px}
+    .split{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:12px;
+    }
+    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
+    .panel{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(12,20,43,.45);
+    }
+    .panel h4{margin:0 0 10px; font-size:13px; color:rgba(233,236,255,.92)}
+    .panel ul{margin:0; padding-left:18px; color:rgba(233,236,255,.82); line-height:1.6; font-size:12.8px}
+    .code{
+      font-family:var(--mono);
+      font-size:12px;
+      line-height:1.55;
+      color:rgba(233,236,255,.88);
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+      overflow:auto;
+      white-space:pre;
+    }
+
+    /* Footer */
+    .footer{
+      margin-top:14px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      background:rgba(255,255,255,.03);
+      color:var(--faint);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .toggle:hover,.ex:hover{transform:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge" aria-hidden="true"></div>
+        <div>
+          <h1>Architecture, Entropy, & AI</h1>
+          <p>Why vigilance beats “smarts” at scale</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="pill toggle" id="modeBtn" title="Switch narrative density">
+          <span class="dot good" id="modeDot"></span>
+          <span>Mode: <strong id="modeLabel">Infographic</strong></span>
+        </div>
+        <div class="pill toggle" id="focusBtn" title="Highlight what humans do best vs what AI does best">
+          <span class="dot warn" id="focusDot"></span>
+          <span>Focus: <strong id="focusLabel">Balanced</strong></span>
+        </div>
+        <div class="pill">
+          <span class="dot" style="background:rgba(255,255,255,.35)"></span>
+          <span>Click examples for deep dive</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="hero" aria-label="Hero">
+      <div class="heroInner">
+        <div class="kicker">
+          <span class="tag"><b>Provocation</b> AI can be better at architecture</span>
+          <span class="tag"><b>Reason</b> not smarter — more vigilant</span>
+          <span class="tag"><b>Enemy</b> entropy (slow rot)</span>
+        </div>
+        <h2>Software architecture fails less from bad judgment…<br/>and more from lost context.</h2>
+        <p>
+          At scale, systems degrade through thousands of local “reasonable” changes that nobody sees adding up.
+          Humans can zoom <i>in</i> or <i>out</i>, but struggle to do both with equal fidelity—especially under deadlines.
+          AI, paired with large context + searchable repos + structured rules, can act as a tireless vigilance layer:
+          checking consistency, tracing global implications, and teaching at the moment of need.
+        </p>
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- LEFT: Thesis + Diagram -->
+      <section class="card" aria-label="Core frame">
+        <div class="cardHeader">
+          <h3>The core frame</h3>
+          <div class="pill" style="padding:8px 10px;">
+            <span class="dot good"></span>
+            <span><strong>Entropy</strong> is systemic, not a patch</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="callout">
+            <div class="quote">
+              <p><b>You cannot hold the design of the cathedral in your head while laying a single brick.</b></p>
+              <div class="meta">
+                <span>Architecture ⇢ requires global + local reasoning</span>
+                <span>Humans ⇢ working memory bottleneck</span>
+                <span>AI ⇢ large-context vigilance</span>
+              </div>
+            </div>
+
+            <div class="diagram" aria-label="Entropy loop diagram">
+              <!-- Simple SVG flow: Local changes -> Context gaps -> Regressions -> Firefighting -> More local changes -->
+              <svg viewBox="0 0 1100 360" role="img" aria-label="Entropy loop: local decisions accumulate into systemic rot">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="1">
+                    <stop offset="0" stop-color="rgba(122,167,255,.95)"/>
+                    <stop offset="1" stop-color="rgba(181,140,255,.85)"/>
+                  </linearGradient>
+                  <linearGradient id="g2" x1="0" x2="1">
+                    <stop offset="0" stop-color="rgba(100,240,200,.95)"/>
+                    <stop offset="1" stop-color="rgba(122,167,255,.75)"/>
+                  </linearGradient>
+                  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(0,0,0,.45)"/>
+                  </filter>
+                </defs>
+
+                <rect x="0" y="0" width="1100" height="360" rx="18" fill="rgba(12,20,43,.20)" stroke="rgba(255,255,255,.10)"/>
+
+                <!-- Nodes -->
+                <g filter="url(#soft)">
+                  <rect x="60"  y="70" width="230" height="90" rx="18" fill="rgba(12,20,43,.55)" stroke="rgba(255,255,255,.12)"/>
+                  <rect x="330" y="40" width="250" height="90" rx="18" fill="rgba(12,20,43,.55)" stroke="rgba(255,255,255,.12)"/>
+                  <rect x="640" y="70" width="260" height="90" rx="18" fill="rgba(12,20,43,.55)" stroke="rgba(255,255,255,.12)"/>
+                  <rect x="360" y="220" width="310" height="95" rx="18" fill="rgba(12,20,43,.55)" stroke="rgba(255,255,255,.12)"/>
+                </g>
+
+                <text x="85" y="110" fill="rgba(233,236,255,.92)" font-size="18" font-weight="700">Local “reasonable” changes</text>
+                <text x="85" y="135" fill="rgba(233,236,255,.72)" font-size="14">✅ passes review</text>
+                <text x="85" y="155" fill="rgba(233,236,255,.72)" font-size="14">✅ ships fast</text>
+
+                <text x="355" y="80" fill="rgba(233,236,255,.92)" font-size="18" font-weight="700">Context gets dispersed</text>
+                <text x="355" y="105" fill="rgba(233,236,255,.72)" font-size="14">files • people • time</text>
+                <text x="355" y="125" fill="rgba(233,236,255,.72)" font-size="14">institutional memory decays</text>
+
+                <text x="665" y="110" fill="rgba(233,236,255,.92)" font-size="18" font-weight="700">Systemic regressions</text>
+                <text x="665" y="135" fill="rgba(233,236,255,.72)" font-size="14">waterfalls • cache misses</text>
+                <text x="665" y="155" fill="rgba(233,236,255,.72)" font-size="14">hidden costs • slow rot</text>
+
+                <text x="385" y="255" fill="rgba(233,236,255,.92)" font-size="18" font-weight="700">Firefighting + patching</text>
+                <text x="385" y="280" fill="rgba(233,236,255,.72)" font-size="14">pressure ↑, attention ↓</text>
+                <text x="385" y="300" fill="rgba(233,236,255,.72)" font-size="14">more shortcuts, more entropy</text>
+
+                <!-- Arrows -->
+                <g stroke="rgba(255,255,255,.25)" stroke-width="2" fill="none" stroke-linecap="round">
+                  <path d="M290 115 C315 115, 315 95, 330 95" />
+                  <path d="M580 85 C610 85, 615 115, 640 115" />
+                  <path d="M760 160 C760 200, 690 215, 670 235" />
+                  <path d="M360 268 C260 250, 170 220, 150 160" />
+                </g>
+
+                <!-- AI overlay -->
+                <g>
+                  <rect x="910" y="210" width="160" height="110" rx="18" fill="rgba(100,240,200,.10)" stroke="rgba(100,240,200,.35)"/>
+                  <text x="930" y="242" fill="rgba(233,236,255,.92)" font-size="16" font-weight="800">AI Vigilance</text>
+                  <text x="930" y="266" fill="rgba(233,236,255,.75)" font-size="13">• consistent rules</text>
+                  <text x="930" y="287" fill="rgba(233,236,255,.75)" font-size="13">• global tracing</text>
+                  <text x="930" y="308" fill="rgba(233,236,255,.75)" font-size="13">• teach in-flow</text>
+                  <path d="M900 250 C860 240, 845 225, 815 205" stroke="url(#g2)" stroke-width="3" fill="none"/>
+                  <path d="M900 290 C860 295, 840 300, 800 305" stroke="url(#g2)" stroke-width="3" fill="none"/>
+                </g>
+
+                <!-- Highlights -->
+                <circle cx="175" cy="115" r="6" fill="url(#g1)"/>
+                <circle cx="455" cy="85" r="6" fill="url(#g1)"/>
+                <circle cx="770" cy="115" r="6" fill="url(#g1)"/>
+                <circle cx="520" cy="268" r="6" fill="url(#g1)"/>
+              </svg>
+
+              <div class="legend" aria-label="Legend">
+                <div class="item"><span class="sw" style="background:rgba(122,167,255,.75)"></span>Architecture view (global)</div>
+                <div class="item"><span class="sw" style="background:rgba(181,140,255,.65)"></span>Code changes (local)</div>
+                <div class="item"><span class="sw" style="background:rgba(100,240,200,.75)"></span>AI vigilance overlay</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: The constraint -->
+      <section class="card" aria-label="Constraint">
+        <div class="cardHeader">
+          <h3>The bottleneck</h3>
+          <div class="pill" style="padding:8px 10px;">
+            <span class="dot bad"></span>
+            <span><strong>Lost context</strong> beats good intentions</span>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="quote" style="margin-bottom:12px;">
+            <p>
+              The failure mode isn’t “bad engineers.” It’s a <b>distributed cognitive system</b> (a team)
+              hitting a <b>context window limit</b>: knowledge spreads across files, people, and months.
+              Review catches bugs, but misses <b>architectural regressions</b>.
+            </p>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="num">1</div>
+              <div>
+                <h4>Working memory ceiling</h4>
+                <p>Architecture needs many concerns at once (perf, security, maintainability, conventions, downstream impact). Humans cycle; AI can cross-reference continuously.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">2</div>
+              <div>
+                <h4>Scale beats attention</h4>
+                <p>Teams can’t scrutinize <span class="kbd">10,000 files</span> like <span class="kbd">10 files</span>. AI can apply identical checks everywhere, every time.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">3</div>
+              <div>
+                <h4>Fatigue + deadline pressure</h4>
+                <p>Humans become inconsistent (47th PR of the week). AI doesn’t “get tired.”</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">4</div>
+              <div>
+                <h4>Institutional memory decay</h4>
+                <p>People leave; docs rot. AI can keep patterns + history searchable and teachable <i>in-flow</i>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Examples -->
+    <section class="card" style="margin-top:14px;" aria-label="Failure modes examples">
+      <div class="cardHeader">
+        <h3>Normal failure modes (click to open)</h3>
+        <div class="pill" style="padding:8px 10px;">
+          <span class="dot warn"></span>
+          <span>Each change is “reasonable” → together they rot</span>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="examples" id="examples">
+          <div class="ex" data-key="listeners">
+            <h4>1) Abstraction conceals cost</h4>
+            <p>A clean reusable hook adds a global click listener. Multiply it across 100 popups → 100 callbacks per click, everywhere.</p>
+            <div class="chips">
+              <span class="chip">hidden-global-work</span>
+              <span class="chip">fanout</span>
+              <span class="chip">“looks clean”</span>
+            </div>
+          </div>
+
+          <div class="ex" data-key="cache">
+            <h4>2) Fragile abstractions</h4>
+            <p>Add an object param to a cached function. Tests pass. But referential equality breaks → cache never hits, silently.</p>
+            <div class="chips">
+              <span class="chip">referential-equality</span>
+              <span class="chip">silent-regression</span>
+              <span class="chip">docs-not-enforced</span>
+            </div>
+          </div>
+
+          <div class="ex" data-key="waterfall">
+            <h4>3) Opaque async flows</h4>
+            <p>Add an await for coupon validation in a 1000-line checkout function. It creates a sequential waterfall where parallel work was possible.</p>
+            <div class="chips">
+              <span class="chip">waterfall</span>
+              <span class="chip">async-graph</span>
+              <span class="chip">diff-too-local</span>
+            </div>
+          </div>
+
+          <div class="ex" data-key="memo">
+            <h4>4) Optimization without proof</h4>
+            <p>Memoize something that was already instant. Dependency tracking overhead costs more than the original work.</p>
+            <div class="chips">
+              <span class="chip">cargo-cult</span>
+              <span class="chip">overhead</span>
+              <span class="chip">measure-first</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Human vs AI -->
+    <section class="card" style="margin-top:14px;" aria-label="Complementarity matrix">
+      <div class="cardHeader">
+        <h3>Complementarity: vigilance vs judgment</h3>
+        <div class="pill" style="padding:8px 10px;">
+          <span class="dot good"></span>
+          <span>Not replacement → correct division of labor</span>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="matrix" id="matrix">
+          <div class="col" data-col="ai">
+            <div class="colTop">
+              <div class="title"><span>AI</span> <span style="color:var(--good); font-weight:800;">(Vigilance Layer)</span></div>
+              <div class="score"><span class="dot good"></span> consistent at scale</div>
+            </div>
+            <div class="bars">
+              <div class="barRow">
+                <label>Apply consistent rules across many files</label>
+                <div class="bar good"><i style="width:92%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Global+local reasoning in the same pass</label>
+                <div class="bar good"><i style="width:86%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Pattern detection across history (“we’ve done this before”)</label>
+                <div class="bar good"><i style="width:80%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Teach at the moment of need (inline explanations)</label>
+                <div class="bar warn"><i style="width:72%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Tireless review (no fatigue / no deadline blindness)</label>
+                <div class="bar good"><i style="width:90%"></i></div>
+              </div>
+            </div>
+            <div class="foot">
+              Best when patterns exist (rules, conventions, checklists) and the system can retrieve the right context.
+            </div>
+          </div>
+
+          <div class="col" data-col="human">
+            <div class="colTop">
+              <div class="title"><span>Humans</span> <span style="color:var(--warn); font-weight:800;">(Judgment Layer)</span></div>
+              <div class="score"><span class="dot warn"></span> trade-offs under uncertainty</div>
+            </div>
+            <div class="bars">
+              <div class="barRow">
+                <label>Novel architectural invention (new patterns)</label>
+                <div class="bar warn"><i style="width:78%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Business context + product trade-offs (“worth it?”)</label>
+                <div class="bar good"><i style="width:88%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Cross-team integration realities (cadence, ownership)</label>
+                <div class="bar good"><i style="width:82%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Know when to stop optimizing (“good enough”)</label>
+                <div class="bar good"><i style="width:90%"></i></div>
+              </div>
+              <div class="barRow">
+                <label>Interpret “why” behind legacy decisions</label>
+                <div class="bar warn"><i style="width:74%"></i></div>
+              </div>
+            </div>
+            <div class="foot">
+              Humans remain essential for stakes, strategy, and decisions where “optimal code” is not the goal.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deployment plan -->
+    <section class="card" style="margin-top:14px;" aria-label="How to deploy">
+      <div class="cardHeader">
+        <h3>How to build this in 2026</h3>
+        <div class="pill" style="padding:8px 10px;">
+          <span class="dot good"></span>
+          <span><strong>Context engineering</strong> is the differentiator</span>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="steps">
+          <div class="step">
+            <div class="num">A</div>
+            <div>
+              <h4>Distill patterns into enforceable rules</h4>
+              <p>Turn tacit knowledge into a structured, queryable “rulebook” (e.g., perf categories ordered by impact). AI enforces; humans govern.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">B</div>
+            <div>
+              <h4>Wire context retrieval into workflow</h4>
+              <p>Large repos exceed any context window. Use semantic search + progressive disclosure: pull “just enough” code, docs, ownership, and history per change.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">C</div>
+            <div>
+              <h4>Inline teaching, not just linting</h4>
+              <p>Flag the issue <i>and</i> explain why it matters, show a fix, and link to internal examples. Make learning happen during PR review.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">D</div>
+            <div>
+              <h4>Governance: whose rules are they?</h4>
+              <p>Define ownership, change-control, and dispute resolution. AI forces implicit standards to become explicit—this is an org alignment problem.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <b>Core takeaway:</b> the future of software architecture isn’t human vs AI.
+      It’s <b>AI preventing entropy</b> through tireless, consistent vigilance—while <b>humans make judgment calls</b>
+      under uncertainty (trade-offs, strategy, “good enough,” cross-team realities).
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Example details">
+    <div class="modalCard">
+      <div class="modalHead">
+        <h3 id="modalTitle">Example</h3>
+        <button class="close" id="closeBtn">Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="split">
+          <div class="panel">
+            <h4>What happens</h4>
+            <ul id="modalWhat"></ul>
+          </div>
+          <div class="panel">
+            <h4>What AI can do (vigilance)</h4>
+            <ul id="modalAI"></ul>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:12px;">
+          <h4>Illustrative snippet (conceptual)</h4>
+          <div class="code" id="modalCode"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Content payload for modal deep dives ---
+    const DETAILS = {
+      listeners: {
+        title: "1) Abstraction conceals cost — global listeners",
+        what: [
+          "A hook/utility hides a global side effect (window/document listener).",
+          "Each instance is reasonable in isolation; the cost explodes with usage count.",
+          "The regression appears far from the change: users feel sluggishness later."
+        ],
+        ai: [
+          "Count instantiations across repo (how many times this hook is used).",
+          "Detect repeated global subscriptions and suggest dedup (singleton/event bus).",
+          "Provide impact framing: callbacks-per-click × average click rate."
+        ],
+        code:
+`// Looks clean…
+function useOutsideClick(ref, onClose) {
+  useEffect(() => {
+    function onDocClick(e) { /* check target */ onClose(); }
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [ref, onClose]);
+}
+
+// Hidden cost: 100 instances => 100 listeners firing on every click`
+      },
+
+      cache: {
+        title: "2) Fragile abstractions — silent cache misses",
+        what: [
+          "A cached function is extended with an object parameter.",
+          "Each call creates a new object reference, so cache keys never match.",
+          "Tests pass; production slowly degrades until profiling discovers it."
+        ],
+        ai: [
+          "Trace cache keying strategy and warn on referential-identity pitfalls.",
+          "Suggest stable keys (serialize, memoize params, use primitive keys).",
+          "Scan call sites: detect fresh object literals passed repeatedly."
+        ],
+        code:
+`// Cached function
+const getUser = memoize((id, opts) => fetchUser(id, opts));
+
+// Innocent change: pass object literal
+getUser(42, { include: "orders" }); // new ref each call => cache miss
+
+// Fix: stable key
+getUser(42, "include=orders");`
+      },
+
+      waterfall: {
+        title: "3) Opaque async flows — waterfalls in checkout",
+        what: [
+          "A long function accumulates sequential awaits over time.",
+          "A new await blocks downstream operations that could run in parallel.",
+          "Nobody holds the whole async graph in their head during a small PR diff."
+        ],
+        ai: [
+          "Build a dependency graph of awaits and highlight parallelizable groups.",
+          "Detect patterns: sequential awaits with independent inputs.",
+          "Offer a refactor plan: Promise.all boundaries + error handling guidance."
+        ],
+        code:
+`// Before: potentially parallel work
+const [inventory, shipping] = await Promise.all([
+  fetchInventory(cart),
+  fetchShippingQuote(cart)
+]);
+
+// Later: a local change adds a blocking await above everything
+const couponOk = await validateCoupon(code); // blocks
+// … now inventory+shipping happen later, creating a waterfall`
+      },
+
+      memo: {
+        title: "4) Optimization without proof — memoizing the trivial",
+        what: [
+          "A best practice is applied without measurement.",
+          "Memoization adds dependency tracking + comparisons on every render.",
+          "The 'optimization' costs more than the original constant-time work."
+        ],
+        ai: [
+          "Estimate complexity: warn when memoization overhead dominates.",
+          "Suggest profiling checkpoints ('measure first') and simpler alternatives.",
+          "Detect patterns: memoizing property access or cheap pure functions."
+        ],
+        code:
+`// Cargo-cult optimization
+const val = useMemo(() => obj.name, [obj]);
+// obj.name is a simple property access — instant
+
+// Meanwhile, useMemo does:
+// 1. Store last value + deps
+// 2. Compare deps on every render
+// 3. Return cached or recompute
+
+// If deps change often, you pay comparison + storage with zero benefit`
+      }
+    };
+
+    // --- Modal logic ---
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalWhat = document.getElementById("modalWhat");
+    const modalAI = document.getElementById("modalAI");
+    const modalCode = document.getElementById("modalCode");
+    const closeBtn = document.getElementById("closeBtn");
+    const examples = document.getElementById("examples");
+
+    function openModal(key) {
+      const d = DETAILS[key];
+      if (!d) return;
+      modalTitle.textContent = d.title;
+      modalWhat.innerHTML = d.what.map(w => `<li>${w}</li>`).join("");
+      modalAI.innerHTML = d.ai.map(a => `<li>${a}</li>`).join("");
+      modalCode.textContent = d.code;
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    examples.addEventListener("click", (e) => {
+      const ex = e.target.closest(".ex");
+      if (ex && ex.dataset.key) openModal(ex.dataset.key);
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // --- Mode toggle (Infographic / Verbose) ---
+    const modeBtn = document.getElementById("modeBtn");
+    const modeLabel = document.getElementById("modeLabel");
+    const modeDot = document.getElementById("modeDot");
+    let modeVerbose = false;
+
+    modeBtn.addEventListener("click", () => {
+      modeVerbose = !modeVerbose;
+      modeLabel.textContent = modeVerbose ? "Verbose" : "Infographic";
+      modeDot.className = modeVerbose ? "dot warn" : "dot good";
+      // Could toggle visibility of additional content here
+    });
+
+    // --- Focus toggle (Balanced / AI / Human) ---
+    const focusBtn = document.getElementById("focusBtn");
+    const focusLabel = document.getElementById("focusLabel");
+    const focusDot = document.getElementById("focusDot");
+    const focusModes = ["Balanced", "AI strengths", "Human strengths"];
+    let focusIndex = 0;
+
+    focusBtn.addEventListener("click", () => {
+      focusIndex = (focusIndex + 1) % focusModes.length;
+      focusLabel.textContent = focusModes[focusIndex];
+      const colors = ["warn", "good", "accent2"];
+      focusDot.className = `dot ${colors[focusIndex]}`;
+
+      // Highlight columns based on focus
+      const matrix = document.getElementById("matrix");
+      const cols = matrix.querySelectorAll(".col");
+      cols.forEach(col => col.style.opacity = "1");
+
+      if (focusIndex === 1) { // AI strengths
+        cols[1].style.opacity = "0.5";
+      } else if (focusIndex === 2) { // Human strengths
+        cols[0].style.opacity = "0.5";
+      }
+    });
+  </script>
+</body>
+</html>
