@@ -1883,7 +1883,15 @@
                 const resolvedIcon = iconMap[rawIcon] || "description";
 
                 const dateStr = extractMeta(html, 'created');
-                const createdDate = dateStr ? new Date(dateStr) : null;
+                let createdDate = dateStr ? new Date(dateStr) : null;
+
+                // Fallback to file's Last-Modified header if no created meta tag
+                if (!createdDate) {
+                    const lastModified = response.headers.get('Last-Modified');
+                    if (lastModified) {
+                        createdDate = new Date(lastModified);
+                    }
+                }
 
                 return {
                     id,
