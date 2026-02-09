@@ -1,0 +1,51 @@
+{
+    "files": [
+        "2026_AI_Strategy_Comparison.html",
+        "2026-bets-from-zach.html",
+        "2026-brain2.html",
+        "2026-predictions.html",
+        "agents-domain-memory.html",
+        "ai-adoption-interaction.html",
+        "ai-as-software-architect.html",
+        "ai-bottleneck-shift.html",
+        "ai-claude-vs-codex.html",
+        "ai-collapse-future-jobs.html",
+        "ai-factory-era.html",
+        "ai-management-skill.html",
+        "ai-native-execution-cheap.html",
+        "ai-strategy.html",
+        "ai-strategy2.html",
+        "ai-talent-market.html",
+        "amazon-gpu-vs-people.html",
+        "bottleneck_economy.html",
+        "claude.html",
+        "day_after_agi.html",
+        "disposable-software.html",
+        "engineering-mode-trigger-levels.html",
+        "good-4-ai.html",
+        "google-vs-openai.html",
+        "healthcare-race.html",
+        "human-friction.html",
+        "latent-demand-ai.html",
+        "linkedin-hiring-arm-race.html",
+        "llm-psy.html",
+        "napoleon-technique.html",
+        "personal-agents.html",
+        "techno-feudalism.html"
+    ],
+    "folders": [
+        {
+            "id": "social-ai",
+            "path": "social-ai/",
+            "files": [
+                "social-ai/Global_Readiness.html",
+                "social-ai/global-ai-readiness-report.html",
+                "social-ai/india.html",
+                "social-ai/italy.html",
+                "social-ai/romania.html",
+                "social-ai/spain.html",
+                "social-ai/world-ai-simulator.html"
+            ]
+        }
+    ]
+}

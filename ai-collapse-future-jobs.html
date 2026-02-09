@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI is Collapsing Futures — Interactive Infographic</title>
+  <meta name="description" content="Interactive infographic: AI collapses horizontal roles and temporal career timelines into a single meta-skill: orchestrating AI agents + software-shaped intent." />
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1224;
+      --card:#0E1731cc;
+      --card2:#0C1430;
+      --stroke:#2B3A6A;
+      --stroke2:#1F2B52;
+      --txt:#EAF0FF;
+      --muted:#A9B6E6;
+      --muted2:#7F90C9;
+      --accent:#7C5CFF;
+      --accent2:#23D5FF;
+      --good:#29F5A6;
+      --warn:#FFC857;
+      --bad:#FF4D6D;
+      --shadow: 0 14px 40px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --r:20px;
+      --r2:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--txt);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(124,92,255,.18), transparent 60%),
+        radial-gradient(1200px 900px at 80% 20%, rgba(35,213,255,.14), transparent 62%),
+        radial-gradient(1000px 800px at 60% 90%, rgba(41,245,166,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{
+      width:min(1200px, 94vw);
+      margin: 28px auto 80px;
+    }
+
+    /* Header */
+    .hero{
+      border:1px solid rgba(43,58,106,.65);
+      background: linear-gradient(180deg, rgba(14,23,49,.78), rgba(10,16,40,.55));
+      border-radius: calc(var(--r) + 8px);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 500px at 15% 20%, rgba(124,92,255,.20), transparent 60%),
+        radial-gradient(900px 600px at 85% 30%, rgba(35,213,255,.17), transparent 60%),
+        radial-gradient(700px 600px at 50% 120%, rgba(41,245,166,.12), transparent 60%);
+      filter: blur(10px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .heroInner{
+      position:relative;
+      padding: 26px 26px 20px;
+      display:grid;
+      gap:16px;
+    }
+    .kicker{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      font-family:var(--mono);
+      color: var(--muted);
+      font-size:12px;
+      letter-spacing:.04em;
+      opacity:.95;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid rgba(43,58,106,.7);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(8,12,28,.35);
+    }
+    .dot{
+      width:9px; height:9px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(124,92,255,.12);
+    }
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size: clamp(14px, 1.35vw, 18px);
+      line-height:1.5;
+      max-width: 72ch;
+    }
+    .heroRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: 6px;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid rgba(43,58,106,.75);
+      background: rgba(12,18,40,.45);
+      color:var(--txt);
+      border-radius: 999px;
+      padding:10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(124,92,255,.65)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.24), rgba(35,213,255,.14));
+      border-color: rgba(124,92,255,.75);
+    }
+    .btn .icon{
+      width:18px; height:18px; border-radius:8px;
+      display:grid; place-items:center;
+      background: rgba(124,92,255,.16);
+      border:1px solid rgba(124,92,255,.35);
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .toggle{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 10px;
+      border:1px solid rgba(43,58,106,.75);
+      background: rgba(8,12,28,.35);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      user-select:none;
+    }
+    .switch{
+      width:44px; height:24px;
+      border-radius:999px;
+      border:1px solid rgba(43,58,106,.9);
+      background: rgba(12,18,40,.55);
+      position:relative;
+      cursor:pointer;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+    }
+    .knob{
+      position:absolute; top:50%; left:3px;
+      transform: translateY(-50%);
+      width:18px; height:18px;
+      border-radius:50%;
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(35,213,255,.65));
+      transition: left .18s ease;
+    }
+    .switch.on .knob{left: calc(100% - 21px);}
+    .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      color:var(--muted2);
+      font-size:12px;
+    }
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(43,58,106,.65);
+      background: rgba(8,12,28,.28);
+      font-family: var(--mono);
+    }
+
+    /* Layout */
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 960px){
+      .grid{grid-template-columns: 1fr}
+    }
+
+    .card{
+      border:1px solid rgba(43,58,106,.65);
+      background: rgba(14,23,49,.66);
+      border-radius: var(--r);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    .cardHeader{
+      padding:16px 18px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      border-bottom:1px solid rgba(43,58,106,.45);
+      background: linear-gradient(180deg, rgba(12,18,40,.25), rgba(12,18,40,0));
+    }
+    .cardTitle{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .cardTitle h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing:-.01em;
+    }
+    .cardTitle p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      max-width: 80ch;
+    }
+    .cardBody{padding:16px 18px 18px;}
+    .hint{
+      font-size:12px;
+      color:var(--muted2);
+      display:flex; gap:8px; align-items:center;
+      margin-top: 8px;
+    }
+    .spark{
+      width:10px; height:10px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(35,213,255,.12);
+    }
+
+    /* Infographic primitives */
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 680px){
+      .twoCol{grid-template-columns: 1fr;}
+    }
+    .mini{
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.25);
+      border-radius: var(--r2);
+      padding:14px 14px 12px;
+    }
+    .mini h3{
+      margin:0 0 8px 0;
+      font-size:13px;
+      font-family: var(--mono);
+      color: var(--muted);
+      letter-spacing:.03em;
+      text-transform: uppercase;
+    }
+    .big{
+      font-size:22px;
+      margin:0;
+      letter-spacing:-.02em;
+    }
+    .desc{
+      margin:8px 0 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .divider{
+      height:1px;
+      background: rgba(43,58,106,.45);
+      margin:14px 0;
+    }
+
+    /* Role convergence */
+    .roleCanvas{
+      border:1px dashed rgba(124,92,255,.55);
+      background:
+        radial-gradient(500px 280px at 20% 30%, rgba(124,92,255,.12), transparent 60%),
+        radial-gradient(600px 340px at 80% 40%, rgba(35,213,255,.10), transparent 60%),
+        rgba(8,12,28,.18);
+      border-radius: var(--r2);
+      padding:14px;
+      overflow:hidden;
+    }
+    .roleTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .seg{
+      display:flex; gap:8px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .chip{
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(43,58,106,.65);
+      background: rgba(12,18,40,.35);
+      font-size: 12px;
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .chip:hover{transform: translateY(-1px); border-color: rgba(35,213,255,.55)}
+    .chip.active{
+      border-color: rgba(124,92,255,.85);
+      background: linear-gradient(135deg, rgba(124,92,255,.22), rgba(35,213,255,.12));
+      color: var(--txt);
+    }
+    .svgWrap{
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow:hidden;
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(7,10,18,.25);
+      position:relative;
+    }
+    .svgWrap svg{width:100%; height:100%; display:block;}
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted2);
+      font-size:12px;
+    }
+    .key{
+      display:flex; align-items:center; gap:8px;
+      padding:6px 8px;
+      border:1px solid rgba(43,58,106,.55);
+      border-radius:999px;
+      background: rgba(8,12,28,.22);
+    }
+    .sw{
+      width:10px; height:10px; border-radius:2px;
+      background: linear-gradient(135deg, rgba(124,92,255,.9), rgba(35,213,255,.7));
+    }
+
+    /* Timeline */
+    .timeline{
+      display:grid;
+      gap:12px;
+    }
+    .sliderRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    input[type="range"]{
+      width:min(420px, 100%);
+      accent-color: var(--accent2);
+    }
+    .tlBox{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 780px){ .tlBox{grid-template-columns:1fr;} }
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(43,58,106,.35);
+      border: 1px solid rgba(43,58,106,.6);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width:40%;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(35,213,255,.85), rgba(124,92,255,.85));
+      box-shadow: 0 0 18px rgba(35,213,255,.25);
+    }
+    .barLabel{
+      display:flex; justify-content:space-between;
+      font-size:12px;
+      color:var(--muted2);
+      margin-top:6px;
+      font-family: var(--mono);
+    }
+    .callouts{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+    .quote{
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.22);
+      border-radius: var(--r2);
+      padding:12px 12px 10px;
+      position:relative;
+    }
+    .quote::before{
+      content:"“";
+      position:absolute;
+      left:10px; top:-2px;
+      font-size: 28px;
+      color: rgba(124,92,255,.55);
+      font-family: var(--mono);
+    }
+    .qtext{
+      margin:0;
+      padding-left:16px;
+      color: var(--txt);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .qmeta{
+      margin-top:8px;
+      padding-left:16px;
+      color: var(--muted2);
+      font-size:12px;
+      font-family: var(--mono);
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+
+    /* Action playbook */
+    .play{
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.22);
+      border-radius: var(--r2);
+      padding:12px 12px 12px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .num{
+      width:30px; height:30px;
+      border-radius:10px;
+      display:grid; place-items:center;
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--txt);
+      border:1px solid rgba(124,92,255,.6);
+      background: rgba(124,92,255,.16);
+      flex: 0 0 auto;
+    }
+    .step h4{margin:0; font-size:13px;}
+    .step p{margin:6px 0 0 0; color:var(--muted); font-size:13px; line-height:1.55;}
+    .tags{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;}
+    .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted2);
+      padding:6px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.20);
+    }
+
+    /* Commentary drawer */
+    .drawer{
+      position:fixed;
+      right:14px;
+      top:14px;
+      width: min(460px, 92vw);
+      max-height: calc(100vh - 28px);
+      border-radius: 22px;
+      border:1px solid rgba(43,58,106,.75);
+      background: rgba(10,16,40,.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      transform: translateX(110%);
+      opacity: 0;
+      transition: transform .22s ease, opacity .22s ease;
+      overflow:hidden;
+      z-index: 50;
+    }
+    .drawer.on{transform: translateX(0%); opacity: 1;}
+    .drawerHead{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid rgba(43,58,106,.5);
+      background: linear-gradient(180deg, rgba(124,92,255,.14), rgba(12,18,40,.0));
+    }
+    .drawerHead h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:-.01em;
+    }
+    .drawerHead p{
+      margin:6px 0 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+    .drawerBody{
+      padding: 12px 14px 14px;
+      overflow:auto;
+      max-height: calc(100vh - 120px);
+    }
+    .note{
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.22);
+      border-radius: 16px;
+      padding: 12px 12px 10px;
+      margin-bottom: 10px;
+    }
+    .note h4{
+      margin:0;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      letter-spacing:.03em;
+      text-transform: uppercase;
+    }
+    .note p{
+      margin:8px 0 0 0;
+      font-size: 13px;
+      color: var(--txt);
+      line-height:1.6;
+    }
+    .note ul{
+      margin:8px 0 0 18px;
+      color: var(--muted);
+      line-height:1.55;
+      font-size:13px;
+    }
+    .xbtn{
+      border:1px solid rgba(43,58,106,.75);
+      background: rgba(8,12,28,.25);
+      color:var(--txt);
+      width:36px; height:36px;
+      border-radius: 14px;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      font-family: var(--mono);
+    }
+    .xbtn:hover{border-color: rgba(35,213,255,.55)}
+    .foot{
+      margin-top: 14px;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height:1.5;
+    }
+    .foot code{font-family:var(--mono); font-size: 11px; color: var(--muted);}
+
+    /* Small helpers */
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .miniStat{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    .stat{
+      flex:1 1 180px;
+      border:1px solid rgba(43,58,106,.55);
+      background: rgba(8,12,28,.22);
+      border-radius: var(--r2);
+      padding:10px 12px;
+    }
+    .stat .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.03em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .stat .v{
+      margin-top:6px;
+      font-size: 18px;
+      letter-spacing:-.02em;
+    }
+    .stat .s{
+      margin-top:4px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.4;
+    }
+    .warnline{
+      margin-top:12px;
+      border:1px solid rgba(255,200,87,.35);
+      background: rgba(255,200,87,.08);
+      border-radius: var(--r2);
+      padding:10px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .warnline strong{color: var(--txt)}
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding:2px 6px;
+      border:1px solid rgba(43,58,106,.7);
+      border-bottom-color: rgba(43,58,106,.35);
+      background: rgba(8,12,28,.35);
+      border-radius: 8px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <section class="hero" id="top">
+      <div class="heroInner">
+        <div class="kicker">
+          <span class="pill"><span class="dot"></span>AI Futures: Collapse ≠ Destruction → Compression</span>
+          <span class="pill">Two collapses: <b>Horizontal</b> + <b>Temporal</b></span>
+          <span class="pill">Meta-skill: <b>Orchestrate AI Agents</b></span>
+        </div>
+
+        <h1>AI is collapsing futures — and compressing work into a single thread.</h1>
+        <p class="sub">
+          “Collapsing” here means <b>compressing</b> multiple dimensions of work into one forward vector:
+          role boundaries blur, timelines shorten, and differentiation shifts to a universal capability:
+          <b>directing AI agents with software-shaped intent</b>.
+        </p>
+
+        <div class="heroRow">
+          <div class="controls">
+            <button class="btn primary" id="btnFocus">
+              <span class="icon">◎</span> Focus: What matters now
+            </button>
+
+            <button class="btn" id="btnCommentary">
+              <span class="icon">≋</span> Toggle Commentary
+            </button>
+
+            <span class="toggle">
+              <span>High-signal mode</span>
+              <span class="switch" id="switchSignal" role="switch" aria-checked="false" tabindex="0">
+                <span class="knob"></span>
+              </span>
+            </span>
+          </div>
+
+          <div class="meta">
+            <span class="badge">Keyboard: <span class="kbd">C</span> commentary · <span class="kbd">H</span> high-signal · <span class="kbd">?</span> help</span>
+            <span class="badge">Infographic + explainer inside</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+
+      <!-- LEFT: Core collapses -->
+      <article class="card" id="collapse">
+        <header class="cardHeader">
+          <div class="cardTitle">
+            <h2>1) The Two Collapses</h2>
+            <p>
+              The thesis: AI compresses (a) roles into a meta-competency and (b) time horizons into the present.
+              Both collapses converge on one conclusion: <b>engagement now</b> beats planning later.
+            </p>
+            <div class="hint"><span class="spark"></span>Interact: tap roles, move the timeline slider, open commentary for deeper meaning.</div>
+          </div>
+          <div class="pill" title="The transcript positions late 2026/early 2027 as a hard inflection window.">
+            Window: late 2026 → 2027
+          </div>
+        </header>
+
+        <div class="cardBody">
+          <div class="twoCol">
+            <div class="mini">
+              <h3>Horizontal collapse</h3>
+              <p class="big">Many roles → one meta-skill</p>
+              <p class="desc">
+                Engineer, PM, marketing, analyst, designer, ops: once distinct career paths,
+                now converging fast into a shared differentiator:
+                <b>orchestrating AI agents to deliver outcomes</b>.
+              </p>
+              <div class="warnline">
+                <strong>Claimed inflection:</strong> without the orchestration skill,
+                domain expertise becomes “foundational” but <b>not differentiating</b> by late 2026/early 2027.
+              </div>
+            </div>
+
+            <div class="mini">
+              <h3>Temporal collapse</h3>
+              <p class="big">Years of leverage → months</p>
+              <p class="desc">
+                The old career ladder assumed breathing room (learn → apply for years → compound).
+                AI compresses that timeline: capability improves faster, and your “future plan”
+                gets eaten by the <b>present arrival rate</b> of tools and workflows.
+              </p>
+              <div class="warnline">
+                <strong>New rule:</strong> preparation means <b>ongoing engagement</b>.
+                AI is framed as an experiential technology: you learn it by doing.
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Role Convergence Visual -->
+          <div class="roleCanvas">
+            <div class="roleTop">
+              <div>
+                <div style="font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:.03em; text-transform:uppercase;">
+                  Role convergence map
+                </div>
+                <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.5;">
+                  Click a role to see how the transcript frames it: the role becomes a <b>domain lens</b>
+                  plugged into the same orchestration core.
+                </div>
+              </div>
+
+              <div class="seg" id="roleChips" aria-label="Role selector">
+                <!-- chips injected by JS -->
+              </div>
+            </div>
+
+            <div class="svgWrap">
+              <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" aria-label="Role convergence diagram">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="rgba(124,92,255,0.95)"/>
+                    <stop offset="1" stop-color="rgba(35,213,255,0.85)"/>
+                  </linearGradient>
+                  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="6" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Background grid -->
+                <g opacity="0.28">
+                  <path d="M0 80 H1000" stroke="rgba(43,58,106,.6)" />
+                  <path d="M0 160 H1000" stroke="rgba(43,58,106,.45)" />
+                  <path d="M0 240 H1000" stroke="rgba(43,58,106,.45)" />
+                  <path d="M0 320 H1000" stroke="rgba(43,58,106,.45)" />
+                  <path d="M0 400 H1000" stroke="rgba(43,58,106,.45)" />
+                  <path d="M0 480 H1000" stroke="rgba(43,58,106,.6)" />
+                  <path d="M140 0 V560" stroke="rgba(43,58,106,.45)" />
+                  <path d="M280 0 V560" stroke="rgba(43,58,106,.35)" />
+                  <path d="M420 0 V560" stroke="rgba(43,58,106,.35)" />
+                  <path d="M560 0 V560" stroke="rgba(43,58,106,.35)" />
+                  <path d="M700 0 V560" stroke="rgba(43,58,106,.35)" />
+                  <path d="M840 0 V560" stroke="rgba(43,58,106,.45)" />
+                </g>
+
+                <!-- Orchestration core -->
+                <g id="core">
+                  <circle cx="500" cy="290" r="104" fill="rgba(124,92,255,.10)" stroke="rgba(124,92,255,.45)" stroke-width="2"/>
+                  <circle cx="500" cy="290" r="74" fill="rgba(35,213,255,.08)" stroke="rgba(35,213,255,.35)" stroke-width="2"/>
+                  <circle cx="500" cy="290" r="46" fill="url(#g1)" filter="url(#glow)" opacity="0.92"/>
+                  <text x="500" y="285" text-anchor="middle" font-size="14" fill="rgba(234,240,255,.95)" font-family="ui-monospace,Menlo,monospace">META-SKILL</text>
+                  <text x="500" y="309" text-anchor="middle" font-size="16" fill="rgba(234,240,255,.98)" font-weight="700" font-family="system-ui,Segoe UI,Roboto,sans-serif">Orchestrate AI Agents</text>
+                  <text x="500" y="332" text-anchor="middle" font-size="12" fill="rgba(169,182,230,.95)" font-family="ui-monospace,Menlo,monospace">+ software-shaped intent</text>
+                </g>
+
+                <!-- Role nodes (positions updated by JS highlight) -->
+                <g id="roles"></g>
+
+                <!-- Axes labels -->
+                <g opacity="0.85">
+                  <text x="22" y="34" font-size="12" fill="rgba(169,182,230,.85)" font-family="ui-monospace,Menlo,monospace">Distinct specialization</text>
+                  <text x="22" y="52" font-size="12" fill="rgba(169,182,230,.85)" font-family="ui-monospace,Menlo,monospace">→</text>
+                  <text x="22" y="70" font-size="12" fill="rgba(169,182,230,.85)" font-family="ui-monospace,Menlo,monospace">Universal orchestration</text>
+
+                  <text x="742" y="520" font-size="12" fill="rgba(169,182,230,.85)" font-family="ui-monospace,Menlo,monospace">Domain expertise remains</text>
+                  <text x="742" y="538" font-size="12" fill="rgba(169,182,230,.85)" font-family="ui-monospace,Menlo,monospace">— but becomes foundational</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="legend">
+              <span class="key"><span class="sw"></span> Orchestration core</span>
+              <span class="key">Roles = domain lenses</span>
+              <span class="key">Click chips to highlight</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Timeline / Temporal compression -->
+          <div class="timeline" id="timeline">
+            <div class="row">
+              <div>
+                <div style="font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:.03em; text-transform:uppercase;">
+                  Temporal compression simulator
+                </div>
+                <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.5;">
+                  Slide to compress “career leverage” from years to months. This mirrors the transcript’s claim:
+                  the curve is steepening and rewards early compounding.
+                </div>
+              </div>
+              <div class="badge" id="timeReadout">Mode: 2010s career ladder → breathing room</div>
+            </div>
+
+            <div class="sliderRow">
+              <label style="font-family:var(--mono); color:var(--muted2); font-size:12px;">Compression</label>
+              <input id="rng" type="range" min="0" max="100" value="22" />
+              <span class="badge" id="rngLabel">22%</span>
+            </div>
+
+            <div class="tlBox">
+              <div class="mini">
+                <h3>Old model</h3>
+                <p class="desc">
+                  Learn → apply for years → expertise compounds → promotion ladder steps (2–3 years).
+                </p>
+                <div class="bar" aria-label="Old model bar"><i id="barOld"></i></div>
+                <div class="barLabel"><span>Leverage horizon</span><span id="oldTxt">~5 years</span></div>
+              </div>
+
+              <div class="mini">
+                <h3>Compressed model</h3>
+                <p class="desc">
+                  The “future arrives faster.” Differentiation is set by those engaging now.
+                  Waiting for maturity costs compounding time.
+                </p>
+                <div class="bar" aria-label="Compressed model bar"><i id="barNew"></i></div>
+                <div class="barLabel"><span>Leverage horizon</span><span id="newTxt">~18 months</span></div>
+              </div>
+            </div>
+
+            <div class="callouts">
+              <div class="quote">
+                <p class="qtext">
+                  AI is framed as an <b>experiential technology</b>: you don’t learn to swim by watching the ocean.
+                  You learn by getting in.
+                </p>
+                <div class="qmeta">
+                  <span>Implication: skill = habit + reps</span>
+                  <span>Not: one-time course</span>
+                </div>
+              </div>
+
+              <div class="quote">
+                <p class="qtext">
+                  Bike metaphor: going slow feels safer, but balance becomes easier when you go faster.
+                  The claim: with AI, <b>faster engagement is safer</b> than cautious delay.
+                </p>
+                <div class="qmeta">
+                  <span>Implication: reduce friction</span>
+                  <span>Increase iteration speed</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="miniStat">
+              <div class="stat">
+                <div class="k">Agent adoption (as stated in the transcript)</div>
+                <div class="v">“~Half” by end of 2026</div>
+                <div class="s">Framed as a rapid jump from “<5%” in 2025 to “~50%” in 2026.</div>
+              </div>
+              <div class="stat">
+                <div class="k">Companies with agents in production (claimed)</div>
+                <div class="v">57% (2025)</div>
+                <div class="s">Noted as variable competency, but direction = explosive growth.</div>
+              </div>
+              <div class="stat">
+                <div class="k">Progress example (claimed)</div>
+                <div class="v">“4% → ~90–95%”</div>
+                <div class="s">SweetBench saturation used to argue accelerating doubling time.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- RIGHT: Software-shaped intent + Playbook -->
+      <aside class="card" id="intent">
+        <header class="cardHeader">
+          <div class="cardTitle">
+            <h2>2) The Differentiator: “Software-Shaped Intent”</h2>
+            <p>
+              The transcript argues role expertise doesn’t vanish — it becomes <b>foundational</b>.
+              Differentiation becomes: can you express intent so agents can reliably act in a tool ecosystem?
+            </p>
+          </div>
+          <div class="pill" title="Software = leverage expressed in silicon.">
+            leverage → software
+          </div>
+        </header>
+
+        <div class="cardBody">
+          <div class="mini">
+            <h3>Definition</h3>
+            <p class="desc" style="margin-top:0;">
+              <b>Software-shaped intent</b> = thinking in terms of what an agent can deliver inside its ecosystem:
+              tools, memory, workflow, read/write boundaries, interfaces, data flows.
+              <br><br>
+              In other words: specify outcomes in a way that produces <b>working artifacts</b> (tickets updated, dashboards built,
+              contracts reviewed, projections computed) rather than vague chat.
+            </p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="mini">
+            <h3>Role examples (compressed jobs)</h3>
+            <p class="desc">
+              The transcript repeats the pattern across functions:
+              PM moves from synthesis/spec coordination → prompting + agent workflows;
+              legal compresses review from weeks → hours;
+              finance uses AI in spreadsheets to compress days → hours;
+              customer success uses agents to handle 80–95% of initial inquiries.
+            </p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="mini">
+            <h3>Why “Now” dominates</h3>
+            <p class="desc">
+              Waiting for maturity is framed as losing <b>compound learning</b>.
+              Early adopters build workflows, norms, and capture opportunities
+              while late movers are still learning basics.
+            </p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="mini">
+            <h3>Practical Playbook</h3>
+            <div class="play" id="playbook">
+              <div class="step">
+                <div class="num">1</div>
+                <div>
+                  <h4>Pick one real workflow and agent-ize it</h4>
+                  <p>
+                    Don’t start with abstract AI learning. Start with a task you already do weekly:
+                    writing specs, triaging tickets, drafting emails, analyzing data, generating slides, contract review.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">“learn by doing”</span>
+                    <span class="tag">reps > theory</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="num">2</div>
+                <div>
+                  <h4>Define the tool ecosystem (tools • memory • workflow)</h4>
+                  <p>
+                    Make it explicit: where does the agent read from? where does it write?
+                    what format? what “done” artifact is produced?
+                    This is the core of software-shaped intent.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">inputs/outputs</span>
+                    <span class="tag">interfaces</span>
+                    <span class="tag">state + memory</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="num">3</div>
+                <div>
+                  <h4>Increase speed to increase stability</h4>
+                  <p>
+                    Treat it like the bike metaphor: accelerate iterations.
+                    Faster cycles reduce fear and build intuition in your “unconscious pattern system.”
+                  </p>
+                  <div class="tags">
+                    <span class="tag">tight feedback loops</span>
+                    <span class="tag">ship small</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="num">4</div>
+                <div>
+                  <h4>Convert domain knowledge into guidance, not manual labor</h4>
+                  <p>
+                    Your expertise matters most as <b>judgment</b>: constraints, edge cases, what good looks like.
+                    You compete by directing systems better, not by doing every step yourself.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">expert as “supervisor”</span>
+                    <span class="tag">quality control</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="num">5</div>
+                <div>
+                  <h4>Adopt “continuous update” as the durable skill</h4>
+                  <p>
+                    Specific AI knowledge depreciates quickly; the habit of learning compounds.
+                    The transcript argues the half-life of tools gets shorter, but the half-life of the learning habit gets longer.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">meta-learning</span>
+                    <span class="tag">adaptation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="mini">
+            <h3>Exit option (intentional)</h3>
+            <p class="desc">
+              The transcript explicitly allows a clean alternative:
+              if you truly don’t want AI, choose a path away from screens (bookshop, carpentry, etc.)
+              rather than staying in AI-touched work and resisting.
+            </p>
+          </div>
+
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- Bottom summary -->
+    <section class="card" id="conclusion" style="margin-top:14px;">
+      <header class="cardHeader">
+        <div class="cardTitle">
+          <h2>3) Synthesis: The single thread</h2>
+          <p>
+            Horizontal collapse + temporal collapse → one conclusion:
+            the differentiator is <b>agent orchestration</b> + <b>software-shaped intent</b>,
+            learned through <b>continuous engagement</b>.
+          </p>
+        </div>
+        <div class="pill">“Going faster is safer.”</div>
+      </header>
+      <div class="cardBody">
+        <div class="twoCol">
+          <div class="mini">
+            <h3>What changes</h3>
+            <p class="desc">
+              • Roles converge into variations on a theme: humans directing AI toward outcomes.<br>
+              • Work compresses: weeks → hours; days → hours; years of leverage → months.<br>
+              • Expertise depreciates unless refreshed; learning habit becomes the moat.
+            <
