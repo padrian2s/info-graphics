@@ -1883,13 +1883,8 @@
                 const dateStr = extractMeta(html, 'created');
                 let createdDate = dateStr ? new Date(dateStr) : null;
 
-                // Fallback to file's Last-Modified header if no created meta tag
-                if (!createdDate) {
-                    const lastModified = response.headers.get('Last-Modified');
-                    if (lastModified) {
-                        createdDate = new Date(lastModified);
-                    }
-                }
+                // No fallback — Last-Modified is unreliable (reflects deploy time, not creation)
+                // Files without <meta name="created"> will sort to the end
 
                 return {
                     id,
