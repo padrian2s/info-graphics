@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Opus 4.6 marks a phase change in autonomous AI: 2-week coding sessions, agent teams, 500 zero-days found, and the org chart flipping from headcount to agent-to-human ratio." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Opus 4.6, Anthropic, autonomous agents, agent teams, context window, phase change, revenue per employee, personal software" />
+  <meta name="created" content="2026-02-11" />
+  <meta name="icon" content="⚡" />
+  <title>Opus 4.6 — The Phase Change: From Minutes to Weeks of Autonomous AI</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0E1630;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --muted2:#7E8BB5;
+      --line:rgba(255,255,255,.10);
+      --good:#22C55E;
+      --warn:#F59E0B;
+      --bad:#EF4444;
+      --brand:#7C3AED;
+      --brand2:#06B6D4;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(124,58,237,.25), transparent 60%),
+        radial-gradient(800px 600px at 85% 20%, rgba(6,182,212,.22), transparent 55%),
+        radial-gradient(900px 700px at 50% 95%, rgba(34,197,94,.12), transparent 60%),
+        linear-gradient(180deg, #050713, #060A18 60%, #050713);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 70px}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .card.soft{background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));}
+
+    .kicker{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+    .dot{width:9px;height:9px;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+    h1{
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.05;
+      margin:12px 0 12px;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:68ch;
+    }
+
+    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.25);
+    }
+
+    .statRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 560px){ .statRow{grid-template-columns:1fr;} }
+
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .stat .label{color:var(--muted); font-size:12px}
+    .stat .value{font-size:20px; margin-top:6px; font-weight:700}
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr;} }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .sectionTitle h2{margin:0; font-size:18px; letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.22)}
+
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 680px){ .twoCol{grid-template-columns:1fr;} }
+
+    .callout{
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(124,58,237,.12), rgba(6,182,212,.08));
+      padding:12px;
+      color:var(--text);
+    }
+    .callout p{margin:0; color:var(--muted); line-height:1.55; font-size:13.5px}
+    .callout strong{color:var(--text)}
+
+    .spark{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:900;
+    }
+
+    /* Timeline */
+    .timeline{display:grid; gap:10px}
+    .tl{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns: 80px 1fr;
+      gap:12px;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .tl .date{
+      font-size:12px;
+      color:var(--muted2);
+      font-weight:700;
+      text-align:center;
+    }
+    .tl .dur{
+      font-size:22px;
+      font-weight:900;
+      text-align:center;
+      line-height:1.1;
+    }
+    .tl .desc{color:var(--muted); font-size:13px; line-height:1.45}
+    .tl .name{font-weight:800; margin:0; font-size:14px}
+    .tl .bar{
+      position:absolute;
+      left:0; top:0; bottom:0;
+      border-radius:16px 0 0 16px;
+      opacity:.12;
+    }
+
+    /* Comparison bars */
+    .cmp{display:grid; gap:10px}
+    .cmpRow{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px 12px;
+      display:grid;
+      grid-template-columns: 120px 1fr 60px;
+      gap:10px;
+      align-items:center;
+    }
+    .cmpRow .name{font-size:13px; font-weight:700}
+    .cmpRow .bar{
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+    .cmpRow .bar > i{
+      display:block;
+      height:100%;
+      border-radius:999px;
+    }
+    .cmpRow .val{font-size:13px; font-weight:700; text-align:right}
+
+    /* Revenue comparison */
+    .revGrid{display:grid; gap:10px}
+    .revRow{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px 12px;
+      display:grid;
+      grid-template-columns: 1fr 100px;
+      gap:10px;
+      align-items:center;
+    }
+    .revRow .company{font-weight:700; font-size:13px}
+    .revRow .detail{color:var(--muted); font-size:12px; margin-top:2px}
+    .revRow .rev{font-weight:900; font-size:16px; text-align:right}
+
+    /* Boxes */
+    .tri{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){ .tri{grid-template-columns:1fr;} }
+
+    .box{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .box .h{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .box .h b{font-size:13px}
+    .box .h span{font-size:12px; color:var(--muted)}
+    .box p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45}
+
+    .layers{display:grid; gap:10px}
+    .layer{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns: 40px 1fr;
+      gap:12px;
+      align-items:center;
+    }
+    .layer .ico{
+      width:40px; height:40px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      font-weight:900;
+    }
+    .layer .name{font-weight:800; margin:0}
+    .layer .desc{color:var(--muted); margin:4px 0 0; font-size:13px; line-height:1.45}
+
+    /* SVG diagram */
+    .diagram{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:14px;
+      overflow:hidden;
+    }
+    .diagram svg{width:100%; height:auto; display:block}
+
+    /* Diagnostic */
+    .diag{display:grid; gap:10px}
+    .diag .q{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .diag .q .top{display:flex; justify-content:space-between; gap:12px; align-items:baseline}
+    .diag .q label{font-weight:750; font-size:13px}
+    .diag .q .v{color:var(--muted); font-size:12px}
+    input[type="range"]{width:100%; accent-color: var(--brand2);}
+
+    .result{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(6,182,212,.06));
+      padding:14px;
+    }
+    .result h3{margin:0; font-size:16px}
+    .result p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .recList{display:grid; gap:8px; margin-top:10px}
+    .rec{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns: 16px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .chip{width:12px;height:12px;border-radius:99px;margin-top:4px}
+    .chip.good{background:var(--good)}
+    .chip.warn{background:var(--warn)}
+    .chip.bad{background:var(--bad)}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color:var(--muted);
+    }
+    .badge strong{color:var(--text)}
+
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:700;
+      font-size:13px;
+    }
+    button:hover{border-color: rgba(255,255,255,.22)}
+
+    .footer{margin-top:18px; color:rgba(168,179,214,.85); font-size:12.5px; line-height:1.6}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      backdrop-filter: blur(10px);
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-4px)}
+
+    .mini{display:grid; grid-template-columns:1fr; gap:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="card">
+        <div class="kicker"><span class="dot"></span>Claude Opus 4.6 &mdash; February 2026</div>
+        <h1>30 minutes to 2 weeks in 12 months.<br/>That is not a trend line. That is a <span class="spark">phase change</span>.</h1>
+        <p class="sub">
+          16 Opus 4.6 agents coded autonomously for <b>two weeks straight</b>, delivering a fully functional C compiler &mdash;
+          100,000+ lines of Rust. It builds the Linux kernel on three architectures. It passes 99% of compiler torture tests.
+          It cost <b>$20,000</b>. This is not the headline feature. The headline feature is what it means for everyone.
+        </p>
+
+        <div class="pills">
+          <span class="pill">2-week autonomous coding</span>
+          <span class="pill">1M token context window</span>
+          <span class="pill">76% needle-in-haystack retrieval</span>
+          <span class="pill">Agent team swarms</span>
+          <span class="pill">500 zero-day vulnerabilities found</span>
+          <span class="pill">Org chart is flipping</span>
+        </div>
+
+        <div class="statRow">
+          <div class="stat">
+            <div class="label">Autonomous coding duration</div>
+            <div class="value">30 min &rarr; 7 hrs &rarr; <span style="color:var(--good)">2 weeks</span></div>
+          </div>
+          <div class="stat">
+            <div class="label">Key metric (MRCV2 retrieval)</div>
+            <div class="value">18.5% &rarr; <span style="color:var(--good)">76%</span> at 1M tokens</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card soft mini">
+        <div>
+          <div class="sectionTitle">
+            <h2>Why this matters</h2>
+            <div class="tag">the real story</div>
+          </div>
+          <div class="callout">
+            <p>
+              <strong>The context window was a filing cabinet with no index.</strong> Every major model could accept big inputs.
+              None could reliably retrieve what you put in. Opus 4.6 holds 50,000 lines of code and knows what's on every line
+              simultaneously &mdash; like a senior engineer who's lived in the codebase for years.
+            </p>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="sectionTitle">
+            <h2>The shift</h2>
+            <div class="tag">bottom line</div>
+          </div>
+          <div class="recList">
+            <div class="rec"><span class="chip good"></span><div><b>Execution &rarr; Judgment</b> &mdash; the bottleneck moved from "can we build it?" to "do we know what to build?"</div></div>
+            <div class="rec"><span class="chip warn"></span><div><b>Headcount &rarr; Agent ratio</b> &mdash; the question is now "how many agents per person" and what each person must excel at.</div></div>
+            <div class="rec"><span class="chip bad"></span><div><b>January mental models are already wrong</b> &mdash; the tools you mastered weeks ago are a different generation.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid">
+      <!-- Timeline -->
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The trajectory: autonomous coding duration</h2>
+          <div class="tag">phase change</div>
+        </div>
+
+        <div class="timeline">
+          <div class="tl">
+            <div class="bar" style="width:2%; background:var(--bad)"></div>
+            <div>
+              <div class="date">Early 2025</div>
+              <div class="dur" style="color:var(--bad)">30m</div>
+            </div>
+            <div>
+              <p class="name">State of the art</p>
+              <p class="desc">Autonomous AI coding topped out at barely 30 minutes before the model lost the thread.</p>
+            </div>
+          </div>
+
+          <div class="tl">
+            <div class="bar" style="width:12%; background:var(--warn)"></div>
+            <div>
+              <div class="date">Summer 2025</div>
+              <div class="dur" style="color:var(--warn)">7h</div>
+            </div>
+            <div>
+              <p class="name">Rakuten + Claude</p>
+              <p class="desc">Rakuten got 7 hours out of Claude. Everybody thought it was incredible.</p>
+            </div>
+          </div>
+
+          <div class="tl">
+            <div class="bar" style="width:60%; background:linear-gradient(90deg,var(--brand),var(--brand2))"></div>
+            <div>
+              <div class="date">Nov 2025</div>
+              <div class="dur" style="color:var(--brand2)">Opus 4.5</div>
+            </div>
+            <div>
+              <p class="name">Anthropic's most capable model</p>
+              <p class="desc">200K context window. 10K lines of code in working memory. State-of-the-art reasoning.</p>
+            </div>
+          </div>
+
+          <div class="tl">
+            <div class="bar" style="width:100%; background:linear-gradient(90deg,var(--brand),var(--good))"></div>
+            <div>
+              <div class="date">Feb 5, 2026</div>
+              <div class="dur" style="color:var(--good)">2 wk</div>
+            </div>
+            <div>
+              <p class="name">Opus 4.6 &mdash; C compiler in Rust</p>
+              <p class="desc">16 agents, 2 weeks, 100K+ lines, $20K cost. 1M context window. 76% retrieval. Agent teams.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="callout">
+          <p>
+            <strong>The trajectory from hours to 2 weeks took 3 months.</strong>
+            The trajectory from 2 weeks to months is coming soon. By mid-2026, agents working autonomously
+            for weeks will be routine rather than remarkable.
+          </p>
+        </div>
+      </div>
+
+      <!-- Context window -->
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Context window: the number that actually matters</h2>
+          <div class="tag">MRCV2 retrieval</div>
+        </div>
+
+        <div class="callout" style="margin-bottom:12px">
+          <p>
+            It's not about how many tokens fit in the window. It's about whether the model can
+            <strong>find, retrieve, and use</strong> what you put there. The MRCV2 score measures exactly this &mdash;
+            needle-in-haystack retrieval across the full context.
+          </p>
+        </div>
+
+        <div class="cmp">
+          <div class="cmpRow">
+            <div class="name">Sonnet 4.5</div>
+            <div class="bar"><i style="width:18.5%; background:linear-gradient(90deg,var(--bad),rgba(239,68,68,.5))"></i></div>
+            <div class="val" style="color:var(--bad)">18.5%</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name">Gemini 3 Pro</div>
+            <div class="bar"><i style="width:26.3%; background:linear-gradient(90deg,var(--warn),rgba(245,158,11,.5))"></i></div>
+            <div class="val" style="color:var(--warn)">26.3%</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name" style="color:var(--good)">Opus 4.6</div>
+            <div class="bar"><i style="width:76%; background:linear-gradient(90deg,var(--brand),var(--good))"></i></div>
+            <div class="val" style="color:var(--good)">76.0%</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name" style="color:var(--brand2); font-size:12px">Opus 4.6 @256K</div>
+            <div class="bar"><i style="width:93%; background:linear-gradient(90deg,var(--brand2),var(--good))"></i></div>
+            <div class="val" style="color:var(--brand2)">93.0%</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="twoCol">
+          <div class="box">
+            <div class="h"><b>Before: filing cabinet, no index</b></div>
+            <p>Documents went in, but retrieving them was a random guess past the first quarter of the content. Models could hold your codebase &mdash; they couldn't reliably read it.</p>
+          </div>
+          <div class="box">
+            <div class="h"><b>After: holistic awareness</b></div>
+            <p>Holds 50K lines and knows every import, dependency, and interaction between modules simultaneously. Like a senior engineer who's lived in the code for years.</p>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Opus 4.5 &rarr; 4.6 at a glance</h2>
+          <div class="tag">couple of months</div>
+        </div>
+        <div class="twoCol">
+          <div class="stat">
+            <div class="label">Context window</div>
+            <div class="value">200K &rarr; <span style="color:var(--good)">1M tokens</span></div>
+          </div>
+          <div class="stat">
+            <div class="label">Code in working memory</div>
+            <div class="value">10K &rarr; <span style="color:var(--good)">50K lines</span></div>
+          </div>
+          <div class="stat">
+            <div class="label">Retrieval accuracy</div>
+            <div class="value">~20% &rarr; <span style="color:var(--good)">76%</span></div>
+          </div>
+          <div class="stat">
+            <div class="label">New capability</div>
+            <div class="value"><span style="color:var(--brand2)">Agent teams</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid">
+      <!-- Agent teams -->
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Agent teams: convergent evolution of management</h2>
+          <div class="tag">architecture</div>
+        </div>
+
+        <div class="diagram" aria-label="Agent team swarm architecture">
+          <svg viewBox="0 0 520 340" role="img" aria-label="Lead agent coordinates specialist agents with peer-to-peer messaging">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="rgba(124,58,237,.9)"/>
+                <stop offset="1" stop-color="rgba(6,182,212,.9)"/>
+              </linearGradient>
+              <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,.45)"/>
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="520" height="340" rx="14" fill="rgba(0,0,0,.15)" stroke="rgba(255,255,255,.08)"/>
+
+            <!-- Lead agent -->
+            <g filter="url(#glow)">
+              <rect x="185" y="20" width="150" height="65" rx="14" fill="rgba(12,20,43,.65)" stroke="url(#g1)" stroke-width="1.5"/>
+            </g>
+            <text x="260" y="48" fill="rgba(234,240,255,.95)" font-size="14" font-weight="800" text-anchor="middle">Lead Agent</text>
+            <text x="260" y="68" fill="rgba(168,179,214,.8)" font-size="11" text-anchor="middle">decompose &bull; assign &bull; track</text>
+
+            <!-- Specialists -->
+            <g filter="url(#glow)">
+              <rect x="20" y="130" width="130" height="55" rx="12" fill="rgba(12,20,43,.55)" stroke="rgba(124,58,237,.4)"/>
+              <rect x="195" y="130" width="130" height="55" rx="12" fill="rgba(12,20,43,.55)" stroke="rgba(6,182,212,.4)"/>
+              <rect x="370" y="130" width="130" height="55" rx="12" fill="rgba(12,20,43,.55)" stroke="rgba(34,197,94,.4)"/>
+            </g>
+            <text x="85" y="155" fill="rgba(234,240,255,.9)" font-size="12" font-weight="700" text-anchor="middle">Frontend</text>
+            <text x="85" y="172" fill="rgba(168,179,214,.7)" font-size="10" text-anchor="middle">specialist</text>
+            <text x="260" y="155" fill="rgba(234,240,255,.9)" font-size="12" font-weight="700" text-anchor="middle">Backend</text>
+            <text x="260" y="172" fill="rgba(168,179,214,.7)" font-size="10" text-anchor="middle">specialist</text>
+            <text x="435" y="155" fill="rgba(234,240,255,.9)" font-size="12" font-weight="700" text-anchor="middle">Testing</text>
+            <text x="435" y="172" fill="rgba(168,179,214,.7)" font-size="10" text-anchor="middle">specialist</text>
+
+            <!-- Task system -->
+            <g filter="url(#glow)">
+              <rect x="140" y="240" width="240" height="55" rx="12" fill="rgba(12,20,43,.55)" stroke="rgba(255,255,255,.12)"/>
+            </g>
+            <text x="260" y="264" fill="rgba(234,240,255,.9)" font-size="12" font-weight="700" text-anchor="middle">Shared Task System</text>
+            <text x="260" y="282" fill="rgba(168,179,214,.7)" font-size="10" text-anchor="middle">pending &rarr; in_progress &rarr; completed</text>
+
+            <!-- Arrows: lead to specialists -->
+            <g stroke="rgba(255,255,255,.2)" stroke-width="1.5" fill="none">
+              <path d="M220 85 Q120 110 85 130"/>
+              <path d="M260 85 L260 130"/>
+              <path d="M300 85 Q400 110 435 130"/>
+            </g>
+
+            <!-- Arrows: specialists to task system -->
+            <g stroke="rgba(255,255,255,.15)" stroke-width="1" fill="none" stroke-dasharray="4 3">
+              <path d="M85 185 Q140 220 200 240"/>
+              <path d="M260 185 L260 240"/>
+              <path d="M435 185 Q380 220 320 240"/>
+            </g>
+
+            <!-- Peer-to-peer -->
+            <g stroke="rgba(245,158,11,.35)" stroke-width="1.5" fill="none" stroke-dasharray="5 4">
+              <path d="M150 157 L195 157"/>
+              <path d="M325 157 L370 157"/>
+            </g>
+            <text x="172" y="150" fill="rgba(245,158,11,.5)" font-size="9" text-anchor="middle">DM</text>
+            <text x="347" y="150" fill="rgba(245,158,11,.5)" font-size="9" text-anchor="middle">DM</text>
+
+            <!-- Labels -->
+            <text x="465" y="235" fill="rgba(168,179,214,.5)" font-size="9" text-anchor="middle">peer-to-peer</text>
+            <text x="465" y="247" fill="rgba(168,179,214,.5)" font-size="9" text-anchor="middle">coordination</text>
+
+            <!-- Insight -->
+            <rect x="15" y="300" width="490" height="28" rx="8" fill="rgba(124,58,237,.08)" stroke="rgba(124,58,237,.2)"/>
+            <text x="260" y="319" fill="rgba(168,179,214,.8)" font-size="11" text-anchor="middle">AI discovered management. Hierarchy is an emergent property of coordinating intelligent agents.</text>
+          </svg>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="callout">
+          <p>
+            <strong>Anthropic calls them "team swarms" internally.</strong> Multiple instances of Claude Code run simultaneously,
+            each in its own context window. They coordinate through a shared task system. The lead decomposes projects and assigns work.
+            Specialists can message each other directly &mdash; not hub and spoke, but peer-to-peer. This is how the C compiler got built:
+            16 agents in parallel, 24 hours a day, no standups.
+          </p>
+        </div>
+      </div>
+
+      <!-- Real-world evidence -->
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Real-world evidence</h2>
+          <div class="tag">production, not pilots</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(34,197,94,.18), rgba(0,0,0,.10));">R</div>
+            <div>
+              <p class="name">Rakuten: AI managed 50 engineers</p>
+              <p class="desc">Opus 4.6 closed 13 issues itself, assigned 12 to the right people across 6 repos in a single day. Understood the org chart &mdash; not just the code.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(239,68,68,.18), rgba(0,0,0,.10));">S</div>
+            <div>
+              <p class="name">500 zero-day vulnerabilities</p>
+              <p class="desc">Given basic tools and an open-source codebase with no instructions, Opus 4.6 found 500+ high-severity vulnerabilities that human researchers and automated tools missed. It independently analyzed git history to find hastily-made security changes.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(6,182,212,.18), rgba(0,0,0,.10));">P</div>
+            <div>
+              <p class="name">Personal software: Monday.com clone in &lt;1 hour</p>
+              <p class="desc">Two CNBC reporters (non-engineers) built a project management dashboard with calendar views, email integration, and task boards. Cost: $5&ndash;$15.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(124,58,237,.18), rgba(0,0,0,.10));">A</div>
+            <div>
+              <p class="name">Rakuten: 24 parallel agent streams</p>
+              <p class="desc">Building an ambient agent that breaks tasks into 24 parallel Claude Code sessions, each handling a different slice of their mono repo. Non-technical employees are contributing to development.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>The org chart is flipping</h2>
+          <div class="tag">revenue per employee</div>
+        </div>
+
+        <div class="revGrid">
+          <div class="revRow" style="border-color:rgba(255,255,255,.06)">
+            <div>
+              <div class="company" style="color:var(--muted2)">Traditional SaaS (excellent)</div>
+              <div class="detail">Industry benchmark</div>
+            </div>
+            <div class="rev" style="color:var(--muted2)">$300K</div>
+          </div>
+          <div class="revRow" style="border-color:rgba(255,255,255,.06)">
+            <div>
+              <div class="company" style="color:var(--muted)">Traditional SaaS (elite / Notion)</div>
+              <div class="detail">Industry benchmark</div>
+            </div>
+            <div class="rev" style="color:var(--muted)">$600K</div>
+          </div>
+          <div class="revRow">
+            <div>
+              <div class="company">Midjourney</div>
+              <div class="detail">$200M ARR &bull; ~40 people</div>
+            </div>
+            <div class="rev" style="color:var(--good)">$5M</div>
+          </div>
+          <div class="revRow">
+            <div>
+              <div class="company">Cursor</div>
+              <div class="detail">$100M ARR &bull; ~20 people</div>
+            </div>
+            <div class="rev" style="color:var(--good)">$5M</div>
+          </div>
+          <div class="revRow">
+            <div>
+              <div class="company">Lovable</div>
+              <div class="detail">$200M in 8 months &bull; 15 people</div>
+            </div>
+            <div class="rev" style="color:var(--brand2)">$13M</div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <b>McKinsey</b> is targeting parity &mdash; matching AI agents to human workers across the firm &mdash; by end of 2026.
+          The company that sells organizational design to every Fortune 500 is saying the org chart is about to flip.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- What this means for you -->
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>What this means &mdash; by role</h2>
+        <div class="tag">action items</div>
+      </div>
+
+      <div class="tri">
+        <div class="box">
+          <div class="h"><b>If you write code</b><span style="color:var(--brand2)">builders</span></div>
+          <p>
+            Try running a multi-agent session on <b>real work</b>, not a toy problem. A piece of your codebase with real technical depth.
+            Watch how agents coordinate. That experience changes your mental model more than anything else.
+            <br/><br/>
+            The skill that matters: <b>specifying precisely</b> what needs to be built, not writing the code itself.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>If you don't write code</b><span style="color:var(--good)">knowledge workers</span></div>
+          <p>
+            Open Claude and hand it a task you've been procrastinating on. A competitive analysis, a financial model,
+            a content audit. <b>Describe the outcome, not the steps.</b>
+            <br/><br/>
+            The gap between what you expect and what you get is the gap between your mental model and where the tools actually are.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>If you lead an organization</b><span style="color:var(--warn)">leaders</span></div>
+          <p>
+            Look at the 20 hours/week your team spends on operational coordination, ticket routing, dependency tracking.
+            How many require <b>excellent human judgment</b> versus pattern matching?
+            <br/><br/>
+            The question has changed: <b>what is our agent-to-human ratio</b> and what must each human excel at?
+          </p>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="twoCol">
+        <div class="box">
+          <div class="h"><b>The new bottleneck</b><span>for everyone</span></div>
+          <p>
+            Technical proficiency &rarr; <b>clarity of intent</b>. Knowing what you want and being able to articulate the real requirement &mdash;
+            not just your surface request &mdash; is becoming the differentiator. The C compiler agents didn't need anyone to write code.
+            They needed someone to specify what a C compiler means precisely enough that 16 agents could coordinate on building one.
+          </p>
+        </div>
+        <div class="box">
+          <div class="h"><b>The billion-dollar solo founder</b><span>Dario Amodei</span></div>
+          <p>
+            Anthropic's CEO puts the odds at <b>70&ndash;80%</b> that a billion-dollar solo-founded company will emerge by end of 2026.
+            Sam Altman apparently has a betting pool among tech CEOs on the exact same question.
+            The relationship between headcount and output is broken.
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Readiness diagnostic -->
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>How ready is your organization?</h2>
+        <div class="tag">interactive diagnostic</div>
+      </div>
+
+      <div class="diag">
+        <div class="q">
+          <div class="top">
+            <label for="agentUse">Current AI agent usage in workflows</label>
+            <div class="v"><span id="agentUseV">25</span>/100</div>
+          </div>
+          <input type="range" id="agentUse" min="0" max="100" value="25" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="mentalModel">How current is your team's mental model of AI capabilities?</label>
+            <div class="v"><span id="mentalModelV">40</span>/100</div>
+          </div>
+          <input type="range" id="mentalModel" min="0" max="100" value="40" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="coordination">% of coordination work that could be automated</label>
+            <div class="v"><span id="coordinationV">50</span>%</div>
+          </div>
+          <input type="range" id="coordination" min="0" max="100" value="50" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="judgment">% of team work requiring genuine human judgment</label>
+            <div class="v"><span id="judgmentV">60</span>%</div>
+          </div>
+          <input type="range" id="judgment" min="0" max="100" value="60" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="support">Investment in change management &amp; training</label>
+            <div class="v"><span id="supportV">30</span>/100</div>
+          </div>
+          <input type="range" id="support" min="0" max="100" value="30" />
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="result" id="result">
+        <h3 id="resultTitle">&mdash;</h3>
+        <p id="resultDesc">Adjust the sliders to see your readiness assessment.</p>
+        <div class="recList" id="recs"></div>
+        <div class="btnRow">
+          <button id="copy">Copy assessment</button>
+          <button id="reset">Reset sliders</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <b>Core truth:</b> The people working in knowledge work desperately need their leaders to understand that
+        humans need a ton of support to get through this change management. Most orgs are underinvesting in their people.
+        Every month now matters. In March, you should be touching an AI system that was built in March.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function showToast(text){
+      const t = $("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>t.classList.remove("show"), 1400);
+    }
+
+    const sliders = ["agentUse","mentalModel","coordination","judgment","support"];
+
+    function assess(){
+      const vals = {};
+      sliders.forEach(id => {
+        const v = +$(id).value;
+        vals[id] = v;
+        $(id + "V").textContent = v;
+      });
+
+      const au = vals.agentUse / 100;
+      const mm = vals.mentalModel / 100;
+      const co = vals.coordination / 100;
+      const ju = vals.judgment / 100;
+      const su = vals.support / 100;
+
+      // Readiness score: higher is more ready
+      const readiness = clamp01(
+        0.25 * au +
+        0.25 * mm +
+        0.15 * (1 - co * (1 - au)) + // unautomated coordination is drag
+        0.15 * ju +                    // judgment-heavy work is good
+        0.20 * su
+      );
+      const pct = Math.round(readiness * 100);
+
+      // Opportunity: how much upside is available
+      const opportunity = clamp01(co * (1 - au) + 0.3 * (1 - mm));
+      const oppPct = Math.round(opportunity * 100);
+
+      // Determine narrative
+      let title, desc;
+      const recs = [];
+
+      if (pct >= 70) {
+        title = `Strong readiness (${pct}%) — opportunity: ${oppPct}%`;
+        desc = "Your organization is well-positioned for the agent era. Focus on scaling what works and pushing the frontier.";
+        recs.push({s:"good", t:"Scale multi-agent workflows", d:"Move from single-agent experiments to coordinated agent teams on real production work."});
+        recs.push({s:"good", t:"Redefine roles around judgment", d:"Your people should be directing agents, not competing with them. Formalize the new job descriptions."});
+        recs.push({s:"warn", t:"Watch for complacency", d:"The tools that work today will be a different generation in 3 months. Keep updating mental models monthly."});
+      } else if (pct >= 45) {
+        title = `Moderate readiness (${pct}%) — opportunity: ${oppPct}%`;
+        desc = "You're making progress but there's significant upside being left on the table. The gap between your mental model and reality is your biggest risk.";
+        recs.push({s:"warn", t:"Close the mental model gap", d:"Your team's understanding of AI capabilities is likely already outdated. Hands-on experimentation is the fastest fix."});
+        recs.push({s:"good", t:"Automate coordination first", d:`${vals.coordination}% of coordination work could be automated. Start with ticket routing, dependency tracking, and status updates.`});
+        recs.push({s:"warn", t:"Increase change management investment", d:"Your people need support. Training, safe sandboxes, and clear guidance on the new ways of working."});
+        recs.push({s:"good", t:"Run a pilot: multi-agent session", d:"Pick one real project and run it with agent teams. The experience will shift the entire team's understanding."});
+      } else {
+        title = `Low readiness (${pct}%) — opportunity: ${oppPct}%`;
+        desc = "There is a large and growing gap between your current capabilities and what the tools can now do. The January mental model is already wrong — urgent action needed.";
+        recs.push({s:"bad", t:"Your mental models are stale", d:"AI agents can now work autonomously for weeks, manage engineering orgs, and find vulnerabilities humans missed. This changes everything."});
+        recs.push({s:"warn", t:"Start with personal software", d:"Have every team member build something with AI this week. Describe outcomes, not steps. The gap between expectations and results is educational."});
+        recs.push({s:"warn", t:"Audit coordination overhead", d:`${vals.coordination}% automatable coordination is a massive drag. Every hour spent on pattern-matching work an agent can do is a wasted hour.`});
+        recs.push({s:"good", t:"Invest in people, not just tools", d:"Humans need support to become a new kind of worker that partners with AI. Most orgs are critically underinvesting here."});
+      }
+
+      $("resultTitle").textContent = title;
+      $("resultDesc").textContent = desc;
+
+      const recsEl = $("recs");
+      recsEl.innerHTML = "";
+      for(const item of recs){
+        const row = document.createElement("div");
+        row.className = "rec";
+        row.innerHTML = `<span class="chip ${item.s}"></span><div><b>${item.t}</b><div style="margin-top:4px; color: var(--muted); font-size:13px; line-height:1.45">${item.d}</div></div>`;
+        recsEl.appendChild(row);
+      }
+
+      return { ...vals, pct, oppPct, title, desc, recs };
+    }
+
+    function copyAssessment(){
+      const r = assess();
+      const lines = [
+        "Opus 4.6 Readiness Assessment",
+        "---",
+        `Agent usage: ${r.agentUse}/100`,
+        `Mental model currency: ${r.mentalModel}/100`,
+        `Automatable coordination: ${r.coordination}%`,
+        `Judgment-heavy work: ${r.judgment}%`,
+        `Change management investment: ${r.support}/100`,
+        "",
+        `Readiness: ${r.pct}%`,
+        `Opportunity: ${r.oppPct}%`,
+        "",
+        r.title,
+        r.desc,
+        "",
+        "Recommendations:",
+        ...r.recs.map((x,i) => `${i+1}. ${x.t} — ${x.d}`)
+      ];
+      navigator.clipboard.writeText(lines.join("\n")).then(
+        ()=>showToast("Copied assessment to clipboard"),
+        ()=>showToast("Couldn't access clipboard")
+      );
+    }
+
+    function resetAll(){
+      $("agentUse").value = 25;
+      $("mentalModel").value = 40;
+      $("coordination").value = 50;
+      $("judgment").value = 60;
+      $("support").value = 30;
+      assess();
+      showToast("Reset sliders");
+    }
+
+    sliders.forEach(id => $(id).addEventListener("input", assess));
+    $("copy").addEventListener("click", copyAssessment);
+    $("reset").addEventListener("click", resetAll);
+
+    assess();
+  </script>
+</body>
+</html>
