@@ -1,16 +1,15 @@
 {
     "files": [
-        "2026_AI_Strategy_Comparison.html",
         "2026-bets-from-zach.html",
         "2026-brain2.html",
         "2026-predictions.html",
+        "2026_AI_Strategy_Comparison.html",
         "agents-domain-memory.html",
         "ai-adoption-interaction.html",
         "ai-as-software-architect.html",
         "ai-bottleneck-shift.html",
         "ai-claude-vs-codex.html",
         "ai-collapse-future-jobs.html",
-        "ai-dev-study.html",
         "ai-factory-era.html",
         "ai-management-skill.html",
         "ai-native-execution-cheap.html",
@@ -33,8 +32,7 @@
         "napoleon-technique.html",
         "opus-46.html",
         "personal-agents.html",
-        "techno-feudalism.html",
-        "tsmc-ai-bottleneck.html"
+        "techno-feudalism.html"
     ],
     "folders": [
         {
