@@ -10,6 +10,7 @@
         "ai-bottleneck-shift.html",
         "ai-claude-vs-codex.html",
         "ai-collapse-future-jobs.html",
+        "ai-dev-study.html",
         "ai-factory-era.html",
         "ai-management-skill.html",
         "ai-native-execution-cheap.html",
@@ -30,8 +31,10 @@
         "linkedin-hiring-arm-race.html",
         "llm-psy.html",
         "napoleon-technique.html",
+        "opus-46.html",
         "personal-agents.html",
-        "techno-feudalism.html"
+        "techno-feudalism.html",
+        "tsmc-ai-bottleneck.html"
     ],
     "folders": [
         {
