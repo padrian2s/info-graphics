@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The web is forking: Coinbase, Stripe, Cloudflare, and OpenAI are simultaneously building a parallel agent web with its own payment rails, content formats, search engines, and execution environments." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Agent Web, Infrastructure, Coinbase, Stripe, Cloudflare, OpenAI, Payments, Commerce, Security, Web Fork" />
+  <meta name="created" content="2026-02-21" />
+  <meta name="icon" content="🌐" />
+  <title>The Web Is Forking — Agent Infrastructure Convergence</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0E1630;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --muted2:#7E8BB5;
+      --line:rgba(255,255,255,.10);
+      --good:#22C55E;
+      --warn:#F59E0B;
+      --bad:#EF4444;
+      --brand:#7C3AED;
+      --brand2:#06B6D4;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(124,58,237,.25), transparent 60%),
+        radial-gradient(800px 600px at 85% 20%, rgba(6,182,212,.22), transparent 55%),
+        radial-gradient(900px 700px at 50% 95%, rgba(34,197,94,.12), transparent 60%),
+        linear-gradient(180deg, #050713, #060A18 60%, #050713);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 70px}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .card.soft{background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));}
+
+    .kicker{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+    .dot{width:9px;height:9px;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+    h1{
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.05;
+      margin:12px 0 12px;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:68ch;
+    }
+
+    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.25);
+    }
+
+    .statRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 560px){ .statRow{grid-template-columns:1fr;} }
+
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .stat .label{color:var(--muted); font-size:12px}
+    .stat .value{font-size:20px; margin-top:6px; font-weight:700}
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr;} }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .sectionTitle h2{margin:0; font-size:18px; letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.22); white-space:nowrap}
+
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 680px){ .twoCol{grid-template-columns:1fr;} }
+
+    .callout{
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(124,58,237,.12), rgba(6,182,212,.08));
+      padding:12px;
+      color:var(--text);
+    }
+    .callout p{margin:0; color:var(--muted); line-height:1.55; font-size:13.5px}
+    .callout strong{color:var(--text)}
+
+    .spark{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:900;
+    }
+
+    .mini{display:grid; grid-template-columns:1fr; gap:12px}
+
+    /* Stack layers */
+    .layers{display:grid; gap:10px}
+    .layer{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns: 44px 1fr;
+      gap:12px;
+      align-items:center;
+      transition: border-color .15s ease;
+    }
+    .layer:hover{border-color: rgba(255,255,255,.2)}
+    .layer .ico{
+      width:44px; height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      font-weight:900;
+      font-size:18px;
+    }
+    .layer .name{font-weight:800; margin:0; font-size:14px}
+    .layer .desc{color:var(--muted); margin:4px 0 0; font-size:13px; line-height:1.45}
+    .layer .companies{
+      display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;
+    }
+    .layer .co{
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,.03);
+      color:var(--muted2); font-weight:600;
+    }
+
+    /* Fork comparison */
+    .fork{display:grid; grid-template-columns:1fr 1fr; gap:0; overflow:hidden; border-radius:16px; border:1px solid var(--line)}
+    @media (max-width: 680px){ .fork{grid-template-columns:1fr;} }
+    .forkSide{padding:14px; background:rgba(0,0,0,.20)}
+    .forkSide:first-child{border-right:1px solid var(--line)}
+    @media (max-width: 680px){ .forkSide:first-child{border-right:none; border-bottom:1px solid var(--line)} }
+    .forkSide h3{margin:0 0 10px; font-size:14px; display:flex; align-items:center; gap:8px}
+    .forkRow{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:13px;
+    }
+    .forkRow:last-child{border-bottom:none}
+    .forkRow .k{color:var(--muted)}
+    .forkRow .v{font-weight:700; font-size:12px}
+
+    /* Security */
+    .secGrid{display:grid; gap:10px}
+    .secRow{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px 12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px;
+      align-items:center;
+    }
+    .secRow .cap{font-weight:700; font-size:13px}
+    .secRow .risk{color:var(--bad); font-size:12px}
+    .secRow .cap .good{color:var(--good)}
+    .secRow .cap .bad{color:var(--bad)}
+
+    /* Boxes */
+    .tri{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){ .tri{grid-template-columns:1fr;} }
+
+    .box{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .box .h{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .box .h b{font-size:13px}
+    .box .h span{font-size:12px; color:var(--muted)}
+    .box p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45}
+
+    /* Comparison bars */
+    .cmp{display:grid; gap:8px}
+    .cmpRow{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px 12px;
+      display:grid;
+      grid-template-columns: 100px 1fr 60px;
+      gap:10px;
+      align-items:center;
+    }
+    .cmpRow .name{font-size:13px; font-weight:700}
+    .cmpRow .bar{
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+    .cmpRow .bar > i{
+      display:block;
+      height:100%;
+      border-radius:999px;
+    }
+    .cmpRow .val{font-size:13px; font-weight:700; text-align:right}
+
+    /* Trust gap meter */
+    .trustGap{
+      position:relative;
+      height:80px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .trustGap .rail{
+      position:absolute;
+      left:8%; right:8%;
+      top:50%; height:12px;
+      transform: translateY(-50%);
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(34,197,94,.5), rgba(245,158,11,.5), rgba(239,68,68,.6));
+    }
+    .trustGap .marker{
+      position:absolute;
+      top:50%; transform: translate(-50%,-50%);
+      padding:6px 10px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(0,0,0,.4);
+      font-size:12px; font-weight:700;
+      white-space:nowrap;
+    }
+
+    /* Diagnostic */
+    .diag{display:grid; gap:10px}
+    .diag .q{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .diag .q .top{display:flex; justify-content:space-between; gap:12px; align-items:baseline}
+    .diag .q label{font-weight:750; font-size:13px}
+    .diag .q .v{color:var(--muted); font-size:12px}
+    input[type="range"]{width:100%; accent-color: var(--brand2)}
+
+    .result{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(6,182,212,.06));
+      padding:14px;
+    }
+    .result h3{margin:0; font-size:16px}
+    .result p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .recList{display:grid; gap:8px; margin-top:10px}
+    .rec{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns: 16px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .chip{width:12px;height:12px;border-radius:99px;margin-top:4px}
+    .chip.good{background:var(--good)}
+    .chip.warn{background:var(--warn)}
+    .chip.bad{background:var(--bad)}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; padding:7px 10px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(0,0,0,.22); color:var(--muted);
+    }
+    .badge strong{color:var(--text)}
+
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      cursor:pointer; border:1px solid var(--line); background:rgba(0,0,0,.22);
+      color:var(--text); border-radius:12px; padding:10px 12px; font-weight:700; font-size:13px;
+    }
+    button:hover{border-color: rgba(255,255,255,.22)}
+
+    .footer{margin-top:18px; color:rgba(168,179,214,.85); font-size:12.5px; line-height:1.6}
+
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.16);
+      color:var(--muted); padding:10px 12px; border-radius:999px;
+      box-shadow:var(--shadow); opacity:0; pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      backdrop-filter: blur(10px);
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-4px)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <div class="kicker"><span class="dot"></span>The agent web &mdash; 2026</div>
+        <h1>The web is <span class="spark">forking</span>. Nobody coordinated it. Nobody had to.</h1>
+        <p class="sub">
+          Within hours of each other, Coinbase launched agent wallets, Cloudflare shipped Markdown-for-agents,
+          and OpenAI published execution environments for autonomous code. They weren't coordinating &mdash;
+          they were all building toward the same future. Every major infrastructure company is simultaneously
+          constructing a parallel web designed for software that will never open a browser.
+        </p>
+
+        <div class="pills">
+          <span class="pill">Coinbase &bull; Agent wallets</span>
+          <span class="pill">Stripe &bull; Shared payment tokens</span>
+          <span class="pill">Cloudflare &bull; Markdown for agents</span>
+          <span class="pill">OpenAI &bull; Skills + Shell + Compaction</span>
+          <span class="pill">Google &bull; Universal Commerce Protocol</span>
+          <span class="pill">Visa &bull; Trusted Agent Protocol</span>
+        </div>
+
+        <div class="statRow">
+          <div class="stat">
+            <div class="label">Machine-to-machine transactions (X42)</div>
+            <div class="value"><span style="color:var(--good)">50 million</span> and counting</div>
+          </div>
+          <div class="stat">
+            <div class="label">The analogy</div>
+            <div class="value">iPhone 2007 &rarr; <span style="color:var(--brand2)">Agent 2026</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card soft mini">
+        <div>
+          <div class="sectionTitle">
+            <h2>The mobile web parallel</h2>
+            <div class="tag">history rhymes</div>
+          </div>
+          <div class="callout">
+            <p>
+              In 2007, the web already existed. It worked on phones &mdash; technically. But it was designed for desktops.
+              What followed was a decade-long rebuild: responsive design, app stores, push notifications, tap-to-pay.
+              <strong>The underlying infrastructure was the same, but the interface layer forked completely.</strong>
+              <br/><br/>
+              The companies that recognized the fork early &mdash; that built for the new client instead of making the old
+              interface work &mdash; built Uber, Instagram, WhatsApp, Snap. <strong>Trillion-dollar companies that could not have
+              existed on the desktop web.</strong>
+            </p>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="sectionTitle">
+            <h2>The new client</h2>
+            <div class="tag">not a screen</div>
+          </div>
+          <div class="recList">
+            <div class="rec"><span class="chip good"></span><div><b>It reads</b> &mdash; structured data and markdown, not rendered HTML</div></div>
+            <div class="rec"><span class="chip good"></span><div><b>It decides</b> &mdash; programmatic logic, not browsing and comparing</div></div>
+            <div class="rec"><span class="chip warn"></span><div><b>It pays</b> &mdash; tokenized payment primitives, not checkout flows</div></div>
+            <div class="rec"><span class="chip bad"></span><div><b>It acts</b> &mdash; shell commands and API calls, not clicks</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- INFRASTRUCTURE STACK + FORK -->
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The 4 primitives (all in production now)</h2>
+          <div class="tag">infrastructure stack</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(34,197,94,.18), rgba(0,0,0,.10));">$</div>
+            <div>
+              <p class="name">Money &mdash; agents that can pay and get paid</p>
+              <p class="desc">Coinbase: X42 protocol, 50M transactions, non-custodial wallets with programmable spending limits.
+                Stripe: shared payment tokens (scoped, time-constrained credentials). Fraud detection had to be retrained from scratch &mdash;
+                mouse movements and browsing time are useless when the buyer is software.</p>
+              <div class="companies">
+                <span class="co">Coinbase</span><span class="co">Stripe</span><span class="co">Google</span><span class="co">PayPal</span><span class="co">Visa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(6,182,212,.18), rgba(0,0,0,.10));">&#x2630;</div>
+            <div>
+              <p class="name">Content &mdash; the web made readable for machines</p>
+              <p class="desc">Cloudflare converts any page to markdown on the fly when an agent requests it. Serves 20% of the web.
+                When they decide agents are first-class citizens, that's an infrastructure-level commitment. Also shipped: llm.txt sitemaps,
+                AI index for discovery, and built-in X42 monetization &mdash; sites can charge agents for content access.</p>
+              <div class="companies">
+                <span class="co">Cloudflare</span><span class="co">Firecrawl</span><span class="co">Exa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(124,58,237,.18), rgba(0,0,0,.10));">&#x2315;</div>
+            <div>
+              <p class="name">Search &mdash; built for machines, not 10 blue links</p>
+              <p class="desc">Exa.ai: own index, own neural retrieval, 95% factual accuracy (beats Perplexity).
+                Returns raw URLs and structured data, not search result pages. Latency matters &mdash; Brave: 669ms vs Parallel Pro: 13.6s.
+                In agent chains, that compounds into minutes.</p>
+              <div class="companies">
+                <span class="co">Exa.ai</span><span class="co">Brave</span><span class="co">Firecrawl</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(245,158,11,.18), rgba(0,0,0,.10));">&#x25B6;</div>
+            <div>
+              <p class="name">Execution &mdash; real terminals, not sandbox playgrounds</p>
+              <p class="desc">OpenAI Skills: versioned, mountable instruction packages (more like Docker images than prompts).
+                Shell tool: real Linux environment with install, curl, files to disk. Compaction: automatic context management for
+                multi-hour workflows. Glean saw accuracy jump 73% &rarr; 85% with a single well-structured skill.</p>
+              <div class="companies">
+                <span class="co">OpenAI</span><span class="co">Anthropic</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="callout">
+          <p>
+            <strong>None of these companies coordinated.</strong> They all reached the same conclusions independently
+            within the same couple-month window. That's convergent evolution &mdash; the shape of the problem
+            dictated the shape of the solution.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The fork: two webs, same servers</h2>
+          <div class="tag">interface layer</div>
+        </div>
+
+        <div class="fork">
+          <div class="forkSide">
+            <h3><span style="color:var(--brand2)">&#x1F464;</span> Human Web</h3>
+            <div class="forkRow"><span class="k">Content</span><span class="v">Beautiful product pages</span></div>
+            <div class="forkRow"><span class="k">Search</span><span class="v">Results you can browse</span></div>
+            <div class="forkRow"><span class="k">Checkout</span><span class="v">Trust signals + flows</span></div>
+            <div class="forkRow"><span class="k">Discovery</span><span class="v">SEO + social + ads</span></div>
+            <div class="forkRow"><span class="k">Format</span><span class="v">HTML + CSS + JS</span></div>
+          </div>
+          <div class="forkSide">
+            <h3><span style="color:var(--good)">&#x1F916;</span> Agent Web</h3>
+            <div class="forkRow"><span class="k">Content</span><span class="v" style="color:var(--good)">JSON + markdown</span></div>
+            <div class="forkRow"><span class="k">Search</span><span class="v" style="color:var(--good)">Structured data to act on</span></div>
+            <div class="forkRow"><span class="k">Checkout</span><span class="v" style="color:var(--good)">Tokenized payment primitives</span></div>
+            <div class="forkRow"><span class="k">Discovery</span><span class="v" style="color:var(--good)">llm.txt + AI index + MCP</span></div>
+            <div class="forkRow"><span class="k">Format</span><span class="v" style="color:var(--good)">APIs + protocols</span></div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>The trust gap</h2>
+          <div class="tag">central tension</div>
+        </div>
+
+        <div class="trustGap">
+          <div class="rail"></div>
+          <div class="marker" style="left:25%; color:var(--good)">Humans want: 70% control</div>
+          <div class="marker" style="left:80%; color:var(--bad)">Infrastructure assumes: 0% human</div>
+        </div>
+
+        <p style="margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.45">
+          The infrastructure being built right now assumes fully autonomous agents with their own wallets, search, execution environments,
+          and economic relationships. The gap between what's being built and the trust people are willing to extend
+          is the central tension of the next few years.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Agents as economic actors</h2>
+          <div class="tag">Polymarket case study</div>
+        </div>
+
+        <div class="statRow" style="margin-top:0">
+          <div class="stat">
+            <div class="label">Polymarket volume (Jan 2026)</div>
+            <div class="value" style="color:var(--good)">$12 billion</div>
+          </div>
+          <div class="stat">
+            <div class="label">Bot arbitrage profits (12 months)</div>
+            <div class="value" style="color:var(--warn)">$40 million</div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p>
+            <strong>Agents are trying to earn money to pay for their own compute.</strong>
+            Polymarket itself confirmed that autonomous AI agents are trading on the platform
+            to subsidize their token costs. The loop is closing: agents that earn, spend, and
+            accumulate capital independently of the humans who created them. A category of software
+            that has never existed before.
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SECURITY + EMERGENT WEB -->
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The security paradox</h2>
+          <div class="tag">every capability = attack surface</div>
+        </div>
+
+        <div class="secGrid">
+          <div class="secRow">
+            <div class="cap"><span class="good">Wallet</span> &rarr; pay for APIs</div>
+            <div class="risk">or get drained by a malicious skill</div>
+          </div>
+          <div class="secRow">
+            <div class="cap"><span class="good">Shell</span> &rarr; install dependencies</div>
+            <div class="risk">or execute injected code</div>
+          </div>
+          <div class="secRow">
+            <div class="cap"><span class="good">Search</span> &rarr; find information</div>
+            <div class="risk">or be redirected to adversarial content</div>
+          </div>
+          <div class="secRow">
+            <div class="cap"><span class="good">Markdown</span> &rarr; read websites</div>
+            <div class="risk">or consume poison content at machine speed</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>The correct mental model</h2>
+          <div class="tag">consensus</div>
+        </div>
+
+        <div class="callout" style="border-color:rgba(239,68,68,.25); background:linear-gradient(180deg, rgba(239,68,68,.10), rgba(239,68,68,.04))">
+          <p>
+            <strong style="color:var(--bad)">Treat the agent as a potential adversary, not a trusted employee.</strong><br/>
+            Every serious security approach &mdash; IronClaw's WASM sandboxing, OpenAI's container isolation,
+            Coinbase's enclave key storage &mdash; assumes the agent itself cannot be fully trusted with the assets it manages.
+          </p>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="layers" style="gap:8px">
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name">IronClaw (near.ai)</p>
+              <p class="desc">Rust-based OpenClaw reimplementation. Every tool sandboxed into isolated WebAssembly. Assumption: any tool is a compromise vector.</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name">OpenAI Shell Tool</p>
+              <p class="desc">Org-level network allow lists, domain secrets, container isolation. Assumption: agents will run untrusted code, blast radius must be contained.</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name">Coinbase Agentic Wallets</p>
+              <p class="desc">Enclave isolation for private keys. Programmable spending guardrails. Assumption: agent cannot be trusted with the assets it manages.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The emergent web (it's already happening)</h2>
+          <div class="tag">chaining capabilities</div>
+        </div>
+
+        <div class="callout" style="margin-bottom:12px">
+          <p>
+            A developer connected OpenClaw to a video generation model. He sent it an Amazon product link. The agent:
+            crawled the page, extracted product info, identified suitable assets, fed them into a video model,
+            and produced a UGC-style product video. <strong>The kind of content brands pay creators $1,000 to produce.
+            No human touched any step.</strong>
+          </p>
+        </div>
+
+        <div class="box" style="margin-bottom:12px">
+          <div class="h"><b>Why this pattern is inevitable</b></div>
+          <p>
+            None of these services were designed to work together. The Amazon page wasn't built for agents.
+            The video model wasn't designed to receive input from crawlers. But because each piece exposes
+            capabilities through APIs and structured data, the agent stitches them into workflows
+            <b>no individual company planned</b>. When primitives exist and agents are smart enough, integration is emergent.
+          </p>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Stripe's fraud detection problem</h2>
+          <div class="tag">the old world is broken</div>
+        </div>
+
+        <div class="twoCol">
+          <div class="box">
+            <div class="h"><b>Old signals (now useless)</b><span style="color:var(--bad)">dead</span></div>
+            <p>Mouse movement variability. Browsing time. Session behavior. Device fingerprinting.
+              Decades of fraud ML calibrated for human shopping &mdash; all of it meaningless when the buyer is software.</p>
+          </div>
+          <div class="box">
+            <div class="h"><b>New reality</b><span style="color:var(--warn)">rebuild</span></div>
+            <p>Stripe had to retrain Radar from scratch. They built an entirely new fraud model for a client that is,
+              by any prior definition, a bot. And yet bots are now legitimate purchasers. Urban, Etsy, Coach, Kate Spade already onboarding.</p>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Agent search latency</h2>
+          <div class="tag">speed compounds</div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmpRow">
+            <div class="name" style="color:var(--good)">Brave</div>
+            <div class="bar"><i style="width:5%; background:linear-gradient(90deg,var(--good),rgba(34,197,94,.5))"></i></div>
+            <div class="val" style="color:var(--good)">669ms</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name">Exa.ai</div>
+            <div class="bar"><i style="width:22%; background:linear-gradient(90deg,var(--brand),var(--brand2))"></i></div>
+            <div class="val">~3s</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name">Firecrawl</div>
+            <div class="bar"><i style="width:35%; background:linear-gradient(90deg,var(--warn),rgba(245,158,11,.5))"></i></div>
+            <div class="val">~5s</div>
+          </div>
+          <div class="cmpRow">
+            <div class="name" style="color:var(--bad)">Parallel Pro</div>
+            <div class="bar"><i style="width:100%; background:linear-gradient(90deg,var(--bad),rgba(239,68,68,.5))"></i></div>
+            <div class="val" style="color:var(--bad)">13.6s</div>
+          </div>
+        </div>
+        <p style="margin:8px 0 0; color:var(--muted); font-size:12px; line-height:1.4">
+          In agent workflows where each search is one step in a chain, latency differences compound into minutes.
+          Providers that own their own index have a structural speed advantage that grows with workflow complexity.
+        </p>
+      </div>
+    </div>
+
+
+    <!-- WHAT TO BUILD FOR -->
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>What to build for</h2>
+        <div class="tag">strategic implications</div>
+      </div>
+
+      <div class="tri">
+        <div class="box">
+          <div class="h"><b>If you own infrastructure</b><span style="color:var(--good)">build primitives</span></div>
+          <p>
+            Your design decisions become de facto web standards. The companies doing this &mdash; Coinbase, Stripe,
+            Cloudflare &mdash; have the scale and distribution to make their choices stick. This is the TCP/IP layer
+            of the agent economy. Capture it and everything flows through you.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>If you build products</b><span style="color:var(--warn)">serve two clients</span></div>
+          <p>
+            Your website now has two audiences: humans who want beautiful pages, and agents who want JSON payloads
+            with price, availability, and payment endpoints. Ship llm.txt. Expose structured APIs. Accept tokenized payments.
+            The businesses that emerge from this fork couldn't have existed on the human web alone.
+          </p>
+        </div>
+
+        <div class="box">
+          <div class="h"><b>If you make content</b><span style="color:var(--bad)">repeatable patterns collapse</span></div>
+          <p>
+            A $1,000 UGC video from a single link, at near-zero cost. Product descriptions, social posts, email campaigns,
+            comparison articles &mdash; every content type that follows a repeatable pattern is getting compressed to commodity
+            pricing. Your moat is taste, judgment, and brand trust that agents can't replicate.
+          </p>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="twoCol">
+        <div class="box">
+          <div class="h"><b>The real scam vs the real signal</b></div>
+          <p>
+            TikTok is flooded with "$50 to $3,000 in days" AI trading claims. Reality: the famous bot that turned $313 into $438K
+            was running latency arbitrage requiring colocated infrastructure with sub-10ms latency. One developer spent $200 in API
+            fees in two days. <b>But the underlying premise &mdash; agents participating in economic activity &mdash; is exactly where
+            billions in infrastructure investment are going.</b>
+          </p>
+        </div>
+        <div class="box">
+          <div class="h"><b>The primitive of trust</b></div>
+          <p>
+            Every company in the agent stack is betting that trust will catch up to capability. Every security incident &mdash;
+            OpenClaw's remote code execution, the iMessage disaster, Redis databases wiped by unsupervised agents &mdash;
+            pushes the trust timeline back. <b>Without the base layer of trust, the agent web may be stillborn.</b>
+            Trust is the primitive nobody has shipped yet.
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- DIAGNOSTIC -->
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>How exposed is your business to the fork?</h2>
+        <div class="tag">interactive diagnostic</div>
+      </div>
+
+      <div class="diag">
+        <div class="q">
+          <div class="top">
+            <label for="agentReady">How agent-readable is your product/content?</label>
+            <div class="v"><span id="agentReadyV">20</span>/100</div>
+          </div>
+          <input type="range" id="agentReady" min="0" max="100" value="20" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="repeatContent">% of your output that follows repeatable patterns</label>
+            <div class="v"><span id="repeatContentV">50</span>%</div>
+          </div>
+          <input type="range" id="repeatContent" min="0" max="100" value="50" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="agentPayments">Could agents buy/interact with your product today?</label>
+            <div class="v"><span id="agentPaymentsV">10</span>/100</div>
+          </div>
+          <input type="range" id="agentPayments" min="0" max="100" value="10" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="humanMoat">Strength of your human-judgment moat (taste, trust, brand)</label>
+            <div class="v"><span id="humanMoatV">55</span>/100</div>
+          </div>
+          <input type="range" id="humanMoat" min="0" max="100" value="55" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="infra">Do you own infrastructure or wrap others' APIs?</label>
+            <div class="v"><span id="infraV">30</span>/100 (own)</div>
+          </div>
+          <input type="range" id="infra" min="0" max="100" value="30" />
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="result" id="result">
+        <h3 id="resultTitle">&mdash;</h3>
+        <p id="resultDesc">Adjust the sliders to see your assessment.</p>
+        <div class="recList" id="recs"></div>
+        <div class="btnRow">
+          <button id="copy">Copy assessment</button>
+          <button id="reset">Reset sliders</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <b>Bottom line:</b> The web is forking. The agent web runs on the same servers, same CDNs, same payment rails &mdash;
+        but serves a fundamentally different client. Small now does not mean small later. The question isn't whether agents
+        will transact autonomously. The question is whether guardrails get built fast enough to prevent predictable disasters.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function showToast(text){
+      const t = $("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>t.classList.remove("show"), 1400);
+    }
+
+    const sliders = ["agentReady","repeatContent","agentPayments","humanMoat","infra"];
+
+    function assess(){
+      const v = {};
+      sliders.forEach(id => {
+        v[id] = +$(id).value;
+        $(id + "V").textContent = v[id];
+      });
+
+      const ar = v.agentReady / 100;
+      const rc = v.repeatContent / 100;
+      const ap = v.agentPayments / 100;
+      const hm = v.humanMoat / 100;
+      const inf = v.infra / 100;
+
+      // Exposure: high repeatable content + low moat + low agent readiness = high exposure
+      const exposure = clamp01(0.35 * rc * (1 - hm) + 0.25 * (1 - ar) + 0.20 * (1 - ap) + 0.10 * (1 - inf));
+      const expPct = Math.round(exposure * 100);
+
+      // Opportunity: high agent readiness + payments + infrastructure
+      const opportunity = clamp01(0.30 * ar + 0.25 * ap + 0.25 * inf + 0.20 * (1 - rc * (1 - hm)));
+      const oppPct = Math.round(opportunity * 100);
+
+      let title, desc;
+      const recs = [];
+
+      if (expPct >= 60 && oppPct < 40) {
+        title = `High exposure (${expPct}%), low readiness (${oppPct}%) — urgent action needed`;
+        desc = "Your business produces repeatable content without strong human-judgment moats, and you haven't built for agent clients yet. The fork is happening with or without you.";
+        recs.push({s:"bad", t:"Your repeatable content is being commoditized", d:`${v.repeatContent}% of your output follows patterns that agents can replicate at near-zero cost. The $1,000 UGC video is already a $0 agent task.`});
+        recs.push({s:"warn", t:"Make your product agent-readable now", d:"Ship llm.txt, expose structured APIs, serve markdown. Cloudflare serves 20% of the web as markdown already — if you're not readable, you're invisible to agent clients."});
+        recs.push({s:"warn", t:"Enable agent payments", d:"Stripe's Agent Commerce Suite is a single integration. Google's Universal Commerce Protocol is an open standard. Merchants who don't accept agent payments will lose agent-driven transactions."});
+        recs.push({s:"good", t:"Double down on your human moat", d:"Taste, judgment, brand trust, and relationships are what agents can't replicate. Make that the product, not the repeatable deliverable."});
+      } else if (expPct >= 45) {
+        title = `Moderate exposure (${expPct}%), opportunity: ${oppPct}% — act now`;
+        desc = "You have meaningful exposure to the content/commerce fork but also room to capture the upside. The next 6 months are the window.";
+        recs.push({s:"warn", t:"Serve two clients simultaneously", d:"Your website now has two audiences: humans want beautiful pages, agents want JSON with price, availability, and payment endpoints. Both must be first-class."});
+        recs.push({s:"good", t:"Build switching costs for agents", d:"Integrate into agent workflows. Own data pipelines. Create structured APIs that agents depend on. When agents choose your service programmatically, that's stickier than human loyalty."});
+        recs.push({s:"warn", t:"Separate repeatable from judgment work", d:"Identify which output is pattern-following (automate it) vs which requires genuine human judgment (that's your margin)."});
+      } else {
+        title = `Lower exposure (${expPct}%), opportunity: ${oppPct}% — position to capture`;
+        desc = "Your human-judgment moat or infrastructure ownership gives you structural protection. Focus on becoming the primitive that agents depend on.";
+        recs.push({s:"good", t:"Your moat is real — invest in it", d:`Human judgment strength at ${v.humanMoat}/100 means your value comes from what agents can't replicate. Make that explicit in your positioning.`});
+        recs.push({s:"good", t:"Build for agent clients anyway", d:"Even protected businesses should serve the agent web. The companies that recognized the mobile fork early built trillion-dollar platforms."});
+        if (inf > 0.5) {
+          recs.push({s:"good", t:"Your infrastructure ownership is an advantage", d:"Providers that own their own index/infrastructure have structural advantages that grow as agent workflows get more complex."});
+        } else {
+          recs.push({s:"warn", t:"Reduce API wrapper dependency", d:"Wrapping others' APIs means your margins compress as they change pricing. Consider building proprietary infrastructure where feasible."});
+        }
+      }
+
+      $("resultTitle").textContent = title;
+      $("resultDesc").textContent = desc;
+
+      const recsEl = $("recs");
+      recsEl.innerHTML = "";
+      for (const item of recs) {
+        const row = document.createElement("div");
+        row.className = "rec";
+        row.innerHTML = `<span class="chip ${item.s}"></span><div><b>${item.t}</b><div style="margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45">${item.d}</div></div>`;
+        recsEl.appendChild(row);
+      }
+
+      return { ...v, expPct, oppPct, title, desc, recs };
+    }
+
+    function copyAssessment(){
+      const r = assess();
+      const lines = [
+        "Agent Web Fork — Exposure Assessment",
+        "---",
+        `Agent readability: ${r.agentReady}/100`,
+        `Repeatable content: ${r.repeatContent}%`,
+        `Agent payments: ${r.agentPayments}/100`,
+        `Human-judgment moat: ${r.humanMoat}/100`,
+        `Infrastructure ownership: ${r.infra}/100`,
+        "",
+        `Exposure: ${r.expPct}%`,
+        `Opportunity: ${r.oppPct}%`,
+        "",
+        r.title,
+        r.desc,
+        "",
+        "Recommendations:",
+        ...r.recs.map((x,i) => `${i+1}. ${x.t} — ${x.d}`)
+      ];
+      navigator.clipboard.writeText(lines.join("\n")).then(
+        ()=>showToast("Copied assessment to clipboard"),
+        ()=>showToast("Couldn't access clipboard")
+      );
+    }
+
+    function resetAll(){
+      $("agentReady").value = 20;
+      $("repeatContent").value = 50;
+      $("agentPayments").value = 10;
+      $("humanMoat").value = 55;
+      $("infra").value = 30;
+      assess();
+      showToast("Reset sliders");
+    }
+
+    sliders.forEach(id => $(id).addEventListener("input", assess));
+    $("copy").addEventListener("click", copyAssessment);
+    $("reset").addEventListener("click", resetAll);
+
+    assess();
+  </script>
+</body>
+</html>
