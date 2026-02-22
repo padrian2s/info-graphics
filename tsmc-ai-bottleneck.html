@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TSMC, “Bottlenecks”, and the Boba Game — Interactive Infographic</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1224;
+      --panel2:#0D1733;
+      --text:#EAF0FF;
+      --muted:#A9B4D6;
+      --faint:#6E7BA7;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.16);
+      --good:#4FF4A3;
+      --warn:#FFD166;
+      --bad:#FF4D6D;
+      --blue:#6CC3FF;
+      --violet:#B79BFF;
+      --cyan:#5EF3FF;
+      --pink:#FF79C6;
+      --shadow: 0 18px 70px rgba(0,0,0,.45);
+      --shadow2: 0 12px 40px rgba(0,0,0,.35);
+      --r: 18px;
+      --r2: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% 10%, rgba(108,195,255,.20), transparent 60%),
+        radial-gradient(900px 650px at 80% 12%, rgba(183,155,255,.18), transparent 55%),
+        radial-gradient(800px 650px at 35% 85%, rgba(255,77,109,.12), transparent 60%),
+        radial-gradient(900px 850px at 85% 80%, rgba(94,243,255,.10), transparent 55%),
+        linear-gradient(180deg, #050710 0%, #070A12 45%, #060814 100%);
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: 1180px; margin:0 auto; padding: 24px 18px 96px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; margin: 10px 0 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 32% 35%, rgba(94,243,255,.95), rgba(94,243,255,.02) 70%),
+        radial-gradient(18px 18px at 72% 70%, rgba(255,121,198,.9), rgba(255,121,198,.03) 70%),
+        linear-gradient(135deg, rgba(108,195,255,.35), rgba(183,155,255,.25));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 210deg, rgba(94,243,255,.0), rgba(94,243,255,.28), rgba(255,121,198,.0), rgba(108,195,255,.25), rgba(183,155,255,.0));
+      filter: blur(8px);
+      animation: spin 9s linear infinite;
+      opacity:.85;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+    .brand h1{
+      font-size: 14px; margin:0; font-weight:650; color:var(--text);
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brand h1 span{
+      font-weight:500; color:var(--muted); font-size:12px;
+    }
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:620;
+      font-size: 12px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      display:inline-flex; align-items:center; gap:8px;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+    .btn:active{ transform: translateY(0); }
+    .pill{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(108,195,255,.14);
+      border:1px solid rgba(108,195,255,.25);
+      color: var(--text);
+    }
+    .hero{
+      border-radius: var(--r2);
+      padding: 22px 20px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
+        radial-gradient(900px 500px at 15% 20%, rgba(108,195,255,.16), transparent 55%),
+        radial-gradient(900px 500px at 85% 10%, rgba(183,155,255,.14), transparent 55%);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset: -1px;
+      background:
+        radial-gradient(600px 300px at 20% 0%, rgba(94,243,255,.10), transparent 55%),
+        radial-gradient(600px 400px at 90% 35%, rgba(255,121,198,.08), transparent 55%);
+      pointer-events:none;
+    }
+    .hero .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 16px;
+      align-items:stretch;
+      position:relative;
+    }
+    .headline{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .headline h2{
+      margin:0;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.6px;
+    }
+    .headline p{
+      margin:0;
+      color: var(--muted);
+      max-width: 68ch;
+      line-height:1.45;
+      font-size: 13.5px;
+    }
+    .tags{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .tag{
+      font-size:12px;
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      display:inline-flex; gap:8px; align-items:center;
+      white-space:nowrap;
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; background: var(--blue); box-shadow:0 0 0 4px rgba(108,195,255,.10); }
+    .dot.v{ background: var(--violet); box-shadow:0 0 0 4px rgba(183,155,255,.10); }
+    .dot.p{ background: var(--pink); box-shadow:0 0 0 4px rgba(255,121,198,.10); }
+    .dot.c{ background: var(--cyan); box-shadow:0 0 0 4px rgba(94,243,255,.10); }
+
+    .scorecard{
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .scorecard .row{
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+    }
+    .metric{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      padding: 10px 10px;
+      min-height:72px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .metric .k{ font-size:11px; color: var(--muted); display:flex; gap:8px; align-items:center; }
+    .metric .v{ font-size:18px; font-weight:750; letter-spacing:-.3px; }
+    .metric .s{ font-size:11px; color: var(--faint); line-height:1.2; }
+    .spark{
+      width:100%; height:20px; margin-top:8px;
+      background: linear-gradient(90deg, rgba(108,195,255,.0), rgba(108,195,255,.22), rgba(183,155,255,.0));
+      border-radius: 999px;
+      position:relative;
+      overflow:hidden;
+    }
+    .spark:after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.16), rgba(255,255,255,0));
+      transform: translateX(-60%);
+      animation: sweep 2.8s ease-in-out infinite;
+      opacity:.6;
+    }
+    @keyframes sweep{ 50%{ transform: translateX(60%);} }
+
+    .section{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .card{
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(11,18,36,.75);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .hd{
+      padding: 14px 14px 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .card .hd h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.1px;
+    }
+    .card .hd .sub{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+      max-width: 70ch;
+    }
+    .card .bd{ padding: 12px 14px 14px; }
+    .mini{
+      font-size:12px; color:var(--muted); line-height:1.5;
+    }
+    .list{
+      margin: 10px 0 0;
+      padding:0; list-style:none;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .li{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+    }
+    .li .b{
+      width:10px; height:10px; border-radius:999px; margin-top:4px;
+      background: var(--blue);
+      box-shadow:0 0 0 4px rgba(108,195,255,.10);
+      flex:0 0 auto;
+    }
+    .li .t{ flex:1; }
+    .li .t b{ color: var(--text); font-weight:700; }
+    .li .t .m{ color: var(--muted); font-size:12px; margin-top:4px; line-height:1.35; }
+
+    .toggle{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .seg{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      font-size: 12px;
+      font-weight:650;
+      cursor:pointer;
+      user-select:none;
+      transition:.12s ease;
+    }
+    .seg[aria-pressed="true"]{
+      border-color: rgba(94,243,255,.35);
+      background: rgba(94,243,255,.10);
+      box-shadow: 0 0 0 4px rgba(94,243,255,.10) inset;
+    }
+
+    .iceberg{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    .ice{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      padding: 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .ice .k{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.9px;}
+    .ice .v{ margin-top:6px; font-size:12px; color:var(--text); font-weight:720;}
+    .ice .m{ margin-top:6px; font-size:12px; color:var(--muted); line-height:1.35; }
+    .wave{
+      position:absolute; left:-10%; right:-10%; bottom:-18px; height:42px;
+      background: radial-gradient(30px 16px at 10% 40%, rgba(108,195,255,.18), rgba(108,195,255,0) 70%),
+                  radial-gradient(30px 16px at 30% 60%, rgba(183,155,255,.18), rgba(183,155,255,0) 70%),
+                  radial-gradient(30px 16px at 55% 45%, rgba(94,243,255,.16), rgba(94,243,255,0) 70%),
+                  radial-gradient(30px 16px at 80% 60%, rgba(255,121,198,.14), rgba(255,121,198,0) 70%);
+      filter: blur(2px);
+      opacity:.8;
+    }
+
+    .viz{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding: 12px;
+      margin-top: 10px;
+    }
+    canvas{ width:100%; height:220px; display:block; border-radius: 14px; background: rgba(7,10,18,.7); border:1px solid rgba(255,255,255,.08); }
+    .controls{
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+      margin-top: 10px;
+    }
+    .ctrl{
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 10px;
+    }
+    .ctrl label{
+      display:flex; justify-content:space-between; gap:10px;
+      font-size:12px; color: var(--muted);
+      margin-bottom:6px;
+    }
+    .ctrl input[type="range"]{ width:100%; }
+    .ctrl .val{ font-family: var(--mono); color: var(--text); font-size:12px; }
+    .note{
+      font-size: 11.5px;
+      color: var(--faint);
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    .wide{ grid-column: 1 / -1; }
+    .footer{
+      margin-top:18px;
+      padding: 14px 14px 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+    }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero .grid{ grid-template-columns: 1fr; }
+      .section{ grid-template-columns: 1fr; }
+      .iceberg{ grid-template-columns: 1fr; }
+      .controls{ grid-template-columns: 1fr; }
+      .actions{ justify-content:flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>
+          AI Supply Chain Reality Check
+          <span>TSMC · “shortages” · the Boba (Beer) Game · bullwhip effects</span>
+        </h1>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnMode" title="Toggle readability mode">
+          <span class="pill" id="modePill">Focus</span>
+          <span>View Mode</span>
+        </button>
+        <button class="btn" id="btnExpand" title="Expand/collapse commentary">
+          <span class="pill">C</span>
+          <span>Commentary</span>
+        </button>
+        <button class="btn" id="btnReset" title="Reset interactive simulation">
+          <span class="pill">R</span>
+          <span>Reset Sim</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="hero" id="top">
+      <div class="grid">
+        <div class="headline">
+          <div class="tags">
+            <span class="tag"><span class="dot"></span> “TSMC risk” debate: conservatism vs reality</span>
+            <span class="tag"><span class="dot v"></span> The bottleneck isn’t one company — it’s a chain</span>
+            <span class="tag"><span class="dot c"></span> Long lead times + demand spikes = volatility</span>
+            <span class="tag"><span class="dot p"></span> Power may be the heavier constraint than silicon</span>
+          </div>
+
+          <h2>
+            When people say “TSMC is the limiter”, they often mean:
+            <span style="color:var(--cyan)">AI supply chains behave like a system</span> —
+            with delays, amplification, and painful trade-offs.
+          </h2>
+
+          <p>
+            This infographic processes a long-form argument that pushes back on the idea that “if only TSMC believed earlier,
+            we’d have unlimited compute (or AGI) by now.” The core claim here is not that concentration is healthy (it isn’t),
+            but that semiconductor shortages are structurally normal because: (1) manufacturing is hard, (2) supply chains are deep,
+            and (3) lead times force forecasting that produces bullwhip volatility.
+          </p>
+        </div>
+
+        <aside class="scorecard" aria-label="Key numbers and time constants (from the narrative)">
+          <div class="row">
+            <div class="metric">
+              <div class="k"><span class="dot"></span> TSMC CapEx (2025)</div>
+              <div class="v">$41B</div>
+              <div class="s">“Sitting on hands” doesn’t match spending</div>
+              <div class="spark" aria-hidden="true"></div>
+            </div>
+            <div class="metric">
+              <div class="k"><span class="dot v"></span> Planned CapEx (2026)</div>
+              <div class="v">$53–56B</div>
+              <div class="s">Scaling, but at semiconductor tempo</div>
+              <div class="spark" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="metric">
+              <div class="k"><span class="dot c"></span> Chip fab + package time</div>
+              <div class="v">~4.5 months</div>
+              <div class="s">Even “fast” cycles are slow</div>
+            </div>
+            <div class="metric">
+              <div class="k"><span class="dot p"></span> Build a fab (new capacity)</div>
+              <div class="v">~18–24 months</div>
+              <div class="s">Shovels → chips is measured in years</div>
+            </div>
+          </div>
+          <div class="metric">
+            <div class="k"><span class="dot"></span> EUV tool pipeline</div>
+            <div class="v">12–18 mo install + ~6 mo ramp</div>
+            <div class="s">The machine isn’t “productive” on day one</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <!-- Card 1 -->
+      <article class="card">
+        <header class="hd">
+          <div>
+            <h3>1) What the “TSMC is the bottleneck” story is really saying</h3>
+            <div class="sub">
+              A Silicon Valley framing: hyperscalers could have earned “hundreds of billions more”
+              if advanced-node capacity had expanded earlier. The counter-framing: shortages are emergent
+              properties of long-lead-time industrial systems.
+            </div>
+          </div>
+          <div class="toggle" role="group" aria-label="Framing toggle">
+            <div class="seg" id="segSV" aria-pressed="true">SV diagnosis</div>
+            <div class="seg" id="segSys" aria-pressed="false">Systems diagnosis</div>
+          </div>
+        </header>
+
+        <div class="bd" id="framePane">
+          <div class="mini" id="frameText"></div>
+
+          <ul class="list" id="frameList"></ul>
+
+          <div class="note">
+            Tip: switch the framing. Notice how the “system” version talks about delays, forecasting, and supplier bottlenecks,
+            not a single villain.
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card">
+        <header class="hd">
+          <div>
+            <h3>2) The Iceberg: “TSMC” = the visible tip of an AI industrial stack</h3>
+            <div class="sub">
+              Foundry output depends on specialized equipment, specialized materials, plus non-chip constraints
+              (power, water, land, labor). And you can’t ship AI systems without memory.
+            </div>
+          </div>
+          <span class="pill">Deep supply chain</span>
+        </header>
+        <div class="bd">
+          <div class="iceberg">
+            <div class="ice">
+              <div class="k">Above water</div>
+              <div class="v">TSMC output & packaging headlines</div>
+              <div class="m">“Where are the chips?” is the visible symptom.</div>
+              <div class="wave" aria-hidden="true"></div>
+            </div>
+            <div class="ice">
+              <div class="k">Under water</div>
+              <div class="v">Equipment, materials, infrastructure, memory</div>
+              <div class="m">Specialized tools + long lead times = slow-to-turn system.</div>
+              <div class="wave" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <ul class="list">
+            <li class="li">
+              <div class="b" style="background:var(--violet); box-shadow:0 0 0 4px rgba(183,155,255,.10)"></div>
+              <div class="t">
+                <b>Equipment</b>
+                <div class="m">EUV lithography (ASML) + tool “niches” (deposition variants, etch, metrology). Not fungible like cloud compute.</div>
+              </div>
+            </li>
+            <li class="li">
+              <div class="b" style="background:var(--cyan); box-shadow:0 0 0 4px rgba(94,243,255,.10)"></div>
+              <div class="t">
+                <b>Materials</b>
+                <div class="m">Photoresist, wafers, specialty gases, chemicals — each with qualification & supply constraints.</div>
+              </div>
+            </li>
+            <li class="li">
+              <div class="b" style="background:var(--blue); box-shadow:0 0 0 4px rgba(108,195,255,.10)"></div>
+              <div class="t">
+                <b>Infrastructure</b>
+                <div class="m">Power, water, land, labor — capacity requires civil/utility buildout, not just machines.</div>
+              </div>
+            </li>
+            <li class="li">
+              <div class="b" style="background:var(--pink); box-shadow:0 0 0 4px rgba(255,121,198,.10)"></div>
+              <div class="t">
+                <b>Memory gate</b>
+                <div class="m">HBM (a DRAM class) is critical for AI GPUs. Memory is also consolidated (Samsung, SK hynix, Micron).</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card wide">
+        <header class="hd">
+          <div>
+            <h3>3) The Boba Game Simulator: delays → overreaction → bullwhip</h3>
+            <div class="sub">
+              A simplified supply chain (Retailer → Wholesaler → Distributor → Factory). You can create a demand spike and watch
+              inventory & backlog oscillate. The point isn’t precise prediction — it’s intuition: long delays amplify signals.
+            </div>
+          </div>
+          <span class="pill">Interactive</span>
+        </header>
+
+        <div class="bd">
+          <div class="mini">
+            Model notes: weekly steps; each tier targets an inventory level; orders propagate with delay; production has delay;
+            stockouts incur backlog. This mirrors how “compute shortage” discussions can ignore upstream amplification.
+          </div>
+
+          <div class="viz">
+            <canvas id="simChart" width="1200" height="520" aria-label="Simulation chart"></canvas>
+
+            <div class="controls">
+              <div class="ctrl">
+                <label>
+                  <span>Demand spike size</span>
+                  <span class="val" id="vSpike"></span>
+                </label>
+                <input id="spike" type="range" min="0" max="60" value="24" />
+              </div>
+              <div class="ctrl">
+                <label>
+                  <span>Spike week (start)</span>
+                  <span class="val" id="vWeek"></span>
+                </label>
+                <input id="week" type="range" min="4" max="26" value="12" />
+              </div>
+              <div class="ctrl">
+                <label>
+                  <span>Order / shipping delay (weeks)</span>
+                  <span class="val" id="vDelay"></span>
+                </label>
+                <input id="delay" type="range" min="1" max="8" value="3" />
+              </div>
+              <div class="ctrl">
+                <label>
+                  <span>Production delay (weeks)</span>
+                  <span class="val" id="vProd"></span>
+                </label>
+                <input id="prod" type="range" min="1" max="10" value="5" />
+              </div>
+            </div>
+
+            <div class="note">
+              Try: set delay high and spike moderate. You’ll see bigger overshoots (gluts) *after* shortages.
+              That’s the core “semiconductors are hard” intuition: even small demand shocks can become violent upstream.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card">
+        <header class="hd">
+          <div>
+            <h3>4) Bullwhip amplification (from consumer → semis → equipment)</h3>
+            <div class="sub">
+              The narrative cites historical U.S. electronics consumption volatility, then shows how semiconductor and equipment
+              swings can be much larger — especially with long lead times.
+            </div>
+          </div>
+          <span class="pill">Amplification</span>
+        </header>
+        <div class="bd">
+          <div class="mini">
+            Intuition: upstream tiers act like “gain stages” in an audio system — noise becomes feedback.
+            Long lead times force forecasts; forecasts + incentives create over-ordering; corrections cause gluts.
+          </div>
+
+          <div class="viz">
+            <canvas id="whipChart" width="1200" height="420" aria-label="Bullwhip chart"></canvas>
+            <div class="note">
+              The chart below uses the volatility ranges described in the narrative as illustrative bands (not precise measurement).
+            </div>
+          </div>
+
+          <ul class="list">
+            <li class="li">
+              <div class="b" style="background:var(--good); box-shadow:0 0 0 4px rgba(79,244,163,.12)"></div>
+              <div class="t">
+                <b>Consumer electronics demand</b>
+                <div class="m">“Positive growth but volatile”: roughly 0–20% swings.</div>
+              </div>
+            </li>
+            <li class="li">
+              <div class="b" style="background:var(--warn); box-shadow:0 0 0 4px rgba(255,209,102,.14)"></div>
+              <div class="t">
+                <b>Semiconductor makers</b>
+                <div class="m">Amplified to roughly -20% to +40% swings.</div>
+              </div>
+            </li>
+            <li class="li">
+              <div class="b" style="background:var(--bad); box-shadow:0 0 0 4px rgba(255,77,109,.14)"></div>
+              <div class="t">
+                <b>Equipment makers</b>
+                <div class="m">Amplified further to roughly ±60% swings.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="card">
+        <header class="hd">
+          <div>
+            <h3>5) Silicon vs Power: what’s the “real” bottleneck?</h3>
+            <div class="sub">
+              A key disagreement: are chips the dominant constraint, or is it the utility & deployment stack (power, cooling, rack integration)?
+              This section lets you compare both arguments side-by-side.
+            </div>
+          </div>
+          <div class="toggle" role="group" aria-label="Bottleneck toggle">
+            <div class="seg" id="segSil" aria-pressed="true">Silicon bottleneck</div>
+            <div class="seg" id="segPow" aria-pressed="false">Power bottleneck</div>
+          </div>
+        </header>
+        <div class="bd">
+          <div class="mini" id="bottleneckText"></div>
+          <ul class="list" id="bottleneckList"></ul>
+
+          <div class="note">
+            Practical reading: both can be true in different windows. Chips gate “potential compute”;
+            power/cooling/rack integration gates “delivered compute”.
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card wide" id="commentaryCard">
+        <header class="hd">
+          <div>
+            <h3>Commentary: what this argument is trying to change in your mental model</h3>
+            <div class="sub">
+              Not a “defense of a company,” but a systems reminder: industrial scaling is not a software deploy.
+              The critique targets shallow blame and short feedback loops in tech discourse.
+            </div>
+          </div>
+          <span class="pill">Interpretation</span>
+        </header>
+        <div class="bd">
+          <div class="mini">
+            <ul class="list">
+              <li class="li">
+                <div class="b"></div>
+                <div class="t">
+                  <b>1) “TSMC is the limiter” is often shorthand for “I don’t see the hidden constraints.”</b>
+                  <div class="m">
+                    The essay reframes “shortages” as normal for semiconductors (and equally normal: gluts).
+                    When the system turns, it turns slowly — but it can overshoot violently.
+                  </div>
+                </div>
+              </li>
+
+              <li class="li">
+                <div class="b" style="background:var(--violet); box-shadow:0 0 0 4px rgba(183,155,255,.10)"></div>
+                <div class="t">
+                  <b>2) Competition helps long-term health, but it doesn’t magically erase near-term shortages.</b>
+                  <div class="m">
+                    Even with more foundries, the suppliers are shared (EUV, deposition niches, materials, HBM).
+                    Scaling “everyone” simultaneously can still slam the same upstream nodes.
+                  </div>
+                </div>
+              </li>
+
+              <li class="li">
+                <div class="b" style="background:var(--cyan); box-shadow:0 0 0 4px rgba(94,243,255,.10)"></div>
+                <div class="t">
+                  <b>3) The last mile matters: chips can exist while deployable systems lag.</b>
+                  <div class="m">
+                    The narrative cites packaging/yield issues and rack/cooling integration delays.
+                    That creates weird phases where inventory exists but “usable compute” doesn’t.
+                  </div>
+                </div>
+              </li>
+
+              <li class="li">
+                <div class="b" style="background:var(--pink); box-shadow:0 0 0 4px rgba(255,121,198,.10)"></div>
+                <div class="t">
+                  <b>4) The software world has lost industrial intuition.</b>
+                  <div class="m">
+                    The closing thesis is cultural: many “AI people” don’t understand how hardware gets made,
+                    so they talk about fabs like they’re Kubernetes clusters. The request is: patience + realism.
+                  </div>
+                </div>
+              </li>
+
+              <li class="li">
+                <div class="b" style="background:var(--warn); box-shadow:0 0 0 4px rgba(255,209,102,.14)"></div>
+                <div class="t">
+                  <b>5) A hidden subtext: capital allocation is constrained by uncertainty.</b>
+                  <div class="m">
+                    Foundries don’t just scale because hype exists — they scale when demand is durable and monetizable.
+                    If the “AI ROI” is unclear, overbuilding becomes existential (depreciation + low utilization).
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <div class="footer">
+              <b>How to use this as a builder / operator:</b><br/>
+              If you’re planning AI capacity, treat the stack like a multi-year program: <span class="kbd">power</span>, <span class="kbd">cooling</span>, <span class="kbd">racks</span>,
+              <span class="kbd">networking</span>, <span class="kbd">HBM</span>, <span class="kbd">packaging</span>, <span class="kbd">tools</span>, then <span class="kbd">chips</span>.
+              Over-index on supply chain lead times the way you’d over-index on latency budgets in distributed systems.
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    /**********************
+     * Small UI helpers
+     **********************/
+    const $ = (q, el=document) => el.querySelector(q);
+    const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+    // Mode toggle (purely visual: bumps contrast)
+    let focusMode = true;
+    $("#btnMode").addEventListener("click", () => {
+      focusMode = !focusMode;
+      $("#modePill").textContent = focusMode ? "Focus" : "Wide";
+      document.documentElement.style.setProperty("--panel", focusMode ? "#0B1224" : "#070A12");
+      document.documentElement.style.setProperty("--panel2", focusMode ? "#0D1733" : "#09102A");
+      document.body.style.background = focusMode
+        ? document.body.style.background
+        : document.body.style.background;
+      // tiny nudge: reduce card opacity slightly in wide mode
+      $$(".card").forEach(c => c.style.background = focusMode ? "rgba(11,18,36,.75)" : "rgba(11,18,36,.62)");
+    });
+
+    // Commentary toggle
+    let commentaryOpen = true;
+    $("#btnExpand").addEventListener("click", () => {
+      commentaryOpen = !commentaryOpen;
+      $("#commentaryCard").style.display = commentaryOpen ? "" : "none";
+    });
+
+    /**********************
+     * Framing pane
+     **********************/
+    const frameData = {
+      sv: {
+        text:
+          `The “SV diagnosis” framing treats the compute shortage as mainly a <b>capacity planning failure</b> — “TSMC didn’t scale early enough, so hyperscalers lost huge revenue.” It implicitly assumes that if the foundry believed sooner, supply would have expanded fast enough to meet AI demand.`,
+        bullets: [
+          ["Blame axis", "A single chokepoint firm with too much market share."],
+          ["Proposed fix", "More foundry competition + more aggressive early capex."],
+          ["Hidden assumption", "You can safely front-run demand without being crushed by low utilization."],
+          ["Failure mode", "Treating fabs like software: “just scale up”."]
+        ]
+      },
+      sys: {
+        text:
+          `The “systems diagnosis” framing treats the compute shortage as a <b>normal industrial dynamics outcome</b>. Semiconductors have deep dependencies, long lead times, and bullwhip amplification. You can dislike concentration and still accept that shortages would likely have happened anyway.`,
+        bullets: [
+          ["Blame axis", "Delays + shared suppliers + demand uncertainty + multi-tier incentives."],
+          ["Proposed fix", "Build resilience: diversify suppliers, plan earlier for power/racks/memory, accept slower turn rates."],
+          ["Hidden assumption", "Forecasts are fragile; customers double-book; hype doesn’t equal durable ROI."],
+          ["Failure mode", "Overbuilding: depreciation losses + utilization collapse."]
+        ]
+      }
+    };
+
+    function renderFrame(which){
+      const d = frameData[which];
+      $("#frameText").innerHTML = `<div class="mini">${d.text}</div>`;
+      const ul = $("#frameList");
+      ul.innerHTML = "";
+      d.bullets.forEach(([k,m], i) => {
+        const li = document.createElement("li");
+        li.className = "li";
+        const b = document.createElement("div");
+        b.className = "b";
+        b.style.background = i%2 ? "var(--violet)" : "var(--blue)";
+        b.style.boxShadow = i%2 ? "0 0 0 4px rgba(183,155,255,.10)" : "0 0 0 4px rgba(108,195,255,.10)";
+        const t = document.createElement("div");
+        t.className = "t";
+        t.innerHTML = `<b>${k}</b><div class="m">${m}</div>`;
+        li.appendChild(b); li.appendChild(t);
+        ul.appendChild(li);
+      });
+    }
+
+    let framing = "sv";
+    renderFrame(framing);
+    $("#segSV").addEventListener("click", () => {
+      framing = "sv";
+      $("#segSV").setAttribute("aria-pressed", "true");
+      $("#segSys").setAttribute("aria-pressed", "false");
+      renderFrame(framing);
+    });
+    $("#segSys").addEventListener("click", () => {
+      framing = "sys";
+      $("#segSV").setAttribute("aria-pressed", "false");
+      $("#segSys").setAttribute("aria-pressed", "true");
+      renderFrame(framing);
+    });
+
+    /**********************
+     * Bottleneck pane
+     **********************/
+    const bottleneckData = {
+      silicon: {
+        text:
+          `“Silicon bottleneck” says: even if power is hard, you can’t run GPUs you don’t have. Executives may describe silicon as the gating constraint because their job is to secure chips first, and because upstream lead times mean chip availability sets the ceiling of potential capacity.`,
+        bullets: [
+          ["Symptoms", "Backlogs for advanced packaging (CoWoS), yield issues, allocation fights."],
+          ["Structural cause", "Advanced nodes + advanced packaging scale slowly; shared suppliers limit burst capacity."],
+          ["Why it feels personal", "A single foundry’s dominance makes delays look like “choices.”"],
+          ["What helps", "Long-range capacity commitments, packaging expansion, multi-sourcing where possible."]
+        ]
+      },
+      power: {
+        text:
+          `“Power bottleneck” says: chips can exist in inventory while “delivered compute” is stalled by electricity, cooling, transformers, turbine availability, permitting, and rack integration. If data centers were specced around 2021 assumptions, AI-era loads can overwhelm plans.`,
+        bullets: [
+          ["Symptoms", "Interconnect delays, cooling leaks/overheat issues, grid connection timelines."],
+          ["Structural cause", "Utility buildouts are slow; turbine/transformer supply is tight; permitting is political."],
+          ["Why it matters", "Power gates deployment speed even when silicon is available."],
+          ["What helps", "Earlier utility planning, staged rollout, better thermal design, realistic power budgets."]
+        ]
+      }
+    };
+
+    function renderBottleneck(which){
+      const d = bottleneckData[which];
+      $("#bottleneckText").innerHTML = `<div class="mini">${d.text}</div>`;
+      const ul = $("#bottleneckList");
+      ul.innerHTML = "";
+      d.bullets.forEach(([k,m], i) => {
+        const li = document.createElement("li");
+        li.className = "li";
+        const b = document.createElement("div");
+        b.className = "b";
+        b.style.background = which === "power"
+          ? (i%2 ? "var(--pink)" : "var(--cyan)")
+          : (i%2 ? "var(--violet)" : "var(--blue)");
+        b.style.boxShadow = "0 0 0 4px rgba(255,255,255,.08)";
+        const t = document.createElement("div");
+        t.className = "t";
+        t.innerHTML = `<b>${k}</b><div class="m">${m}</div>`;
+        li.appendChild(b); li.appendChild(t);
+        ul.appendChild(li);
+      });
+    }
+
+    let bottleneck = "silicon";
+    renderBottleneck(bottleneck);
+    $("#segSil").addEventListener("click", () => {
+      bottleneck = "silicon";
+      $("#segSil").setAttribute("aria-pressed","true");
+      $("#segPow").setAttribute("aria-pressed","false");
+      renderBottleneck(bottleneck);
+    });
+    $("#segPow").addEventListener("click", () => {
+      bottleneck = "power";
+      $("#segSil").setAttribute("aria-pressed","false");
+      $("#segPow").setAttribute("aria-pressed","true");
+      renderBottleneck(bottleneck);
+    });
+
+    /**********************
+     * Boba game simulation
+     * - simplified multi-tier ordering with delay buffers
+     **********************/
+    const sim = {
+      weeks: 44,
+      baseDemand: 24,
+      targetInv: 60,
+      orderSmoothing: 0.45,
+      initInv: 60
+    };
+
+    function runSim({spike=24, spikeWeek=12, delay=3, prodDelay=5}){
+      // tiers: R, W, D, F
+      const tiers = ["Retailer","Wholesaler","Distributor","Factory"];
+      const n = tiers.length;
+
+      // State arrays per tier
+      let inv = Array(n).fill(sim.initInv);
+      let back = Array(n).fill(0);      // backlog/stockouts
+      let shipPipe = Array(n).fill(0).map(()=> Array(delay).fill(0)); // shipments in transit to this tier
+      let orderPipe = Array(n).fill(0).map(()=> Array(delay).fill(0)); // orders in transit to upstream tier (except factory)
+      let prodPipe = Array(prodDelay).fill(0); // factory production in transit to distributor
+      let orderRate = Array(n).fill(sim.baseDemand); // smoothed ordering intent
+
+      // records
+      const rec = {
+        demand: [],
+        R_inv: [], R_back: [],
+        W_inv: [], W_back: [],
+        D_inv: [], D_back: [],
+        F_inv: [], F_back: [],
+        totalBack: [],
+        totalInv: []
+      };
+
+      for(let t=0; t<sim.weeks; t++){
+        // customer demand with one spike window
+        const d = sim.baseDemand + ((t>=spikeWeek && t<spikeWeek+6) ? spike : 0);
+        rec.demand.push(d);
+
+        // 1) Receive shipments (move last element of shipPipe into inventory)
+        for(let i=0;i<n;i++){
+          const arriving = shipPipe[i].pop();
+          inv[i] += arriving;
+          shipPipe[i].unshift(0);
+        }
+
+        // 2) Retailer satisfies customer demand
+        // Also each tier satisfies downstream orders similarly (we model backlog and partial fills)
+        function fulfill(tierIndex, requested){
+          const available = inv[tierIndex];
+          const owed = back[tierIndex] + requested;
+          const shipped = Math.min(available, owed);
+          inv[tierIndex] -= shipped;
+          back[tierIndex] = owed - shipped;
+          return shipped;
+        }
+
+        // Retailer demand fulfillment
+        const rShippedToCustomers = fulfill(0, d);
+
+        // 3) Downstream order arrivals (orders placed earlier now arrive as requests)
+        // Retailer -> wholesaler request arrives to wholesaler via orderPipe[1]
+        // We'll store requests per tier (except retailer) as the arrived orders from downstream
+        const req = Array(n).fill(0);
+        for(let i=1;i<n;i++){
+          // orders to tier i arrive via orderPipe[i]
+          const arrivedReq = orderPipe[i].pop();
+          req[i] = arrivedReq;
+          orderPipe[i].unshift(0);
+        }
+
+        // 4) Each upstream tier ships to its downstream to satisfy requests
+        // Wholesaler ships to retailer -> goes into retailer's shipPipe[0]
+        // Distributor ships to wholesaler -> shipPipe[1]
+        // Factory "ships" to distributor via prodPipe then shipPipe[2] (to simulate packaging/logistics)
+        const shipToDownstream = Array(n).fill(0);
+
+        // Wholesaler fulfills retailer request
+        shipToDownstream[0] = fulfill(1, req[1]);
+        // Distributor fulfills wholesaler request
+        shipToDownstream[1] = fulfill(2, req[2]);
+
+        // Factory fulfills distributor request (but factory "inventory" is capacity constrained)
+        // We'll model factory inventory as "work-in-progress capacity": inv[3]
+        const fShip = fulfill(3, req[3]);
+        // Factory shipment goes into production/logistics pipe first
+        prodPipe[0] += fShip; // enters production transit (already "made", but delayed to appear downstream)
+
+        // Push shipments into shipping pipelines for downstream tiers
+        // shipments shipped this week arrive after `delay`
+        shipPipe[0][0] += shipToDownstream[0];
+        shipPipe[1][0] += shipToDownstream[1];
+
+        // 5) Production pipeline advances: after prodDelay, becomes shipment to distributor
+        const prodArriving = prodPipe.pop();
+        prodPipe.unshift(0);
+        // When factory output arrives, it becomes shipment to distributor with the same shipping delay
+        shipPipe[2][0] += prodArriving;
+
+        // 6) Ordering policy: each tier orders upstream based on target inventory + backlog
+        // Retailer places order to wholesaler; wholesaler to distributor; distributor to factory.
+        function desiredOrder(i){
+          // i is tier index: 0 orders from 1, 1 from 2, 2 from 3
+          const pipeline = shipPipe[i].reduce((a,b)=>a+b,0);
+          const position = inv[i] + pipeline - back[i];
+          const gap = sim.targetInv - position;
+          const base = (i===0) ? d : req[i]; // retailer sees real demand; others see arrived orders
+          const raw = clamp(base + gap, 0, 220);
+          // smooth
+          orderRate[i] = orderRate[i]*(1-sim.orderSmoothing) + raw*sim.orderSmoothing;
+          return orderRate[i];
+        }
+
+        const oR = desiredOrder(0);
+        const oW = desiredOrder(1);
+        const oD = desiredOrder(2);
+
+        // orders go into upstream's orderPipe buffer (arrive after delay)
+        orderPipe[1][0] += oR; // arrives to wholesaler as req
+        orderPipe[2][0] += oW; // arrives to distributor
+        orderPipe[3][0] += oD; // arrives to factory
+
+        // 7) Factory replenishment: assume factory has a production "capacity inventory" that refills each week
+        // This is a toy way to represent capacity; raising capacity would raise this refill.
+        inv[3] += 65; // weekly capacity to fulfill (toy)
+
+        // record
+        rec.R_inv.push(inv[0]); rec.R_back.push(back[0]);
+        rec.W_inv.push(inv[1]); rec.W_back.push(back[1]);
+        rec.D_inv.push(inv[2]); rec.D_back.push(back[2]);
+        rec.F_inv.push(inv[3]); rec.F_back.push(back[3]);
+        rec.totalBack.push(back.reduce((a,b)=>a+b,0));
+        rec.totalInv.push(inv.reduce((a,b)=>a+b,0));
+      }
+
+      return rec;
+    }
+
+    /**********************
+     * Drawing helpers (canvas)
+     **********************/
+    function drawAxes(ctx, w, h, pad){
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,.10)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(pad, pad);
+      ctx.lineTo(pad, h-pad);
+      ctx.lineTo(w-pad, h-pad);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawLegend(ctx, items, x, y){
+      ctx.save();
+      ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.textBaseline = "middle";
+      let dx = x;
+      items.forEach(it=>{
+        const [label, color] = it;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.95;
+        ctx.beginPath();
+        ctx.roundRect(dx, y-7, 14, 14, 7);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "rgba(234,240,255,.92)";
+        ctx.fillText(label, dx+20, y);
+        dx += 20 + ctx.measureText(label).width + 18;
+      });
+      ctx.restore();
+    }
+
+    function plotLine(ctx, series, x0, y0, w, h, ymin, ymax, color, width=2){
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      series.forEach((v,i)=>{
+        const x = x0 + (i/(series.length-1))*w;
+        const y = y0 + h - ((v - ymin) / (ymax - ymin)) * h;
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function fillBand(ctx, x0, y0, w, h, ymin, ymax, lo, hi, color){
+      // band between lo..hi as horizontal range across chart
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.18;
+      const yHi = y0 + h - ((hi - ymin)/(ymax-ymin))*h;
+      const yLo = y0 + h - ((lo - ymin)/(ymax-ymin))*h;
+      ctx.beginPath();
+      ctx.roundRect(x0, yHi, w, (yLo - yHi), 12);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Polyfill for roundRect in older browsers
+    if(!CanvasRenderingContext2D.prototype.roundRect){
+      CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+        const rr = Math.min(r, w/2, h/2);
+        this.beginPath();
+        this.moveTo(x+rr, y);
+        this.arcTo(x+w, y, x+w, y+h, rr);
+        this.arcTo(x+w, y+h, x, y+h, rr);
+        this.arcTo(x, y+h, x, y, rr);
+        this.arcTo(x, y, x+w, y, rr);
+        this.closePath();
+        return this;
+      }
+    }
+
+    function drawSimChart(rec){
+      const c = $("#simChart");
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0,0,w,h);
+
+      // background subtle grid
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,.03)";
+      ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle = "rgba(255,255,255,.05)";
+      for(let i=0;i<10;i++){
+        const y = (i/10)*h;
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+      }
+      ctx.restore();
+
+      const pad = 54;
+      drawAxes(ctx,w,h,pad);
+
+      const x0 = pad, y0 = pad, cw = w-2*pad, ch = h-2*pad;
+
+      // scale from min/max of visible series
+      const seriesAll = [
+        ...rec.demand,
+        ...rec.R_inv, ...rec.W_inv, ...rec.D_inv,
+        ...rec.totalBack
+      ];
+      let ymin = 0;
+      let ymax = Math.max(140, ...seriesAll) * 1.08;
+
+      // Title
+      ctx.save();
+      ctx.fillStyle = "rgba(234,240,255,.92)";
+      ctx.font = "700 14px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.fillText("Boba Game (Toy) — Demand vs Retail/Wholesale/Distributor Inventory + Total Backlog", pad, 28);
+      ctx.fillStyle = "rgba(169,180,214,.9)";
+      ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.fillText("Watch how a demand spike propagates and amplifies upstream (bullwhip).", pad, 46);
+      ctx.restore();
+
+      // plot
+      plotLine(ctx, rec.demand, x0, y0, cw, ch, ymin, ymax, "rgba(94,243,255,.95)", 2.2);
+      plotLine(ctx, rec.R_inv, x0, y0, cw, ch, ymin, ymax, "rgba(108,195,255,.90)", 2.1);
+      plotLine(ctx, rec.W_inv, x0, y0, cw, ch, ymin, ymax, "rgba(183,155,255,.88)", 2.1);
+      plotLine(ctx, rec.D_inv, x0, y0, cw, ch, ymin, ymax, "rgba(255,121,198,.85)", 2.1);
+      plotLine(ctx, rec.totalBack, x0, y0, cw, ch, ymin, ymax, "rgba(255,77,109,.90)", 2.2);
+
+      drawLegend(ctx, [
+        ["Demand", "rgba(94,243,255,.9)"],
+        ["Retail inv", "rgba(108,195,255,.9)"],
+        ["Wholesale inv", "rgba(183,155,255,.9)"],
+        ["Distrib inv", "rgba(255,121,198,.9)"],
+        ["Total backlog", "rgba(255,77,109,.9)"],
+      ], pad, h-pad+26);
+
+      // y labels
+      ctx.save();
+      ctx.fillStyle = "rgba(169,180,214,.9)";
+      ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New";
+      for(let i=0;i<=5;i++){
+        const v = (ymin + (i/5)*(ymax-ymin));
+        const y = y0 + ch - (i/5)*ch;
+        ctx.fillText(Math.round(v).toString().padStart(3," "), 12, y+4);
+      }
+      ctx.restore();
+    }
+
+    function drawWhipChart(){
+      const c = $("#whipChart");
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0,0,w,h);
+
+      // background
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,.03)";
+      ctx.fillRect(0,0,w,h);
+      ctx.restore();
+
+      const pad = 54;
+      drawAxes(ctx,w,h,pad);
+      const x0 = pad, y0 = pad, cw = w-2*pad, ch = h-2*pad;
+
+      // Chart title
+      ctx.save();
+      ctx.fillStyle = "rgba(234,240,255,.92)";
+      ctx.font = "700 14px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.fillText("Bullwhip Bands (Illustrative): volatility grows upstream", pad, 28);
+      ctx.fillStyle = "rgba(169,180,214,.9)";
+      ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.fillText("Consumer → Semis → Equipment (bigger swings with long lead times)", pad, 46);
+      ctx.restore();
+
+      // y scale: -70..+70
+      const ymin = -70, ymax = 70;
+
+      // Bands
+      // Consumer 0..20
+      fillBand(ctx, x0 + 0.05*cw, y0, cw*0.26, ch, ymin, ymax, 0, 20, "rgba(79,244,163,.9)");
+      // Semis -20..40
+      fillBand(ctx, x0 + 0.37*cw, y0, cw*0.26, ch, ymin, ymax, -20, 40, "rgba(255,209,102,.9)");
+      // Equipment -60..60
+      fillBand(ctx, x0 + 0.69*cw, y0, cw*0.26, ch, ymin, ymax, -60, 60, "rgba(255,77,109,.9)");
+
+      // zero line
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,.12)";
+      ctx.lineWidth = 1;
+      const yZero = y0 + ch - ((0 - ymin)/(ymax-ymin))*ch;
+      ctx.beginPath(); ctx.moveTo(x0, yZero); ctx.lineTo(x0+cw, yZero); ctx.stroke();
+      ctx.restore();
+
+      // labels
+      ctx.save();
+      ctx.fillStyle = "rgba(234,240,255,.92)";
+      ctx.font = "650 13px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+      ctx.fillText("Consumer", x0 + 0.05*cw, y0 + ch + 26);
+      ctx.fillText("Semiconductors", x0 + 0.37*cw, y0 + ch + 26);
+      ctx.fillText("Equipment", x0 + 0.69*cw, y0 + ch + 26);
+
+      ctx.fillStyle = "rgba(169,180,214,.9)";
+      ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New";
+      for(let i=0;i<=7;i++){
+        const v = ymin + (i/7)*(ymax-ymin);
+        const y = y0 + ch - (i/7)*ch;
+        ctx.fillText((v>=0?"+":"") + Math.round(v) + "%", 10, y+4);
+      }
+      ctx.restore();
+
+      drawLegend(ctx, [
+        ["Band = plausible swing", "rgba(255,255,255,.65)"],
+        ["Higher tier = bigger swing", "rgba(94,243,255,.65)"],
+      ], pad, h-pad+26);
+    }
+
+    /**********************
+     * Wire up sim controls
+     **********************/
+    const elSpike = $("#spike");
+    const elWeek  = $("#week");
+    const elDelay = $("#delay");
+    const elProd  = $("#prod");
+
+    function syncVals(){
+      $("#vSpike").textContent = `${elSpike.value} /wk`;
+      $("#vWeek").textContent  = `week ${elWeek.value}`;
+      $("#vDelay").textContent = `${elDelay.value}`;
+      $("#vProd").textContent  = `${elProd.value}`;
+    }
+
+    function redraw(){
+      syncVals();
+      const rec = runSim({
+        spike: +elSpike.value,
+        spikeWeek: +elWeek.value,
+        delay: +elDelay.value,
+        prodDelay: +elProd.value
+      });
+      drawSimChart(rec);
+    }
+
+    [elSpike, elWeek, elDelay, elProd].forEach(el => el.addEventListener("input", redraw));
+
+    $("#btnReset").addEventListener("click", () => {
+      elSpike.value = 24;
+      elWeek.value = 12;
+      elDelay.value = 3;
+      elProd.value = 5;
+      redraw();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    // initial paint
+    syncVals();
+    redraw();
+    drawWhipChart();
+
+    /**********************
+     * Nice: keyboard shortcuts
+     **********************/
+    window.addEventListener("keydown", (e) => {
+      if(e.key.toLowerCase() === "c"){
+        commentaryOpen = !commentaryOpen;
+        $("#commentaryCard").style.display = commentaryOpen ? "" : "none";
+      }
+      if(e.key.toLowerCase() === "r"){
+        $("#btnReset").click();
+      }
+    });
+  </script>
+</body>
+</html>
