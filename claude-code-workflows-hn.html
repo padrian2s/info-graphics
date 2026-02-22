@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="What 485 Hacker News comments reveal about effective Claude Code workflows: the planning spectrum, verification loops, real-world outcomes, and the techniques that actually work versus superstition." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Claude Code, AI Coding, Developer Workflows, HN Discussion, Verification Loops, Planning, TDD, Vibe Coding" />
+  <meta name="created" content="2026-02-22" />
+  <meta name="icon" content="🔧" />
+  <title>Claude Code in Practice — What 485 HN Comments Reveal</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0E1630;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --muted2:#7E8BB5;
+      --line:rgba(255,255,255,.10);
+      --good:#22C55E;
+      --warn:#F59E0B;
+      --bad:#EF4444;
+      --brand:#7C3AED;
+      --brand2:#06B6D4;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(124,58,237,.25), transparent 60%),
+        radial-gradient(800px 600px at 85% 20%, rgba(6,182,212,.22), transparent 55%),
+        radial-gradient(900px 700px at 50% 95%, rgba(34,197,94,.12), transparent 60%),
+        linear-gradient(180deg, #050713, #060A18 60%, #050713);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1180px; margin:0 auto; padding:28px 18px 70px}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .card.soft{background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));}
+
+    .kicker{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+    .dot{width:9px;height:9px;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+    h1{
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.05;
+      margin:12px 0 12px;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 14px;
+      max-width:68ch;
+    }
+
+    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .pill{
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      background: rgba(0,0,0,.25);
+    }
+
+    .statRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 560px){ .statRow{grid-template-columns:1fr;} }
+
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .stat .label{color:var(--muted); font-size:12px}
+    .stat .value{font-size:20px; margin-top:6px; font-weight:700}
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr;} }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .sectionTitle h2{margin:0; font-size:18px; letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.22); white-space:nowrap}
+
+    .hr{height:1px; background:var(--line); margin:14px 0}
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 680px){ .twoCol{grid-template-columns:1fr;} }
+
+    .callout{
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(124,58,237,.12), rgba(6,182,212,.08));
+      padding:12px;
+      color:var(--text);
+    }
+    .callout p{margin:0; color:var(--muted); line-height:1.55; font-size:13.5px}
+    .callout strong{color:var(--text)}
+
+    .spark{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:900;
+    }
+
+    .mini{display:grid; grid-template-columns:1fr; gap:12px}
+
+    /* Layers */
+    .layers{display:grid; gap:10px}
+    .layer{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns: 44px 1fr;
+      gap:12px;
+      align-items:center;
+    }
+    .layer .ico{
+      width:44px; height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      font-weight:900;
+      font-size:16px;
+    }
+    .layer .name{font-weight:800; margin:0; font-size:14px}
+    .layer .desc{color:var(--muted); margin:4px 0 0; font-size:13px; line-height:1.45}
+
+    /* Spectrum bar */
+    .spectrum{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(0,0,0,.18);
+      padding:14px;
+      overflow:hidden;
+    }
+    .spectrumBar{
+      height:14px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(239,68,68,.7), rgba(245,158,11,.6), rgba(34,197,94,.6), rgba(6,182,212,.6));
+      margin:12px 0 8px;
+      position:relative;
+    }
+    .spectrumLabels{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .spectrumPoints{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+    @media (max-width: 680px){ .spectrumPoints{grid-template-columns:1fr 1fr;} }
+    .specPt{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:8px 10px;
+      background:rgba(0,0,0,.15);
+      font-size:12px;
+    }
+    .specPt b{display:block; margin-bottom:4px; font-size:13px}
+    .specPt span{color:var(--muted); line-height:1.4}
+
+    /* Quote */
+    .quote{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(0,0,0,.20);
+      position:relative;
+    }
+    .quote:before{
+      content:"\201C";
+      position:absolute;
+      left:12px; top:6px;
+      font-size:32px;
+      opacity:.18;
+      font-weight:900;
+    }
+    .quote p{margin:0; color:rgba(233,236,255,.88); font-size:13.5px; line-height:1.55; padding-left:4px}
+    .quote .attr{margin-top:8px; color:var(--muted2); font-size:12px}
+
+    /* Boxes */
+    .tri{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){ .tri{grid-template-columns:1fr;} }
+
+    .box{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .box .h{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .box .h b{font-size:13px}
+    .box .h span{font-size:12px; color:var(--muted)}
+    .box p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45}
+
+    /* Rec list */
+    .recList{display:grid; gap:8px; margin-top:10px}
+    .rec{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns: 16px 1fr;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .chip{width:12px;height:12px;border-radius:99px;margin-top:4px}
+    .chip.good{background:var(--good)}
+    .chip.warn{background:var(--warn)}
+    .chip.bad{background:var(--bad)}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; padding:7px 10px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(0,0,0,.22); color:var(--muted);
+    }
+    .badge strong{color:var(--text)}
+
+    /* Versus */
+    .vs{display:grid; grid-template-columns:1fr 1fr; gap:0; border-radius:16px; border:1px solid var(--line); overflow:hidden}
+    @media (max-width: 680px){ .vs{grid-template-columns:1fr;} }
+    .vsSide{padding:14px; background:rgba(0,0,0,.20)}
+    .vsSide:first-child{border-right:1px solid var(--line)}
+    @media (max-width: 680px){ .vsSide:first-child{border-right:none; border-bottom:1px solid var(--line)} }
+    .vsSide h3{margin:0 0 10px; font-size:14px; display:flex; align-items:center; gap:8px}
+    .vsItem{padding:6px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:13px; color:var(--muted); line-height:1.45}
+    .vsItem:last-child{border-bottom:none}
+
+    /* Diagnostic */
+    .diag{display:grid; gap:10px}
+    .diag .q{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      border-radius:16px;
+      padding:12px;
+    }
+    .diag .q .top{display:flex; justify-content:space-between; gap:12px; align-items:baseline}
+    .diag .q label{font-weight:750; font-size:13px}
+    .diag .q .v{color:var(--muted); font-size:12px}
+    input[type="range"]{width:100%; accent-color: var(--brand2)}
+
+    .result{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(6,182,212,.06));
+      padding:14px;
+    }
+    .result h3{margin:0; font-size:16px}
+    .result p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.55}
+
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      cursor:pointer; border:1px solid var(--line); background:rgba(0,0,0,.22);
+      color:var(--text); border-radius:12px; padding:10px 12px; font-weight:700; font-size:13px;
+    }
+    button:hover{border-color: rgba(255,255,255,.22)}
+
+    .footer{margin-top:18px; color:rgba(168,179,214,.85); font-size:12.5px; line-height:1.6}
+
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.16);
+      color:var(--muted); padding:10px 12px; border-radius:999px;
+      box-shadow:var(--shadow); opacity:0; pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      backdrop-filter: blur(10px);
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-4px)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <div class="kicker"><span class="dot"></span>Hacker News &mdash; 485 comments distilled</div>
+        <h1>Claude Code in the wild: what developers <span class="spark">actually discovered</span></h1>
+        <p class="sub">
+          A viral HN thread on Claude Code workflows surfaced the real patterns, hard-won lessons,
+          and honest criticisms from hundreds of developers using AI coding tools daily.
+          Not the marketing version &mdash; the practitioner version.
+          Here's what the community converged on.
+        </p>
+
+        <div class="pills">
+          <span class="pill">Plan-first vs iterate</span>
+          <span class="pill">Verification loops</span>
+          <span class="pill">30K+ LOC apps</span>
+          <span class="pill">Open-loop vs closed-loop</span>
+          <span class="pill">Superstition vs signal</span>
+          <span class="pill">TDD with agents</span>
+        </div>
+
+        <div class="statRow">
+          <div class="stat">
+            <div class="label">The real insight</div>
+            <div class="value">LLMs fail at <span style="color:var(--bad)">invisible assumptions</span>, not syntax</div>
+          </div>
+          <div class="stat">
+            <div class="label">The bottleneck shift</div>
+            <div class="value">Typing &rarr; <span style="color:var(--good)">verification</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card soft mini">
+        <div>
+          <div class="sectionTitle">
+            <h2>The one thing everyone agrees on</h2>
+            <div class="tag">consensus</div>
+          </div>
+          <div class="quote">
+            <p>
+              LLMs don't usually fail at syntax. They fail at invisible assumptions about architecture,
+              constraints, and invariants. A written plan becomes a debugging surface for those assumptions.
+            </p>
+            <div class="attr">Top-voted comment &mdash; HN thread #47106686</div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="sectionTitle">
+            <h2>The core tension</h2>
+            <div class="tag">debate</div>
+          </div>
+          <div class="recList">
+            <div class="rec"><span class="chip good"></span><div><b>Plan-first camp</b> &mdash; "Never let Claude write code until you've reviewed and approved a written plan."</div></div>
+            <div class="rec"><span class="chip warn"></span><div><b>Iterate camp</b> &mdash; "Small issues with clear details? Claude can go to town. You don't review every decision a teammate makes."</div></div>
+            <div class="rec"><span class="chip bad"></span><div><b>Skeptic camp</b> &mdash; "All this planning and prompting is far more work than just writing the code yourself."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SPECTRUM + WHAT WORKS -->
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The workflow spectrum</h2>
+          <div class="tag">from vibe coding to full spec</div>
+        </div>
+
+        <div class="spectrum">
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <span style="font-size:13px; font-weight:700">Less structure</span>
+            <span style="font-size:13px; font-weight:700">More structure</span>
+          </div>
+          <div class="spectrumBar"></div>
+          <div class="spectrumLabels">
+            <span>Vibe coding</span>
+            <span>Annotated plans</span>
+            <span>Vertical slices</span>
+            <span>Full BDD/TDD</span>
+          </div>
+
+          <div class="spectrumPoints">
+            <div class="specPt" style="border-color:rgba(239,68,68,.3)">
+              <b style="color:var(--bad)">Vibe coding</b>
+              <span>Prompt &rarr; giant diff &rarr; debug. Fast start, "illusion of velocity." Works for throwaway code.</span>
+            </div>
+            <div class="specPt" style="border-color:rgba(245,158,11,.3)">
+              <b style="color:var(--warn)">Plan &rarr; Execute</b>
+              <span>Written plan, review, then one-shot execution. The original article's approach. Risk: if plan is wrong, start over.</span>
+            </div>
+            <div class="specPt" style="border-color:rgba(34,197,94,.3)">
+              <b style="color:var(--good)">Thin slices + verify</b>
+              <span>Scaffold &rarr; one feature at a time &rarr; tests &rarr; repeat. Closed-loop. Favored by experienced devs.</span>
+            </div>
+            <div class="specPt" style="border-color:rgba(6,182,212,.3)">
+              <b style="color:var(--brand2)">Full BDD/TDD</b>
+              <span>Research &rarr; domains &rarr; specs &rarr; gap analysis &rarr; tests first &rarr; implement. Overkill for small projects.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Open-loop vs closed-loop</h2>
+          <div class="tag">the key distinction</div>
+        </div>
+
+        <div class="vs">
+          <div class="vsSide">
+            <h3><span style="color:var(--bad)">&#x2718;</span> Open-loop (fragile)</h3>
+            <div class="vsItem">Prompt &rarr; giant diff &rarr; read &rarr; debug</div>
+            <div class="vsItem">Thousands of lines nobody understands</div>
+            <div class="vsItem">"Illusion of velocity" &mdash; fast output, slow integration</div>
+            <div class="vsItem">Agent touches 15 files speculatively</div>
+            <div class="vsItem">Pay integration cost repeatedly</div>
+          </div>
+          <div class="vsSide">
+            <h3><span style="color:var(--good)">&#x2714;</span> Closed-loop (robust)</h3>
+            <div class="vsItem">Scaffold &rarr; constraints &rarr; verifiers &rarr; iterate</div>
+            <div class="vsItem">One thin slice at a time, tested</div>
+            <div class="vsItem">Real velocity &mdash; verification catches errors early</div>
+            <div class="vsItem">Refactors are safe because harness exists</div>
+            <div class="vsItem">Actually ship faster</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:12px">
+          <p>
+            <strong>"The reason AI works isn't that the model codes fast. It's that the workflow moves the bottleneck
+            from typing to verification, and then you engineer the verification loop."</strong>
+            &mdash; Developer who shipped a live ticketing system (Stripe payments, email, ticket verification at door)
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>What actually works (consensus techniques)</h2>
+          <div class="tag">practitioner-tested</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(34,197,94,.18), rgba(0,0,0,.10));">1</div>
+            <div>
+              <p class="name">Surface assumptions before they become code</p>
+              <p class="desc">LLMs fail at invisible constraints and invariants. A written plan is a debugging surface for architectural assumptions. Get them wrong on paper, not in a 2,000-line diff.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(6,182,212,.18), rgba(0,0,0,.10));">2</div>
+            <div>
+              <p class="name">Work in batches of &le;1,500 lines</p>
+              <p class="desc">One developer's 30,000 LOC app has ~100,000 lines of plan behind it. Can't build something that big as a one-shot. Break plans into complexity-bounded batches.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(124,58,237,.18), rgba(0,0,0,.10));">3</div>
+            <div>
+              <p class="name">Annotations in-context are powerful</p>
+              <p class="desc">"This should be two slides." "Use a side-by-side layout here." "Pull the code example from ../examples/foo." Token distance in-context makes inline annotations extremely effective.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(245,158,11,.18), rgba(0,0,0,.10));">4</div>
+            <div>
+              <p class="name">Build a living knowledge base</p>
+              <p class="desc">Every time you correct the model, update persistent guidance so it doesn't repeat the mistake. Turn one-off corrections into durable rules. CLAUDE.md, memory files, skills.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(239,68,68,.18), rgba(0,0,0,.10));">5</div>
+            <div>
+              <p class="name">Clear context between phases</p>
+              <p class="desc">Restart sessions between planning levels. Fresh context often finds new issues and things to clarify before the next phase. Stale context accumulates drift.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>Layered documentation (large projects)</h2>
+          <div class="tag">multi-pass</div>
+        </div>
+
+        <div class="layers" style="gap:6px">
+          <div class="layer" style="grid-template-columns:1fr; padding:10px 12px">
+            <div>
+              <p class="name" style="font-size:13px; display:flex; align-items:center; gap:8px">
+                <span style="color:var(--brand)">&#x25B6;</span> Architecture &amp; requirements
+                <span style="color:var(--muted); font-size:11px; font-weight:400">&rarr; iterate until satisfied</span>
+              </p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr; padding:10px 12px">
+            <div>
+              <p class="name" style="font-size:13px; display:flex; align-items:center; gap:8px">
+                <span style="color:var(--brand2)">&#x25B6;</span> Design document
+                <span style="color:var(--muted); font-size:11px; font-weight:400">&rarr; clear context, iterate</span>
+              </p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr; padding:10px 12px">
+            <div>
+              <p class="name" style="font-size:13px; display:flex; align-items:center; gap:8px">
+                <span style="color:var(--good)">&#x25B6;</span> Implementation plan (&le;1,500 lines per batch)
+                <span style="color:var(--muted); font-size:11px; font-weight:400">&rarr; clear context, iterate</span>
+              </p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr; padding:10px 12px">
+            <div>
+              <p class="name" style="font-size:13px; display:flex; align-items:center; gap:8px">
+                <span style="color:var(--warn)">&#x25B6;</span> Code execution + tests
+                <span style="color:var(--muted); font-size:11px; font-weight:400">&rarr; atomic commits, verify</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- CRITICISMS + REAL OUTCOMES -->
+    <div class="grid">
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The honest criticisms</h2>
+          <div class="tag">what pushed back</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name" style="color:var(--bad)">"Nothing radically different here"</p>
+              <p class="desc">Multiple commenters pointed out the viral article's workflow is exactly what Anthropic recommends as best practice. The framing as revolutionary was seen as AI-written hype. Same ideas have been written about dozens of times.</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name" style="color:var(--warn)">"More work than just writing the code"</p>
+              <p class="desc">For experienced developers, the overhead of planning, prompting, checking, and orchestrating can exceed the cost of just writing the code yourself. "There's no winner for 'least code written regardless of productivity outcomes.'"</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name" style="color:var(--warn)">"Prompt magic is superstition"</p>
+              <p class="desc">Debate over whether words like "deeply" and "intricacies" actually change model behavior or are confirmation bias. Evidence suggests framing does influence attention patterns, but results are probabilistic, not deterministic.</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name" style="color:var(--bad)">"Big bang is fragile"</p>
+              <p class="desc">Writing the entire plan then executing monolithically produces thousands of lines nobody understands. If the plan is wrong, you start over from scratch. Multiple devs strongly preferred incremental execution.</p>
+            </div>
+          </div>
+          <div class="layer" style="grid-template-columns:1fr">
+            <div>
+              <p class="name" style="color:var(--warn)">"Where are the tests?"</p>
+              <p class="desc">The original article mentioned only "quick checks" &mdash; no comprehensive tests. Community consensus: tests are non-negotiable. TDD with AI (write tests first, implement second) gets strong advocacy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>Real-world outcomes (not toy demos)</h2>
+          <div class="tag">shipped products</div>
+        </div>
+
+        <div class="layers">
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(34,197,94,.18), rgba(0,0,0,.10));">&#x2714;</div>
+            <div>
+              <p class="name">30,000 LOC application</p>
+              <p class="desc">~100K lines of planning docs behind it. Built in batches of &le;1,500 lines each. Maintained better documentation trail than manual development typically produces.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(6,182,212,.18), rgba(0,0,0,.10));">&#x2714;</div>
+            <div>
+              <p class="name">Live ticketing system (Kolibri Tickets)</p>
+              <p class="desc">Real Stripe payments, email delivery, ticket verification at the door. Frontend + backend, migrations, idempotency edges. Running and taking money in production.</p>
+            </div>
+          </div>
+          <div class="layer">
+            <div class="ico" style="background:linear-gradient(180deg, rgba(124,58,237,.18), rgba(0,0,0,.10));">&#x2714;</div>
+            <div>
+              <p class="name">University lecture slides</p>
+              <p class="desc">Detailed Quarto notes &rarr; Slidev slides via custom Claude skill. Annotations for layout changes, clipart generation, code example injection. Three-pass workflow: generate, annotate, tweak.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>What the thread rediscovered</h2>
+          <div class="tag">old lessons, new context</div>
+        </div>
+
+        <div class="callout">
+          <p>
+            Several experienced developers noted this workflow rediscovers <strong>fundamental software engineering
+            principles</strong> &mdash; smaller iterations, atomic commits, thorough planning, TDD &mdash; that had fallen
+            out of practice during rapid prototyping eras. AI didn't invent good engineering. It made good engineering
+            <strong>mandatory again</strong> because the cost of sloppy specification is now a 2,000-line wrong diff
+            instead of a 20-line wrong function.
+          </p>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionTitle">
+          <h2>The tools people mentioned</h2>
+          <div class="tag">emerging ecosystem</div>
+        </div>
+
+        <div class="twoCol">
+          <div class="box">
+            <div class="h"><b>Spec-first tools</b></div>
+            <p>
+              Amazon Kiro, Google Antigravity, GitHub Spec Kit, OpenSpec &mdash; all automate
+              the plan-then-execute pattern. Antigravity even includes UI for annotating plans.
+              But models sometimes silently downgrade specialized requirements.
+            </p>
+          </div>
+          <div class="box">
+            <div class="h"><b>Multi-model workflows</b></div>
+            <p>
+              Using GPT for planning/exploration to bootstrap conversations with Claude for execution.
+              Helps form better questions and derisk usage limits. "I'm having richer conversations
+              now because I'm more confident in my prompts."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- DIAGNOSTIC -->
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h2>What's your optimal Claude Code workflow?</h2>
+        <div class="tag">interactive diagnostic</div>
+      </div>
+
+      <div class="diag">
+        <div class="q">
+          <div class="top">
+            <label for="projSize">Typical project size</label>
+            <div class="v"><span id="projSizeV">50</span>/100 (small &rarr; large)</div>
+          </div>
+          <input type="range" id="projSize" min="0" max="100" value="50" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="expLevel">Your coding experience level</label>
+            <div class="v"><span id="expLevelV">60</span>/100</div>
+          </div>
+          <input type="range" id="expLevel" min="0" max="100" value="60" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="testCulture">How strong is your test culture?</label>
+            <div class="v"><span id="testCultureV">40</span>/100</div>
+          </div>
+          <input type="range" id="testCulture" min="0" max="100" value="40" />
+        </div>
+
+        <div class="q">
+          <div class="top">
+            <label for="riskTol">Risk tolerance (throwaway vs production)</label>
+            <div class="v"><span id="riskTolV">35</span>/100 (production &rarr; throwaway)</div>
+          </div>
+          <input type="range" id="riskTol" min="0" max="100" value="35" />
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="result" id="result">
+        <h3 id="resultTitle">&mdash;</h3>
+        <p id="resultDesc">Adjust the sliders to see your recommended workflow.</p>
+        <div class="recList" id="recs"></div>
+        <div class="btnRow">
+          <button id="copy">Copy recommendation</button>
+          <button id="reset">Reset sliders</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <b>The meta-lesson:</b> AI coding tools didn't change what good engineering looks like.
+        They changed the cost of bad specification. The bottleneck moved from typing to verification.
+        Engineer the verification loop &mdash; and you can actually ship faster.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function showToast(text){
+      const t = $("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>t.classList.remove("show"), 1400);
+    }
+
+    const sliders = ["projSize","expLevel","testCulture","riskTol"];
+
+    function assess(){
+      const v = {};
+      sliders.forEach(id => {
+        v[id] = +$(id).value;
+        $(id + "V").textContent = v[id];
+      });
+
+      const ps = v.projSize / 100;
+      const ex = v.expLevel / 100;
+      const tc = v.testCulture / 100;
+      const rt = v.riskTol / 100;
+
+      // Structure score: higher = more structure needed
+      const structure = clamp01(0.35 * ps + 0.15 * (1 - rt) + 0.20 * tc + 0.15 * ex + 0.15 * (1 - rt));
+      const structPct = Math.round(structure * 100);
+
+      let title, desc;
+      const recs = [];
+
+      if (rt > 0.7 && ps < 0.3) {
+        // Throwaway + small = vibe code
+        title = `Vibe coding is fine here (structure: ${structPct}%)`;
+        desc = "For small throwaway projects, the overhead of full planning isn't justified. Prompt, iterate, throw away what doesn't work. Speed matters more than architecture.";
+        recs.push({s:"good", t:"Just prompt and iterate", d:"Don't over-plan. Fast feedback loops beat perfect specs for disposable code."});
+        recs.push({s:"warn", t:"Know when to switch modes", d:"If you find yourself debugging for longer than it would take to plan, switch to a more structured approach."});
+      } else if (ps > 0.65 || (ex > 0.6 && ps > 0.4)) {
+        // Large project or experienced + medium
+        title = `Thin vertical slices + verification loops (structure: ${structPct}%)`;
+        desc = "Your project size and experience level point toward the closed-loop approach favored by senior developers in the thread. Scaffold first, then iterate in thin slices with tests.";
+        recs.push({s:"good", t:"Start with a runnable scaffold", d:"Get end-to-end working (even if minimal) before adding features. This makes every subsequent slice verifiable."});
+        recs.push({s:"good", t:"One thin slice at a time", d:"Don't let the model touch 15 files speculatively. Add one feature, test it, commit it. Batch plans to ≤1,500 lines."});
+        recs.push({s:"good", t:"Build a living knowledge base", d:"Every correction becomes a durable rule (CLAUDE.md, memory files). Stop repeating yourself."});
+        if (tc < 0.5) {
+          recs.push({s:"warn", t:"Invest in test infrastructure first", d:`Test culture at ${v.testCulture}/100 is a bottleneck. The verification loop only works if verification is automated.`});
+        }
+        recs.push({s:"good", t:"Clear context between phases", d:"Restart sessions between architecture → design → implementation. Fresh context catches drift."});
+      } else if (ps > 0.35) {
+        // Medium projects
+        title = `Plan → batch execute (structure: ${structPct}%)`;
+        desc = "Medium-sized projects benefit from upfront planning but don't need full BDD/TDD. Write a plan, review it, execute in bounded batches.";
+        recs.push({s:"good", t:"Write the plan first, but keep it bounded", d:"Architecture + implementation plan → execute in batches of ≤1,500 lines. Don't one-shot the whole thing."});
+        recs.push({s:"warn", t:"Don't fall into big-bang execution", d:"If the plan is wrong, you'll have to start over. Break it into phases you can verify independently."});
+        recs.push({s:"good", t:"Use annotations heavily", d:"Inline comments like 'this should be split' or 'pull example from X' are more effective than separate instructions."});
+        if (tc > 0.5) {
+          recs.push({s:"good", t:"Write tests alongside (not after)", d:"Your test culture supports TDD with AI: write test specs first, then have Claude implement to pass them."});
+        }
+      } else {
+        // Small projects
+        title = `Annotated plan → execute (structure: ${structPct}%)`;
+        desc = "For smaller production work, a quick plan with annotations is enough. Focus on making the spec clear enough that Claude doesn't make invisible assumption errors.";
+        recs.push({s:"good", t:"Quick plan with inline annotations", d:"Write what you want, annotate the tricky parts, let Claude execute. Review before committing."});
+        recs.push({s:"warn", t:"Surface assumptions explicitly", d:"The failure mode isn't wrong syntax — it's wrong architectural assumptions. State constraints upfront."});
+        recs.push({s:"good", t:"Atomic commits with reasoning", d:"Commit each logical change separately with clear messages. Makes rollback cheap."});
+      }
+
+      $("resultTitle").textContent = title;
+      $("resultDesc").textContent = desc;
+
+      const recsEl = $("recs");
+      recsEl.innerHTML = "";
+      for (const item of recs) {
+        const row = document.createElement("div");
+        row.className = "rec";
+        row.innerHTML = `<span class="chip ${item.s}"></span><div><b>${item.t}</b><div style="margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45">${item.d}</div></div>`;
+        recsEl.appendChild(row);
+      }
+
+      return { ...v, structPct, title, desc, recs };
+    }
+
+    function copyRec(){
+      const r = assess();
+      const lines = [
+        "Claude Code Workflow Recommendation",
+        "---",
+        `Project size: ${r.projSize}/100`,
+        `Experience level: ${r.expLevel}/100`,
+        `Test culture: ${r.testCulture}/100`,
+        `Risk tolerance: ${r.riskTol}/100`,
+        "",
+        `Structure score: ${r.structPct}%`,
+        "",
+        r.title,
+        r.desc,
+        "",
+        "Recommendations:",
+        ...r.recs.map((x,i) => `${i+1}. ${x.t} — ${x.d}`)
+      ];
+      navigator.clipboard.writeText(lines.join("\n")).then(
+        ()=>showToast("Copied recommendation to clipboard"),
+        ()=>showToast("Couldn't access clipboard")
+      );
+    }
+
+    function resetAll(){
+      $("projSize").value = 50;
+      $("expLevel").value = 60;
+      $("testCulture").value = 40;
+      $("riskTol").value = 35;
+      assess();
+      showToast("Reset sliders");
+    }
+
+    sliders.forEach(id => $(id).addEventListener("input", assess));
+    $("copy").addEventListener("click", copyRec);
+    $("reset").addEventListener("click", resetAll);
+
+    assess();
+  </script>
+</body>
+</html>
