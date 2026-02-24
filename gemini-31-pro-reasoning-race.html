@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Google's Gemini 3.1 Pro: the smartest naked reasoner at 1/7th the cost. Why 6 types of hard work matter more than benchmarks." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Gemini, Google, Reasoning, Model Routing, Problem Types, Benchmarks" />
+  <meta name="icon" content="🧠" />
+  <meta name="created" content="2026-02-24" />
+  <title>Gemini 3.1 Pro &amp; the Reasoning Race: 6 Types of Hard</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+
+    .slider{
+      display:grid;gap:8px;margin-top:10px
+    }
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+
+    /* SVG look */
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>INFographic &bull; February 2026 &bull; &ldquo;Which AI for which problem?&rdquo;</span></div>
+          <h1>Gemini 3.1 Pro &amp; the 6 types of &ldquo;hard&rdquo;</h1>
+          <p class="sub">
+            Google shipped the smartest pure reasoner at 1/7th the cost &mdash; and they don&rsquo;t care if you use it daily.
+            This page maps the three model archetypes, six dimensions of difficulty, and why &ldquo;which AI is best?&rdquo;
+            is now the wrong question. The right question: which AI for which problem?
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Theme</b> Naked reasoning vs equipped reasoning</div>
+            <div class="chip"><b>Theme</b> Google&rsquo;s vertical silicon-to-science stack</div>
+            <div class="chip"><b>Theme</b> 6 dimensions of difficulty &rarr; model routing</div>
+            <div class="chip"><b>Theme</b> &ldquo;Solve intelligence, then solve everything else&rdquo;</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any story below to expand. Use Focus buttons to highlight connections on the SVG map. Try the simulators to stress-test which model fits your work.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: key numbers</h2>
+          <small>3 KPIs &bull; 1 map</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>ARC-AGI2 score</small>
+              <b>77.1%</b>
+              <span>Doubled from 31.1% in 90 days &mdash; largest single-gen reasoning gain ever.</span>
+            </div>
+            <div class="kpi">
+              <small>Cost ratio</small>
+              <b>1/7th</b>
+              <span>$2/M input tokens vs $15/M for Opus 4.6. Billion-token workloads: $2K vs $15K/mo.</span>
+            </div>
+            <div class="kpi">
+              <small>Unsolved problems</small>
+              <b>18</b>
+              <span>Deep Think solved 18 previously unsolved problems across math, physics, CS &amp; economics.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Models / archetypes</div>
+            <div class="key"><span class="sq c2"></span> Pure reasoning</div>
+            <div class="key"><span class="sq c3"></span> Google&rsquo;s stack</div>
+            <div class="key"><span class="sq c4"></span> Problem types</div>
+            <div class="key"><span class="sq c5"></span> Human-only axes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 stories that matter</h2>
+          <div class="pill">Click to expand &bull; skim fast</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 Benchmark dominance -->
+          <details class="story" open data-story="benchmarks">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">1</div>
+                <div class="titleBlock">
+                  <b>Benchmark dominance: 77.1% ARC-AGI2 &mdash; but tools change the story</b>
+                  <span>Naked reasoning king, but Opus 4.6 catches up &amp; pulls ahead when equipped with tools</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Gemini 3.1 Pro leads 13/16 benchmarks. The 46-point ARC-AGI2 jump in 90 days is the largest
+                single-generation reasoning gain any frontier model family has ever produced. But when you add web search,
+                code execution, and database access, Opus 4.6 catches up and often pulls ahead &mdash; scoring 53.1% vs
+                Gemini&rsquo;s 51.4% on Humanity&rsquo;s Last Exam with tools, and leading by 289 ELO on GDPVal (expert
+                office &amp; financial tasks).
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Naked benchmarks</h4>
+                  <ul>
+                    <li><span class="mono">ARC-AGI2</span>: 77.1% (Opus 68.8%, GPT 5.2 lower)</li>
+                    <li>GPQA Diamond (science): near-saturation scores</li>
+                    <li>Live Codebench Pro: very strong coding marks</li>
+                    <li>Configurable thinking: low / medium / high / max</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Equipped (with tools)</h4>
+                  <ul>
+                    <li>Humanity&rsquo;s Last Exam + tools: <span class="mono">Opus leads</span></li>
+                    <li>GDPVal (office/finance): Opus +289 ELO gap</li>
+                    <li>Arena coding + human preference: Claude wins</li>
+                    <li>Pattern: <span class="mono">naked &ne; equipped</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Key insight:</b> &ldquo;Google built a better engine. Anthropic built a better car. OpenAI built a better racing transmission.&rdquo;
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 Google's vertical stack -->
+          <details class="story" data-story="stack">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">2</div>
+                <div class="titleBlock">
+                  <b>Google&rsquo;s vertical stack: from transistor design to Nobel Prizes</b>
+                  <span>$100B+ free cash flow &bull; Ironwood TPUs &bull; competitors train on Google&rsquo;s hardware</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Google controls the full stack: custom Ironwood TPUs (7th gen, 10x compute, half energy), Google Cloud
+                (used by 9/10 AI research labs), 650M+ monthly Gemini users, and DeepMind&rsquo;s Nobel-winning AlphaFold.
+                Anthropic signed a multi-billion-dollar deal for a million TPUs. Meta is negotiating similar. When your
+                competitors train on your hardware, you have built something beyond a moat.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The stack</h4>
+                  <ul>
+                    <li><span class="mono">Silicon</span>: Ironwood TPU, 9,216-chip pods</li>
+                    <li><span class="mono">Cloud</span>: 9/10 AI labs use Google Cloud</li>
+                    <li><span class="mono">Distribution</span>: 650M Gemini + search + Android</li>
+                    <li><span class="mono">Research</span>: DeepMind &rarr; Nobel Prize (AlphaFold)</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why nobody else can replicate this</h4>
+                  <ul>
+                    <li>Microsoft: no chips, fragmented Copilot UX</li>
+                    <li>Amazon: AWS + Trainium chips, but models trail frontier</li>
+                    <li>Meta: research + social, but no cloud or chip stack</li>
+                    <li>Anthropic: best agentic product, but runs on others&rsquo; hardware</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Flywheel:</b> Jeff Dean is using AI to shrink TPU design cycles from 2 years to 6&ndash;9 months. Intelligence building the hardware that runs intelligence.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 Three model archetypes -->
+          <details class="story" data-story="archetypes">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">3</div>
+                <div class="titleBlock">
+                  <b>Three model archetypes: naked reasoner, equipped reasoner, specialist coder</b>
+                  <span>Gemini = engine &bull; Opus = car &bull; Codex = racing transmission</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                The model landscape has clearly differentiated. Gemini 3.1 Pro is the strongest naked reasoner &mdash; pure
+                thinking, novel logic, first-principles deduction. Opus 4.6 is the strongest equipped reasoner &mdash;
+                combining intelligence with tools, APIs, file systems, and sustained work over hours and days. GPT 5.3/Codex
+                is the strongest specialist coder with self-bootstrapping sandboxes and thousand-token/sec throughput.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>When to pick each</h4>
+                  <ul>
+                    <li><span class="mono">Gemini 3.1 Pro</span>: novel logic, multi-step deduction, science, math</li>
+                    <li><span class="mono">Opus 4.6</span>: agentic work, tool use, multi-day coding, team coordination</li>
+                    <li><span class="mono">GPT 5.3 / Codex</span>: specialized coding pipelines, throughput-critical tasks</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>The real question</h4>
+                  <ul>
+                    <li>&ldquo;Which model is smartest?&rdquo; &rarr; wrong question</li>
+                    <li>&ldquo;Is the bottleneck raw thinking or acting on thinking?&rdquo; &rarr; right question</li>
+                    <li>Model routing is now a skill &mdash; domain-specific, compounds weekly</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Practical:</b> model routing is the gap between commodity AI usage and actual leverage. Nobody will build that routing for your domain except you.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 Six types of hard -->
+          <details class="story" data-story="hardtypes">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">4</div>
+                <div class="titleBlock">
+                  <b>Six types of &ldquo;hard&rdquo;: why benchmarks only measure one axis</b>
+                  <span>Reasoning &bull; Effort &bull; Coordination &bull; Emotional intelligence &bull; Judgment &bull; Ambiguity</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                We&rsquo;ve been treating &ldquo;hard work&rdquo; as one thing. It&rsquo;s not. Each dimension is getting
+                automated on a different timeline by different tools. Pure reasoning is ~10% of most knowledge work. The other
+                90% is effort, coordination, emotional intelligence, judgment, and ambiguity &mdash; and those map to very
+                different models (or no model at all).
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>AI-tractable axes (automating now)</h4>
+                  <ul>
+                    <li><span class="mono">Reasoning</span>: multi-jurisdiction tax, derivative pricing, fraud tracing &rarr; <b>Gemini on max</b></li>
+                    <li><span class="mono">Effort</span>: 3K vendor audits, 2M-line migrations, churn reviews &rarr; <b>agentic Opus / Codex</b></li>
+                    <li><span class="mono">Coordination</span>: aligning 6 teams, routing dependencies, org awareness &rarr; <b>Opus agent teams</b></li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Human-dominant axes (not automating soon)</h4>
+                  <ul>
+                    <li><span class="mono">Emotional IQ</span>: feedback during divorce, reading boardroom silence</li>
+                    <li><span class="mono">Judgment / Willpower</span>: killing a 6-month project, saying no to lucrative client</li>
+                    <li><span class="mono">Ambiguity</span>: contradictory market signals, what does the customer actually want?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>The 10/90 split:</b> the tax attorney spends 10% on the genuine multi-jurisdiction reasoning puzzle &mdash; and 90% on client management, coordination, and navigating ambiguity. A better engine helps the 10%. A better car helps the 90%.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 Demis Hassabis & the long game -->
+          <details class="story" data-story="mission">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">5</div>
+                <div class="titleBlock">
+                  <b>Demis Hassabis&rsquo;s mission: &ldquo;Solve intelligence, then solve everything else&rdquo;</b>
+                  <span>Deep Think &bull; 18 unsolved problems &bull; AGI within 5 years &bull; the product race is a sideshow</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Hassabis has repeated the same sentence for 15 years &mdash; from when DeepMind was an unknown London startup,
+                through AlphaGo, through the Nobel Prize, through Davos. Google isn&rsquo;t trying to win the product race.
+                They think it&rsquo;s a sideshow. The main event is intelligence itself. Deep Think collaborated with
+                researchers to solve 18 previously unsolved problems &mdash; disproving a 2015 conjecture, crossing
+                disciplinary boundaries humans rarely cross.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Deep Think breakthroughs</h4>
+                  <ul>
+                    <li>Disproved a 2015 online submodular optimization conjecture</li>
+                    <li>Solved max-cut via Krivine theorem + measure theory (cross-disciplinary)</li>
+                    <li>Caught a critical error in a cryptography paper</li>
+                    <li>Isomorphic Labs: 2x AlphaFold 3 accuracy on hardest protein tasks</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Google&rsquo;s quiet game</h4>
+                  <ul>
+                    <li>$93B capex this year, mostly AI</li>
+                    <li>Hassabis: AGI &ldquo;very very soon&rdquo; (updated to ~5 years)</li>
+                    <li>Can lose the model race entirely and still be fine</li>
+                    <li>Models are experiments in intelligence, not the business</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Strategic read:</b> Google is building &ldquo;the thing underneath the thing&rdquo; &mdash; the engine that disproves conjectures, discovers drug-binding sites, and pushes what &ldquo;thinking&rdquo; means when a machine does it.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive strategy map</h2>
+          <small>Models + problem types</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="benchmarks"><span class="sw b"></span>Benchmarks</button>
+            <button class="btn" data-focus="stack"><span class="sw"></span>Google stack</button>
+            <button class="btn" data-focus="archetypes"><span class="sw p"></span>Archetypes</button>
+            <button class="btn" data-focus="hardtypes"><span class="sw o"></span>6 types of hard</button>
+            <button class="btn" data-focus="mission"><span class="sw r"></span>Mission</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 520" width="100%" height="auto" role="img" aria-label="Strategy map: models, problem types, and connections">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <!-- Model archetype connections -->
+                <path id="l-gemini-reasoning" d="M160,75 C200,120 220,140 250,170" />
+                <path id="l-opus-effort" d="M400,75 C410,120 390,140 370,170" />
+                <path id="l-opus-coord" d="M400,75 C440,120 450,160 440,200" />
+                <path id="l-codex-effort" d="M560,75 C540,120 490,150 430,170" />
+                <!-- Problem type to human axes -->
+                <path id="l-reasoning-science" d="M250,200 C220,240 180,260 140,290" />
+                <path id="l-effort-coord" d="M370,200 C390,225 420,230 440,230" />
+                <path id="l-coord-emotional" d="M440,260 C430,290 380,310 340,330" />
+                <path id="l-emotional-judgment" d="M340,360 C300,380 260,390 230,400" />
+                <path id="l-judgment-ambiguity" d="M230,430 C280,440 340,440 400,430" />
+                <!-- Google stack connections -->
+                <path id="l-stack-gemini" d="M90,290 C110,220 130,140 160,75" />
+                <path id="l-stack-science" d="M140,310 C140,310 140,310 140,310" />
+                <!-- Mission connections -->
+                <path id="l-mission-stack" d="M90,420 C80,380 80,340 90,300" />
+                <path id="l-mission-reasoning" d="M140,420 C180,380 220,330 250,290" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+
+                <!-- Three model archetypes (top row) -->
+                <g class="node" id="n-gemini" data-node="gemini">
+                  <rect x="60" y="40" rx="14" ry="14" width="195" height="66" fill="rgba(59,130,246,.12)" stroke="rgba(59,130,246,.30)"/>
+                  <text x="78" y="66" fill="#EAF0FF" font-weight="700">Gemini 3.1 Pro</text>
+                  <text x="78" y="86" fill="rgba(234,240,255,.75)" font-size="12">naked reasoner &bull; 1/7th cost</text>
+                </g>
+
+                <g class="node" id="n-opus" data-node="opus">
+                  <rect x="280" y="40" rx="14" ry="14" width="195" height="66" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.30)"/>
+                  <text x="298" y="66" fill="#EAF0FF" font-weight="700">Opus 4.6</text>
+                  <text x="298" y="86" fill="rgba(234,240,255,.75)" font-size="12">equipped reasoner &bull; tools</text>
+                </g>
+
+                <g class="node" id="n-codex" data-node="codex">
+                  <rect x="490" y="40" rx="14" ry="14" width="120" height="66" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.30)"/>
+                  <text x="505" y="66" fill="#EAF0FF" font-weight="700">Codex 5.3</text>
+                  <text x="505" y="86" fill="rgba(234,240,255,.75)" font-size="12">specialist coder</text>
+                </g>
+
+                <!-- Six problem types (middle band) -->
+                <g class="node" id="n-reasoning" data-node="reasoning">
+                  <rect x="160" y="150" rx="14" ry="14" width="190" height="62" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.24)"/>
+                  <text x="178" y="176" fill="#EAF0FF" font-weight="700">Reasoning</text>
+                  <text x="178" y="194" fill="rgba(234,240,255,.75)" font-size="11">tax, derivatives, fraud &bull; ~10%</text>
+                </g>
+
+                <g class="node" id="n-effort" data-node="effort">
+                  <rect x="370" y="150" rx="14" ry="14" width="170" height="62" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="388" y="176" fill="#EAF0FF" font-weight="700">Effort</text>
+                  <text x="388" y="194" fill="rgba(234,240,255,.75)" font-size="11">3K audits, 2M-line migration</text>
+                </g>
+
+                <g class="node" id="n-coordination" data-node="coordination">
+                  <rect x="370" y="230" rx="14" ry="14" width="195" height="62" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="388" y="256" fill="#EAF0FF" font-weight="700">Coordination</text>
+                  <text x="388" y="274" fill="rgba(234,240,255,.75)" font-size="11">6 teams, routing, org awareness</text>
+                </g>
+
+                <g class="node" id="n-emotional" data-node="emotional">
+                  <rect x="240" y="310" rx="14" ry="14" width="205" height="62" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="258" y="336" fill="#EAF0FF" font-weight="700">Emotional intelligence</text>
+                  <text x="258" y="354" fill="rgba(234,240,255,.75)" font-size="11">feedback, boardroom, reorgs</text>
+                </g>
+
+                <g class="node" id="n-judgment" data-node="judgment">
+                  <rect x="130" y="390" rx="14" ry="14" width="210" height="62" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="148" y="416" fill="#EAF0FF" font-weight="700">Judgment &amp; willpower</text>
+                  <text x="148" y="434" fill="rgba(234,240,255,.75)" font-size="11">kill projects, say no, take risk</text>
+                </g>
+
+                <g class="node" id="n-ambiguity" data-node="ambiguity">
+                  <rect x="360" y="390" rx="14" ry="14" width="195" height="62" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.24)"/>
+                  <text x="378" y="416" fill="#EAF0FF" font-weight="700">Ambiguity</text>
+                  <text x="378" y="434" fill="rgba(234,240,255,.75)" font-size="11">contradictory signals, vague asks</text>
+                </g>
+
+                <!-- Google stack (left column) -->
+                <g class="node" id="n-stack" data-node="stack">
+                  <rect x="20" y="270" rx="14" ry="14" width="140" height="62" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="34" y="296" fill="#EAF0FF" font-weight="700">Google stack</text>
+                  <text x="34" y="314" fill="rgba(234,240,255,.75)" font-size="11">TPUs &rarr; Cloud &rarr; apps</text>
+                </g>
+
+                <!-- Mission (bottom-left) -->
+                <g class="node" id="n-mission" data-node="mission">
+                  <rect x="20" y="400" rx="14" ry="14" width="100" height="62" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="32" y="426" fill="#EAF0FF" font-weight="700" font-size="13">Hassabis</text>
+                  <text x="32" y="444" fill="rgba(234,240,255,.75)" font-size="10">solve intelligence</text>
+                </g>
+
+                <!-- Divider labels -->
+                <text x="310" y="138" text-anchor="middle" fill="rgba(234,240,255,.30)" font-size="10" letter-spacing=".14em">PROBLEM TYPES</text>
+                <text x="310" y="300" text-anchor="middle" fill="rgba(234,240,255,.30)" font-size="10" letter-spacing=".14em">HUMAN-DOMINANT AXES</text>
+                <text x="310" y="480" text-anchor="middle" fill="rgba(234,240,255,.30)" font-size="10" letter-spacing=".14em">AI helps the 10% &bull; humans own the 90%</text>
+
+                <!-- Automation arrows -->
+                <g id="fly" opacity="0.85">
+                  <circle cx="575" cy="160" r="36" fill="rgba(59,130,246,.06)" stroke="rgba(59,130,246,.24)" stroke-width="2"/>
+                  <path d="M575 124 A36 36 0 1 1 545 186" stroke="rgba(59,130,246,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M545 186 L554 183 L550 194 Z" fill="rgba(59,130,246,.70)"/>
+                  <text x="575" y="157" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="10" font-weight="700">model</text>
+                  <text x="575" y="170" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="10" font-weight="700">routing</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>map your work &bull; pick your model</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Problem type analyzer &mdash; what kind of hard is your work?</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Reasoning depth needed: <span id="reasonVal" class="mono">4</span>/10
+                  </label>
+                  <input id="reason" type="range" min="0" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Effort / volume scale: <span id="effortVal" class="mono">6</span>/10
+                  </label>
+                  <input id="effort" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Coordination complexity: <span id="coordVal" class="mono">5</span>/10
+                  </label>
+                  <input id="coord" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Ambiguity / judgment load: <span id="ambigVal" class="mono">7</span>/10
+                  </label>
+                  <input id="ambig" type="range" min="0" max="10" value="7" />
+                </div>
+                <div class="callout" id="ptaRes" style="margin-top:10px">
+                  <b>Profile:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Model router &mdash; what % of your work matches each model?</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % novel logic / first-principles (Gemini): <span id="gemPctVal" class="mono">15</span>%
+                  </label>
+                  <input id="gemPct" type="range" min="0" max="100" value="15" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % tool-heavy / multi-day agentic (Opus): <span id="opPctVal" class="mono">45</span>%
+                  </label>
+                  <input id="opPct" type="range" min="0" max="100" value="45" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % specialist coding pipelines (Codex): <span id="cxPctVal" class="mono">25</span>%
+                  </label>
+                  <input id="cxPct" type="range" min="0" max="100" value="25" />
+                </div>
+                <div class="callout" id="routerRes" style="margin-top:10px; border-left-color:rgba(139,92,246,.9); background:rgba(139,92,246,.10)">
+                  <b>Routing:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Cost calculator &mdash; monthly token volume + model choice</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Monthly input tokens (millions): <span id="tokInVal" class="mono">100</span>M
+                  </label>
+                  <input id="tokIn" type="range" min="1" max="2000" value="100" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Monthly output tokens (millions): <span id="tokOutVal" class="mono">20</span>M
+                  </label>
+                  <input id="tokOut" type="range" min="1" max="500" value="20" />
+                </div>
+                <div class="callout" id="costRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.9); background:rgba(20,184,166,.10)">
+                  <b>Cost:</b> &mdash;
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally rough. The goal is to force the &ldquo;so what?&rdquo; into numbers you can argue with.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this (action checklist)</h2>
+          <small>Three moves for tomorrow</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>Map your work&rsquo;s difficulty dimensions</h4>
+              <ul>
+                <li>Stop asking &ldquo;which AI is best?&rdquo; &mdash; start asking &ldquo;which AI for which problem?&rdquo;</li>
+                <li>Decompose your weekly tasks: what % is reasoning, effort, coordination, ambiguity, emotional IQ, judgment?</li>
+                <li>If most value comes from axes AI isn&rsquo;t automating, you can sleep better &mdash; but route the tractable parts.</li>
+                <li>If most value is reasoning or effort: move deliberately toward human-judgment dimensions.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>Build model-routing skill + output taste</h4>
+              <ul>
+                <li>Route financial modeling to <span class="mono">Gemini on high</span>, coding to <span class="mono">Claude Code</span>, quick research to <span class="mono">Gemini Flash</span>, deep doc analysis to <span class="mono">Opus</span>.</li>
+                <li>The gap between &ldquo;I use ChatGPT for everything&rdquo; and domain-specific routing is the difference between commodity usage and actual leverage.</li>
+                <li>Build the taste to evaluate AI output in your domain &mdash; every model improvement makes this more urgent, not less.</li>
+                <li>A mathematician used Deep Think to catch a flaw in peer-reviewed work. The model found it; the human had to validate it. Both steps were necessary.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Meta-lesson:</b> the model landscape has differentiated enough that &ldquo;which AI should I use?&rdquo; is the wrong question. The right question: &ldquo;which AI for which problem?&rdquo; People who route models well will outperform those who use one model for everything &mdash; and that margin widens every month.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      benchmarks: ["n-gemini","n-opus","n-codex","n-reasoning","fly"],
+      stack:      ["n-stack","n-gemini","n-mission"],
+      archetypes: ["n-gemini","n-opus","n-codex","n-reasoning","n-effort","n-coordination","fly"],
+      hardtypes:  ["n-reasoning","n-effort","n-coordination","n-emotional","n-judgment","n-ambiguity"],
+      mission:    ["n-mission","n-stack","n-gemini","n-reasoning"]
+    };
+
+    const linkMap = {
+      benchmarks: ["l-gemini-reasoning","l-opus-effort","l-opus-coord","l-codex-effort"],
+      stack:      ["l-stack-gemini","l-mission-stack"],
+      archetypes: ["l-gemini-reasoning","l-opus-effort","l-opus-coord","l-codex-effort","l-effort-coord"],
+      hardtypes:  ["l-coord-emotional","l-emotional-judgment","l-judgment-ambiguity","l-reasoning-science"],
+      mission:    ["l-mission-stack","l-mission-reasoning","l-stack-gemini"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+      $("#fly").style.filter = "";
+      $("#fly").style.opacity = "0.85";
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+
+      // dim everything a bit
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g) || g;
+        if(rect && rect.tagName.toLowerCase()==="rect"){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        } else {
+          g.style.filter = "url(#glow)";
+          g.style.opacity = "1";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          benchmarks:"rgba(59,130,246,.75)",
+          stack:"rgba(20,184,166,.75)",
+          archetypes:"rgba(139,92,246,.70)",
+          hardtypes:"rgba(245,158,11,.75)",
+          mission:"rgba(239,68,68,.70)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      const labels = {
+        benchmarks: "Benchmarks",
+        stack: "Google stack",
+        archetypes: "Model archetypes",
+        hardtypes: "6 types of hard",
+        mission: "Hassabis mission"
+      };
+      toast(`<b>Focus:</b> ${labels[focus] || focus} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full system view.`);
+    });
+
+    // Click nodes to jump to story
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        const pick = (id==="gemini") ? "benchmarks"
+                    : (id==="opus" || id==="codex") ? "archetypes"
+                    : (id==="reasoning") ? "benchmarks"
+                    : (id==="effort" || id==="coordination") ? "hardtypes"
+                    : (id==="emotional" || id==="judgment" || id==="ambiguity") ? "hardtypes"
+                    : (id==="stack") ? "stack"
+                    : (id==="mission") ? "mission"
+                    : "benchmarks";
+        highlight(pick);
+        const story = $(`details.story[data-story="${pick}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+
+    // 1. Problem type analyzer
+    const reason=$("#reason"), effort=$("#effort"), coord=$("#coord"), ambig=$("#ambig");
+    const reasonVal=$("#reasonVal"), effortVal=$("#effortVal"), coordVal=$("#coordVal"), ambigVal=$("#ambigVal");
+    const ptaRes=$("#ptaRes");
+
+    function calcPTA(){
+      const R=+reason.value, E=+effort.value, C=+coord.value, A=+ambig.value;
+      reasonVal.textContent=R; effortVal.textContent=E; coordVal.textContent=C; ambigVal.textContent=A;
+
+      const total = R+E+C+A || 1;
+      const rPct = Math.round(R/total*100);
+      const ePct = Math.round(E/total*100);
+      const cPct = Math.round(C/total*100);
+      const aPct = Math.round(A/total*100);
+
+      const aiTractable = rPct + ePct + Math.round(cPct*0.6);
+      const humanDom = aPct + Math.round(cPct*0.4);
+
+      let verdict, advice;
+      if(rPct >= 35){
+        verdict = "Reasoning-heavy profile";
+        advice = `${rPct}% reasoning — Gemini 3.1 Pro on max is your primary tool. Route the ${ePct}% effort slice to agentic Opus. The ${aPct}% ambiguity is yours to own.`;
+      } else if(ePct >= 35){
+        verdict = "Effort-heavy profile";
+        advice = `${ePct}% effort — agentic models (Opus, Codex) are your biggest lever. You don't need frontier reasoning for most of this; even cheaper models work. Focus human time on the ${aPct}% ambiguity slice.`;
+      } else if(aPct >= 35){
+        verdict = "Ambiguity-dominant profile";
+        advice = `${aPct}% ambiguity + judgment — this is human territory. AI helps explore options but can't resolve the ambiguity. Your edge is product sense, strategic intuition, and the nerve to act.`;
+      } else {
+        verdict = "Balanced difficulty mix";
+        advice = `No single axis dominates. Use model routing: Gemini for the ${rPct}% reasoning, Opus for the ${ePct}% effort + ${cPct}% coordination, and human judgment for the ${aPct}% ambiguity.`;
+      }
+      ptaRes.innerHTML = `<b>Profile:</b> ${verdict}<br><span style="color:var(--muted)">~${aiTractable}% AI-tractable, ~${humanDom}% human-dominant. ${advice}</span>`;
+    }
+    [reason, effort, coord, ambig].forEach(i=> i.addEventListener("input", calcPTA));
+    calcPTA();
+
+    // 2. Model router
+    const gemPct=$("#gemPct"), opPct=$("#opPct"), cxPct=$("#cxPct");
+    const gemPctVal=$("#gemPctVal"), opPctVal=$("#opPctVal"), cxPctVal=$("#cxPctVal");
+    const routerRes=$("#routerRes");
+
+    function calcRouter(){
+      const G=+gemPct.value, O=+opPct.value, C=+cxPct.value;
+      gemPctVal.textContent=G; opPctVal.textContent=O; cxPctVal.textContent=C;
+
+      const total = G+O+C;
+      const human = Math.max(0, 100-total);
+
+      let primary, verdict, advice;
+      if(O >= G && O >= C) primary = "Opus 4.6";
+      else if(G >= O && G >= C) primary = "Gemini 3.1 Pro";
+      else primary = "Codex 5.3";
+
+      if(total > 100){
+        verdict = "Over 100% allocated";
+        advice = "Your percentages exceed 100%. Adjust so they represent your real work distribution.";
+      } else if(human >= 40){
+        verdict = `${human}% is human-only work`;
+        advice = `Your primary model is ${primary} (${Math.max(G,O,C)}% of work). But ${human}% of your work isn't model-tractable yet — that's your durable edge. Invest there.`;
+      } else if(total >= 80){
+        verdict = `Highly model-leveraged (${total}%)`;
+        advice = `Primary: ${primary}. You're already routing ${total}% to models. Focus on building taste — can you tell when AI output is actually good? That judgment skill compounds.`;
+      } else {
+        verdict = `Mixed model + human (${total}% routed)`;
+        advice = `Primary: ${primary}. ${human}% is human-only. Good balance — keep mapping which tasks are tractable as models improve monthly.`;
+      }
+      routerRes.innerHTML = `<b>Routing:</b> ${verdict}<br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [gemPct, opPct, cxPct].forEach(i=> i.addEventListener("input", calcRouter));
+    calcRouter();
+
+    // 3. Cost calculator
+    const tokIn=$("#tokIn"), tokOut=$("#tokOut");
+    const tokInVal=$("#tokInVal"), tokOutVal=$("#tokOutVal");
+    const costRes=$("#costRes");
+
+    function calcCost(){
+      const I=+tokIn.value, O=+tokOut.value;
+      tokInVal.textContent=I; tokOutVal.textContent=O;
+
+      // Prices per million tokens
+      const geminiIn=2, geminiOut=12;
+      const opusIn=15, opusOut=75;
+      const codexIn=6, codexOut=30; // approximate
+
+      const gCost = (I*geminiIn + O*geminiOut);
+      const oCost = (I*opusIn + O*opusOut);
+      const cCost = (I*codexIn + O*codexOut);
+      const savings = oCost - gCost;
+      const ratio = oCost > 0 ? (oCost/gCost).toFixed(1) : "N/A";
+
+      const fmt = (n) => n >= 1000 ? `$${(n/1000).toFixed(1)}K` : `$${n.toLocaleString()}`;
+
+      let advice;
+      if(savings > 10000){
+        advice = `Massive savings opportunity. If pure reasoning suffices, Gemini saves ${fmt(savings)}/mo. But if you need tools + sustained work, Opus ROI may justify the cost.`;
+      } else if(savings > 2000){
+        advice = `Meaningful cost difference. Route pure-reasoning tasks to Gemini, keep tool-heavy work on Opus. Gemini's context caching can cut costs another 75%.`;
+      } else {
+        advice = `At this volume, cost difference is modest. Pick based on capability fit, not price. Gemini's configurable thinking (low/med/high/max) helps optimize further.`;
+      }
+      costRes.innerHTML = `<b>Cost:</b> Gemini: <span class="mono">${fmt(gCost)}/mo</span> &bull; Opus: <span class="mono">${fmt(oCost)}/mo</span> &bull; Codex: <span class="mono">${fmt(cCost)}/mo</span> &bull; Ratio: <span class="mono">${ratio}x</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [tokIn, tokOut].forEach(i=> i.addEventListener("input", calcCost));
+    calcCost();
+
+    // --- Nice: expand/collapse hint on first interaction
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to connect stories → strategy map.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

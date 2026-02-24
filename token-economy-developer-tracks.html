@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Computing's unit of work shifted from instruction to token. Three developer tracks emerge: orchestrators, systems builders, and domain translators." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Token Economy, Developer Careers, Jevons Paradox, AI Costs, Orchestration" />
+  <meta name="icon" content="🪙" />
+  <meta name="created" content="2026-02-24" />
+  <title>Token Economy &amp; the Three Developer Tracks</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+
+    .slider{
+      display:grid;gap:8px;margin-top:10px
+    }
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+
+    /* SVG look */
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>INFographic &bull; February 2026 &bull; "The unit of work changed"</span></div>
+          <h1>Token Economy &amp; the Three Developer Tracks</h1>
+          <p class="sub">
+            For 60 years the unit of work in computing was the instruction&mdash;deterministic, human-written, machine-executed.
+            Now it's the token: purchased intelligence you aim at outcomes. This page maps the economics, the three career
+            tracks that emerge, and the organizational restructuring that follows.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Shift</b> Instruction &rarr; Token</div>
+            <div class="chip"><b>Economics</b> Jevons' Paradox applied to intelligence</div>
+            <div class="chip"><b>Careers</b> Orchestrator / Systems Builder / Domain Translator</div>
+            <div class="chip"><b>Split</b> Generalized scale vs specialized precision</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any story below to expand. Use the Focus buttons on the right to highlight nodes on the strategy map. Try the mini simulators to stress-test your position.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the new token economy</h2>
+          <small>3 KPIs &bull; 1 map</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Token spend</small>
+              <b>$1,000/day</b>
+              <span>StrongDM's 3-person team: no handwritten code, pure token-driven output.</span>
+            </div>
+            <div class="kpi">
+              <small>Career tracks</small>
+              <b>3 Paths</b>
+              <span>Orchestrator, Systems Builder, Domain Translator &mdash; the exposed middle disappears.</span>
+            </div>
+            <div class="kpi">
+              <small>Leverage</small>
+              <b>3&ndash;5x Rev/Employee</b>
+              <span>AI-native companies run 3&ndash;5x revenue per employee vs traditional SaaS.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Paradigm shift</div>
+            <div class="key"><span class="sq c2"></span> Developer tracks</div>
+            <div class="key"><span class="sq c3"></span> Market split</div>
+            <div class="key"><span class="sq c4"></span> Token economics</div>
+            <div class="key"><span class="sq c5"></span> Risk / exposure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 shifts that matter</h2>
+          <div class="pill">Click to expand &bull; skim fast</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 Paradigm shift -->
+          <details class="story" open data-story="paradigm">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">1</div>
+                <div class="titleBlock">
+                  <b>The paradigm shift: from instruction to token</b>
+                  <span>60 years of deterministic computing replaced by purchased intelligence</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                The unit of work is no longer an instruction a human writes for a machine to execute. It's a token&mdash;a unit
+                of purchased intelligence. You describe outcomes, feed context, and buy enough inference to get results. The human's
+                job shifts from writing logic to specifying outcomes and managing the intelligence budget.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Old paradigm</h4>
+                  <ul>
+                    <li>Unit of work = <span class="mono">instruction</span> (deterministic).</li>
+                    <li>Human writes code, machine executes code.</li>
+                    <li>Value = how cleverly the human sequences instructions.</li>
+                    <li>Bottleneck = developer time &amp; headcount.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>New paradigm</h4>
+                  <ul>
+                    <li>Unit of work = <span class="mono">token</span> (purchased intelligence).</li>
+                    <li>Human specifies outcome, machine figures out the steps.</li>
+                    <li>Value = ability to convert tokens into economic outcomes.</li>
+                    <li>Bottleneck = context engineering &amp; token management.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Key insight:</b> This is not a tools upgrade. It's a change in what computing <em>is</em>. Intelligence is now a purchasable input with a price curve and a consumption curve.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 The numbers -->
+          <details class="story" data-story="numbers">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">2</div>
+                <div class="titleBlock">
+                  <b>The numbers: token costs are real and exploding</b>
+                  <span>$85K/mo avg AI spend &bull; Cursor's AWS spike &bull; Anthropic's $2.66B AWS bill</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                StrongDM CTO: 3-person team targets $1K/day in token spend, no handwritten code. Cursor's AWS cost spiked
+                from $6M to $12M in one month. Anthropic spent $2.66B on AWS against $2.55B revenue. Average org spends
+                $85K/month on AI (up 36% YoY). OpenAI planning $2K&ndash;$20K/month AI employee tiers.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Price curve (deflation)</h4>
+                  <ul>
+                    <li>Per-token inference costs falling <span class="mono">10x&ndash;200x/year</span>.</li>
+                    <li>GPT-4 equivalent: $20/M tokens (2022) &rarr; $0.40 today.</li>
+                    <li>Claude 4.5 Sonnet at $3/M input tokens &mdash; heading to cents.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Consumption curve (explosion)</h4>
+                  <ul>
+                    <li>Avg org: <span class="mono">$85K/mo</span> on AI, up 36% YoY.</li>
+                    <li>Share planning &gt;$100K/mo doubled: 20% &rarr; 45%.</li>
+                    <li>Enterprise LLM spend: $4.5M (2023) &rarr; $7M (2025) &rarr; $11M+ (2026).</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Jevons' Paradox:</b> when a resource gets cheaper, you use <em>more</em> not less. Steam engines got efficient &rarr; coal exploded. Cloud got cheaper &rarr; AWS bills went up. Token costs fall &rarr; consumption skyrockets.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 Three developer tracks -->
+          <details class="story" data-story="tracks">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">3</div>
+                <div class="titleBlock">
+                  <b>Three developer tracks &mdash; and the exposed middle</b>
+                  <span>Orchestrator gets rich &bull; Systems Builder highest ceiling &bull; Domain Translator doesn't know they're a dev yet</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                The role of developer is differentiating into three distinct tracks with different skills, compensation dynamics,
+                and career trajectories. The "exposed middle"&mdash;competent application coders without deep systems or domain
+                expertise&mdash;sees its value collapse at the same rate as token costs.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Track 1: The Orchestrator</h4>
+                  <ul>
+                    <li>Doesn't write code &mdash; specifies outcomes, manages agents.</li>
+                    <li>Skills: system design, spec writing, quality evaluation, token economics.</li>
+                    <li>"Factory managers of intelligence." Compensation correlates with token budgets.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Track 2: The Systems Builder</h4>
+                  <ul>
+                    <li>Builds infra orchestrators use: agent frameworks, eval pipelines, routing layers.</li>
+                    <li>Deep technical &mdash; understands model behavior at a mechanical level.</li>
+                    <li>Small volume, highest compensation ceiling. Leverage is company-wide.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="cols" style="margin-top:10px">
+                <div class="mini">
+                  <h4>Track 3: The Domain Translator</h4>
+                  <ul>
+                    <li>Combines technical fluency + deep domain expertise.</li>
+                    <li>The dental specialist, construction scheduler, insurance analyst who can now BUILD.</li>
+                    <li>Largest of the three tracks. "Doesn't even know they're a developer yet."</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4 style="color:var(--c5)">The Exposed Middle</h4>
+                  <ul>
+                    <li>Competent application coders without deep systems or domain expertise.</li>
+                    <li>Value of generic code production &rarr; zero at same rate as token costs.</li>
+                    <li>"Using AI to code" is not enough. You must pick a track.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Career test:</b> can you manage agents at scale, build the systems they run on, or point intelligence at the right problem in a specific market? If none, you're in the exposed middle.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 Org restructure -->
+          <details class="story" data-story="orgs">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">4</div>
+                <div class="titleBlock">
+                  <b>Organizational restructure: headcount &rarr; intelligence throughput</b>
+                  <span>500 engineers writing code &lt; 50 engineers managing agents &bull; Klarna's 7-figure rev/employee</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Output is no longer limited by headcount but by the ability to convert token spend into business value.
+                AI-native companies run 3&ndash;5x revenue per employee. Enterprise backlogs&mdash;projects never
+                economically viable before&mdash;become gold mines when building costs collapse.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The leverage shift</h4>
+                  <ul>
+                    <li>500 engineers writing code may produce <em>less</em> than 50 managing agents.</li>
+                    <li>Key: better specs, eval frameworks, context engineering, higher token budget per engineer.</li>
+                    <li>$10M ARR AI startup: ~15 people vs traditional SaaS ~60 people.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>The backlog gold mine</h4>
+                  <ul>
+                    <li>Internal tool saving 200 hrs/yr but costing 2,000 hrs to build &mdash; now viable.</li>
+                    <li>Integration unlocking new revenue but requiring 4 devs for 6 months &mdash; now viable.</li>
+                    <li>Enterprises optimizing for <span class="mono">output &amp; quality</span> beat those optimizing for headcount.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Klarna's lesson:</b> disastrous initial AI rollout, rehired customer service staff, but still hit 7-figure revenue/employee. The rocky path still compounds.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 Market split -->
+          <details class="story" data-story="market">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">5</div>
+                <div class="titleBlock">
+                  <b>Market split: generalized scale vs specialized precision</b>
+                  <span>$200/mo Claude Max aimed well &gt; $20K/mo agent budget aimed poorly</span>
+                </div>
+              </div>
+              <div class="chev">&#9662;</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Not big vs small. Enterprises compete on token volume + horizontal platforms. Startups and solopreneurs
+                win on specificity + distribution + domain expertise. Intelligence is a commodity &mdash; competitive
+                advantage migrates to everything <em>around</em> the commodity: distribution, domain knowledge, trust.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Enterprise play</h4>
+                  <ul>
+                    <li>Compete on token volume, build horizontal platforms.</li>
+                    <li>Run agents 24/7 on broad shared workflows.</li>
+                    <li>Advantage compounds with model upgrades. Moat = capital + infrastructure.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Specialist play</h4>
+                  <ul>
+                    <li>Win on specificity &mdash; the sharp angle, the niche market.</li>
+                    <li>$200/mo Claude Max aimed well creates more value than $20K/mo aimed poorly.</li>
+                    <li>Moat = distribution + trust + domain knowledge. Minimum viable team &rarr; 1.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Jevons' applied to TAM:</b> cheaper intelligence makes more niche problems economically viable. The addressable market for software is expanding explosively. Vertical AI companies have opportunities in niches that weren't possible 6 months ago.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive strategy map</h2>
+          <small>Play with assumptions</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="paradigm"><span class="sw b"></span>Paradigm shift</button>
+            <button class="btn" data-focus="numbers"><span class="sw o"></span>Token economics</button>
+            <button class="btn" data-focus="tracks"><span class="sw p"></span>Developer tracks</button>
+            <button class="btn" data-focus="orgs"><span class="sw"></span>Org restructure</button>
+            <button class="btn" data-focus="market"><span class="sw r"></span>Market split</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 460" width="100%" height="auto" role="img" aria-label="Token economy strategy map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-instr-token" d="M170,55 C240,55 280,55 350,55" />
+                <path id="l-token-orch" d="M440,80 C420,120 330,150 250,165" />
+                <path id="l-token-sys" d="M440,80 C440,120 430,150 410,165" />
+                <path id="l-token-dom" d="M440,80 C470,120 520,150 540,165" />
+                <path id="l-orch-org" d="M200,210 C200,240 200,260 200,280" />
+                <path id="l-sys-org" d="M360,210 C340,250 300,270 270,290" />
+                <path id="l-org-ent" d="M200,340 C180,360 140,375 130,385" />
+                <path id="l-org-spec" d="M280,340 C320,360 380,375 420,385" />
+                <path id="l-dom-spec" d="M540,210 C530,280 490,360 450,385" />
+                <path id="l-middle-exp" d="M410,210 C420,240 420,260 420,275" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <!-- Instruction (old) -->
+                <g class="node" id="n-instr" data-node="paradigm">
+                  <rect x="30" y="25" rx="14" ry="14" width="280" height="60" fill="rgba(107,114,128,.12)" stroke="rgba(107,114,128,.30)"/>
+                  <text x="48" y="52" fill="#EAF0FF" font-weight="700">Instruction era (60 years)</text>
+                  <text x="48" y="70" fill="rgba(234,240,255,.60)" font-size="12">deterministic, human writes code</text>
+                </g>
+
+                <!-- Token (new) -->
+                <g class="node" id="n-token" data-node="numbers">
+                  <rect x="340" y="25" rx="14" ry="14" width="250" height="60" fill="rgba(59,130,246,.12)" stroke="rgba(59,130,246,.30)"/>
+                  <text x="358" y="52" fill="#EAF0FF" font-weight="700">Token era (now)</text>
+                  <text x="358" y="70" fill="rgba(234,240,255,.75)" font-size="12">purchased intelligence, buy inference</text>
+                </g>
+
+                <!-- Arrow between eras -->
+                <g id="arrow-shift" opacity="0.8">
+                  <path d="M310,55 L340,55" stroke="var(--c1)" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                </g>
+                <defs>
+                  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--c1)"/>
+                  </marker>
+                </defs>
+
+                <!-- Track 1: Orchestrator -->
+                <g class="node" id="n-orch" data-node="orchestrator">
+                  <rect x="80" y="130" rx="14" ry="14" width="240" height="78" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.28)"/>
+                  <text x="98" y="160" fill="#EAF0FF" font-weight="700">Track 1: Orchestrator</text>
+                  <text x="98" y="180" fill="rgba(234,240,255,.75)" font-size="12">specs + agents + token budgets</text>
+                  <text x="98" y="196" fill="rgba(139,92,246,.85)" font-size="11" font-weight="600">Gets rich</text>
+                </g>
+
+                <!-- Track 2: Systems Builder -->
+                <g class="node" id="n-sys" data-node="systems">
+                  <rect x="340" y="130" rx="14" ry="14" width="240" height="78" fill="rgba(20,184,166,.12)" stroke="rgba(20,184,166,.28)"/>
+                  <text x="358" y="160" fill="#EAF0FF" font-weight="700">Track 2: Systems Builder</text>
+                  <text x="358" y="180" fill="rgba(234,240,255,.75)" font-size="12">agent frameworks + eval pipelines</text>
+                  <text x="358" y="196" fill="rgba(20,184,166,.85)" font-size="11" font-weight="600">Highest ceiling</text>
+                </g>
+
+                <!-- Track 3: Domain Translator -->
+                <g class="node" id="n-dom" data-node="domain">
+                  <rect x="420" y="230" rx="14" ry="14" width="190" height="78" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.28)"/>
+                  <text x="438" y="260" fill="#EAF0FF" font-weight="700">Track 3: Domain</text>
+                  <text x="438" y="278" fill="rgba(234,240,255,.75)" font-size="12">niche expertise + AI fluency</text>
+                  <text x="438" y="294" fill="rgba(245,158,11,.85)" font-size="11" font-weight="600">Largest track</text>
+                </g>
+
+                <!-- Exposed middle -->
+                <g class="node" id="n-middle" data-node="middle">
+                  <rect x="220" y="240" rx="14" ry="14" width="180" height="60" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)" stroke-dasharray="6,4"/>
+                  <text x="238" y="267" fill="rgba(239,68,68,.90)" font-weight="700" font-size="13">Exposed Middle</text>
+                  <text x="238" y="285" fill="rgba(234,240,255,.60)" font-size="11">generic code &rarr; zero value</text>
+                </g>
+
+                <!-- Org restructure -->
+                <g class="node" id="n-org" data-node="orgs">
+                  <rect x="70" y="280" rx="14" ry="14" width="280" height="64" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.24)"/>
+                  <text x="88" y="307" fill="#EAF0FF" font-weight="700">Org restructure</text>
+                  <text x="88" y="327" fill="rgba(234,240,255,.75)" font-size="12">headcount &rarr; intelligence throughput</text>
+                </g>
+
+                <!-- Enterprise scale -->
+                <g class="node" id="n-ent" data-node="enterprise">
+                  <rect x="30" y="375" rx="14" ry="14" width="220" height="64" fill="rgba(139,92,246,.08)" stroke="rgba(139,92,246,.20)"/>
+                  <text x="48" y="402" fill="#EAF0FF" font-weight="700">Generalized scale</text>
+                  <text x="48" y="420" fill="rgba(234,240,255,.70)" font-size="12">token volume + horizontal platforms</text>
+                </g>
+
+                <!-- Specialized precision -->
+                <g class="node" id="n-spec" data-node="specialist">
+                  <rect x="340" y="375" rx="14" ry="14" width="250" height="64" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.24)"/>
+                  <text x="358" y="402" fill="#EAF0FF" font-weight="700">Specialized precision</text>
+                  <text x="358" y="420" fill="rgba(234,240,255,.70)" font-size="12">distribution + domain + trust</text>
+                </g>
+
+                <!-- Jevons cycle -->
+                <g id="jevons" opacity="0.85">
+                  <circle cx="60" cy="185" r="38" fill="rgba(245,158,11,.06)" stroke="rgba(245,158,11,.24)" stroke-width="2"/>
+                  <path d="M60 147 A38 38 0 1 1 28 210" stroke="rgba(245,158,11,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M28 210 L38 210 L33 219 Z" fill="rgba(245,158,11,.70)"/>
+                  <text x="60" y="188" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="11" font-weight="700">Jevons'</text>
+                  <text x="60" y="200" text-anchor="middle" fill="rgba(234,240,255,.60)" font-size="9">paradox</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>fast, fuzzy, useful</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Developer track finder</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Systems depth (infra, frameworks, evals): <span id="sysVal" class="mono">5</span>/10
+                  </label>
+                  <input id="sysSlider" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Domain expertise (specific market knowledge): <span id="domVal" class="mono">5</span>/10
+                  </label>
+                  <input id="domSlider" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Orchestration skill (specs, agent mgmt, evals): <span id="orchVal" class="mono">5</span>/10
+                  </label>
+                  <input id="orchSlider" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="trackRes" style="margin-top:10px">
+                  <b>Your track:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Token ROI calculator</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Team size (engineers): <span id="teamVal" class="mono">10</span>
+                  </label>
+                  <input id="teamSlider" type="range" min="1" max="100" value="10" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Monthly token budget ($K): <span id="budgetVal" class="mono">30</span>
+                  </label>
+                  <input id="budgetSlider" type="range" min="1" max="500" value="30" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Output multiplier (AI leverage): <span id="multVal" class="mono">3</span>x
+                  </label>
+                  <input id="multSlider" type="range" min="1" max="10" value="3" />
+                </div>
+                <div class="callout" id="roiRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.9); background:rgba(20,184,166,.10)">
+                  <b>ROI:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Career exposure meter</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % of work that is generic application code: <span id="genVal" class="mono">50</span>%
+                  </label>
+                  <input id="genSlider" type="range" min="0" max="100" value="50" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Specialization depth (systems OR domain): <span id="specVal" class="mono">5</span>/10
+                  </label>
+                  <input id="specSlider" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="expRes" style="margin-top:10px; border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                  <b>Exposure:</b> &mdash;
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally rough. The goal is to force the "so what?" into numbers you can argue with.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this (one-page checklist)</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you're an individual developer</h4>
+              <ul>
+                <li>Stop assuming "AI-assisted coding" is enough &mdash; pick a track: orchestrator, systems builder, or domain translator.</li>
+                <li>Build evaluation skills: can you judge whether AI output meets spec? That's the core of orchestration.</li>
+                <li>If you have domain expertise, lean into it hard &mdash; cheaper intelligence makes more niche problems viable to solve.</li>
+                <li>If you're deep in systems, learn model behavior at a mechanical level: context windows, routing, probabilistic reliability.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you're an enterprise / team lead</h4>
+              <ul>
+                <li>Treat token spend as a lever to maximize ROI, not a cost to minimize. Route the right model to the right task at the right price.</li>
+                <li>Restructure around intelligence throughput: 50 engineers managing agents &gt; 500 writing code by hand (with proper specs + evals).</li>
+                <li>Mine your backlog &mdash; projects that were never economically viable before are now gold when building costs collapse.</li>
+                <li>Build token management as a core competency: one supplier pricing change shouldn't create a crisis (see: Cursor).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Meta-lesson:</b> the unit of work changed from instruction to token. Your career, your company, and your product must be positioned for a world where intelligence is a purchasable commodity that gets cheaper every quarter. The question is not whether you can afford tokens &mdash; it's whether you can aim them.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      paradigm:  ["n-instr","n-token","arrow-shift"],
+      numbers:   ["n-token","jevons"],
+      tracks:    ["n-orch","n-sys","n-dom","n-middle"],
+      orgs:      ["n-org","n-ent","n-spec"],
+      market:    ["n-ent","n-spec","n-dom"]
+    };
+
+    const linkMap = {
+      paradigm:  ["l-instr-token"],
+      numbers:   ["l-instr-token","l-token-orch","l-token-sys","l-token-dom"],
+      tracks:    ["l-token-orch","l-token-sys","l-token-dom","l-middle-exp"],
+      orgs:      ["l-orch-org","l-sys-org","l-org-ent","l-org-spec"],
+      market:    ["l-org-ent","l-org-spec","l-dom-spec"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+      const jev = $("#jevons");
+      if(jev){ jev.style.filter = ""; jev.style.opacity = "0.85"; }
+      const arr = $("#arrow-shift");
+      if(arr){ arr.style.filter = ""; arr.style.opacity = "0.8"; }
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+
+      // dim everything
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g) || g;
+        if(rect && rect.tagName.toLowerCase()==="rect"){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        } else {
+          g.style.filter = "url(#glow)";
+          g.style.opacity = "1";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          paradigm:"rgba(59,130,246,.75)",
+          numbers:"rgba(245,158,11,.75)",
+          tracks:"rgba(139,92,246,.70)",
+          orgs:"rgba(20,184,166,.75)",
+          market:"rgba(239,68,68,.70)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      const labels = {
+        paradigm: "Paradigm Shift",
+        numbers: "Token Economics",
+        tracks: "Developer Tracks",
+        orgs: "Org Restructure",
+        market: "Market Split"
+      };
+      toast(`<b>Focus:</b> ${labels[focus] || focus} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full system view.`);
+    });
+
+    // Click nodes to jump to story
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        const pick = (id==="paradigm") ? "paradigm"
+                    : (id==="numbers") ? "numbers"
+                    : (id==="orchestrator"||id==="systems"||id==="domain"||id==="middle") ? "tracks"
+                    : (id==="orgs") ? "orgs"
+                    : (id==="enterprise"||id==="specialist") ? "market"
+                    : "paradigm";
+        highlight(pick);
+        const story = $(`details.story[data-story="${pick}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+
+    // 1. Developer Track Finder
+    const sysSlider = $("#sysSlider"), domSlider = $("#domSlider"), orchSlider = $("#orchSlider");
+    const sysValEl = $("#sysVal"), domValEl = $("#domVal"), orchValEl = $("#orchVal");
+    const trackRes = $("#trackRes");
+
+    function calcTrack(){
+      const S = +sysSlider.value, D = +domSlider.value, O = +orchSlider.value;
+      sysValEl.textContent = S; domValEl.textContent = D; orchValEl.textContent = O;
+
+      const max = Math.max(S, D, O);
+      const total = S + D + O;
+      let track, advice, color;
+
+      if(total <= 9 && max <= 4){
+        track = "Exposed Middle";
+        advice = "Low scores across all three axes. You're in the danger zone. Pick a direction and invest heavily — orchestration is the fastest on-ramp, domain expertise is the widest opportunity.";
+        color = "rgba(239,68,68,.85)";
+      } else if(S >= D && S >= O && S >= 6){
+        track = "Systems Builder";
+        advice = `Systems depth (${S}/10) is your strongest axis. Double down on agent frameworks, eval pipelines, context management, and routing. Highest compensation ceiling, smallest talent pool.`;
+        color = "rgba(20,184,166,.85)";
+      } else if(D >= S && D >= O && D >= 6){
+        track = "Domain Translator";
+        advice = `Domain expertise (${D}/10) is your edge. Combine it with enough AI fluency to build tools. You may not think of yourself as a developer yet — but cheaper intelligence makes your niche knowledge the scarce input.`;
+        color = "rgba(245,158,11,.85)";
+      } else if(O >= S && O >= D && O >= 6){
+        track = "Orchestrator";
+        advice = `Orchestration skill (${O}/10) leads. Sharpen spec writing, quality evaluation, and token economics. Your compensation will correlate with the token budgets you manage.`;
+        color = "rgba(139,92,246,.85)";
+      } else {
+        track = "Multi-track — pick one to lead";
+        advice = `Scores are balanced (sys:${S} dom:${D} orch:${O}). That's versatile but risky in a differentiating market. Pick the axis closest to 7+ and invest there.`;
+        color = "rgba(59,130,246,.85)";
+      }
+      trackRes.innerHTML = `<b>Your track:</b> <span style="color:${color}">${track}</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [sysSlider, domSlider, orchSlider].forEach(i=> i.addEventListener("input", calcTrack));
+    calcTrack();
+
+    // 2. Token ROI Calculator
+    const teamSlider = $("#teamSlider"), budgetSlider = $("#budgetSlider"), multSlider = $("#multSlider");
+    const teamValEl = $("#teamVal"), budgetValEl = $("#budgetVal"), multValEl = $("#multVal");
+    const roiRes = $("#roiRes");
+
+    function calcROI(){
+      const T = +teamSlider.value, B = +budgetSlider.value, M = +multSlider.value;
+      teamValEl.textContent = T; budgetValEl.textContent = B; multValEl.textContent = M;
+
+      // Effective output = team size * multiplier
+      // Traditional equivalent = effective output (in equivalent headcount)
+      const effectiveOutput = T * M;
+      const avgDevCost = 15; // $15K/mo fully loaded (conservative)
+      const traditionalCost = effectiveOutput * avgDevCost;
+      const tokenCost = (T * avgDevCost) + B;
+      const savings = traditionalCost - tokenCost;
+      const roiPct = Math.round(((traditionalCost - tokenCost) / tokenCost) * 100);
+      const revPerEmp = Math.round((B * M * 0.8) / T); // rough value created per engineer
+
+      let verdict, note;
+      if(roiPct >= 100){
+        verdict = "Strong token leverage";
+        note = `${T} engineers + $${B}K/mo tokens produce output equivalent to ~${effectiveOutput} traditional devs. Savings: ~$${Math.round(savings)}K/mo. Revenue/employee potential is high — you're in AI-native territory.`;
+      } else if(roiPct >= 30){
+        verdict = "Moderate leverage";
+        note = `Positive ROI (${roiPct}%), but increase the multiplier through better specs, evals, and context engineering. Consider whether your team size is right for a token-first model.`;
+      } else {
+        verdict = "Low leverage — restructure";
+        note = `Token spend isn't generating enough multiplier effect. Either increase token budget, reduce team size, or invest in orchestration quality. The multiplier is the critical variable.`;
+      }
+      roiRes.innerHTML = `<b>ROI:</b> ${verdict} <span class="mono" style="opacity:.85">(${roiPct}% return)</span><br><span style="color:var(--muted)">${note}</span>`;
+    }
+    [teamSlider, budgetSlider, multSlider].forEach(i=> i.addEventListener("input", calcROI));
+    calcROI();
+
+    // 3. Career Exposure Meter
+    const genSlider = $("#genSlider"), specSlider = $("#specSlider");
+    const genValEl = $("#genVal"), specValEl = $("#specVal");
+    const expRes = $("#expRes");
+
+    function calcExposure(){
+      const G = +genSlider.value, Sp = +specSlider.value;
+      genValEl.textContent = G; specValEl.textContent = Sp;
+
+      // Exposure increases with generic code %, decreases with specialization
+      const exposure = Math.max(0, Math.min(100, Math.round((G * 0.7) + ((10 - Sp) * 3))));
+      let level, action;
+      if(exposure >= 65){
+        level = "High exposure";
+        action = `${G}% generic code + low specialization (${Sp}/10) = maximum vulnerability. The value of generic code production goes to zero at the same rate as token costs. Move decisively toward a track: systems depth, domain expertise, or orchestration.`;
+      } else if(exposure >= 35){
+        level = "Moderate exposure";
+        action = `You have some protection (specialization: ${Sp}/10), but ${G}% generic code is still significant. Reduce that percentage by shifting into evaluation, spec writing, or deep domain work.`;
+      } else {
+        level = "Low exposure";
+        action = `Strong specialization (${Sp}/10) with limited generic code (${G}%). Your skills are harder to commoditize. Keep deepening — the gap between generalists and specialists is widening every week.`;
+      }
+      expRes.innerHTML = `<b>Exposure:</b> ${level} <span class="mono" style="opacity:.85">(${exposure}/100)</span><br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [genSlider, specSlider].forEach(i=> i.addEventListener("input", calcExposure));
+    calcExposure();
+
+    // --- Nice: expand/collapse hint on first interaction
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to connect stories → structure on the map.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
