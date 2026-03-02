@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Open Brain: a database-backed, agent-readable personal knowledge system via MCP. One brain, every AI, $0.10-0.30/mo. Why memory is the real AI bottleneck." />
+  <meta name="category" content="AI Productivity" />
+  <meta name="tags" content="Open Brain, Second Brain, MCP, Memory Architecture, AI Agents, Vector Embeddings" />
+  <meta name="icon" content="🧠" />
+  <meta name="created" content="2026-03-01" />
+  <title>Open Brain: One Brain, Every AI, $0.10/Mo</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+    .slider{display:grid;gap:8px;margin-top:10px}
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Infographic &bull; March 2026 &bull; "The memory bottleneck"</span></div>
+          <h1>Open Brain: one brain, every AI, <em>$0.10/mo</em></h1>
+          <p class="sub">
+            Your AI doesn't have a brain. Every new chat starts from zero. Every platform switch loses context.
+            Every model's memory is a walled garden designed for lock-in. Open Brain is a Postgres-backed,
+            MCP-connected knowledge system you own &mdash; one brain that every AI can read, for the cost of a coffee per year.
+          </p>
+          <div class="chips">
+            <div class="chip"><b>Problem</b> 1,200 app toggles/day &rarr; shattered context</div>
+            <div class="chip"><b>Fix</b> Postgres + pgvector + MCP server</div>
+            <div class="chip"><b>Cost</b> $0.10&ndash;0.30/month on free tiers</div>
+            <div class="chip"><b>Effect</b> Compounding advantage every week</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any story below to expand. Use the Focus buttons to highlight connections on the architecture map. Simulators let you estimate your own context tax.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the memory crisis</h2>
+          <small>3 signals &bull; 1 architecture</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Context switches</small>
+              <b>1,200/day</b>
+              <span>App toggles per digital worker (HBR). Every switch bleeds attention and context.</span>
+            </div>
+            <div class="kpi">
+              <small>Monthly cost</small>
+              <b>$0.10&ndash;0.30</b>
+              <span>Running cost on Slack + Supabase free tiers for ~20 thoughts/day.</span>
+            </div>
+            <div class="kpi">
+              <small>Setup time</small>
+              <b>45 min</b>
+              <span>Non-coder tested. Copy-paste setup guide, no programming required.</span>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Infrastructure</div>
+            <div class="key"><span class="sq c2"></span> Protocol (MCP)</div>
+            <div class="key"><span class="sq c3"></span> Capture &amp; retrieval</div>
+            <div class="key"><span class="sq c4"></span> Problem / lock-in</div>
+            <div class="key"><span class="sq c5"></span> Compounding advantage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The memory problem &amp; the architecture</h2>
+          <div class="pill">Click to expand</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 The memory problem -->
+          <details class="story" open data-story="problem">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">1</div>
+                <div class="titleBlock">
+                  <b>The memory problem hiding inside your prompting</b>
+                  <span>Every new chat = starting from zero &bull; every platform switch = lost context</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                The quality of AI output depends entirely on the quality of your ability to specify. But the best
+                prompt in the world cannot compensate for an AI that doesn't know what you've been working on,
+                what you've already tried, what your constraints are, or what you decided last Tuesday. You're
+                burning your best thinking on context transfer instead of real work.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>The walled garden trap</h4>
+                  <ul>
+                    <li>Claude's memory doesn't know what you told ChatGPT.</li>
+                    <li>ChatGPT's memory doesn't follow you into Cursor.</li>
+                    <li>Your phone app doesn't share context with your coding agent.</li>
+                    <li>Five separate piles of sticky notes on five separate desks.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>The lock-in strategy</h4>
+                  <ul>
+                    <li>Memory is designed as <span class="mono">lock-in</span> &mdash; keeps you on one platform.</li>
+                    <li>Want to try a new model? You lose all accumulated context.</li>
+                    <li>None of this built-in memory is <span class="mono">agent-readable</span>.</li>
+                    <li>Your knowledge is a hostage to a single platform.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(245,158,11,.85); background:rgba(245,158,11,.10)">
+                <b>Person A vs Person B:</b> Person A opens Claude, spends 4 minutes explaining their role, project, constraints. Person B opens Claude &mdash; it already knows everything via MCP. Same model, wildly different outcomes. The variable is infrastructure.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 The web fork -->
+          <details class="story" data-story="fork">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>The web is forking &mdash; and so is your memory</b>
+                  <span>Human web (fonts, layouts) vs agent web (APIs, structured data) &bull; your notes need both</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Notion is built for human eyes: pages, databases, cover images. It's useless for an AI agent
+                that needs to search by meaning, not folder structure. Apple Notes is ecosystem-locked. Evernote
+                has a decade of clutter with no semantic structure. These tools were built for the 2010s human web.
+                Apps adding "chat with your notes" are bolt-ons &mdash; one AI searching one app. Still silos.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>Human web tools</h4>
+                  <ul>
+                    <li>Notion, Apple Notes, Evernote, bookmarks.</li>
+                    <li>Designed for browsing, organizing, reading.</li>
+                    <li>Never designed for AI agent queries.</li>
+                    <li>AI features bolted on &mdash; "chat with your notes."</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Agent web infrastructure</h4>
+                  <ul>
+                    <li>Real database (Postgres) you control.</li>
+                    <li>Vector embeddings = search by <span class="mono">meaning</span>, not keywords.</li>
+                    <li>MCP protocol = any AI can read it.</li>
+                    <li>Build for the agent web; humans benefit downstream.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(139,92,246,.85); background:rgba(139,92,246,.10)">
+                <b>Toby L&uuml;tke's insight:</b> "A lot of corporate politics amount to bad human context engineering." When you build clean context engineering for agents, you happen to build clean context engineering for people too.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 The architecture -->
+          <details class="story" data-story="arch">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">3</div>
+                <div class="titleBlock">
+                  <b>Open Brain architecture: Postgres + pgvector + MCP</b>
+                  <span>45-minute setup &bull; $0.10/mo &bull; no SaaS middlemen &bull; no coding required</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Your thoughts live in a Postgres database you control. Not somebody else's proprietary format.
+                Postgres isn't exciting. It's not deprecating. It's not VC-backed. It's boring, battle-tested,
+                and that's exactly what you want as your foundation. Every thought gets converted into a vector
+                embedding &mdash; a mathematical representation of meaning that is natively AI-readable.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>Capture flow (&lt;10 seconds)</h4>
+                  <ul>
+                    <li>Type a thought in Slack (or any capture point).</li>
+                    <li>Hits a Supabase edge function.</li>
+                    <li>Generates embedding + extracts metadata in parallel.</li>
+                    <li>Stores both in Postgres with pgvector.</li>
+                    <li>Replies in-thread with confirmation.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Retrieval via MCP</h4>
+                  <ul>
+                    <li><span class="mono">semantic_search</span>: find thoughts by meaning.</li>
+                    <li><span class="mono">list_recent</span>: browse what you captured this week.</li>
+                    <li><span class="mono">stats</span>: see your patterns over time.</li>
+                    <li>Works from Claude, ChatGPT, Cursor, VS Code, Claude Code &mdash; anywhere.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout">
+                <b>Semantic search example:</b> Ask "what was I thinking about career changes last month?" &mdash; finds your note about considering consulting even if you never used the word "career" in the original thought.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 The compounding effect -->
+          <details class="story" data-story="compound">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">4</div>
+                <div class="titleBlock">
+                  <b>The compounding advantage: every thought makes every search smarter</b>
+                  <span>Knowledge graph grows &bull; connections surface &bull; new tools plug in instantly</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Every thought you capture makes the next search smarter, the next connection more likely to surface.
+                Every decision logged, every person noted, every insight saved is another node in a growing knowledge
+                graph that every AI in the system can access. And you're less afraid of trying new AI tools because
+                you just plug them into MCP and they instantly have full context.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>The 4 starter prompts</h4>
+                  <ul>
+                    <li><b>Memory migration:</b> pull existing context from Claude/ChatGPT into Open Brain.</li>
+                    <li><b>Spark:</b> interview prompt that discovers what to capture for your specific work.</li>
+                    <li><b>Quick capture templates:</b> decision, person note, insight, meeting debrief.</li>
+                    <li><b>Weekly review:</b> clusters by topic, finds unresolved items, detects patterns.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why it compounds</h4>
+                  <ul>
+                    <li>US productivity grew <span class="mono">2.7%</span> in 2025 &mdash; double the decade average (FT).</li>
+                    <li>3-person teams routinely outproduce teams 10x their size.</li>
+                    <li>The gap between "I use AI sometimes" and "AI is embedded in how I think" = career gap of this decade.</li>
+                    <li>It comes down to memory and context infrastructure.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(20,184,166,.85); background:rgba(20,184,166,.10)">
+                <b>Key insight:</b> Memory architecture determines agent capabilities much more than model selection does. That's widely misunderstood.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 Agent-readable future -->
+          <details class="story" data-story="agents">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">5</div>
+                <div class="titleBlock">
+                  <b>The agent revolution needs agent-readable memory</b>
+                  <span>OpenClaw: 190K stars, 1.5M agents spawned &bull; agents need your context to be useful</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Autonomous agents are going mainstream. Anthropic is building one. OpenAI hired the inventor
+                of OpenClaw. OpenClaw itself passed 190,000 GitHub stars and spawned 1.5 million agents in weeks.
+                But agents that just guess your context aren't useful. Agents that can securely read your
+                Open Brain are fundamentally more capable &mdash; like the person who negotiated thousands off
+                a car purchase because the agent had full context.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>The original second brain gap</h4>
+                  <ul>
+                    <li>Built before the agent revolution went mainstream.</li>
+                    <li>Solved the human capture + organization problem.</li>
+                    <li>Never solved the <span class="mono">agent-readable</span> problem.</li>
+                    <li>Open Brain adds the foundational database layer underneath.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What changes with agents</h4>
+                  <ul>
+                    <li>MCP becomes the "USB-C of AI" &mdash; one protocol, every tool.</li>
+                    <li>Write into the brain from <span class="mono">anywhere</span>: phone, terminal, desktop.</li>
+                    <li>Build dashboards, daily digests, pattern visualizations on top.</li>
+                    <li>The ceiling is wherever you decide to stop building.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                <b>The prompt hierarchy:</b> Prompt craft &rarr; context engineering &rarr; intent engineering &rarr; specification engineering. Open Brain is the memory infrastructure that makes each level work without restarting from zero.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive architecture map</h2>
+          <small>Play with the system</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="problem"><span class="sw o"></span>Problem</button>
+            <button class="btn" data-focus="fork"><span class="sw p"></span>Web fork</button>
+            <button class="btn" data-focus="arch"><span class="sw b"></span>Architecture</button>
+            <button class="btn" data-focus="compound"><span class="sw"></span>Compounding</button>
+            <button class="btn" data-focus="agents"><span class="sw r"></span>Agents</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 440" width="100%" height="auto" role="img" aria-label="Open Brain architecture map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-silos-brain" d="M160,80 C240,100 300,120 340,145" />
+                <path id="l-brain-mcp" d="M420,195 C440,220 440,240 420,260" />
+                <path id="l-mcp-claude" d="M340,290 C280,310 220,320 170,330" />
+                <path id="l-mcp-gpt" d="M420,290 C440,310 460,320 480,330" />
+                <path id="l-mcp-cursor" d="M380,290 C370,310 350,330 320,350" />
+                <path id="l-brain-embed" d="M480,165 C530,165 560,180 570,210" />
+                <path id="l-embed-fly" d="M570,260 C570,290 560,320 540,340" />
+                <path id="l-silos-lock" d="M160,80 C100,100 70,130 60,170" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <!-- Walled silos -->
+                <g class="node" id="n-silos" data-node="silos">
+                  <rect x="40" y="35" rx="14" ry="14" width="240" height="68" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="58" y="62" fill="#EAF0FF" font-weight="700">Walled memory silos</text>
+                  <text x="58" y="82" fill="rgba(234,240,255,.65)" font-size="12">Claude / ChatGPT / Grok / Cursor</text>
+                </g>
+
+                <!-- Lock-in -->
+                <g class="node" id="n-lock" data-node="lock">
+                  <rect x="30" y="145" rx="14" ry="14" width="170" height="60" fill="rgba(239,68,68,.08)" stroke="rgba(239,68,68,.20)"/>
+                  <text x="48" y="172" fill="#EAF0FF" font-weight="700">Platform lock-in</text>
+                  <text x="48" y="190" fill="rgba(234,240,255,.60)" font-size="12">memory as moat</text>
+                </g>
+
+                <!-- Open Brain (central) -->
+                <g class="node" id="n-brain" data-node="brain">
+                  <rect x="300" y="130" rx="16" ry="16" width="220" height="70" fill="rgba(59,130,246,.14)" stroke="rgba(59,130,246,.35)" stroke-width="2"/>
+                  <text x="330" y="158" fill="#EAF0FF" font-weight="800" font-size="15">Open Brain</text>
+                  <text x="330" y="180" fill="rgba(234,240,255,.75)" font-size="12">Postgres + pgvector</text>
+                </g>
+
+                <!-- MCP server -->
+                <g class="node" id="n-mcp" data-node="mcp">
+                  <rect x="320" y="240" rx="14" ry="14" width="200" height="55" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.30)"/>
+                  <text x="338" y="264" fill="#EAF0FF" font-weight="700">MCP server</text>
+                  <text x="338" y="282" fill="rgba(234,240,255,.65)" font-size="12">search / list / stats</text>
+                </g>
+
+                <!-- AI clients -->
+                <g class="node" id="n-claude" data-node="claude">
+                  <rect x="80" y="315" rx="12" ry="12" width="150" height="50" fill="rgba(20,184,166,.08)" stroke="rgba(20,184,166,.20)"/>
+                  <text x="110" y="345" fill="rgba(234,240,255,.80)" font-size="13" font-weight="600">Claude / Code</text>
+                </g>
+                <g class="node" id="n-cursor" data-node="cursor">
+                  <rect x="250" y="340" rx="12" ry="12" width="140" height="50" fill="rgba(20,184,166,.08)" stroke="rgba(20,184,166,.20)"/>
+                  <text x="280" y="370" fill="rgba(234,240,255,.80)" font-size="13" font-weight="600">Cursor / IDE</text>
+                </g>
+                <g class="node" id="n-gpt" data-node="gpt">
+                  <rect x="420" y="315" rx="12" ry="12" width="150" height="50" fill="rgba(20,184,166,.08)" stroke="rgba(20,184,166,.20)"/>
+                  <text x="450" y="345" fill="rgba(234,240,255,.80)" font-size="13" font-weight="600">ChatGPT / Grok</text>
+                </g>
+
+                <!-- Vector embeddings -->
+                <g class="node" id="n-embed" data-node="embed">
+                  <rect x="520" y="170" rx="14" ry="14" width="85" height="90" fill="rgba(59,130,246,.08)" stroke="rgba(59,130,246,.20)"/>
+                  <text x="535" y="200" fill="rgba(234,240,255,.80)" font-size="11" font-weight="700">Vector</text>
+                  <text x="530" y="215" fill="rgba(234,240,255,.60)" font-size="11">embed-</text>
+                  <text x="530" y="230" fill="rgba(234,240,255,.60)" font-size="11">dings</text>
+                  <text x="530" y="248" fill="rgba(234,240,255,.50)" font-size="10">semantic</text>
+                </g>
+
+                <!-- Compounding flywheel -->
+                <g id="fly" opacity="0.85">
+                  <circle cx="540" cy="375" r="40" fill="rgba(20,184,166,.06)" stroke="rgba(20,184,166,.24)" stroke-width="2"/>
+                  <path d="M540 335 A40 40 0 1 1 507 390" stroke="rgba(20,184,166,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M507 390 L518 390 L512 400 Z" fill="rgba(20,184,166,.70)"/>
+                  <text x="540" y="372" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="11" font-weight="700">compound</text>
+                  <text x="540" y="386" text-anchor="middle" fill="rgba(234,240,255,.60)" font-size="10">weekly</text>
+                </g>
+
+                <!-- Label: capture -->
+                <text x="220" y="125" fill="rgba(234,240,255,.30)" font-size="10" letter-spacing=".1em">CAPTURE</text>
+                <!-- Label: retrieve -->
+                <text x="250" y="308" fill="rgba(234,240,255,.30)" font-size="10" letter-spacing=".1em">RETRIEVE</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>estimate your context tax</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Context tax calculator</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    AI tools you use regularly: <span id="toolsVal" class="mono">4</span>
+                  </label>
+                  <input id="tools" type="range" min="1" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Minutes re-explaining context per session: <span id="reexpVal" class="mono">4</span>
+                  </label>
+                  <input id="reexp" type="range" min="0" max="15" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Sessions per day: <span id="sessVal" class="mono">6</span>
+                  </label>
+                  <input id="sess" type="range" min="1" max="20" value="6" />
+                </div>
+                <div class="callout" id="taxRes" style="margin-top:10px; border-left-color:rgba(245,158,11,.85); background:rgba(245,158,11,.10)">
+                  <b>Context tax:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Memory compounding estimator</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Thoughts captured per day: <span id="capVal" class="mono">10</span>
+                  </label>
+                  <input id="cap" type="range" min="1" max="50" value="10" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Weeks of usage: <span id="weeksVal" class="mono">8</span>
+                  </label>
+                  <input id="weeks" type="range" min="1" max="52" value="8" />
+                </div>
+                <div class="callout" id="compRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.85); background:rgba(20,184,166,.10)">
+                  <b>Knowledge graph:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Lock-in exposure meter</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % of context trapped in one platform: <span id="trapVal" class="mono">70</span>%
+                  </label>
+                  <input id="trap" type="range" min="0" max="100" value="70" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Willingness to try new AI tools (1&ndash;10): <span id="willVal" class="mono">7</span>
+                  </label>
+                  <input id="will" type="range" min="1" max="10" value="7" />
+                </div>
+                <div class="callout" id="lockRes" style="margin-top:10px; border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                  <b>Lock-in risk:</b> &mdash;
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These estimates help you see the invisible cost of fragmented memory. Build Open Brain this weekend and start compounding.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>Build it this weekend (checklist)</h2>
+          <small>45 minutes, zero coding</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>Setup steps</h4>
+              <ul>
+                <li>Create a free Supabase project (Postgres + pgvector included).</li>
+                <li>Deploy the edge function for capture (embedding + metadata extraction).</li>
+                <li>Connect a capture point: Slack channel, messaging app, or any MCP client.</li>
+                <li>Install the MCP server config in Claude / Claude Code / Cursor.</li>
+                <li>Run the <span class="mono">memory migration</span> prompt to pull existing context from ChatGPT and Claude.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>First week habits</h4>
+              <ul>
+                <li>Use <span class="mono">quick capture templates</span>: decisions, people notes, insights, meeting debriefs.</li>
+                <li>Run the <span class="mono">Open Brain Spark</span> interview to discover your capture patterns.</li>
+                <li>Test semantic search from at least 2 different AI tools to feel the difference.</li>
+                <li>End-of-week: run the <span class="mono">weekly review</span> prompt to see clusters, gaps, and unresolved items.</li>
+                <li>Goal: 10&ndash;20 thoughts/day. The system compounds &mdash; every input makes every future search smarter.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>The career gap of this decade</b> is between "I use AI sometimes" and "AI is embedded in how I think and work." That gap comes down to memory and context infrastructure. Open Brain closes it &mdash; one brain, every AI, forever yours.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      problem: ["n-silos","n-lock"],
+      fork:    ["n-silos","n-embed","n-brain"],
+      arch:    ["n-brain","n-mcp","n-embed"],
+      compound:["n-brain","n-embed","fly"],
+      agents:  ["n-mcp","n-claude","n-cursor","n-gpt","fly"]
+    };
+    const linkMap = {
+      problem: ["l-silos-lock","l-silos-brain"],
+      fork:    ["l-silos-brain","l-brain-embed"],
+      arch:    ["l-silos-brain","l-brain-mcp","l-brain-embed","l-mcp-claude","l-mcp-gpt","l-mcp-cursor"],
+      compound:["l-brain-embed","l-embed-fly"],
+      agents:  ["l-brain-mcp","l-mcp-claude","l-mcp-gpt","l-mcp-cursor","l-embed-fly"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+      $("#fly").style.filter = "";
+      $("#fly").style.opacity = "0.85";
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g) || g;
+        if(rect && rect.tagName.toLowerCase()==="rect"){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        } else {
+          g.style.filter = "url(#glow)";
+          g.style.opacity = "1";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          problem:"rgba(245,158,11,.75)",
+          fork:"rgba(139,92,246,.70)",
+          arch:"rgba(59,130,246,.75)",
+          compound:"rgba(20,184,166,.75)",
+          agents:"rgba(239,68,68,.70)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      const labels = {problem:"Memory problem",fork:"Web fork",arch:"Architecture",compound:"Compounding",agents:"Agent-readable"};
+      toast(`<b>Focus:</b> ${labels[focus] || focus} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full system view.`);
+    });
+
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        const pick = (id==="silos"||id==="lock") ? "problem"
+                   : (id==="embed") ? "fork"
+                   : (id==="brain"||id==="mcp") ? "arch"
+                   : (id==="claude"||id==="cursor"||id==="gpt") ? "agents"
+                   : "compound";
+        highlight(pick);
+        const story = $(`details.story[data-story="${pick}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+    // 1. Context tax
+    const toolsI = $("#tools"), reexpI = $("#reexp"), sessI = $("#sess");
+    const toolsVal=$("#toolsVal"), reexpVal=$("#reexpVal"), sessVal=$("#sessVal");
+    const taxRes = $("#taxRes");
+
+    function calcTax(){
+      const T = +toolsI.value, R = +reexpI.value, S = +sessI.value;
+      toolsVal.textContent = T; reexpVal.textContent = R; sessVal.textContent = S;
+      const dailyMin = R * S;
+      const weeklyHrs = Math.round(dailyMin * 5 / 60 * 10) / 10;
+      const yearlyHrs = Math.round(weeklyHrs * 50);
+      let verdict;
+      if(dailyMin >= 30){
+        verdict = `You're losing <b>${dailyMin} min/day</b> (${weeklyHrs} hrs/week, ~${yearlyHrs} hrs/year) to context re-explanation. That's ${Math.round(yearlyHrs/8)} full work days per year. Open Brain eliminates most of this.`;
+      } else if(dailyMin >= 10){
+        verdict = `<b>${dailyMin} min/day</b> (${weeklyHrs} hrs/week) of context tax. Not catastrophic, but it compounds — ~${yearlyHrs} hrs/year of re-explanation that a shared brain eliminates.`;
+      } else {
+        verdict = `<b>${dailyMin} min/day</b> is minimal context tax. You're either already efficient or underusing AI. If you add more tools, this number will grow fast.`;
+      }
+      taxRes.innerHTML = `<b>Context tax:</b> ${verdict}`;
+    }
+    [toolsI, reexpI, sessI].forEach(i=> i.addEventListener("input", calcTax));
+    calcTax();
+
+    // 2. Compounding
+    const capI = $("#cap"), weeksI = $("#weeks");
+    const capVal=$("#capVal"), weeksVal=$("#weeksVal");
+    const compRes = $("#compRes");
+
+    function calcComp(){
+      const C = +capI.value, W = +weeksI.value;
+      capVal.textContent = C; weeksVal.textContent = W;
+      const totalThoughts = C * 7 * W;
+      const connections = Math.round(totalThoughts * Math.log2(Math.max(2, totalThoughts)) / 10);
+      const costTotal = Math.round(W * 4 * 0.15 * 100) / 100;
+      let verdict;
+      if(totalThoughts >= 1000){
+        verdict = `<b>${totalThoughts.toLocaleString()} thoughts</b> with ~${connections.toLocaleString()} potential semantic connections. This is a serious knowledge graph. Every AI you use benefits from this context. Total cost: ~$${costTotal}.`;
+      } else if(totalThoughts >= 200){
+        verdict = `<b>${totalThoughts} thoughts</b> with ~${connections} semantic connections. Your brain is building real density — searches start returning surprising connections. Cost: ~$${costTotal}.`;
+      } else {
+        verdict = `<b>${totalThoughts} thoughts</b> so far. Keep capturing — the compounding kicks in around 200+ nodes when semantic search starts surfacing non-obvious connections. Cost: ~$${costTotal}.`;
+      }
+      compRes.innerHTML = `<b>Knowledge graph:</b> ${verdict}`;
+    }
+    [capI, weeksI].forEach(i=> i.addEventListener("input", calcComp));
+    calcComp();
+
+    // 3. Lock-in
+    const trapI = $("#trap"), willI = $("#will");
+    const trapVal=$("#trapVal"), willVal=$("#willVal");
+    const lockRes = $("#lockRes");
+
+    function calcLock(){
+      const Tr = +trapI.value, Wi = +willI.value;
+      trapVal.textContent = Tr; willVal.textContent = Wi;
+      const friction = Math.round(Tr * Wi / 10);
+      let level, advice;
+      if(friction >= 50){
+        level = "High switching friction";
+        advice = `${Tr}% of your context is trapped and you want to try new tools (${Wi}/10). You're the exact person who benefits most from Open Brain — it frees you to use any AI without losing context.`;
+      } else if(friction >= 25){
+        level = "Moderate friction";
+        advice = "Some context is portable, but you'd still lose meaningful history switching platforms. Open Brain prevents this entirely.";
+      } else {
+        level = "Low friction";
+        advice = "Either your context is already portable or you're not invested in trying new tools. Open Brain is still valuable for the compounding advantage.";
+      }
+      lockRes.innerHTML = `<b>Lock-in risk:</b> ${level} <span class="mono" style="opacity:.85">(${friction}/100)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [trapI, willI].forEach(i=> i.addEventListener("input", calcLock));
+    calcLock();
+
+    // --- Expand hint ---
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to trace the architecture on the map.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
