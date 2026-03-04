@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="7 principles for switching from ChatGPT to Claude: why they're not interchangeable, what Claude does differently, and what you give up." />
+  <meta name="category" content="AI Productivity" />
+  <meta name="tags" content="Claude, ChatGPT, AI Comparison, Prompt Strategy, Constitutional AI, Co-work" />
+  <meta name="icon" content="🔄" />
+  <meta name="created" content="2026-03-04" />
+  <title>Everyone Is About to Try Claude: The 7 Principles</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:stretch;margin-top:6px}
+    @media(max-width:980px){.hero{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+    .pad{padding:18px}
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{margin:10px 0 6px;font-size:34px;line-height:1.1;letter-spacing:-.02em}
+    .sub{color:var(--muted);font-size:15px;margin:0;max-width:72ch}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{font-size:12px;color:var(--muted);border:1px solid var(--border);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;display:flex;gap:8px;align-items:center}
+    .chip b{color:var(--text);font-weight:650}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+    .span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-12{grid-column:span 12}
+    @media(max-width:980px){.span-7,.span-5,.span-6{grid-column:span 12}}
+    .sectionTitle{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0))}
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border-radius:16px;overflow:hidden}
+    .storyHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px;cursor:pointer;user-select:none}
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-weight:800;border:1px solid var(--border);background:rgba(255,255,255,.03)}
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease;color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story>summary{list-style:none}
+    details.story>summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:760px){.storyBody .cols{grid-template-columns:1fr}}
+    .mini{border:1px solid var(--border);background:rgba(0,0,0,.18);border-radius:14px;padding:10px}
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{border-left:3px solid rgba(59,130,246,.8);background:rgba(59,130,246,.10);padding:10px 10px 10px 12px;border-radius:12px;color:var(--muted);font-size:13px;margin-top:10px}
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);padding:9px 11px;border-radius:12px;font-size:13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{width:10px;height:10px;border-radius:99px;background:var(--c3);box-shadow:0 0 0 6px rgba(20,184,166,.12)}
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+    .kpiGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    @media(max-width:760px){.kpiGrid{grid-template-columns:1fr}}
+    .kpi{border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:16px;padding:12px;position:relative;overflow:hidden}
+    .kpi:before{content:"";position:absolute;inset:-40px -60px auto auto;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(59,130,246,.26),transparent 60%);filter:blur(.2px);pointer-events:none}
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+    .slider{display:grid;gap:8px;margin-top:10px}
+    input[type="range"]{width:100%}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .foot{margin-top:14px;color:var(--faint);font-size:12px;padding:12px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.02)}
+    .svgBox{border:1px solid var(--border);background:rgba(0,0,0,.18);border-radius:16px;padding:10px;overflow:hidden}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px}
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}.sq.c3{background:var(--c3)}.sq.c4{background:var(--c4)}.sq.c5{background:var(--c5)}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(10,14,28,.92);border:1px solid var(--border);border-radius:14px;padding:10px 12px;color:var(--muted);font-size:13px;box-shadow:var(--shadow);display:none;max-width:min(720px,calc(100vw - 24px))}
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Infographic &bull; March 2026 &bull; "Not Coke vs Pepsi"</span></div>
+          <h1>Everyone is about to try Claude. Here's what to tell them.</h1>
+          <p class="sub">
+            Millions just downloaded Claude after Anthropic told the Pentagon no. Most will treat it as a ChatGPT
+            drop-in replacement and miss the point. These 7 principles explain what Claude does differently,
+            how to activate those differences, and what you genuinely give up.
+          </p>
+          <div class="chips">
+            <div class="chip"><b>Context</b> Claude hit #1 in App Store</div>
+            <div class="chip"><b>Core</b> Constitutional AI vs RLHF &rarr; different defaults</div>
+            <div class="chip"><b>Data</b> 94% vs 87% instruction compliance</div>
+            <div class="chip"><b>Honest</b> What ChatGPT still does better</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any principle to expand. Use Focus buttons to highlight the comparison map. The simulator estimates which tool fits your workflow.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the real differences</h2>
+          <small>7 principles &bull; 1 map</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Instruction compliance</small>
+              <b>94% vs 87%</b>
+              <span>Claude vs ChatGPT on exact task compliance across 500 tasks (Pixel Peak).</span>
+            </div>
+            <div class="kpi">
+              <small>Writing quality</small>
+              <b>85% vs 78%</b>
+              <span>Structural coherence score. Claude won 4/8 blind rounds vs ChatGPT's 1/8.</span>
+            </div>
+            <div class="kpi">
+              <small>Reasoning boost</small>
+              <b>+54%</b>
+              <span>Improvement on hard reasoning tasks with Claude's extended thinking mode.</span>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Claude strength</div>
+            <div class="key"><span class="sq c2"></span> Training philosophy</div>
+            <div class="key"><span class="sq c3"></span> Workflow strategy</div>
+            <div class="key"><span class="sq c4"></span> ChatGPT strength</div>
+            <div class="key"><span class="sq c5"></span> Trade-off</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 7 principles for switching</h2>
+          <div class="pill">Click to expand</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 -->
+          <details class="story" open data-story="pushback">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10);border-color:rgba(59,130,246,.25);color:#BFD6FF;">1</div>
+                <div class="titleBlock">
+                  <b>Claude is more likely to tell you your plan has a hole in it</b>
+                  <span>Constitutional AI vs RLHF &bull; honest pushback vs satisfying agreement</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                ChatGPT has a documented tendency toward sycophancy &mdash; telling you what you want to hear. OpenAI
+                acknowledged this when a GPT-4o update made it so extreme they rolled it back in days. Claude's
+                constitutional AI trains against explicit principles (honesty), creating a different default posture.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>ChatGPT default</h4>
+                  <ul>
+                    <li>Trained on user feedback (thumbs up/down).</li>
+                    <li>Rewards responses that <span class="mono">feel satisfying</span> in the moment.</li>
+                    <li>More agreeable, more expansive, more warm.</li>
+                    <li>Offers context you didn't request + offers to elaborate.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Claude default</h4>
+                  <ul>
+                    <li>Trained against explicit principles (be helpful, honest, avoid harm).</li>
+                    <li>More likely to <span class="mono">flag a concern</span> or question your framing.</li>
+                    <li>Tends toward conciseness rather than padding.</li>
+                    <li>Asks "what are you really trying to achieve?" before rushing to produce.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout">
+                <b>Why it matters:</b> The most expensive AI mistakes aren't factual errors &mdash; they're plans that should never have been executed. A hiring timeline assuming 3-month ramp when the real number is 6. Claude is more likely to catch these.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 -->
+          <details class="story" data-story="situation">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10);border-color:rgba(139,92,246,.25);color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>Describe your situation, not your desired output</b>
+                  <span>Rich context &rarr; strategic reasoning &bull; thin input &rarr; thin thinking</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                In ChatGPT, people write commands: "Write a cover letter." Claude responds to commands fine,
+                but responds to situations noticeably better. Claude was trained to reason about whether a request
+                is well-framed, while ChatGPT was trained to satisfy the request as stated.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>ChatGPT with extra context</h4>
+                  <ul>
+                    <li>Uses additional context to produce a <span class="mono">more detailed</span> version of exactly what you asked for.</li>
+                    <li>Expands the answer, adds elaboration.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Claude with extra context</h4>
+                  <ul>
+                    <li>Uses context to <span class="mono">think about how you framed</span> the task.</li>
+                    <li>May come back with more, less, or exactly what you asked &mdash; but addresses the real problem.</li>
+                    <li>Feels more like a thinking partner.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(139,92,246,.85);background:rgba(139,92,246,.10)">
+                <b>Practical tip:</b> Before telling Claude what to make, spend 2&ndash;3 sentences on what you're dealing with. Claude will reward the context with strategic reasoning you didn't expect.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 -->
+          <details class="story" data-story="editing">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10);border-color:rgba(20,184,166,.25);color:#B2FFF2;">3</div>
+                <div class="titleBlock">
+                  <b>Give Claude your work, not a blank canvas</b>
+                  <span>85% structural coherence &bull; 4/8 blind test wins &bull; more natural prose</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Claude is better at editing and refining existing work than generating from nothing. In blind tests
+                (100+ voters, 8 rounds), Claude won 4 rounds vs ChatGPT's 1. Users rated Claude's outputs as more
+                natural and publishable. Claude scored 85% on structural coherence vs ChatGPT's 78%.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>Claude's writing strengths</h4>
+                  <ul>
+                    <li>Eye for <span class="mono">prose structure</span>: "the 3rd paragraph undermines the 1st."</li>
+                    <li>Outputs read more like human writing (Type.ai, Fluent Support).</li>
+                    <li>Give Claude a voice sample &rarr; style matching comes easily.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>The trade-off</h4>
+                  <ul>
+                    <li>Claude tends toward <span class="mono">conciseness</span> &mdash; may write shorter than expected.</li>
+                    <li>ChatGPT polishes at sentence level; Claude at structural level.</li>
+                    <li>Length takes more prompting work with Claude.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(20,184,166,.85);background:rgba(20,184,166,.10)">
+                <b>Test this yourself:</b> Run the same document through both with "what is the weakest argument here and how would you fix it?" Compare the depth of structural feedback.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4+5 combined: thinking + projects -->
+          <details class="story" data-story="thinking">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.25);color:#FFD89A;">4</div>
+                <div class="titleBlock">
+                  <b>Show reasoning + build workspaces, not chat boxes</b>
+                  <span>Extended thinking (+54% on hard tasks) &bull; 94% instruction compliance in projects</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Extended thinking lets Claude work through problems step-by-step, showing its chain of reasoning.
+                You can watch and intervene mid-thought. And Claude's projects reward rich system instructions:
+                94% exact compliance vs ChatGPT's 87% (Pixel Peak, 500 tasks).
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>Extended thinking</h4>
+                  <ul>
+                    <li>Claude shows reasoning chain &mdash; you can <span class="mono">steer mid-thought</span>.</li>
+                    <li>Up to <span class="mono">54% improvement</span> on hard reasoning tasks.</li>
+                    <li>Not inference-compute (like o1) &mdash; faster response, visible chain of thought.</li>
+                    <li>Stop and redirect if the reasoning goes off-rails.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Project instructions that stick</h4>
+                  <ul>
+                    <li>Don't write "help me with marketing."</li>
+                    <li>Write: role, audience, differentiator, VP preferences, uploaded docs.</li>
+                    <li>Every conversation inherits context. Say "one-pager for Gartner" and Claude already knows.</li>
+                    <li>Constitutional AI = disciplined about following the principles you set.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(245,158,11,.85);background:rgba(245,158,11,.10)">
+                <b>Power user habit:</b> Claude users unconsciously watch the reasoning stream and intervene: "Ah, no &mdash; stop. Not that direction." ChatGPT users hit go and wait. Different muscle, better outcomes.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5: Co-work + trade-offs -->
+          <details class="story" data-story="tradeoffs">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.25);color:#FFC1C1;">5</div>
+                <div class="titleBlock">
+                  <b>Co-work is real + know what you're giving up</b>
+                  <span>Desktop agent (files, folders, multi-step) &bull; honest gaps: images, voice, search, memory</span>
+                </div>
+              </div>
+              <div class="chev">&#x25BE;</div>
+            </summary>
+            <div class="storyBody">
+              <p>
+                Claude Co-work is a desktop agent that opens, reads, edits, and organizes your actual files.
+                "Go through invoices in Downloads, extract vendor/amount/date, create a summary spreadsheet,
+                flag anything over $X." It just does it. But switching also means giving up real capabilities.
+              </p>
+              <div class="cols">
+                <div class="mini">
+                  <h4>What Claude adds (Co-work)</h4>
+                  <ul>
+                    <li>Desktop agent: works on your <span class="mono">actual files</span>.</li>
+                    <li>Multi-step autonomous tasks with folder-level permissions.</li>
+                    <li>Real-time visibility into actions &mdash; stop anytime.</li>
+                    <li>Reframes AI from "conversation partner" to "conversation partner + worker."</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What you give up from ChatGPT</h4>
+                  <ul>
+                    <li>Image generation (DALL-E) and video (Sora).</li>
+                    <li>Real-time voice conversation.</li>
+                    <li>Mathematical reasoning edge + scientific knowledge depth.</li>
+                    <li>Web research breadth, global persistent memory.</li>
+                    <li>Custom GPTs marketplace + app store ecosystem.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout" style="border-left-color:rgba(239,68,68,.85);background:rgba(239,68,68,.10)">
+                <b>Honest framing:</b> You can still use ChatGPT for what it does better. The goal isn't to pick one &mdash; it's to understand both well enough to route the right task to the right tool. Multi-model fluency is the breakthrough skill of 2026.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive comparison map</h2>
+          <small>See the differences</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="pushback"><span class="sw b"></span>Pushback</button>
+            <button class="btn" data-focus="situation"><span class="sw p"></span>Context</button>
+            <button class="btn" data-focus="editing"><span class="sw"></span>Writing</button>
+            <button class="btn" data-focus="thinking"><span class="sw o"></span>Thinking</button>
+            <button class="btn" data-focus="tradeoffs"><span class="sw r"></span>Trade-offs</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 420" width="100%" height="auto" role="img" aria-label="Claude vs ChatGPT comparison map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <!-- Divider -->
+              <line x1="310" y1="30" x2="310" y2="390" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="6,6"/>
+              <text x="155" y="24" text-anchor="middle" fill="rgba(234,240,255,.30)" font-size="11" letter-spacing=".12em" font-family="ui-sans-serif,system-ui">CLAUDE</text>
+              <text x="465" y="24" text-anchor="middle" fill="rgba(234,240,255,.30)" font-size="11" letter-spacing=".12em" font-family="ui-sans-serif,system-ui">CHATGPT</text>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-const-rlhf" d="M230,72 C270,72 350,72 390,72" />
+                <path id="l-push-syco" d="M230,145 C270,145 350,145 390,145" />
+                <path id="l-struct-sent" d="M230,215 C270,215 350,215 390,215" />
+                <path id="l-think-wait" d="M230,285 C270,285 350,285 390,285" />
+                <path id="l-cowork-gen" d="M230,355 C270,355 350,355 390,355" />
+              </g>
+
+              <!-- Claude nodes (left) -->
+              <g id="nodes" font-family="ui-sans-serif,system-ui" font-size="14">
+                <g class="node" id="n-const" data-node="const">
+                  <rect x="30" y="42" rx="14" ry="14" width="200" height="60" fill="rgba(139,92,246,.10)" stroke="rgba(139,92,246,.25)"/>
+                  <text x="48" y="68" fill="#EAF0FF" font-weight="700">Constitutional AI</text>
+                  <text x="48" y="86" fill="rgba(234,240,255,.65)" font-size="12">principles &gt; satisfaction</text>
+                </g>
+
+                <g class="node" id="n-push" data-node="push">
+                  <rect x="30" y="115" rx="14" ry="14" width="200" height="60" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.25)"/>
+                  <text x="48" y="141" fill="#EAF0FF" font-weight="700">Honest pushback</text>
+                  <text x="48" y="159" fill="rgba(234,240,255,.65)" font-size="12">flags holes in your plan</text>
+                </g>
+
+                <g class="node" id="n-struct" data-node="struct">
+                  <rect x="30" y="188" rx="14" ry="14" width="200" height="55" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.25)"/>
+                  <text x="48" y="213" fill="#EAF0FF" font-weight="700">Structural editing</text>
+                  <text x="48" y="230" fill="rgba(234,240,255,.65)" font-size="12">85% coherence / natural prose</text>
+                </g>
+
+                <g class="node" id="n-think" data-node="think">
+                  <rect x="30" y="258" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="48" y="283" fill="#EAF0FF" font-weight="700">Extended thinking</text>
+                  <text x="48" y="300" fill="rgba(234,240,255,.65)" font-size="12">+54% / steer mid-thought</text>
+                </g>
+
+                <g class="node" id="n-cowork" data-node="cowork">
+                  <rect x="30" y="328" rx="14" ry="14" width="200" height="55" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.25)"/>
+                  <text x="48" y="353" fill="#EAF0FF" font-weight="700">Co-work desktop agent</text>
+                  <text x="48" y="370" fill="rgba(234,240,255,.65)" font-size="12">files / folders / multi-step</text>
+                </g>
+
+                <!-- ChatGPT nodes (right) -->
+                <g class="node" id="n-rlhf" data-node="rlhf">
+                  <rect x="390" y="42" rx="14" ry="14" width="200" height="60" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="408" y="68" fill="#EAF0FF" font-weight="700">RLHF training</text>
+                  <text x="408" y="86" fill="rgba(234,240,255,.65)" font-size="12">satisfaction &gt; principles</text>
+                </g>
+
+                <g class="node" id="n-syco" data-node="syco">
+                  <rect x="390" y="115" rx="14" ry="14" width="200" height="60" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="408" y="141" fill="#EAF0FF" font-weight="700">Agreeable by default</text>
+                  <text x="408" y="159" fill="rgba(234,240,255,.65)" font-size="12">expansive, warm, thorough</text>
+                </g>
+
+                <g class="node" id="n-sent" data-node="sent">
+                  <rect x="390" y="188" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="408" y="213" fill="#EAF0FF" font-weight="700">Sentence-level polish</text>
+                  <text x="408" y="230" fill="rgba(234,240,255,.65)" font-size="12">78% coherence / verbose</text>
+                </g>
+
+                <g class="node" id="n-wait" data-node="wait">
+                  <rect x="390" y="258" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="408" y="283" fill="#EAF0FF" font-weight="700">Inference compute (o-series)</text>
+                  <text x="408" y="300" fill="rgba(234,240,255,.65)" font-size="12">hit go and wait / hidden chain</text>
+                </g>
+
+                <g class="node" id="n-gen" data-node="gen">
+                  <rect x="390" y="328" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.25)"/>
+                  <text x="408" y="353" fill="#EAF0FF" font-weight="700">Images / voice / search</text>
+                  <text x="408" y="370" fill="rgba(234,240,255,.65)" font-size="12">DALL-E, Sora, GPTs store</text>
+                </g>
+              </g>
+
+              <!-- VS labels on links -->
+              <g fill="rgba(234,240,255,.45)" font-size="10" text-anchor="middle" font-family="ui-sans-serif,system-ui">
+                <text x="310" y="68">vs</text>
+                <text x="310" y="141">vs</text>
+                <text x="310" y="211">vs</text>
+                <text x="310" y="281">vs</text>
+                <text x="310" y="351">vs</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px;background:rgba(255,255,255,.03);box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>which tool fits your work?</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Workflow routing calculator</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Need honest pushback on plans (1&ndash;10): <span id="pbVal" class="mono">7</span>
+                  </label>
+                  <input id="pb" type="range" min="1" max="10" value="7" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Writing/editing vs generating from scratch: <span id="editVal" class="mono">6</span>
+                  </label>
+                  <input id="edit" type="range" min="1" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Need images/voice/web search (1&ndash;10): <span id="mediaVal" class="mono">4</span>
+                  </label>
+                  <input id="media" type="range" min="1" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Complex reasoning / debugging: <span id="reasonVal" class="mono">7</span>
+                  </label>
+                  <input id="reason" type="range" min="1" max="10" value="7" />
+                </div>
+                <div class="callout" id="routeRes" style="margin-top:10px">
+                  <b>Routing:</b> &mdash;
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Switching readiness meter</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Frustration with AI agreeing too easily: <span id="fruVal" class="mono">6</span>
+                  </label>
+                  <input id="fru" type="range" min="1" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Dependence on ChatGPT-only features: <span id="depVal" class="mono">5</span>
+                  </label>
+                  <input id="dep" type="range" min="1" max="10" value="5" />
+                </div>
+                <div class="callout" id="switchRes" style="margin-top:10px;border-left-color:rgba(20,184,166,.85);background:rgba(20,184,166,.10)">
+                  <b>Readiness:</b> &mdash;
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              The best answer is usually both tools, routed to what each does best. Multi-model fluency is the real skill.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>How to talk to someone new to Claude</h2>
+          <small>The conversation guide</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>What to say</h4>
+              <ul>
+                <li>"It's not Coke vs Pepsi. They're built differently and optimized for different things."</li>
+                <li>"Describe your situation, not just your desired output. Claude rewards context."</li>
+                <li>"Give it your draft to improve, not a blank page to fill."</li>
+                <li>"Set up a Project with rich instructions &mdash; Claude follows them with 94% compliance."</li>
+                <li>"Try Co-work for file tasks &mdash; it's a capability ChatGPT doesn't have."</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>What to be honest about</h4>
+              <ul>
+                <li>No image generation, no video, no real-time voice.</li>
+                <li>Web search is narrower. Memory is less persistent (for now).</li>
+                <li>Claude's conciseness can feel sparse if you're used to ChatGPT's verbosity.</li>
+                <li>No GPTs marketplace or app store ecosystem.</li>
+                <li>"You don't have to pick one. Use both, routed well. That's the skill."</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>The real gift:</b> Don't just show someone a new app. Show them that AI tools have meaningful differences under the hood, that those differences shape how they think, and that multi-model fluency &mdash; routing the right task to the right tool &mdash; is the breakthrough skill of 2026.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $=(s,el=document)=>el.querySelector(s);
+    const $$=(s,el=document)=>Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t=$("#toast");t.innerHTML=html;t.style.display="block";
+      clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display="none",2300);
+    }
+
+    const nodeMap={
+      pushback:["n-const","n-push","n-rlhf","n-syco"],
+      situation:["n-const","n-push","n-rlhf"],
+      editing:["n-struct","n-sent"],
+      thinking:["n-think","n-wait","n-cowork"],
+      tradeoffs:["n-cowork","n-gen","n-sent"]
+    };
+    const linkMap={
+      pushback:["l-const-rlhf","l-push-syco"],
+      situation:["l-const-rlhf","l-push-syco"],
+      editing:["l-struct-sent"],
+      thinking:["l-think-wait","l-cowork-gen"],
+      tradeoffs:["l-cowork-gen","l-struct-sent"]
+    };
+
+    function clearHighlight(){
+      const svg=$("#map");
+      $$("g.node rect",svg).forEach(r=>{r.style.filter="";r.style.strokeWidth="";r.style.opacity="1"});
+      $$("#links path",svg).forEach(p=>{p.style.stroke="rgba(255,255,255,.22)";p.style.strokeWidth="2";p.style.opacity="0.9"});
+    }
+    function highlight(focus){
+      clearHighlight();const svg=$("#map");
+      $$("g.node rect",svg).forEach(r=>r.style.opacity="0.55");
+      $$("#links path",svg).forEach(p=>p.style.opacity="0.25");
+      (nodeMap[focus]||[]).forEach(id=>{
+        const g=$("#"+id,svg);if(!g)return;
+        const rect=$("rect",g);
+        if(rect){rect.style.opacity="1";rect.style.filter="url(#glow)";rect.style.strokeWidth="2.4";}
+      });
+      (linkMap[focus]||[]).forEach(id=>{
+        const p=$("#"+id,svg);if(!p)return;
+        p.style.opacity="0.95";p.style.strokeWidth="3.2";
+        const col=({pushback:"rgba(59,130,246,.75)",situation:"rgba(139,92,246,.70)",editing:"rgba(20,184,166,.75)",thinking:"rgba(245,158,11,.75)",tradeoffs:"rgba(239,68,68,.70)"})[focus]||"rgba(255,255,255,.35)";
+        p.style.stroke=col;
+      });
+      const labels={pushback:"Honest pushback",situation:"Context strategy",editing:"Writing quality",thinking:"Thinking + projects",tradeoffs:"Trade-offs"};
+      toast(`<b>Focus:</b> ${labels[focus]||focus} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click",()=>{
+        const f=b.getAttribute("data-focus");highlight(f);
+        const story=$(`details.story[data-story="${f}"]`);
+        if(story){story.open=true;story.scrollIntoView({behavior:"smooth",block:"start"});}
+      });
+    });
+    $("#reset").addEventListener("click",()=>{clearHighlight();toast(`<b>Reset</b> — full comparison view.`);});
+
+    const svg=$("#map");
+    $$(".node",svg).forEach(n=>{
+      n.style.cursor="pointer";
+      n.addEventListener("click",()=>{
+        const id=n.getAttribute("data-node");
+        const pick=(id==="const"||id==="rlhf"||id==="push"||id==="syco")?"pushback"
+                  :(id==="struct"||id==="sent")?"editing"
+                  :(id==="think"||id==="wait")?"thinking"
+                  :(id==="cowork"||id==="gen")?"tradeoffs":"pushback";
+        highlight(pick);
+        const story=$(`details.story[data-story="${pick}"]`);
+        if(story){story.open=true;story.scrollIntoView({behavior:"smooth",block:"start"});}
+      });
+    });
+
+    // --- Simulators ---
+    const pb=$("#pb"),editI=$("#edit"),media=$("#media"),reason=$("#reason");
+    const pbVal=$("#pbVal"),editVal=$("#editVal"),mediaVal=$("#mediaVal"),reasonVal=$("#reasonVal");
+    const routeRes=$("#routeRes");
+
+    function calcRoute(){
+      const P=+pb.value,E=+editI.value,M=+media.value,R=+reason.value;
+      pbVal.textContent=P;editVal.textContent=E;mediaVal.textContent=M;reasonVal.textContent=R;
+      const claudeScore=(P*3+E*2.5+R*2.5)-(M*2);
+      const gptScore=(M*3+10-P)+(10-E);
+      const total=claudeScore+gptScore;
+      const claudePct=Math.round(claudeScore/total*100);
+      const gptPct=100-claudePct;
+      let verdict;
+      if(claudePct>=65) verdict=`Route <b>${claudePct}% to Claude</b>, ${gptPct}% to ChatGPT. Your work rewards pushback, editing depth, and reasoning. Use ChatGPT for media generation and broad search.`;
+      else if(claudePct>=45) verdict=`Roughly <b>${claudePct}% Claude / ${gptPct}% ChatGPT</b>. You genuinely need both. Route strategic work to Claude, creative generation and search to ChatGPT.`;
+      else verdict=`Route <b>${gptPct}% to ChatGPT</b>, ${claudePct}% to Claude. Your workflow is media-heavy. But try Claude for plan review and structural editing — you'll be surprised.`;
+      routeRes.innerHTML=`<b>Routing:</b> ${verdict}`;
+    }
+    [pb,editI,media,reason].forEach(i=>i.addEventListener("input",calcRoute));
+    calcRoute();
+
+    const fru=$("#fru"),dep=$("#dep");
+    const fruVal=$("#fruVal"),depVal=$("#depVal");
+    const switchRes=$("#switchRes");
+
+    function calcSwitch(){
+      const F=+fru.value,D=+dep.value;
+      fruVal.textContent=F;depVal.textContent=D;
+      const readiness=Math.round((F*7-D*4+30));
+      const clamped=Math.max(0,Math.min(100,readiness));
+      let label,advice;
+      if(clamped>=65){label="High readiness";advice="You're frustrated with sycophancy and not locked into ChatGPT-only features. Claude will feel like a relief. Start with a Project and rich instructions.";}
+      else if(clamped>=35){label="Moderate readiness";advice="You want better pushback but depend on some ChatGPT features. Start using both in parallel — route strategic work to Claude, media to ChatGPT.";}
+      else{label="Low readiness";advice="You depend heavily on ChatGPT-only features (images, voice, search). Keep ChatGPT as primary but try Claude for one specific workflow — plan review or document editing.";}
+      switchRes.innerHTML=`<b>Readiness:</b> ${label} <span class="mono" style="opacity:.85">(${clamped}/100)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [fru,dep].forEach(i=>i.addEventListener("input",calcSwitch));
+    calcSwitch();
+
+    let firstOpen=true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle",()=>{
+        if(firstOpen){firstOpen=false;toast(`<b>Tip:</b> Use Focus buttons to highlight comparisons on the map.`);}
+      });
+    });
+  </script>
+</body>
+</html>
