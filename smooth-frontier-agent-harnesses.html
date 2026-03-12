@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Why AI capabilities aren't jagged anymore: 4 labs converged on the same multi-agent harness pattern (decompose, parallelize, verify, iterate) and smoothed the frontier." />
+  <meta name="category" content="AI Strategy" />
+  <meta name="tags" content="Agent Harnesses, Multi-Agent Systems, Smooth Frontier, Cursor, Verifiability" />
+  <meta name="icon" content="🔮" />
+  <meta name="created" content="2026-03-12" />
+  <title>The Smooth Frontier: Why AI Isn't Jagged Anymore</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+
+    .slider{
+      display:grid;gap:8px;margin-top:10px
+    }
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Infographic · March 2026 · "The frontier is smooth"</span></div>
+          <h1>The Smooth Frontier: Why AI Isn't Jagged Anymore</h1>
+          <p class="sub">
+            4 AI labs (Anthropic, Google DeepMind, OpenAI, Cursor) independently built the same multi-agent
+            coordination pattern — decompose, parallelize, verify, iterate — and it generalizes to any
+            verifiable domain. The jaggedness was never the AI; it was the harness.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Thesis</b> Jaggedness = harness failure, not intelligence failure</div>
+            <div class="chip"><b>Proof</b> Cursor's coding agent solved novel math</div>
+            <div class="chip"><b>Pattern</b> Decompose → parallelize → verify → iterate</div>
+            <div class="chip"><b>Shift</b> Execution → meta-skills (sniff-checking)</div>
+          </div>
+        </div>
+        <div class="foot">
+          Tip: click any story below to expand. Use the Focus buttons to highlight the strategy map. Mini simulators at the bottom.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the smooth frontier</h2>
+          <small>5 insights · 1 map</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Core insight</small>
+              <b>Harness &gt; Model</b>
+              <span>The organizational scaffolding around agents matters more than raw intelligence for practical work.</span>
+            </div>
+            <div class="kpi">
+              <small>Convergence</small>
+              <b>4 labs, 1 pattern</b>
+              <span>Anthropic, Google, OpenAI, and Cursor all built decompose → parallelize → verify → iterate.</span>
+            </div>
+            <div class="kpi">
+              <small>Implication</small>
+              <b>Meta-skills win</b>
+              <span>The skill that survives: "I can tell if the work is correct" — sniff-checking beats execution.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Harness architecture</div>
+            <div class="key"><span class="sq c2"></span> Convergence proof</div>
+            <div class="key"><span class="sq c3"></span> Verifiability tiers</div>
+            <div class="key"><span class="sq c4"></span> Intelligence curve</div>
+            <div class="key"><span class="sq c5"></span> Work transformation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 stories that matter</h2>
+          <div class="pill">Click to expand · skim fast</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 Jaggedness was an artifact -->
+          <details class="story" open data-story="jagged">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">1</div>
+                <div class="titleBlock">
+                  <b>The jagged frontier was never about AI intelligence — it was an artifact of how we asked</b>
+                  <span>Single-turn, no-notes, no-retries = asking a brilliant analyst to solve everything in 30 seconds</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                We deployed AI into a paradigm that stripped away every organizational structure humans use to think —
+                review processes, sprint cycles, peer feedback, draft-revise-publish pipelines — then described
+                the resulting failures as a property of AI intelligence. But we forgot: we can't solve one-shot
+                cognition problems well either.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Why single-turn fails</h4>
+                  <ul>
+                    <li>Errors propagate: one mistake midway corrupts everything downstream.</li>
+                    <li>No mechanism to detect a wrong first approach and try another.</li>
+                    <li>Can't accumulate information beyond the context window.</li>
+                    <li>Every problem must be solved in one shot.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What actually improved</h4>
+                  <ul>
+                    <li><span class="mono">Inference compute</span>: AI takes time to think, tries tokens, self-corrects.</li>
+                    <li><span class="mono">Tool use</span>: AI gets access to external capabilities.</li>
+                    <li><span class="mono">Better prompting</span>: we learned to describe tasks more clearly.</li>
+                    <li>Two curves: intelligence <em>and</em> our fluency at using the tool.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Key insight:</b> The fluency curve (our ability to use agents in harnesses) matters more than the intelligence curve for practical work right now.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 Cursor proof -->
+          <details class="story" data-story="cursor">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>Cursor's coding agent solved a novel math proof — without being built for math</b>
+                  <span>Same harness that built a web browser from scratch ran for 4 days on spectral graph theory</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                On March 3, Cursor CEO Michael Truell announced their coding harness solved Problem 6 of
+                the 1st Proof — a research-grade math problem from unpublished Stanford/MIT/Berkeley work.
+                It didn't just solve it: it improved on the human solution with stronger bounds and better coverage.
+                Zero hints. Zero human nudges. 4 days of autonomous running.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Why this matters</h4>
+                  <ul>
+                    <li>Cursor is a <span class="mono">coding</span> company, not a math company.</li>
+                    <li>The same harness previously built a web browser from scratch in Rust.</li>
+                    <li>A system designed to write code produced mathematics its authors hadn't found.</li>
+                    <li>This suggests agent harnesses generalize beyond their original domain.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Other Cursor harness results</h4>
+                  <ul>
+                    <li>Web browser from scratch in Rust (ran for a week).</li>
+                    <li>Solid-to-React migration.</li>
+                    <li>Java language server.</li>
+                    <li>Windows 7 emulator — 1.2M lines of code.</li>
+                    <li>Excel clone — 1.6M lines of code.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Truell's insight:</b> "Our technique for scaling agent coordination might generalize beyond coding" — to any domain that is even reasonably verifiable.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 The harness architecture -->
+          <details class="story" data-story="harness">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">3</div>
+                <div class="titleBlock">
+                  <b>The harness that works: hierarchy, specialization, clean isolation</b>
+                  <span>Flat coordination failed — the breakthrough came from removing complexity, not adding it</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Cursor's first attempt was flat coordination: agents sharing a single file with locks.
+                It failed badly — agents became risk-averse, avoided hard tasks, and optimized for small
+                safe changes. The breakthrough came from hierarchy: planners → sub-planners → workers → judge.
+                And counterintuitively, many improvements came from stripping out complexity rather than adding it.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Architecture that works</h4>
+                  <ul>
+                    <li><span class="mono">Planners</span> explore the codebase, create tasks, spawn sub-planners recursively.</li>
+                    <li><span class="mono">Workers</span> pick up individual tasks, grind until done, ignore everything else.</li>
+                    <li><span class="mono">Judge</span> (LLM-as-judge) determines whether to continue; next iteration starts fresh.</li>
+                    <li>Fresh context restart = most important property (solves context window limits).</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Two key lessons</h4>
+                  <ul>
+                    <li><b>Model choice matters for long-horizon tasks:</b> GPT-5.2 consistently outperformed Claude Opus (which tended to stop earlier and take shortcuts).</li>
+                    <li><b>Removing complexity beats adding it:</b> stripped out coordination machinery, added hierarchy, let agents work in clean isolation.</li>
+                    <li>Prompt design disproportionately determines system behavior.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Design principle:</b> the improvement came from simplification — hierarchy + isolation, not more elaborate coordination.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 Four labs converged -->
+          <details class="story" data-story="converge">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">4</div>
+                <div class="titleBlock">
+                  <b>4 labs built the same system independently — this is not a coincidence</b>
+                  <span>Anthropic, Google DeepMind, OpenAI, Cursor all converged on decompose → parallelize → verify → iterate</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                None coordinated. All four exhibit a similar structural pattern. This convergence is a solution
+                to a fundamental problem: how do you get useful work from units of intelligence with finite context,
+                finite per-step reliability, and no persistent memory? The answer — for both humans and agents —
+                turns out to be organizational.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The four approaches</h4>
+                  <ul>
+                    <li><span class="mono">Anthropic</span>: initializer agent + progress file + structured artifacts for next session.</li>
+                    <li><span class="mono">Google DeepMind</span>: separates generation, verification, revision into distinct roles.</li>
+                    <li><span class="mono">OpenAI Codex</span>: parallel sandbox environments with isolated execution.</li>
+                    <li><span class="mono">Cursor</span>: planner → worker → judge hierarchy (like a PM + engineers).</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why convergence matters</h4>
+                  <ul>
+                    <li>Same principles as human orgs: roles, handoffs, verification, restart procedures.</li>
+                    <li>These are <span class="mono">management insights</span> that generalize to autonomous agents.</li>
+                    <li>We figured out organizational intelligence for humans — now it scales for agents too.</li>
+                    <li>The pattern is domain-agnostic: works for any verifiable problem class.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Deep parallel:</b> We don't structure human orgs as "one very smart person doing everything." We use roles, handoffs, and verification. Agents need the same thing — and now they have it.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 Work transformation -->
+          <details class="story" data-story="work">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">5</div>
+                <div class="titleBlock">
+                  <b>The skill that survives: sniff-checking, not execution</b>
+                  <span>Two tiers of verifiability open up most knowledge work to agent delegation</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                If AI can tackle any problem that's decomposable and verifiable, the question shifts from
+                "can AI do this specific task?" to "can my work be decomposed into verifiable sub-problems?"
+                The answer is yes far more often than most of us are comfortable with. The skill that survives
+                isn't "I can do the work" — it's "I can tell if the work is correct."
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Two tiers of verifiability</h4>
+                  <ul>
+                    <li><b>Tier 1 — Machine-checkable:</b> code compiles or doesn't, tests pass or fail.</li>
+                    <li><b>Tier 2 — Expert-checkable with clear criteria:</b> math proofs, engineering designs, legal briefs, product strategies.</li>
+                    <li>Tier 2 is bigger than people think: 3-4 experienced product leaders will agree on whether a strategy is correct.</li>
+                    <li>"Soft work" is more verifiable than we assume.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Meta-skills that matter</h4>
+                  <ul>
+                    <li>Knowing whether architecture is <span class="mono">maintainable</span>.</li>
+                    <li>Recognizing a solution that is <span class="mono">fragile</span>.</li>
+                    <li>Understanding when tests cover all important cases.</li>
+                    <li>Decomposing problems into delegatable sub-tasks.</li>
+                    <li>These get <em>more</em> valuable as harnesses improve, not less.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Every department:</b> Marketing can sniff-check campaign designs. Customer success can sniff-check email schemas. The best orgs are delegating the <em>hard</em> stuff — not just the easy stuff.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive strategy map</h2>
+          <small>From jagged to smooth</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="jagged"><span class="sw o"></span>Jaggedness myth</button>
+            <button class="btn" data-focus="cursor"><span class="sw p"></span>Cursor proof</button>
+            <button class="btn" data-focus="harness"><span class="sw"></span>Harness design</button>
+            <button class="btn" data-focus="converge"><span class="sw r"></span>4-lab convergence</button>
+            <button class="btn" data-focus="work"><span class="sw b"></span>Work shift</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 440" width="100%" height="auto" role="img" aria-label="Smooth frontier strategy map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-jagged-harness" d="M200,80 C280,100 300,130 310,160" />
+                <path id="l-jagged-intel" d="M200,80 C320,60 420,55 500,72" />
+                <path id="l-harness-cursor" d="M360,190 C420,190 450,175 490,155" />
+                <path id="l-harness-converge" d="M310,210 C310,260 290,290 260,310" />
+                <path id="l-cursor-converge" d="M520,170 C500,230 420,290 330,320" />
+                <path id="l-converge-work" d="M260,350 C300,380 380,390 440,385" />
+                <path id="l-harness-work" d="M360,210 C420,260 460,330 480,370" />
+                <path id="l-intel-cursor" d="M530,100 C530,120 525,135 520,145" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <g class="node" id="n-jagged" data-node="jagged">
+                  <rect x="40" y="40" rx="14" ry="14" width="220" height="70" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.30)"/>
+                  <text x="58" y="70" fill="#EAF0FF" font-weight="700">Jagged frontier myth</text>
+                  <text x="58" y="92" fill="rgba(234,240,255,.75)" font-size="12">single-turn = artificial limit</text>
+                </g>
+
+                <g class="node" id="n-intel" data-node="intel">
+                  <rect x="420" y="40" rx="14" ry="14" width="180" height="70" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.24)"/>
+                  <text x="438" y="70" fill="#EAF0FF" font-weight="700">Intelligence curve</text>
+                  <text x="438" y="92" fill="rgba(234,240,255,.70)" font-size="12">scaling + inference</text>
+                </g>
+
+                <g class="node" id="n-harness" data-node="harness">
+                  <rect x="220" y="140" rx="14" ry="14" width="220" height="80" fill="rgba(20,184,166,.12)" stroke="rgba(20,184,166,.28)"/>
+                  <text x="238" y="172" fill="#EAF0FF" font-weight="700">Agent harness design</text>
+                  <text x="238" y="194" fill="rgba(234,240,255,.75)" font-size="12">hierarchy + isolation + judge</text>
+                </g>
+
+                <g class="node" id="n-cursor" data-node="cursor">
+                  <rect x="460" y="125" rx="14" ry="14" width="150" height="70" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.28)"/>
+                  <text x="478" y="155" fill="#EAF0FF" font-weight="700">Cursor proof</text>
+                  <text x="478" y="177" fill="rgba(234,240,255,.75)" font-size="12">code → math</text>
+                </g>
+
+                <g class="node" id="n-converge" data-node="converge">
+                  <rect x="100" y="280" rx="14" ry="14" width="260" height="80" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="118" y="312" fill="#EAF0FF" font-weight="700">4-lab convergence</text>
+                  <text x="118" y="334" fill="rgba(234,240,255,.75)" font-size="12">decompose → parallelize → verify → iterate</text>
+                </g>
+
+                <g class="node" id="n-work" data-node="work">
+                  <rect x="390" y="345" rx="14" ry="14" width="210" height="80" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.24)"/>
+                  <text x="408" y="377" fill="#EAF0FF" font-weight="700">Work transformation</text>
+                  <text x="408" y="399" fill="rgba(234,240,255,.75)" font-size="12">execution → sniff-checking</text>
+                </g>
+
+                <!-- Smooth ring -->
+                <g id="smooth" opacity="0.85">
+                  <circle cx="100" cy="185" r="42" fill="rgba(59,130,246,.06)" stroke="rgba(59,130,246,.24)" stroke-width="2"/>
+                  <path d="M100 143 A42 42 0 1 1 65 221" stroke="rgba(59,130,246,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M65 221 L76 221 L70.5 231 Z" fill="rgba(59,130,246,.70)"/>
+                  <text x="100" y="189" text-anchor="middle" fill="rgba(234,240,255,.88)" font-size="11" font-weight="700">smooth</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>stress-test the logic</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Harness readiness (can your work benefit from agents?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Task decomposability: <span id="decompVal" class="mono">6</span>/10
+                  </label>
+                  <input id="decomp" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Output verifiability: <span id="verifyVal" class="mono">7</span>/10
+                  </label>
+                  <input id="verify" type="range" min="0" max="10" value="7" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Iteration tolerance (can you retry cheaply?): <span id="iterVal" class="mono">5</span>/10
+                  </label>
+                  <input id="iter" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="harnessRes" style="margin-top:10px">
+                  <b>Result:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Token burn vs. value (multi-agent cost-benefit)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Problem complexity: <span id="complexVal" class="mono">7</span>/10
+                  </label>
+                  <input id="complex" type="range" min="0" max="10" value="7" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Parallel workers needed: <span id="workersVal" class="mono">4</span>/10
+                  </label>
+                  <input id="workers" type="range" min="0" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Value of correct solution: <span id="valueVal" class="mono">8</span>/10
+                  </label>
+                  <input id="value" type="range" min="0" max="10" value="8" />
+                </div>
+                <div class="callout" id="tokenRes" style="margin-top:10px; border-left-color:rgba(139,92,246,.9); background:rgba(139,92,246,.10)">
+                  <b>Cost-benefit:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Sniff-check readiness (are you positioned for the meta-skill shift?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Domain evaluation expertise: <span id="expertVal" class="mono">6</span>/10
+                  </label>
+                  <input id="expert" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Delegation practice (do you use agents already?): <span id="delegVal" class="mono">4</span>/10
+                  </label>
+                  <input id="deleg" type="range" min="0" max="10" value="4" />
+                </div>
+                <div class="callout" id="sniffRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.85); background:rgba(20,184,166,.10)">
+                  <b>Readiness:</b> —
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally rough. The goal is to force the "so what?" into numbers you can argue with.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this (one-page checklist)</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you're an individual contributor</h4>
+              <ul>
+                <li>Map your daily work: which tasks are decomposable and verifiable? Start delegating those to agents.</li>
+                <li>Build your <span class="mono">sniff-check</span> muscle — practice evaluating AI outputs rather than producing from scratch.</li>
+                <li>Learn to design harnesses: task files, memory structures, clear prompts with complete success criteria.</li>
+                <li>Think "team of one" — you + multi-agent coordination = team of a hundred.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you lead a team or organization</h4>
+              <ul>
+                <li>Stop thinking "AI can do the easy stuff" — the best orgs delegate the <em>hard</em> stuff they can sniff-check.</li>
+                <li>Invest in <span class="mono">agent infrastructure</span>: harnesses, evaluation pipelines, and structured handoff patterns.</li>
+                <li>Train people on taste, decomposition, and verification — these meta-skills get more valuable as execution gets cheaper.</li>
+                <li>The relevant question is shifting: not "can AI do X?" but "can X be decomposed into verifiable sub-problems?"</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Core message:</b> The frontier is smooth for work. Capabilities are not jagged at work. We essentially scaled our organizational intelligence tools for people into AI — and it finally hit a tipping point.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      jagged:   ["n-jagged","n-intel"],
+      cursor:   ["n-cursor","n-intel","n-harness"],
+      harness:  ["n-harness","smooth"],
+      converge: ["n-converge","n-harness"],
+      work:     ["n-work","n-converge"]
+    };
+
+    const linkMap = {
+      jagged:   ["l-jagged-harness","l-jagged-intel"],
+      cursor:   ["l-harness-cursor","l-intel-cursor","l-cursor-converge"],
+      harness:  ["l-jagged-harness","l-harness-cursor","l-harness-converge","l-harness-work"],
+      converge: ["l-harness-converge","l-cursor-converge","l-converge-work"],
+      work:     ["l-converge-work","l-harness-work"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+      $("#smooth").style.filter = "";
+      $("#smooth").style.opacity = "0.85";
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g) || g;
+        if(rect && rect.tagName.toLowerCase()==="rect"){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        } else {
+          g.style.filter = "url(#glow)";
+          g.style.opacity = "1";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          jagged:"rgba(245,158,11,.75)",
+          cursor:"rgba(139,92,246,.70)",
+          harness:"rgba(20,184,166,.75)",
+          converge:"rgba(239,68,68,.70)",
+          work:"rgba(59,130,246,.75)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      toast(`<b>Focus:</b> ${focus.replace(/^\w/,c=>c.toUpperCase())} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full system view.`);
+    });
+
+    // Click nodes to jump to story
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        const pick = (id==="intel") ? "jagged" : id;
+        highlight(pick);
+        const story = $(`details.story[data-story="${pick}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+    const decomp=$("#decomp"), verify=$("#verify"), iter=$("#iter");
+    const decompVal=$("#decompVal"), verifyVal=$("#verifyVal"), iterVal=$("#iterVal");
+    const harnessRes=$("#harnessRes");
+
+    function calcHarness(){
+      const D=+decomp.value, V=+verify.value, I=+iter.value;
+      decompVal.textContent=D; verifyVal.textContent=V; iterVal.textContent=I;
+
+      const score = Math.round((D*0.35 + V*0.40 + I*0.25) * 10);
+      let verdict, advice;
+      if(score >= 70){
+        verdict = "High harness fit";
+        advice = "Your work is ready for multi-agent delegation. Invest in building the harness: task decomposition, evaluation criteria, and iteration loops.";
+      } else if(score >= 40){
+        verdict = "Moderate fit — needs structure";
+        advice = "Focus on making outputs more verifiable: define success criteria, create rubrics, and structure tasks into smaller checkable units.";
+      } else {
+        verdict = "Low fit (currently)";
+        advice = "Your work may need more structure before agents can help. Start by identifying which sub-tasks have clear right/wrong answers.";
+      }
+      harnessRes.innerHTML = `<b>Result:</b> ${verdict} <span class="mono" style="opacity:.85">(${score}/100)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [decomp, verify, iter].forEach(i=> i.addEventListener("input", calcHarness));
+    calcHarness();
+
+    const complex=$("#complex"), workers=$("#workers"), value=$("#value");
+    const complexVal=$("#complexVal"), workersVal=$("#workersVal"), valueVal=$("#valueVal");
+    const tokenRes=$("#tokenRes");
+
+    function calcToken(){
+      const C=+complex.value, W=+workers.value, V=+value.value;
+      complexVal.textContent=C; workersVal.textContent=W; valueVal.textContent=V;
+
+      const cost = Math.round((C*0.4 + W*0.6) * 10);
+      const benefit = Math.round(V * 10);
+      const ratio = benefit > 0 ? (benefit / Math.max(cost, 10)).toFixed(1) : "0.0";
+      let verdict, advice;
+      if(ratio >= 1.5){
+        verdict = "Strong ROI — burn the tokens";
+        advice = "Multi-agent coordination is worth the cost. The problem is complex enough and valuable enough to justify parallel exploration.";
+      } else if(ratio >= 0.8){
+        verdict = "Marginal — optimize carefully";
+        advice = "Consider whether a simpler harness (fewer workers, smarter decomposition) could get 80% of the result at lower cost.";
+      } else {
+        verdict = "Expensive for the value";
+        advice = "Single-agent or simpler approaches may be more cost-effective. Reserve multi-agent for higher-value problems.";
+      }
+      tokenRes.innerHTML = `<b>Cost-benefit:</b> ${verdict} <span class="mono" style="opacity:.85">(ratio: ${ratio}x)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [complex, workers, value].forEach(i=> i.addEventListener("input", calcToken));
+    calcToken();
+
+    const expert=$("#expert"), deleg=$("#deleg");
+    const expertVal=$("#expertVal"), delegVal=$("#delegVal");
+    const sniffRes=$("#sniffRes");
+
+    function calcSniff(){
+      const E=+expert.value, D=+deleg.value;
+      expertVal.textContent=E; delegVal.textContent=D;
+
+      const score = Math.round((E*0.6 + D*0.4) * 10);
+      let level, action;
+      if(score >= 65){
+        level="Well positioned";
+        action="You have the evaluation expertise and delegation practice. Focus on expanding: map more of your work domain for agent delegation.";
+      } else if(score >= 35){
+        level="Building — keep going";
+        action="Strengthen either your evaluation skills (learn what 'correct' looks like faster) or your delegation practice (use agents more frequently).";
+      } else {
+        level="Early stage";
+        action="Start small: pick one verifiable task you do weekly, delegate it to an agent, and practice evaluating the output. Build the muscle.";
+      }
+      sniffRes.innerHTML = `<b>Readiness:</b> ${level} <span class="mono" style="opacity:.85">(${score}/100)</span><br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [expert, deleg].forEach(i=> i.addEventListener("input", calcSniff));
+    calcSniff();
+
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to connect stories → structure.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
