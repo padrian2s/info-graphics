@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="How Anthropic and OpenAI actually build software: no sprints, no PRDs, prototypes over docs, agent fleets, and the death of traditional engineering process." />
+  <meta name="category" content="AI Engineering" />
+  <meta name="tags" content="Anthropic, OpenAI, Engineering Culture, No Sprints, Agent-First Development, Harness Engineering" />
+  <meta name="icon" content="⚙️" />
+  <meta name="created" content="2026-03-12" />
+  <title>No Sprints, No PRDs: How Anthropic &amp; OpenAI Actually Build Software</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(59,130,246,.8);
+      background:rgba(59,130,246,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+    .slider{display:grid;gap:8px;margin-top:10px}
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+    .srcTag{font-size:11px;color:var(--faint);font-style:italic;margin-top:6px;display:block}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Infographic · March 2026 · "How the AI labs actually ship"</span></div>
+          <h1>No Sprints, No PRDs: How Anthropic &amp; OpenAI Actually Build Software</h1>
+          <p class="sub">
+            Both AI labs have abandoned traditional software engineering process. Anthropic's Claude Code team
+            ships 60-100 internal releases daily with zero PRDs. OpenAI's engineers manage fleets of 10-20
+            parallel agents. The "builder" era has replaced the "software engineer" era.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Anthropic</b> Docs-to-demos · everyone codes · 20 prototypes in 2 days</div>
+            <div class="chip"><b>OpenAI</b> Ship day one · DRI model · harness engineering</div>
+            <div class="chip"><b>Both</b> No traditional sprints · prototypes over specs · agent-first</div>
+            <div class="chip"><b>Verified</b> Multiple sources: Lenny's Podcast, Pragmatic Engineer, OpenAI blog</div>
+          </div>
+        </div>
+        <div class="foot">
+          Sources: Boris Cherny (Lenny's Podcast, Feb 2026), Cat Wu (Coder.com), Evan Morikawa (Pragmatic Engineer),
+          Sherwin Wu (Lenny's Podcast), OpenAI "Harness Engineering" blog, Miqdad Jaffer (OpenAI PM).
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>At-a-glance: the new engineering</h2>
+          <small>verified claims · real numbers</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Anthropic velocity</small>
+              <b>60-100 / day</b>
+              <span>Internal releases daily. ~5 PRs/engineer/day vs. industry norm of 1-2. One external release almost every day.</span>
+            </div>
+            <div class="kpi">
+              <small>OpenAI agent adoption</small>
+              <b>95% use Codex</b>
+              <span>On the API platform team. Engineers manage 10-20 parallel agents. Code review dropped from 15 min to 2-3 min.</span>
+            </div>
+            <div class="kpi">
+              <small>Productivity gap</small>
+              <b>10x difference</b>
+              <span>OpenAI reports people not adopting agent-first approaches are 10x less productive at review time.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Anthropic practices</div>
+            <div class="key"><span class="sq c2"></span> OpenAI practices</div>
+            <div class="key"><span class="sq c3"></span> Shared patterns</div>
+            <div class="key"><span class="sq c4"></span> What they killed</div>
+            <div class="key"><span class="sq c5"></span> What replaces it</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 stories that matter</h2>
+          <div class="pill">Click to expand · verified claims</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1 Anthropic: No PRDs, Docs to Demos -->
+          <details class="story" open data-story="anthropic">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">1</div>
+                <div class="titleBlock">
+                  <b>Anthropic killed PRDs — replaced them with "docs to demos" and 20 prototypes in 2 days</b>
+                  <span>Boris Cherny + Cat Wu, Claude Code team · verified via Lenny's Podcast + Coder.com</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Boris Cherny (creator/head of Claude Code) stated on Lenny's Podcast (Feb 2026) that the team
+                operates with no sprints, no PRDs, and "everyone codes" — including the PM, designer, finance
+                person, and data scientist. Cat Wu (founding PM) described the replacement: "docs to demos."
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The "docs to demos" process</h4>
+                  <ul>
+                    <li><b>Step 1:</b> Idea → working prototype (skip the spec/PRD entirely).</li>
+                    <li><b>Step 2:</b> Ship prototype to all employees immediately.</li>
+                    <li><b>Step 3:</b> Iterate based on "antfooding" (internal dogfooding).</li>
+                    <li><b>Step 4:</b> Prioritize: high usage + positive feedback → keep; low engagement → kill.</li>
+                  </ul>
+                  <span class="srcTag">Source: Cat Wu, Coder.com interview; Aakash Gupta analysis</span>
+                </div>
+                <div class="mini">
+                  <h4>Verified numbers</h4>
+                  <ul>
+                    <li><span class="mono">60-100</span> internal releases per day.</li>
+                    <li><span class="mono">~5 PRs/engineer/day</span> (industry norm: 1-2).</li>
+                    <li><span class="mono">~20 prototypes in 2 days</span> for a single feature (todo list).</li>
+                    <li><span class="mono">80%+</span> of Anthropic technical staff use Claude Code daily.</li>
+                    <li><span class="mono">90%</span> of Claude Code's own codebase written by Claude Code.</li>
+                  </ul>
+                  <span class="srcTag">Source: Boris Cherny, Lenny's Podcast Feb 2026; Pragmatic Engineer</span>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Cherny quote:</b> "By the end of the year, everyone is going to be a product manager, and everyone codes. The title 'software engineer' is going to be replaced by 'builder.'"
+              </div>
+            </div>
+          </details>
+
+          <!-- 2 OpenAI: Ship Day One + DRI -->
+          <details class="story" data-story="openai">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>OpenAI ships on day one, hires only senior generalists, and uses the DRI model</b>
+                  <span>Evan Morikawa (Head of Applied) · verified via Pragmatic Engineer + LeadDev</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                ChatGPT started from zero — fresh repo, fresh cluster, no legacy code. The team of ~130 engineers
+                operates like a small startup. They hire only senior-and-above generalists who can work across
+                mobile, frontend, and backend. Every project has one DRI (Directly Responsible Individual)
+                with full decision-making authority.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>How OpenAI plans</h4>
+                  <ul>
+                    <li><b>No traditional sprints.</b> Quarterly planning assumes only 60-70% completion.</li>
+                    <li>"Doing more than 70% probably means you weren't flexible enough."</li>
+                    <li>PRDs are evolving: shorter, AI-enhanced, with dual metrics (user + AI quality).</li>
+                    <li>Prototypes quickly become production — the line is intentionally blurred.</li>
+                  </ul>
+                  <span class="srcTag">Source: Evan Morikawa, Pragmatic Engineer; Miqdad Jaffer PRD template</span>
+                </div>
+                <div class="mini">
+                  <h4>The DRI + startup model</h4>
+                  <ul>
+                    <li><b>DRI:</b> one person owns the project end-to-end with full authority.</li>
+                    <li><b>Small teams:</b> most successful projects come from 2-3 people.</li>
+                    <li><b>Extreme generalists:</b> engineers work across the entire stack.</li>
+                    <li><b>Research-engineering blur:</b> researchers run A/B tests, engineers iterate on models.</li>
+                  </ul>
+                  <span class="srcTag">Source: Pragmatic Engineer "Inside OpenAI"; Eng Leadership Newsletter</span>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Morikawa philosophy:</b> "It's easier to move faster when you have no baggage to carry." ChatGPT launched from a blank repo.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3 Both: Agent-First Development -->
+          <details class="story" data-story="agents">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">3</div>
+                <div class="titleBlock">
+                  <b>Both labs went agent-first: 100% AI-written code, fleets of parallel agents</b>
+                  <span>Boris Cherny + Sherwin Wu · verified via Fortune, Lenny's Podcast, OpenAI blog</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Boris Cherny hasn't manually edited a single line of code since November 2024 — 100% written
+                by Claude Code. At OpenAI, Sherwin Wu's API platform team has 95% of engineers using Codex,
+                managing 10-20 parallel agents each. Both labs independently arrived at "humans steer, agents execute."
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Anthropic's agent-first approach</h4>
+                  <ul>
+                    <li>Boris ships <span class="mono">10-30 PRs per day</span> — all AI-written.</li>
+                    <li>Unlimited token allocation for teams.</li>
+                    <li>"Strategic underfunding" — small teams + unlimited compute = efficiency.</li>
+                    <li>Sid Bidasaria: "No formal processes. Super fluid. Prototype really quickly."</li>
+                  </ul>
+                  <span class="srcTag">Source: Fortune Jan 2026; Boris Cherny, Lenny's Podcast</span>
+                </div>
+                <div class="mini">
+                  <h4>OpenAI's "harness engineering"</h4>
+                  <ul>
+                    <li>3 engineers built <span class="mono">1M lines</span> of code in 5 months — all via Codex agents.</li>
+                    <li><span class="mono">~1,500 PRs merged</span>, averaging 3.5 PRs/engineer/day.</li>
+                    <li>Code review dropped from <span class="mono">10-15 min to 2-3 min</span>.</li>
+                    <li>"Engineers are becoming sorcerers" — Sherwin Wu.</li>
+                  </ul>
+                  <span class="srcTag">Source: OpenAI "Harness Engineering" blog; Sherwin Wu, Lenny's Podcast</span>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>10x gap:</b> OpenAI reports that people not adopting agent-first approaches are 10x less productive — "whether you measure lines of code, commits, or business impact."
+              </div>
+            </div>
+          </details>
+
+          <!-- 4 What they killed -->
+          <details class="story" data-story="killed">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">4</div>
+                <div class="titleBlock">
+                  <b>What traditional engineering practices both labs killed — and what replaced them</b>
+                  <span>Sprints, PRDs, code review rituals, role specialization — all gone</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Both labs converged on replacing traditional engineering rituals with speed-optimized alternatives.
+                The pattern is consistent: remove process that predicts value, replace with process that demonstrates value.
+                Working software beats documentation. Prototypes beat specifications.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>What died</h4>
+                  <ul>
+                    <li><b>Sprints:</b> replaced by continuous shipping (60-100 releases/day at Anthropic).</li>
+                    <li><b>PRDs:</b> replaced by prototypes at Anthropic; shorter AI-enhanced specs at OpenAI.</li>
+                    <li><b>Role specialization:</b> "everyone codes" at Anthropic; extreme generalists at OpenAI.</li>
+                    <li><b>Manual code writing:</b> 100% AI-written code for top engineers at both labs.</li>
+                    <li><b>Lengthy code review:</b> from 15 min to 2-3 min with AI assistance at OpenAI.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What replaced it</h4>
+                  <ul>
+                    <li><b>Rapid prototyping:</b> 10-20 prototypes per feature, then internal dogfooding.</li>
+                    <li><b>Antfooding / internal launch:</b> ship to employees immediately, measure usage.</li>
+                    <li><b>DRI ownership:</b> one person owns end-to-end, no committee decisions.</li>
+                    <li><b>Agent fleets:</b> manage 10-20 parallel agents instead of writing code yourself.</li>
+                    <li><b>Simplicity bias:</b> "almost always pick the simplest possible option" — Cherny.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Caveat:</b> Anthropic's "no PRDs" applies specifically to the Claude Code team's product feature development. Other Anthropic teams (safety, enterprise, core model) may still use more structured processes.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5 The convergence pattern -->
+          <details class="story" data-story="converge">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">5</div>
+                <div class="titleBlock">
+                  <b>The convergence: both labs arrived at the same engineering philosophy independently</b>
+                  <span>Small teams + agent leverage + prototype-first + speed over process</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Despite different cultures (Anthropic: safety-first, measured; OpenAI: rapid progress, consumer-first),
+                both labs independently converged on the same engineering philosophy. This suggests the pattern
+                is a real solution, not just a cultural preference.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The shared pattern</h4>
+                  <ul>
+                    <li><b>Tiny teams, massive leverage:</b> 2-3 people + agent fleets = what used to take 30+.</li>
+                    <li><b>Prototypes over specs:</b> demonstrated value replaces predicted value.</li>
+                    <li><b>Speed as strategy:</b> "optimize heavily for speed and velocity" (OpenAI).</li>
+                    <li><b>Everyone builds:</b> PM, designer, data scientist all write code.</li>
+                    <li><b>Simplicity wins:</b> delete code aggressively, avoid over-engineering.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Where they differ</h4>
+                  <ul>
+                    <li><b>Safety posture:</b> Anthropic has Constitutional AI + RSP; OpenAI collaborates with AI Safety Institute.</li>
+                    <li><b>Revenue model:</b> Anthropic ($4.2B) projects break-even 2028; OpenAI ($13B) burning $9B.</li>
+                    <li><b>Team size:</b> Claude Code ~10 engineers; ChatGPT Applied ~130 engineers.</li>
+                    <li><b>Agent tool:</b> Anthropic = Claude Code; OpenAI = Codex.</li>
+                    <li><b>PRDs:</b> Anthropic killed them; OpenAI shortened + AI-enhanced them.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>What this means for you:</b> If both leading AI labs independently abandoned traditional engineering process, the signal is clear — the "builder" era is replacing the "software engineer" era. The practices that worked for the last 20 years are not the practices that will work for the next 5.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Interactive comparison map</h2>
+          <small>Anthropic vs OpenAI</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="anthropic"><span class="sw b"></span>Anthropic</button>
+            <button class="btn" data-focus="openai"><span class="sw p"></span>OpenAI</button>
+            <button class="btn" data-focus="agents"><span class="sw"></span>Agent-first</button>
+            <button class="btn" data-focus="killed"><span class="sw r"></span>What died</button>
+            <button class="btn" data-focus="converge"><span class="sw o"></span>Convergence</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 460" width="100%" height="auto" role="img" aria-label="Engineering practices comparison map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Center divider -->
+              <line x1="310" y1="30" x2="310" y2="440" stroke="rgba(255,255,255,.06)" stroke-width="1" stroke-dasharray="4,6"/>
+              <text x="150" y="28" fill="rgba(59,130,246,.6)" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-sans-serif, system-ui">ANTHROPIC</text>
+              <text x="470" y="28" fill="rgba(139,92,246,.6)" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-sans-serif, system-ui">OPENAI</text>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-anth-demos" d="M150,90 C170,120 160,140 150,160" />
+                <path id="l-oai-dri" d="M470,90 C450,120 460,140 470,160" />
+                <path id="l-demos-agent" d="M200,185 C250,210 280,240 300,265" />
+                <path id="l-dri-agent" d="M420,185 C380,210 350,240 320,265" />
+                <path id="l-anth-killed" d="M150,200 C120,240 100,280 110,320" />
+                <path id="l-oai-killed" d="M470,200 C500,240 520,280 510,320" />
+                <path id="l-agent-converge" d="M310,300 C310,340 310,360 310,380" />
+                <path id="l-killed-converge" d="M170,345 C220,370 260,385 290,395" />
+                <path id="l-killed2-converge" d="M450,345 C400,370 360,385 330,395" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <!-- Anthropic side -->
+                <g class="node" id="n-anth" data-node="anthropic">
+                  <rect x="40" y="50" rx="14" ry="14" width="220" height="65" fill="rgba(59,130,246,.12)" stroke="rgba(59,130,246,.30)"/>
+                  <text x="58" y="78" fill="#EAF0FF" font-weight="700">Docs to demos</text>
+                  <text x="58" y="98" fill="rgba(234,240,255,.75)" font-size="12">no PRDs · everyone codes</text>
+                </g>
+
+                <g class="node" id="n-demos" data-node="anthropic">
+                  <rect x="40" y="145" rx="14" ry="14" width="220" height="65" fill="rgba(59,130,246,.08)" stroke="rgba(59,130,246,.20)"/>
+                  <text x="58" y="173" fill="#EAF0FF" font-weight="700">60-100 releases/day</text>
+                  <text x="58" y="193" fill="rgba(234,240,255,.75)" font-size="12">antfooding · ~5 PRs/eng/day</text>
+                </g>
+
+                <!-- OpenAI side -->
+                <g class="node" id="n-oai" data-node="openai">
+                  <rect x="360" y="50" rx="14" ry="14" width="220" height="65" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.30)"/>
+                  <text x="378" y="78" fill="#EAF0FF" font-weight="700">Ship day one + DRI</text>
+                  <text x="378" y="98" fill="rgba(234,240,255,.75)" font-size="12">senior generalists only</text>
+                </g>
+
+                <g class="node" id="n-dri" data-node="openai">
+                  <rect x="360" y="145" rx="14" ry="14" width="220" height="65" fill="rgba(139,92,246,.08)" stroke="rgba(139,92,246,.20)"/>
+                  <text x="378" y="173" fill="#EAF0FF" font-weight="700">Harness engineering</text>
+                  <text x="378" y="193" fill="rgba(234,240,255,.75)" font-size="12">10-20 agents in parallel</text>
+                </g>
+
+                <!-- Center: Shared -->
+                <g class="node" id="n-agent" data-node="agents">
+                  <rect x="200" y="240" rx="14" ry="14" width="220" height="70" fill="rgba(20,184,166,.12)" stroke="rgba(20,184,166,.28)"/>
+                  <text x="218" y="268" fill="#EAF0FF" font-weight="700">100% AI-written code</text>
+                  <text x="218" y="290" fill="rgba(234,240,255,.75)" font-size="12">humans steer, agents execute</text>
+                </g>
+
+                <!-- Killed practices -->
+                <g class="node" id="n-killed1" data-node="killed">
+                  <rect x="30" y="300" rx="14" ry="14" width="180" height="60" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="48" y="326" fill="#EAF0FF" font-weight="700" font-size="13">Sprints · PRDs</text>
+                  <text x="48" y="346" fill="rgba(234,240,255,.70)" font-size="11">role specialization</text>
+                </g>
+
+                <g class="node" id="n-killed2" data-node="killed">
+                  <rect x="410" y="300" rx="14" ry="14" width="180" height="60" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="428" y="326" fill="#EAF0FF" font-weight="700" font-size="13">Long reviews</text>
+                  <text x="428" y="346" fill="rgba(234,240,255,.70)" font-size="11">manual coding · silos</text>
+                </g>
+
+                <!-- Convergence -->
+                <g class="node" id="n-converge" data-node="converge">
+                  <rect x="170" y="375" rx="14" ry="14" width="280" height="70" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.28)"/>
+                  <text x="188" y="405" fill="#EAF0FF" font-weight="700">The builder era</text>
+                  <text x="188" y="425" fill="rgba(234,240,255,.75)" font-size="12">tiny teams + agent leverage + prototype-first</text>
+                </g>
+
+                <!-- VS badge -->
+                <g id="vsbadge" opacity="0.7">
+                  <circle cx="310" y="110" r="18" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+                  <text x="310" y="115" text-anchor="middle" fill="rgba(234,240,255,.75)" font-size="11" font-weight="700">vs</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>stress-test your readiness</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Is your team ready to kill sprints?</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Team seniority (can everyone build end-to-end?): <span id="seniorVal" class="mono">5</span>/10
+                  </label>
+                  <input id="senior" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Agent adoption (% of team using AI coding tools): <span id="agentVal" class="mono">4</span>/10
+                  </label>
+                  <input id="agent" type="range" min="0" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Prototype velocity (can you demo in hours, not weeks?): <span id="protoVal" class="mono">3</span>/10
+                  </label>
+                  <input id="proto" type="range" min="0" max="10" value="3" />
+                </div>
+                <div class="callout" id="sprintRes" style="margin-top:10px">
+                  <b>Result:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Which lab's model fits you better?</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Team size (1=tiny, 10=large): <span id="sizeVal" class="mono">5</span>/10
+                  </label>
+                  <input id="size" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Risk tolerance (1=conservative, 10=move fast): <span id="riskVal" class="mono">5</span>/10
+                  </label>
+                  <input id="risk" type="range" min="0" max="10" value="5" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Process dependency (1=minimal, 10=heavily process-driven): <span id="procVal" class="mono">5</span>/10
+                  </label>
+                  <input id="proc" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="fitRes" style="margin-top:10px; border-left-color:rgba(139,92,246,.9); background:rgba(139,92,246,.10)">
+                  <b>Best fit:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Agent leverage multiplier (how much can agents amplify your team?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Task clarity (can you define "done"?): <span id="clarityVal" class="mono">6</span>/10
+                  </label>
+                  <input id="clarity" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Codebase testability: <span id="testVal" class="mono">5</span>/10
+                  </label>
+                  <input id="test" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="leverageRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.85); background:rgba(20,184,166,.10)">
+                  <b>Leverage:</b> —
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally rough. The goal is to force the "so what?" into numbers you can argue with.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this (one-page checklist)</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you want to adopt Anthropic's model</h4>
+              <ul>
+                <li>Kill PRDs for feature development. Replace with "docs to demos": build a working prototype before writing any spec.</li>
+                <li>Ship internally first — get feedback from real usage, not meetings. Measure actual engagement.</li>
+                <li>Make everyone code. The PM, designer, and data scientist should all be building with AI tools.</li>
+                <li>Give teams <span class="mono">unlimited token budgets</span> but keep team sizes small ("strategic underfunding").</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you want to adopt OpenAI's model</h4>
+              <ul>
+                <li>Hire senior generalists who can own entire features end-to-end. Assign a DRI to every project.</li>
+                <li>Plan quarterly but <span class="mono">assume 60-70% completion</span> — anything more means you aren't flexible enough.</li>
+                <li>Adopt "harness engineering": have engineers managing fleets of 10-20 parallel agents, not writing code manually.</li>
+                <li>Blur the research-engineering line. Let researchers ship to production and engineers iterate on models.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Bottom line:</b> Both labs agree on the core insight — prototypes beat specs, small teams + agent leverage beat large teams + process,
+            and the "builder" role is replacing the "software engineer" role. The question isn't whether this transition happens. It's whether you lead it or get caught by it.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    // --- Story focus + map highlighting ---
+    const nodeMap = {
+      anthropic: ["n-anth","n-demos"],
+      openai:    ["n-oai","n-dri"],
+      agents:    ["n-agent","n-anth","n-oai"],
+      killed:    ["n-killed1","n-killed2"],
+      converge:  ["n-converge","n-agent"]
+    };
+
+    const linkMap = {
+      anthropic: ["l-anth-demos","l-demos-agent"],
+      openai:    ["l-oai-dri","l-dri-agent"],
+      agents:    ["l-demos-agent","l-dri-agent","l-agent-converge"],
+      killed:    ["l-anth-killed","l-oai-killed","l-killed-converge","l-killed2-converge"],
+      converge:  ["l-agent-converge","l-killed-converge","l-killed2-converge"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g);
+        if(rect){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          anthropic:"rgba(59,130,246,.75)",
+          openai:"rgba(139,92,246,.70)",
+          agents:"rgba(20,184,166,.75)",
+          killed:"rgba(239,68,68,.70)",
+          converge:"rgba(245,158,11,.75)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      toast(`<b>Focus:</b> ${focus.replace(/^\w/,c=>c.toUpperCase())} — map highlights updated.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — back to the full view.`);
+    });
+
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        highlight(id);
+        const story = $(`details.story[data-story="${id}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Mini simulators ---
+    const senior=$("#senior"), agent=$("#agent"), proto=$("#proto");
+    const seniorVal=$("#seniorVal"), agentVal=$("#agentVal"), protoVal=$("#protoVal");
+    const sprintRes=$("#sprintRes");
+
+    function calcSprint(){
+      const S=+senior.value, A=+agent.value, P=+proto.value;
+      seniorVal.textContent=S; agentVal.textContent=A; protoVal.textContent=P;
+      const score = Math.round((S*0.35 + A*0.35 + P*0.30) * 10);
+      let verdict, advice;
+      if(score >= 70){
+        verdict = "Ready — kill the sprints";
+        advice = "Your team has the seniority, tooling, and velocity to drop traditional process. Move to continuous shipping with prototype-first development.";
+      } else if(score >= 40){
+        verdict = "Getting there — hybrid phase";
+        advice = "Keep lightweight planning but start replacing specs with prototypes. Increase agent adoption and push for end-to-end ownership.";
+      } else {
+        verdict = "Not yet — build foundations first";
+        advice = "Focus on agent adoption and team seniority. You need people who can build end-to-end before you can drop the safety rails of traditional process.";
+      }
+      sprintRes.innerHTML = `<b>Result:</b> ${verdict} <span class="mono" style="opacity:.85">(${score}/100)</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [senior, agent, proto].forEach(i=> i.addEventListener("input", calcSprint));
+    calcSprint();
+
+    const size=$("#size"), risk=$("#risk"), proc=$("#proc");
+    const sizeVal=$("#sizeVal"), riskVal=$("#riskVal"), procVal=$("#procVal");
+    const fitRes=$("#fitRes");
+
+    function calcFit(){
+      const Sz=+size.value, R=+risk.value, P=+proc.value;
+      sizeVal.textContent=Sz; riskVal.textContent=R; procVal.textContent=P;
+      // Anthropic fit: small teams, lower risk tolerance, minimal process
+      const anthScore = Math.round(((10-Sz)*0.3 + (10-R)*0.2 + (10-P)*0.5) * 10);
+      // OpenAI fit: larger teams okay, high risk tolerance, some process
+      const oaiScore = Math.round((Sz*0.2 + R*0.4 + P*0.4) * 10);
+      let verdict, advice;
+      if(anthScore > oaiScore + 10){
+        verdict = "Anthropic model (docs-to-demos)";
+        advice = "Your small team size and low process dependency make you a great fit for prototype-first, everyone-codes culture. Kill the PRDs, ship demos.";
+      } else if(oaiScore > anthScore + 10){
+        verdict = "OpenAI model (DRI + harness engineering)";
+        advice = "Your larger team and higher risk tolerance suit the DRI ownership model. Assign one owner per project, adopt harness engineering with agent fleets.";
+      } else {
+        verdict = "Hybrid — take the best of both";
+        advice = "Cherry-pick: use Anthropic's prototype-first approach for feature dev, and OpenAI's DRI model for project ownership. Both agree on agent-first.";
+      }
+      fitRes.innerHTML = `<b>Best fit:</b> ${verdict} <span class="mono" style="opacity:.85">(A:${anthScore} / O:${oaiScore})</span><br><span style="color:var(--muted)">${advice}</span>`;
+    }
+    [size, risk, proc].forEach(i=> i.addEventListener("input", calcFit));
+    calcFit();
+
+    const clarity=$("#clarity"), test=$("#test");
+    const clarityVal=$("#clarityVal"), testVal=$("#testVal");
+    const leverageRes=$("#leverageRes");
+
+    function calcLeverage(){
+      const C=+clarity.value, T=+test.value;
+      clarityVal.textContent=C; testVal.textContent=T;
+      const multiplier = ((C*0.55 + T*0.45) / 5).toFixed(1);
+      let level, action;
+      if(multiplier >= 1.4){
+        level = `High leverage (${multiplier}x team output)`;
+        action = "Your codebase and task clarity are ready for agent fleets. Each engineer can manage 10-20 parallel agents effectively.";
+      } else if(multiplier >= 0.8){
+        level = `Moderate leverage (${multiplier}x team output)`;
+        action = "Improve either task definitions or test coverage. Agents work best when they can verify their own output.";
+      } else {
+        level = `Low leverage (${multiplier}x team output)`;
+        action = "Invest in testability and task clarity first. Without clear 'done' criteria and automated checks, agents will produce unreliable work.";
+      }
+      leverageRes.innerHTML = `<b>Leverage:</b> ${level}<br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [clarity, test].forEach(i=> i.addEventListener("input", calcLeverage));
+    calcLeverage();
+
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to connect stories → structure.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
