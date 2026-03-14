@@ -177,6 +177,73 @@
       margin-bottom:6px;
     }
 
+    /* Floating Glossary */
+    .gloss-fab{
+      position:fixed;bottom:24px;right:24px;z-index:900;
+      width:52px;height:52px;border-radius:50%;border:none;
+      background:linear-gradient(135deg,var(--c1),var(--c2));
+      color:#fff;font-size:22px;font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 24px rgba(59,130,246,.35);
+      display:grid;place-items:center;
+      transition:transform .2s, box-shadow .2s;
+    }
+    .gloss-fab:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(59,130,246,.5)}
+    .gloss-fab.active{background:linear-gradient(135deg,var(--c5),var(--c6))}
+
+    .gloss-panel{
+      position:fixed;bottom:88px;right:24px;z-index:899;
+      width:420px;max-height:70vh;
+      background:rgba(11,16,32,.97);
+      border:1px solid rgba(59,130,246,.25);
+      border-radius:18px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      backdrop-filter:blur(16px);
+      display:none;flex-direction:column;
+      overflow:hidden;
+    }
+    .gloss-panel.open{display:flex}
+    @media(max-width:500px){
+      .gloss-panel{left:12px;right:12px;width:auto;max-height:65vh;bottom:84px}
+    }
+
+    .gloss-head{
+      padding:14px 16px 10px;
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .gloss-head h3{font-size:14px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+    .gloss-search{
+      width:100%;padding:8px 12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      border-radius:10px;
+      color:var(--text);font-size:13px;
+      outline:none;
+    }
+    .gloss-search::placeholder{color:var(--faint)}
+    .gloss-search:focus{border-color:rgba(59,130,246,.4)}
+
+    .gloss-body{
+      overflow-y:auto;padding:12px 16px;flex:1;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(255,255,255,.12) transparent;
+    }
+    .gloss-body::-webkit-scrollbar{width:5px}
+    .gloss-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+
+    .gl{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .gl:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .gl dfn{color:var(--text);font-weight:700;font-style:normal;display:block;font-size:13px;letter-spacing:.01em}
+    .gl .gl-def{color:var(--muted);font-size:12.5px;line-height:1.55;margin-top:2px}
+    .gl.hidden{display:none}
+    .gloss-empty{color:var(--faint);font-size:13px;text-align:center;padding:20px 0}
+
+    .gloss-count{
+      font-size:11px;color:var(--faint);
+      margin-left:auto;font-weight:400;
+    }
+
     /* Controls */
     .controls{
       display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;
@@ -240,7 +307,7 @@
       <a class="toc-item" href="#s4"><span class="toc-num sc4">IV</span> Memory Crisis & Consumer Fallout</a>
       <a class="toc-item" href="#s5"><span class="toc-num sc5">V</span> Power, Space & Physical Constraints</a>
       <a class="toc-item" href="#s6"><span class="toc-num sc6">VI</span> China, Models, Taiwan & Robots</a>
-      <a class="toc-item" href="#glossary"><span class="toc-num" style="background:rgba(255,255,255,.06)">&#128218;</span> Acronym Glossary (35 terms)</a>
+      <a class="toc-item" href="#" onclick="event.preventDefault();toggleGlossary()"><span class="toc-num" style="background:rgba(255,255,255,.06)">&#128218;</span> Acronym Glossary (35 terms) &mdash; floating &#9432;</a>
     </div>
   </div>
 
@@ -1126,108 +1193,6 @@
     </details>
   </div>
 
-  <!-- Acronym Glossary -->
-  <div class="section" id="glossary">
-    <div class="section-header">
-      <div class="section-num" style="background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--muted)">&#128218;</div>
-      <h2>Acronym &amp; Term Glossary</h2>
-    </div>
-
-    <div style="
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:18px 20px;
-      columns: 2;
-      column-gap: 24px;
-      font-size:13px;
-      line-height:1.7;
-      color:var(--muted);
-    ">
-      <style>
-        .gl{break-inside:avoid;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
-        .gl:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-        .gl dfn{color:var(--text);font-weight:700;font-style:normal;display:block;font-size:13.5px;letter-spacing:.01em}
-        .gl .aka{color:var(--faint);font-size:11px;margin-bottom:2px}
-        @media(max-width:700px){
-          [style*="columns: 2"]{columns:1 !important}
-        }
-      </style>
-
-      <div class="gl"><dfn>AGI</dfn>Artificial General Intelligence — AI with human-level reasoning across all domains. Used loosely in the podcast to describe near-future capable AI systems.</div>
-
-      <div class="gl"><dfn>ARR</dfn>Annual Recurring Revenue — yearly revenue run rate, typically extrapolated from monthly figures (e.g., $5B ARR = ~$417M/month).</div>
-
-      <div class="gl"><dfn>ASML</dfn>Dutch company (Advanced Semiconductor Materials Lithography) — sole manufacturer of EUV lithography tools. Monopoly supplier for cutting-edge chipmaking.</div>
-
-      <div class="gl"><dfn>BOM</dfn>Bill of Materials — total cost of all components in a product (e.g., iPhone BOM includes memory, processor, display, etc.).</div>
-
-      <div class="gl"><dfn>CapEx</dfn>Capital Expenditure — upfront investment in physical infrastructure (data centers, fabs, turbines) as opposed to operational spending.</div>
-
-      <div class="gl"><dfn>CNN</dfn>Convolutional Neural Network — neural architecture optimized for image/spatial tasks. Contrasted with transformers, which dominate modern LLMs.</div>
-
-      <div class="gl"><dfn>CoWoS</dfn>Chip-on-Wafer-on-Substrate — TSMC's advanced packaging technology for connecting multiple dies (e.g., GPU + HBM stacks) on a single substrate.</div>
-
-      <div class="gl"><dfn>DDR / DDR5</dfn>Double Data Rate (5th gen) — standard DRAM memory used in PCs, phones, servers. Lower bandwidth than HBM but cheaper and denser per wafer.</div>
-
-      <div class="gl"><dfn>DRAM</dfn>Dynamic Random-Access Memory — volatile memory used for active data. Both DDR (commodity) and HBM (high-bandwidth) are types of DRAM.</div>
-
-      <div class="gl"><dfn>DUV</dfn>Deep Ultraviolet (lithography) — older lithography technology using 193nm wavelength light. Still used for many chip layers and by China for 7nm via multi-patterning.</div>
-
-      <div class="gl"><dfn>EUV</dfn>Extreme Ultraviolet (lithography) — 13.5nm wavelength lithography used for cutting-edge chips (3nm, 2nm). Only ASML manufactures these tools.</div>
-
-      <div class="gl"><dfn>FLOPS</dfn>Floating-Point Operations Per Second — measure of compute throughput. Prefixes: tera (10<sup>12</sup>), peta (10<sup>15</sup>), exa (10<sup>18</sup>).</div>
-
-      <div class="gl"><dfn>FP4 / FP6 / FP8 / FP16</dfn>Floating-point number formats with 4, 6, 8, or 16 bits of precision. Lower precision = more operations per second but less accuracy. Modern AI increasingly uses FP4/FP8.</div>
-
-      <div class="gl"><dfn>GW</dfn>Gigawatt — unit of power (1 billion watts). Used throughout to measure data center capacity. A 1GW data center costs ~$50B in total CapEx.</div>
-
-      <div class="gl"><dfn>HBM / HBM3e / HBM4</dfn>High Bandwidth Memory — 3D-stacked DRAM providing ~2.5 TB/s bandwidth per stack. Critical for AI accelerators. Each generation increases bandwidth and capacity.</div>
-
-      <div class="gl"><dfn>HPC</dfn>High-Performance Computing — general term for compute-intensive workloads (AI, simulation, genomics). TSMC earns higher margins on HPC vs. mobile chips.</div>
-
-      <div class="gl"><dfn>KV Cache</dfn>Key-Value Cache — stored attention data from prior tokens during inference. Grows linearly with context length; major driver of memory demand for reasoning models.</div>
-
-      <div class="gl"><dfn>MoE</dfn>Mixture of Experts — model architecture where only a subset of parameters ("experts") activate per token. Enables larger models with lower per-token compute cost.</div>
-
-      <div class="gl"><dfn>N2 / N3</dfn>TSMC's 2-nanometer and 3-nanometer process nodes. Smaller = more transistors per area but more expensive and harder to manufacture.</div>
-
-      <div class="gl"><dfn>NAND</dfn>Non-volatile flash memory — used for storage (SSDs, phone storage). Also facing price increases from AI demand, though less severe than DRAM.</div>
-
-      <div class="gl"><dfn>Neocloud</dfn>Newer GPU cloud providers (CoreWeave, Together AI, Nebius, Lambda, etc.) that emerged to serve AI workloads. Often more flexible than hyperscalers but less infrastructure.</div>
-
-      <div class="gl"><dfn>NVLink</dfn>Nvidia's proprietary high-speed GPU-to-GPU interconnect. NVL72 connects 72 GPUs all-to-all at terabytes/second within a single rack.</div>
-
-      <div class="gl"><dfn>Overlay</dfn>Alignment accuracy between successive lithography layers on a wafer. Must be ~3nm or less for modern chips. Sub-1nm precision required per component.</div>
-
-      <div class="gl"><dfn>PCB</dfn>Printed Circuit Board — the physical board connecting chips, memory, and other components. Many AI server PCBs are manufactured in China (e.g., Victory Giant).</div>
-
-      <div class="gl"><dfn>RL</dfn>Reinforcement Learning — training technique where models learn from reward signals. Post-training RL (RLHF, RLAIF) is a key capability driver for frontier models.</div>
-
-      <div class="gl"><dfn>RMA</dfn>Return Merchandise Authorization — process of returning defective hardware to the manufacturer. ~15% of Blackwell GPUs require RMA upon deployment.</div>
-
-      <div class="gl"><dfn>ROIC</dfn>Return on Invested Capital — profitability metric measuring how efficiently capital is deployed. Central question for $1T in AI data center investment.</div>
-
-      <div class="gl"><dfn>Scale-up</dfn>The domain of tightly-connected chips that can communicate at high bandwidth (TB/s). Nvidia NVL72 = 72 GPUs; Google TPU pods = 4,000–9,000 chips.</div>
-
-      <div class="gl"><dfn>SerDes</dfn>Serializer/Deserializer — high-speed I/O circuits that convert parallel data to serial for chip-to-chip communication. Key bottleneck in cross-chip bandwidth.</div>
-
-      <div class="gl"><dfn>TAM</dfn>Total Addressable Market — the maximum possible revenue for a product/service. GPT-5.4 TAM estimated at $100B+, vs. GPT-4 at single-digit billions.</div>
-
-      <div class="gl"><dfn>TCO</dfn>Total Cost of Ownership — full lifecycle cost of operating hardware (chip, power, cooling, networking, labor, space). H100 TCO ≈ $1.40/hr over 5 years.</div>
-
-      <div class="gl"><dfn>TPU</dfn>Tensor Processing Unit — Google's custom AI accelerator. TPU v7 (Ironwood) is the latest generation. Torus topology, pods of thousands.</div>
-
-      <div class="gl"><dfn>TSMC</dfn>Taiwan Semiconductor Manufacturing Company — world's largest contract chipmaker. Fabricates chips for Nvidia, Apple, AMD, Google, Amazon, and others.</div>
-
-      <div class="gl"><dfn>TSV</dfn>Through-Silicon Via — vertical electrical connections that pass through silicon dies, enabling 3D chip stacking (used in HBM and CoWoS packaging).</div>
-
-      <div class="gl"><dfn>VLA / VLM</dfn>Vision-Language-Action / Vision-Language Model — multimodal AI architectures for robotics that process visual input and generate physical actions.</div>
-
-      <div class="gl"><dfn>Wafer</dfn>A thin disc of silicon (typically 300mm diameter) on which chips are fabricated. One wafer yields hundreds of individual chips depending on die size.</div>
-    </div>
-  </div>
-
   <!-- Footer -->
   <div class="footer">
     <p>Source: Dwarkesh Podcast — Dylan Patel (SemiAnalysis) &middot; Line-by-line commentary analysis &middot; March 2026</p>
@@ -1235,5 +1200,98 @@
   </div>
 
 </div>
+
+<!-- Floating Glossary FAB -->
+<button class="gloss-fab" id="glossFab" onclick="toggleGlossary()" title="Acronym Glossary">&#9432;</button>
+
+<!-- Floating Glossary Panel -->
+<div class="gloss-panel" id="glossPanel">
+  <div class="gloss-head">
+    <h3>&#128218; Glossary <span class="gloss-count" id="glossCount">35 terms</span></h3>
+    <input type="text" class="gloss-search" id="glossSearch" placeholder="Search terms... (e.g. EUV, HBM, TSMC)" autocomplete="off" />
+  </div>
+  <div class="gloss-body" id="glossBody">
+    <div class="gl" data-term="AGI"><dfn>AGI</dfn><div class="gl-def">Artificial General Intelligence — AI with human-level reasoning across all domains. Used loosely in the podcast to describe near-future capable AI systems.</div></div>
+    <div class="gl" data-term="ARR"><dfn>ARR</dfn><div class="gl-def">Annual Recurring Revenue — yearly revenue run rate, typically extrapolated from monthly figures (e.g., $5B ARR = ~$417M/month).</div></div>
+    <div class="gl" data-term="ASML"><dfn>ASML</dfn><div class="gl-def">Advanced Semiconductor Materials Lithography — Dutch company, sole manufacturer of EUV lithography tools. Monopoly supplier for cutting-edge chipmaking.</div></div>
+    <div class="gl" data-term="BOM"><dfn>BOM</dfn><div class="gl-def">Bill of Materials — total cost of all components in a product (e.g., iPhone BOM includes memory, processor, display, etc.).</div></div>
+    <div class="gl" data-term="CapEx"><dfn>CapEx</dfn><div class="gl-def">Capital Expenditure — upfront investment in physical infrastructure (data centers, fabs, turbines) as opposed to operational spending.</div></div>
+    <div class="gl" data-term="CNN"><dfn>CNN</dfn><div class="gl-def">Convolutional Neural Network — neural architecture optimized for image/spatial tasks. Contrasted with transformers, which dominate modern LLMs.</div></div>
+    <div class="gl" data-term="CoWoS"><dfn>CoWoS</dfn><div class="gl-def">Chip-on-Wafer-on-Substrate — TSMC's advanced packaging technology for connecting multiple dies (e.g., GPU + HBM stacks) on a single substrate.</div></div>
+    <div class="gl" data-term="DDR DDR5"><dfn>DDR / DDR5</dfn><div class="gl-def">Double Data Rate (5th gen) — standard DRAM memory used in PCs, phones, servers. Lower bandwidth than HBM but cheaper and denser per wafer.</div></div>
+    <div class="gl" data-term="DRAM"><dfn>DRAM</dfn><div class="gl-def">Dynamic Random-Access Memory — volatile memory used for active data. Both DDR (commodity) and HBM (high-bandwidth) are types of DRAM.</div></div>
+    <div class="gl" data-term="DUV"><dfn>DUV</dfn><div class="gl-def">Deep Ultraviolet (lithography) — older lithography using 193nm wavelength light. Still used for many chip layers and by China for 7nm via multi-patterning.</div></div>
+    <div class="gl" data-term="EUV"><dfn>EUV</dfn><div class="gl-def">Extreme Ultraviolet (lithography) — 13.5nm wavelength lithography for cutting-edge chips (3nm, 2nm). Only ASML manufactures these tools.</div></div>
+    <div class="gl" data-term="FLOPS"><dfn>FLOPS</dfn><div class="gl-def">Floating-Point Operations Per Second — measure of compute throughput. Prefixes: tera (10&sup1;&sup2;), peta (10&sup1;&sup5;), exa (10&sup1;&sup8;).</div></div>
+    <div class="gl" data-term="FP4 FP6 FP8 FP16"><dfn>FP4 / FP6 / FP8 / FP16</dfn><div class="gl-def">Floating-point number formats with 4, 6, 8, or 16 bits of precision. Lower precision = more ops/sec but less accuracy. Modern AI increasingly uses FP4/FP8.</div></div>
+    <div class="gl" data-term="GW Gigawatt"><dfn>GW</dfn><div class="gl-def">Gigawatt — unit of power (1 billion watts). Used throughout to measure data center capacity. A 1GW data center costs ~$50B in total CapEx.</div></div>
+    <div class="gl" data-term="HBM HBM3e HBM4"><dfn>HBM / HBM3e / HBM4</dfn><div class="gl-def">High Bandwidth Memory — 3D-stacked DRAM providing ~2.5 TB/s bandwidth per stack. Critical for AI accelerators. Each generation increases bandwidth and capacity.</div></div>
+    <div class="gl" data-term="HPC"><dfn>HPC</dfn><div class="gl-def">High-Performance Computing — general term for compute-intensive workloads (AI, simulation, genomics). TSMC earns higher margins on HPC vs. mobile chips.</div></div>
+    <div class="gl" data-term="KV Cache"><dfn>KV Cache</dfn><div class="gl-def">Key-Value Cache — stored attention data from prior tokens during inference. Grows linearly with context length; major driver of memory demand for reasoning models.</div></div>
+    <div class="gl" data-term="MoE"><dfn>MoE</dfn><div class="gl-def">Mixture of Experts — model architecture where only a subset of parameters ("experts") activate per token. Enables larger models with lower per-token compute cost.</div></div>
+    <div class="gl" data-term="N2 N3"><dfn>N2 / N3</dfn><div class="gl-def">TSMC's 2-nanometer and 3-nanometer process nodes. Smaller = more transistors per area but more expensive and harder to manufacture.</div></div>
+    <div class="gl" data-term="NAND"><dfn>NAND</dfn><div class="gl-def">Non-volatile flash memory — used for storage (SSDs, phone storage). Also facing price increases from AI demand, though less severe than DRAM.</div></div>
+    <div class="gl" data-term="Neocloud"><dfn>Neocloud</dfn><div class="gl-def">Newer GPU cloud providers (CoreWeave, Together AI, Nebius, Lambda, etc.) that emerged to serve AI workloads. Often more flexible than hyperscalers but less infrastructure.</div></div>
+    <div class="gl" data-term="NVLink NVL72"><dfn>NVLink</dfn><div class="gl-def">Nvidia's proprietary high-speed GPU-to-GPU interconnect. NVL72 connects 72 GPUs all-to-all at terabytes/second within a single rack.</div></div>
+    <div class="gl" data-term="Overlay"><dfn>Overlay</dfn><div class="gl-def">Alignment accuracy between successive lithography layers on a wafer. Must be ~3nm or less for modern chips. Sub-1nm precision required per component.</div></div>
+    <div class="gl" data-term="PCB"><dfn>PCB</dfn><div class="gl-def">Printed Circuit Board — the physical board connecting chips, memory, and other components. Many AI server PCBs are manufactured in China (e.g., Victory Giant).</div></div>
+    <div class="gl" data-term="RL RLHF"><dfn>RL</dfn><div class="gl-def">Reinforcement Learning — training technique where models learn from reward signals. Post-training RL (RLHF, RLAIF) is a key capability driver for frontier models.</div></div>
+    <div class="gl" data-term="RMA"><dfn>RMA</dfn><div class="gl-def">Return Merchandise Authorization — process of returning defective hardware to the manufacturer. ~15% of Blackwell GPUs require RMA upon deployment.</div></div>
+    <div class="gl" data-term="ROIC"><dfn>ROIC</dfn><div class="gl-def">Return on Invested Capital — profitability metric measuring how efficiently capital is deployed. Central question for $1T in AI data center investment.</div></div>
+    <div class="gl" data-term="Scale-up"><dfn>Scale-up</dfn><div class="gl-def">The domain of tightly-connected chips that can communicate at high bandwidth (TB/s). Nvidia NVL72 = 72 GPUs; Google TPU pods = 4,000–9,000 chips.</div></div>
+    <div class="gl" data-term="SerDes"><dfn>SerDes</dfn><div class="gl-def">Serializer/Deserializer — high-speed I/O circuits that convert parallel data to serial for chip-to-chip communication. Key bottleneck in cross-chip bandwidth.</div></div>
+    <div class="gl" data-term="TAM"><dfn>TAM</dfn><div class="gl-def">Total Addressable Market — the maximum possible revenue for a product/service. GPT-5.4 TAM estimated at $100B+, vs. GPT-4 at single-digit billions.</div></div>
+    <div class="gl" data-term="TCO"><dfn>TCO</dfn><div class="gl-def">Total Cost of Ownership — full lifecycle cost of operating hardware (chip, power, cooling, networking, labor, space). H100 TCO ~ $1.40/hr over 5 years.</div></div>
+    <div class="gl" data-term="TPU Ironwood"><dfn>TPU</dfn><div class="gl-def">Tensor Processing Unit — Google's custom AI accelerator. TPU v7 (Ironwood) is the latest generation. Torus topology, pods of thousands.</div></div>
+    <div class="gl" data-term="TSMC"><dfn>TSMC</dfn><div class="gl-def">Taiwan Semiconductor Manufacturing Company — world's largest contract chipmaker. Fabricates chips for Nvidia, Apple, AMD, Google, Amazon, and others.</div></div>
+    <div class="gl" data-term="TSV"><dfn>TSV</dfn><div class="gl-def">Through-Silicon Via — vertical electrical connections that pass through silicon dies, enabling 3D chip stacking (used in HBM and CoWoS packaging).</div></div>
+    <div class="gl" data-term="VLA VLM"><dfn>VLA / VLM</dfn><div class="gl-def">Vision-Language-Action / Vision-Language Model — multimodal AI architectures for robotics that process visual input and generate physical actions.</div></div>
+    <div class="gl" data-term="Wafer"><dfn>Wafer</dfn><div class="gl-def">A thin disc of silicon (typically 300mm diameter) on which chips are fabricated. One wafer yields hundreds of individual chips depending on die size.</div></div>
+  </div>
+</div>
+
+<script>
+function toggleGlossary(){
+  const panel=document.getElementById('glossPanel');
+  const fab=document.getElementById('glossFab');
+  const isOpen=panel.classList.toggle('open');
+  fab.classList.toggle('active',isOpen);
+  if(isOpen){
+    const input=document.getElementById('glossSearch');
+    setTimeout(()=>input.focus(),100);
+  }
+}
+
+document.getElementById('glossSearch').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  const items=document.querySelectorAll('#glossBody .gl');
+  let visible=0;
+  items.forEach(el=>{
+    const term=(el.dataset.term||'').toLowerCase();
+    const def=(el.querySelector('.gl-def')?.textContent||'').toLowerCase();
+    const match=!q||term.includes(q)||def.includes(q);
+    el.classList.toggle('hidden',!match);
+    if(match) visible++;
+  });
+  document.getElementById('glossCount').textContent=q?visible+' match'+(visible!==1?'es':''):items.length+' terms';
+});
+
+// Close on Escape
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('glossPanel').classList.contains('open')){
+    toggleGlossary();
+  }
+});
+
+// Close when clicking outside
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('glossPanel');
+  const fab=document.getElementById('glossFab');
+  if(panel.classList.contains('open')&&!panel.contains(e.target)&&!fab.contains(e.target)){
+    toggleGlossary();
+  }
+});
+</script>
+
 </body>
 </html>
