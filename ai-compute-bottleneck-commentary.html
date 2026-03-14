@@ -261,6 +261,61 @@
     }
     .btn:hover{background:rgba(255,255,255,.08)}
 
+    /* Simulators */
+    .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:800px){.sim-grid{grid-template-columns:1fr}}
+    .sim{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      overflow:hidden;
+    }
+    .sim h3{font-size:14px;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+    .sim h3 .ico{font-size:18px}
+    .sim .sim-desc{color:var(--faint);font-size:11.5px;margin-bottom:14px}
+    .sim-row{margin-bottom:12px}
+    .sim-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+    .sim-label span{color:var(--muted);font-size:12px}
+    .sim-label .sim-val{color:var(--text);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+    input[type=range]{
+      -webkit-appearance:none;appearance:none;
+      width:100%;height:6px;
+      background:rgba(255,255,255,.1);
+      border-radius:4px;outline:none;
+      cursor:pointer;
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;appearance:none;
+      width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(135deg,var(--c1),var(--c2));
+      border:2px solid rgba(255,255,255,.2);
+      cursor:pointer;
+    }
+    input[type=range]::-moz-range-thumb{
+      width:16px;height:16px;border-radius:50%;
+      background:linear-gradient(135deg,var(--c1),var(--c2));
+      border:2px solid rgba(255,255,255,.2);
+      cursor:pointer;
+    }
+    .sim-out{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px 12px;
+      margin-top:10px;
+    }
+    .sim-out-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12.5px}
+    .sim-out-row span:first-child{color:var(--muted)}
+    .sim-out-row span:last-child{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+    .sim-out-row.highlight span:last-child{color:var(--c3);font-size:14px}
+    .sim-out-row.warn span:last-child{color:var(--c4)}
+    .sim-out-row.bad span:last-child{color:var(--c5)}
+    .sim-divider{height:1px;background:var(--border);margin:6px 0}
+    .sim-wide{grid-column:1/-1}
+    .sim-bar-track{height:10px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin-top:6px}
+    .sim-bar{height:100%;border-radius:6px;transition:width .3s ease;min-width:2px}
+
     /* Footer */
     .footer{
       text-align:center;
@@ -307,7 +362,8 @@
       <a class="toc-item" href="#s4"><span class="toc-num sc4">IV</span> Memory Crisis & Consumer Fallout</a>
       <a class="toc-item" href="#s5"><span class="toc-num sc5">V</span> Power, Space & Physical Constraints</a>
       <a class="toc-item" href="#s6"><span class="toc-num sc6">VI</span> China, Models, Taiwan & Robots</a>
-      <a class="toc-item" href="#" onclick="event.preventDefault();toggleGlossary()"><span class="toc-num" style="background:rgba(255,255,255,.06)">&#128218;</span> Acronym Glossary (35 terms) &mdash; floating &#9432;</a>
+      <a class="toc-item" href="#sims"><span class="toc-num" style="background:rgba(20,184,166,.12);color:var(--c3)">&#9881;</span> Interactive Simulators (7)</a>
+      <a class="toc-item" href="#" onclick="event.preventDefault();toggleGlossary()"><span class="toc-num" style="background:rgba(255,255,255,.06)">&#128218;</span> Glossary &mdash; floating &#9432;</a>
     </div>
   </div>
 
@@ -1193,6 +1249,188 @@
     </details>
   </div>
 
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SIMULATORS -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="sims">
+    <div class="section-header">
+      <div class="section-num" style="background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(20,184,166,.2));border:1px solid rgba(59,130,246,.3);color:var(--c3)">&#9881;</div>
+      <h2>Interactive Simulators</h2>
+      <span class="lines">Play with the numbers</span>
+    </div>
+
+    <div class="sim-grid">
+
+      <!-- SIM 1: EUV → Gigawatt Calculator -->
+      <div class="sim" id="simEuv">
+        <h3><span class="ico">&#9889;</span> EUV-to-Gigawatt Calculator</h3>
+        <div class="sim-desc">How many EUV tools does it take to produce X gigawatts of AI compute? Based on Dylan's math: ~3.5 tools per GW.</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>Target AI Capacity</span><span class="sim-val"><span id="euvGw">10</span> GW</span></div>
+          <input type="range" min="1" max="200" value="10" id="euvGwSlider" oninput="calcEuv()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>EUV tools per GW</span><span class="sim-val"><span id="euvPerGw">3.5</span></span></div>
+          <input type="range" min="2" max="6" step="0.1" value="3.5" id="euvPerGwSlider" oninput="calcEuv()">
+        </div>
+
+        <div class="sim-out" id="euvOut"></div>
+      </div>
+
+      <!-- SIM 2: GPU Contract Margin Calculator -->
+      <div class="sim" id="simGpu">
+        <h3><span class="ico">&#128176;</span> GPU Contract Margin</h3>
+        <div class="sim-desc">How much margin do you lock in based on contract price vs. TCO? Dylan cited H100 TCO of $1.40/hr and contracts up to $2.40/hr.</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>GPU hourly TCO (cost basis)</span><span class="sim-val">$<span id="gpuTco">1.40</span>/hr</span></div>
+          <input type="range" min="0.80" max="3.00" step="0.05" value="1.40" id="gpuTcoSlider" oninput="calcGpu()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Contract rental price</span><span class="sim-val">$<span id="gpuPrice">2.40</span>/hr</span></div>
+          <input type="range" min="1.00" max="5.00" step="0.05" value="2.40" id="gpuPriceSlider" oninput="calcGpu()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Contract term</span><span class="sim-val"><span id="gpuYears">3</span> years</span></div>
+          <input type="range" min="1" max="7" value="3" id="gpuYearsSlider" oninput="calcGpu()">
+        </div>
+
+        <div class="sim-out" id="gpuOut"></div>
+      </div>
+
+      <!-- SIM 3: Memory Cost Impact on Smartphones -->
+      <div class="sim" id="simMem">
+        <h3><span class="ico">&#128241;</span> Memory Price → Smartphone Impact</h3>
+        <div class="sim-desc">How does DRAM/NAND price inflation affect device BOM and global smartphone volumes? Dylan projects volumes falling from 1.1B to 500–600M.</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>DRAM price multiplier</span><span class="sim-val"><span id="dramMult">3.0</span>x</span></div>
+          <input type="range" min="1" max="6" step="0.1" value="3.0" id="dramMultSlider" oninput="calcMem()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>NAND price multiplier</span><span class="sim-val"><span id="nandMult">2.0</span>x</span></div>
+          <input type="range" min="1" max="4" step="0.1" value="2.0" id="nandMultSlider" oninput="calcMem()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Device type</span><span class="sim-val" id="memDevice">iPhone ($1,099)</span></div>
+          <input type="range" min="0" max="2" step="1" value="0" id="memDeviceSlider" oninput="calcMem()">
+        </div>
+
+        <div class="sim-out" id="memOut"></div>
+      </div>
+
+      <!-- SIM 4: Revenue → Compute Needs -->
+      <div class="sim" id="simRev">
+        <h3><span class="ico">&#128200;</span> AI Lab Revenue → GW Needed</h3>
+        <div class="sim-desc">How many gigawatts of compute does an AI lab need to support its revenue? Based on ~$10B/GW rental cost and reported gross margins.</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>Annual revenue</span><span class="sim-val">$<span id="revArr">60</span>B</span></div>
+          <input type="range" min="5" max="200" step="5" value="60" id="revArrSlider" oninput="calcRev()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Gross margin</span><span class="sim-val"><span id="revMargin">50</span>%</span></div>
+          <input type="range" min="20" max="80" step="1" value="50" id="revMarginSlider" oninput="calcRev()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Cost per GW (rental)</span><span class="sim-val">$<span id="revCostGw">10</span>B</span></div>
+          <input type="range" min="5" max="20" step="0.5" value="10" id="revCostGwSlider" oninput="calcRev()">
+        </div>
+
+        <div class="sim-out" id="revOut"></div>
+      </div>
+
+      <!-- SIM 5: ASML Production → 2030 Capacity Ceiling -->
+      <div class="sim sim-wide" id="simAsml">
+        <h3><span class="ico">&#128300;</span> ASML Production → Global AI Compute Ceiling (2025–2030)</h3>
+        <div class="sim-desc">Project total EUV tool inventory and maximum possible AI compute by end of decade. Based on ~250–300 existing tools, growing production, and 3.5 tools/GW.</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div class="sim-row">
+            <div class="sim-label"><span>Existing EUV tools</span><span class="sim-val"><span id="asmlBase">280</span></span></div>
+            <input type="range" min="200" max="350" step="5" value="280" id="asmlBaseSlider" oninput="calcAsml()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>2025 production</span><span class="sim-val"><span id="asml25">70</span></span></div>
+            <input type="range" min="50" max="100" value="70" id="asml25Slider" oninput="calcAsml()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>2030 production</span><span class="sim-val"><span id="asml30">100</span></span></div>
+            <input type="range" min="70" max="200" value="100" id="asml30Slider" oninput="calcAsml()">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div class="sim-row">
+            <div class="sim-label"><span>% allocated to AI</span><span class="sim-val"><span id="asmlAiPct">40</span>%</span></div>
+            <input type="range" min="10" max="80" step="1" value="40" id="asmlAiPctSlider" oninput="calcAsml()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>Tools per GW</span><span class="sim-val"><span id="asmlTpg">3.5</span></span></div>
+            <input type="range" min="2" max="6" step="0.1" value="3.5" id="asmlTpgSlider" oninput="calcAsml()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>Sam's ask (GW/yr)</span><span class="sim-val"><span id="asmlSam">52</span></span></div>
+            <input type="range" min="10" max="150" value="52" id="asmlSamSlider" oninput="calcAsml()">
+          </div>
+        </div>
+
+        <div class="sim-out" id="asmlOut"></div>
+      </div>
+
+      <!-- SIM 6: HBM vs DDR Bandwidth Comparison -->
+      <div class="sim" id="simBw">
+        <h3><span class="ico">&#128268;</span> HBM vs DDR Bandwidth</h3>
+        <div class="sim-desc">Compare bandwidth per chip edge (shoreline) between HBM4 stacks and DDR5. Dylan cited ~2.5 TB/s vs ~128 GB/s per shoreline unit.</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>HBM bus width (bits)</span><span class="sim-val"><span id="bwHbmBits">2048</span></span></div>
+          <input type="range" min="1024" max="4096" step="128" value="2048" id="bwHbmBitsSlider" oninput="calcBw()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>HBM transfer rate (GT/s)</span><span class="sim-val"><span id="bwHbmRate">10</span></span></div>
+          <input type="range" min="6" max="16" step="0.5" value="10" id="bwHbmRateSlider" oninput="calcBw()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>DDR bus width (bits)</span><span class="sim-val"><span id="bwDdrBits">128</span></span></div>
+          <input type="range" min="64" max="256" step="64" value="128" id="bwDdrBitsSlider" oninput="calcBw()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>DDR transfer rate (GT/s)</span><span class="sim-val"><span id="bwDdrRate">8</span></span></div>
+          <input type="range" min="4" max="12" step="0.5" value="8" id="bwDdrRateSlider" oninput="calcBw()">
+        </div>
+
+        <div class="sim-out" id="bwOut"></div>
+      </div>
+
+      <!-- SIM 7: Power Cost Sensitivity -->
+      <div class="sim" id="simPower">
+        <h3><span class="ico">&#9889;</span> Power Cost Sensitivity</h3>
+        <div class="sim-desc">Dylan's key insight: doubling power cost only adds ~$0.10/hr to GPU cost. How sensitive is total GPU cost to energy price?</div>
+
+        <div class="sim-row">
+          <div class="sim-label"><span>GPU base TCO (non-power)</span><span class="sim-val">$<span id="pwBase">1.30</span>/hr</span></div>
+          <input type="range" min="0.80" max="3.00" step="0.05" value="1.30" id="pwBaseSlider" oninput="calcPower()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Power cost per kW (baseline)</span><span class="sim-val">$<span id="pwKw">1500</span>/kW</span></div>
+          <input type="range" min="800" max="5000" step="100" value="1500" id="pwKwSlider" oninput="calcPower()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Power cost multiplier</span><span class="sim-val"><span id="pwMult">1.0</span>x</span></div>
+          <input type="range" min="1" max="4" step="0.1" value="1.0" id="pwMultSlider" oninput="calcPower()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>GPU power draw</span><span class="sim-val"><span id="pwWatts">700</span>W</span></div>
+          <input type="range" min="300" max="1500" step="50" value="700" id="pwWattsSlider" oninput="calcPower()">
+        </div>
+
+        <div class="sim-out" id="pwOut"></div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="footer">
     <p>Source: Dwarkesh Podcast — Dylan Patel (SemiAnalysis) &middot; Line-by-line commentary analysis &middot; March 2026</p>
@@ -1251,6 +1489,220 @@
 </div>
 
 <script>
+/* ═══ Simulators ═══ */
+const fmt=n=>{
+  if(n>=1e12) return (n/1e12).toFixed(1)+'T';
+  if(n>=1e9) return (n/1e9).toFixed(1)+'B';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toFixed(n<10?1:0);
+};
+const pct=n=>n.toFixed(1)+'%';
+const usd=n=>'$'+fmt(n);
+const bar=(val,max,color)=>`<div class="sim-bar-track"><div class="sim-bar" style="width:${Math.min(100,val/max*100)}%;background:${color}"></div></div>`;
+
+function calcEuv(){
+  const gw=+document.getElementById('euvGwSlider').value;
+  const tpg=+document.getElementById('euvPerGwSlider').value;
+  document.getElementById('euvGw').textContent=gw;
+  document.getElementById('euvPerGw').textContent=tpg.toFixed(1);
+  const tools=gw*tpg;
+  const cost=tools*350e6;
+  const passes=gw*2e6;
+  const dcCost=gw*50e9;
+  document.getElementById('euvOut').innerHTML=`
+    <div class="sim-out-row"><span>EUV tools needed</span><span>${Math.ceil(tools)} tools</span></div>
+    <div class="sim-out-row"><span>EUV tool cost</span><span>${usd(cost)}</span></div>
+    <div class="sim-out-row"><span>Total EUV wafer passes</span><span>${fmt(passes)}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Total data center CapEx</span><span>${usd(dcCost)}</span></div>
+    <div class="sim-out-row highlight"><span>EUV as % of total CapEx</span><span>${pct(cost/dcCost*100)}</span></div>
+    ${bar(cost,dcCost,'linear-gradient(90deg,var(--c1),var(--c2))')}
+  `;
+}
+
+function calcGpu(){
+  const tco=+document.getElementById('gpuTcoSlider').value;
+  const price=+document.getElementById('gpuPriceSlider').value;
+  const years=+document.getElementById('gpuYearsSlider').value;
+  document.getElementById('gpuTco').textContent=tco.toFixed(2);
+  document.getElementById('gpuPrice').textContent=price.toFixed(2);
+  document.getElementById('gpuYears').textContent=years;
+  const margin=price>0?((price-tco)/price*100):0;
+  const hrs=years*365.25*24;
+  const profitPerGpu=(price-tco)*hrs;
+  const cls=margin>=50?'highlight':margin>=20?'':'warn';
+  document.getElementById('gpuOut').innerHTML=`
+    <div class="sim-out-row"><span>Spread</span><span>$${(price-tco).toFixed(2)}/hr</span></div>
+    <div class="sim-out-row ${cls}"><span>Gross margin</span><span>${pct(margin)}</span></div>
+    <div class="sim-out-row"><span>Hours in contract</span><span>${fmt(hrs)}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row highlight"><span>Profit per GPU over term</span><span>${usd(profitPerGpu)}</span></div>
+    ${bar(margin,100,margin>=50?'var(--c3)':margin>=20?'var(--c4)':'var(--c5)')}
+  `;
+}
+
+function calcMem(){
+  const dm=+document.getElementById('dramMultSlider').value;
+  const nm=+document.getElementById('nandMultSlider').value;
+  const dt=+document.getElementById('memDeviceSlider').value;
+  document.getElementById('dramMult').textContent=dm.toFixed(1);
+  document.getElementById('nandMult').textContent=nm.toFixed(1);
+  const devices=[
+    {name:'iPhone ($1,099)',price:1099,dramGb:12,nandGb:256,baseDramPerGb:4,baseNandPerGb:0.10,margin:0.38,vol:280e6},
+    {name:'Mid-range ($400)',price:400,dramGb:8,nandGb:128,baseDramPerGb:3.5,baseNandPerGb:0.08,margin:0.15,vol:400e6},
+    {name:'Budget ($150)',price:150,dramGb:4,nandGb:64,baseDramPerGb:3,baseNandPerGb:0.07,margin:0.08,vol:500e6},
+  ];
+  const d=devices[dt];
+  document.getElementById('memDevice').textContent=d.name;
+  const baseDram=d.dramGb*d.baseDramPerGb;
+  const baseNand=d.nandGb*d.baseNandPerGb;
+  const newDram=baseDram*dm;
+  const newNand=baseNand*nm;
+  const bomIncrease=(newDram-baseDram)+(newNand-baseNand);
+  const marginDollars=d.price*d.margin;
+  const canAbsorb=Math.min(bomIncrease,marginDollars);
+  const passthrough=Math.max(0,bomIncrease-canAbsorb);
+  const newPrice=d.price+passthrough;
+  const pctIncrease=passthrough/d.price*100;
+  const volDrop=Math.min(0.7,bomIncrease/d.price*1.5);
+  const newVol=d.vol*(1-volDrop);
+  document.getElementById('memOut').innerHTML=`
+    <div class="sim-out-row"><span>Base DRAM cost</span><span>$${baseDram.toFixed(0)} → $${newDram.toFixed(0)}</span></div>
+    <div class="sim-out-row"><span>Base NAND cost</span><span>$${baseNand.toFixed(0)} → $${newNand.toFixed(0)}</span></div>
+    <div class="sim-out-row ${bomIncrease>100?'bad':'warn'}"><span>Total BOM increase</span><span>+$${bomIncrease.toFixed(0)}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Margin available to absorb</span><span>$${marginDollars.toFixed(0)}</span></div>
+    <div class="sim-out-row"><span>Price passthrough to consumer</span><span>+$${passthrough.toFixed(0)} (${pct(pctIncrease)})</span></div>
+    <div class="sim-out-row ${volDrop>0.3?'bad':'warn'}"><span>Est. volume impact</span><span>${fmt(d.vol)} → ${fmt(newVol)} (${pct(-volDrop*100)})</span></div>
+  `;
+}
+
+function calcRev(){
+  const arr=+document.getElementById('revArrSlider').value;
+  const margin=+document.getElementById('revMarginSlider').value;
+  const costGw=+document.getElementById('revCostGwSlider').value;
+  document.getElementById('revArr').textContent=arr;
+  document.getElementById('revMargin').textContent=margin;
+  document.getElementById('revCostGw').textContent=costGw;
+  const computeSpend=arr*(1-margin/100);
+  const gwNeeded=computeSpend/costGw;
+  const capex=gwNeeded*50;
+  document.getElementById('revOut').innerHTML=`
+    <div class="sim-out-row"><span>Compute spend (revenue × cost ratio)</span><span>$${computeSpend.toFixed(1)}B</span></div>
+    <div class="sim-out-row highlight"><span>GW of inference capacity needed</span><span>${gwNeeded.toFixed(1)} GW</span></div>
+    <div class="sim-out-row"><span>Equivalent data center CapEx</span><span>$${capex.toFixed(0)}B</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>EUV tools backing this capacity</span><span>~${Math.ceil(gwNeeded*3.5)} tools</span></div>
+    <div class="sim-out-row ${gwNeeded>10?'warn':''}"><span>% of 2026 global AI capacity (~30 GW)</span><span>${pct(gwNeeded/30*100)}</span></div>
+    ${bar(gwNeeded,30,'linear-gradient(90deg,var(--c1),var(--c5))')}
+  `;
+}
+
+function calcAsml(){
+  const base=+document.getElementById('asmlBaseSlider').value;
+  const p25=+document.getElementById('asml25Slider').value;
+  const p30=+document.getElementById('asml30Slider').value;
+  const aiPct=+document.getElementById('asmlAiPctSlider').value;
+  const tpg=+document.getElementById('asmlTpgSlider').value;
+  const sam=+document.getElementById('asmlSamSlider').value;
+  document.getElementById('asmlBase').textContent=base;
+  document.getElementById('asml25').textContent=p25;
+  document.getElementById('asml30').textContent=p30;
+  document.getElementById('asmlAiPct').textContent=aiPct;
+  document.getElementById('asmlTpg').textContent=tpg.toFixed(1);
+  document.getElementById('asmlSam').textContent=sam;
+
+  // Linear interpolation for production between 2025 and 2030
+  let total=base;
+  let rows='';
+  for(let y=2025;y<=2030;y++){
+    const prod=Math.round(p25+(p30-p25)*((y-2025)/5));
+    total+=prod;
+    const aiTools=total*(aiPct/100);
+    const maxGw=aiTools/tpg;
+    const samShare=sam/maxGw*100;
+    rows+=`<div class="sim-out-row${y===2030?' highlight':''}"><span>${y}: ${total} total tools → AI: ${Math.round(aiTools)}</span><span>${maxGw.toFixed(0)} GW max</span></div>`;
+  }
+  const finalTotal=total;
+  const finalAi=finalTotal*(aiPct/100);
+  const finalGw=finalAi/tpg;
+  const samPct=sam/finalGw*100;
+  document.getElementById('asmlOut').innerHTML=`
+    ${rows}
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Sam's ${sam} GW/yr ask as % of 2030 max</span><span>${pct(samPct)}</span></div>
+    ${bar(sam,finalGw,samPct>80?'var(--c5)':samPct>50?'var(--c4)':'var(--c3)')}
+    <div style="font-size:11px;color:var(--faint);margin-top:6px">${samPct<30?'Easily achievable — plenty of headroom':samPct<60?'Feasible but requires significant AI allocation':'Extremely tight — leaves little room for other industries'}</div>
+  `;
+}
+
+function calcBw(){
+  const hbmBits=+document.getElementById('bwHbmBitsSlider').value;
+  const hbmRate=+document.getElementById('bwHbmRateSlider').value;
+  const ddrBits=+document.getElementById('bwDdrBitsSlider').value;
+  const ddrRate=+document.getElementById('bwDdrRateSlider').value;
+  document.getElementById('bwHbmBits').textContent=hbmBits;
+  document.getElementById('bwHbmRate').textContent=hbmRate;
+  document.getElementById('bwDdrBits').textContent=ddrBits;
+  document.getElementById('bwDdrRate').textContent=ddrRate;
+  const hbmBw=hbmBits*hbmRate/8; // GB/s
+  const ddrBw=ddrBits*ddrRate/8;
+  const ratio=hbmBw/ddrBw;
+  document.getElementById('bwOut').innerHTML=`
+    <div class="sim-out-row highlight"><span>HBM bandwidth (per shoreline)</span><span>${fmt(hbmBw)} GB/s</span></div>
+    <div class="sim-out-row"><span>DDR bandwidth (same shoreline)</span><span>${fmt(ddrBw)} GB/s</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row ${ratio>10?'bad':'warn'}"><span>HBM advantage ratio</span><span>${ratio.toFixed(1)}x</span></div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+      <div style="flex:1">
+        <div style="font-size:10px;color:var(--faint);margin-bottom:3px">HBM</div>
+        ${bar(hbmBw,hbmBw*1.2,'linear-gradient(90deg,var(--c1),var(--c3))')}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:10px;color:var(--faint);margin-bottom:3px">DDR</div>
+        ${bar(ddrBw,hbmBw*1.2,'var(--c4)')}
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--faint);margin-top:8px">${ratio>15?'DDR is completely impractical for AI inference — GPUs would idle 90%+ of the time waiting for memory.':ratio>8?'Massive bandwidth gap. Switching to DDR wastes most of the GPU\'s compute capability.':'Gap is narrowing but HBM still dominates for AI workloads.'}</div>
+  `;
+}
+
+function calcPower(){
+  const base=+document.getElementById('pwBaseSlider').value;
+  const kwCost=+document.getElementById('pwKwSlider').value;
+  const mult=+document.getElementById('pwMultSlider').value;
+  const watts=+document.getElementById('pwWattsSlider').value;
+  document.getElementById('pwBase').textContent=base.toFixed(2);
+  document.getElementById('pwKw').textContent=kwCost;
+  document.getElementById('pwMult').textContent=mult.toFixed(1);
+  document.getElementById('pwWatts').textContent=watts;
+  // Power cost per GPU-hour: watts * hours / 1000 * $/kWh
+  // CapEx per kW amortized over 5 years = kwCost / (5*8760) per kWh
+  const baseKwh=kwCost/(5*8760);
+  const newKwh=baseKwh*mult;
+  const basePowerCost=watts/1000*baseKwh;
+  const newPowerCost=watts/1000*newKwh;
+  const totalBase=base+basePowerCost;
+  const totalNew=base+newPowerCost;
+  const delta=totalNew-totalBase;
+  const powerPct=newPowerCost/totalNew*100;
+  document.getElementById('pwOut').innerHTML=`
+    <div class="sim-out-row"><span>Baseline power cost</span><span>$${basePowerCost.toFixed(3)}/hr</span></div>
+    <div class="sim-out-row"><span>New power cost (${mult.toFixed(1)}x)</span><span>$${newPowerCost.toFixed(3)}/hr</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Total GPU cost (baseline)</span><span>$${totalBase.toFixed(2)}/hr</span></div>
+    <div class="sim-out-row highlight"><span>Total GPU cost (new)</span><span>$${totalNew.toFixed(2)}/hr</span></div>
+    <div class="sim-out-row"><span>Delta from power change</span><span>+$${delta.toFixed(3)}/hr (+${pct(delta/totalBase*100)})</span></div>
+    <div class="sim-out-row ${powerPct<15?'highlight':'warn'}"><span>Power as % of total cost</span><span>${pct(powerPct)}</span></div>
+    ${bar(powerPct,100,powerPct<10?'var(--c3)':powerPct<20?'var(--c4)':'var(--c5)')}
+    <div style="font-size:11px;color:var(--faint);margin-top:6px">${powerPct<10?'Dylan\'s point confirmed: power is a rounding error in GPU economics.':powerPct<20?'Power becoming noticeable but still dwarfed by chip amortization.':'At this level, power optimization starts to matter — but it\'s still not the bottleneck.'}</div>
+  `;
+}
+
+// Initialize all simulators
+calcEuv();calcGpu();calcMem();calcRev();calcAsml();calcBw();calcPower();
+
 function toggleGlossary(){
   const panel=document.getElementById('glossPanel');
   const fab=document.getElementById('glossFab');
