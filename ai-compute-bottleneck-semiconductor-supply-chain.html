@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Dylan Patel (SemiAnalysis) maps the single biggest bottleneck to scaling AI compute: not power, not data centers — it's the semiconductor supply chain, EUV tools, and memory." />
+  <meta name="category" content="AI Infrastructure" />
+  <meta name="tags" content="Semiconductors, EUV, ASML, TSMC, Memory, HBM, Compute Scaling, Dylan Patel, SemiAnalysis" />
+  <meta name="icon" content="🔬" />
+  <meta name="created" content="2026-03-14" />
+  <title>The Single Biggest Bottleneck to Scaling AI Compute</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.12), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{margin:10px 0 6px;font-size:34px;line-height:1.1;letter-spacing:-.02em}
+    .sub{color:var(--muted);font-size:15px;margin:0;max-width:72ch}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{font-size:12px;color:var(--muted);border:1px solid var(--border);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;display:flex;gap:8px;align-items:center}
+    .chip b{color:var(--text);font-weight:650}
+    .grid{display:grid;grid-template-columns: repeat(12, 1fr);gap:14px;margin-top:14px}
+    .span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-12{grid-column:span 12}
+    @media (max-width:980px){.span-7,.span-5,.span-6{grid-column:span 12}}
+    .sectionTitle{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0))}
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));border-radius:16px;overflow:hidden}
+    .storyHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px;cursor:pointer;user-select:none}
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-weight:800;border:1px solid var(--border);background:rgba(255,255,255,.03)}
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease;color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media (max-width:760px){.storyBody .cols{grid-template-columns:1fr}}
+    .mini{border:1px solid var(--border);background:rgba(0,0,0,.18);border-radius:14px;padding:10px}
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{border-left:3px solid rgba(59,130,246,.8);background:rgba(59,130,246,.10);padding:10px 10px 10px 12px;border-radius:12px;color:var(--muted);font-size:13px;margin-top:10px}
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);padding:9px 11px;border-radius:12px;font-size:13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{width:10px;height:10px;border-radius:99px;background:var(--c3);box-shadow:0 0 0 6px rgba(20,184,166,.12)}
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+    .kpiGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    @media (max-width:760px){.kpiGrid{grid-template-columns:1fr}}
+    .kpi{border:1px solid var(--border);background:rgba(255,255,255,.03);border-radius:16px;padding:12px;position:relative;overflow:hidden}
+    .kpi:before{content:"";position:absolute;inset:-40px -60px auto auto;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.26), transparent 60%);filter:blur(.2px);pointer-events:none}
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+    .slider{display:grid;gap:8px;margin-top:10px}
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{margin-top:14px;color:var(--faint);font-size:12px;padding:12px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.02)}
+    .svgBox{border:1px solid var(--border);background:rgba(0,0,0,.18);border-radius:16px;padding:10px;overflow:hidden}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px}
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}.sq.c3{background:var(--c3)}.sq.c4{background:var(--c4)}.sq.c5{background:var(--c5)}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(10,14,28,.92);border:1px solid var(--border);border-radius:14px;padding:10px 12px;color:var(--muted);font-size:13px;box-shadow:var(--shadow);display:none;max-width:min(720px, calc(100vw - 24px))}
+    .toast b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Infographic · March 2026 · Dylan Patel × Dwarkesh Patel</span></div>
+          <h1>The Single Biggest Bottleneck to Scaling AI Compute</h1>
+          <p class="sub">
+            It's not power. It's not data centers. It's semiconductors — specifically EUV lithography tools,
+            memory fabs, and a supply chain that tops out at ~200 GW of AI chips by 2030. Dylan Patel (SemiAnalysis)
+            maps the entire constraint stack from ASML's 70 machines/year to $600B in Big Tech CapEx.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>CapEx</b> ~$1 trillion supply chain this year</div>
+            <div class="chip"><b>EUV</b> 3.5 tools = 1 gigawatt of AI chips</div>
+            <div class="chip"><b>Memory</b> 30% of Big Tech CapEx goes to memory</div>
+            <div class="chip"><b>Labs</b> Anthropic + OpenAI: 5-6 GW each by year-end</div>
+          </div>
+        </div>
+        <div class="foot">
+          Source: Dylan Patel (CEO, SemiAnalysis) on Dwarkesh Podcast, March 2026. Numbers are SemiAnalysis estimates based on supply chain tracking.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The bottleneck stack</h2>
+          <small>what actually constrains AI scaling</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>2026 bottleneck</small>
+              <b>Memory fabs</b>
+              <span>No new fabs built during 2023 price crash. 2-year build time. Memory prices tripling. iPhones getting $150+ more expensive.</span>
+            </div>
+            <div class="kpi">
+              <small>2028+ bottleneck</small>
+              <b>EUV tools</b>
+              <span>ASML makes ~70/year today, scaling to ~100 by 2030. Each costs $300-400M. World's most complex machine. 10,000+ suppliers.</span>
+            </div>
+            <div class="kpi">
+              <small>Ceiling by 2030</small>
+              <b>~200 GW of chips</b>
+              <span>~700 EUV tools total at 3.5 per GW = 200 GW max. Sam Altman wants 52 GW/year (25% share). Feasible but tight.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq"></span> Chip supply chain</div>
+            <div class="key"><span class="sq c2"></span> Memory crisis</div>
+            <div class="key"><span class="sq c3"></span> Power (solvable)</div>
+            <div class="key"><span class="sq c4"></span> Lab compute race</div>
+            <div class="key"><span class="sq c5"></span> Consumer impact</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>The 5 stories that matter</h2>
+          <div class="pill">Click to expand · data-heavy</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1: The compute race -->
+          <details class="story" open data-story="race">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">1</div>
+                <div class="titleBlock">
+                  <b>The compute race: Anthropic was conservative, OpenAI went aggressive — and it matters</b>
+                  <span>Anthropic needs 5+ GW by year-end but was cautious on signing deals. OpenAI locked in early.</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Anthropic's revenue added $4B in January, $6B in February. Drawing a straight line = $60B in revenue
+                over the next 10 months. At sub-50% gross margins, that's ~$40B of compute spend, which at $10B/GW
+                rental cost means 4 GW of inference capacity just for revenue growth — on top of existing research fleet.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Anthropic's conundrum</h4>
+                  <ul>
+                    <li>Was conservative: "didn't want to go bankrupt" — Dario on Dwarkesh.</li>
+                    <li>Now must go to <span class="mono">lower-quality providers</span> for last-minute compute.</li>
+                    <li>Paying premium: H100 deals at <span class="mono">$2.40/hr</span> for 2-3 years (cost to build: $1.40).</li>
+                    <li>Relying on Bedrock, Vertex, Foundry revenue-share arrangements.</li>
+                    <li>Anthropic compute team saw Google's TPU dislocation before Google did.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>OpenAI's advantage</h4>
+                  <ul>
+                    <li>Signed "crazy deals" early — CoreWeave, Oracle, SoftBank Energy, NScale.</li>
+                    <li>5-year contracts locked in at historical prices → <span class="mono">huge margin advantage</span>.</li>
+                    <li>Went from 600 MW → 2 GW last year → 6+ GW this year → 12 GW next year.</li>
+                    <li>Raised $110B vs Anthropic's $30B.</li>
+                    <li>Financial freakouts in H2 2024 ("OpenAI can't pay") now resolved.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Key dynamic:</b> GPU value goes UP over time because better models extract more value per chip. An H100 is worth more today than 3 years ago. Early commitments = locked-in margin advantage. "Commitment issues" are very costly.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2: EUV bottleneck -->
+          <details class="story" data-story="euv">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>EUV: the world's most complex machine, and why ASML can't just make more</b>
+                  <span>70 tools/year → ~100 by 2030. $300-400M each. 10,000+ suppliers. Tin droplets hit by lasers 3x.</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                1 GW of AI chips requires ~2 million EUV wafer passes. At 75 wafers/hour and 90% uptime,
+                that's 3.5 EUV tools per gigawatt. The tools cost $1.2B for a GW, but enable $50B of data center
+                CapEx. The bottleneck is that ASML's supply chain simply cannot scale faster.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>How EUV works</h4>
+                  <ul>
+                    <li><b>Source:</b> tin droplets hit by laser 3x — expand → shape → blast → emit 13.5nm light.</li>
+                    <li><b>Optics:</b> Carl Zeiss makes 18 multilayer mirrors per tool. Molybdenum + ruthenium layers.</li>
+                    <li><b>Reticle stage:</b> moves at <span class="mono">9 Gs</span> in opposite direction to wafer stage.</li>
+                    <li><b>Precision:</b> sub-nanometer accuracy. Layer-to-layer overlay ~3nm.</li>
+                    <li>Assembled in Eindhoven, deconstructed, shipped by plane, reassembled at customer site.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why it can't scale faster</h4>
+                  <ul>
+                    <li><span class="mono">10,000+</span> suppliers in the supply chain.</li>
+                    <li>Carl Zeiss: <span class="mono">&lt;1,000 people</span> on projection optics. Artisanal-scale.</li>
+                    <li>Cymer source: complex supply chain in San Diego.</li>
+                    <li>ASML is not "AGI-pilled" — they think 60 → 100 is aggressive growth.</li>
+                    <li>Even if they wanted to 2x, the subcomponent supply chains can't follow.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>ASML paradox:</b> They have an absolute monopoly on EUV — no one else is even close — yet they haven't raised prices aggressively. "Maybe one of the most generous companies in the world." The margin is there. They just haven't taken it.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3: Memory crisis -->
+          <details class="story" data-story="memory">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">3</div>
+                <div class="titleBlock">
+                  <b>The memory crisis: 30% of Big Tech CapEx, iPhones $150 more expensive, smartphone sales halving</b>
+                  <span>HBM needs 4x more wafer area per bit than regular DRAM. Memory vendors didn't build fabs during 2023 crash.</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                HBM4 delivers 2.5 TB/s per stack vs ~100 GB/s for DDR5 in the same area — 25x more bandwidth.
+                That's why you can't just use commodity DRAM. But HBM uses 4x more wafer area per bit, meaning
+                every byte going to AI destroys 4x more consumer DRAM capacity. Memory prices have tripled.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Consumer impact</h4>
+                  <ul>
+                    <li>iPhone memory cost: $50 → <span class="mono">$150</span> ($100 increase).</li>
+                    <li>Add NAND increases: total iPhone BOM up <span class="mono">~$150</span>.</li>
+                    <li>Low-end smartphones hit hardest: higher % of BOM is memory, lower margins.</li>
+                    <li>Smartphone volumes: 1.1B → projected <span class="mono">800M</span> this year, <span class="mono">500-600M</span> next year.</li>
+                    <li>Xiaomi, Oppo cutting low/mid-range volumes by half.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why it's getting worse</h4>
+                  <ul>
+                    <li>Memory vendors <span class="mono">lost money in 2023</span> — stopped building fabs.</li>
+                    <li>Fabs take <span class="mono">2 years</span> to build. Meaningful new capacity: late 2027/2028.</li>
+                    <li>Reasoning models = long context = big KV cache = <span class="mono">massive memory demand</span>.</li>
+                    <li>Nvidia is now largest customer at both TSMC and SK Hynix.</li>
+                    <li>No more capacity to shift from mobile/PC to AI — it's tapped out.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout" style="border-left-color:rgba(239,68,68,.8); background:rgba(239,68,68,.10)">
+                <b>The meme is real:</b> "Cat dancing videos — this is why memory prices doubled and you can't get a new gaming GPU." It's going to get worse when memory prices double again.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4: Power is solvable -->
+          <details class="story" data-story="power">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">4</div>
+                <div class="titleBlock">
+                  <b>Power is solvable: 16+ vendors, hundreds of GW, ship engines, fuel cells — it's not the bottleneck</b>
+                  <span>Energy is 10-15% of cluster cost. Doubling power cost adds $0.10/hr to GPU cost. The supply chain is simple.</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                SemiAnalysis tracks 16+ power vendors. Combined-cycle turbines are $1,500/kW, but even at
+                $3,500/kW for behind-the-meter alternatives, GPU hourly cost only goes from $1.40 to $1.50.
+                The US grid is terawatt-level, and 20% is idle reserve capacity that batteries could unlock.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>The power zoo</h4>
+                  <ul>
+                    <li><b>Combined-cycle gas turbines:</b> 3 vendors (GE, Siemens, Mitsubishi).</li>
+                    <li><b>Aeroderivatives:</b> airplane engines → turbines (Boom Supersonic + Crusoe).</li>
+                    <li><b>Reciprocating engines:</b> 10+ vendors (Cummins etc). Diesel → gas convertible.</li>
+                    <li><b>Ship engines:</b> Nebius running them for Microsoft data center in NJ.</li>
+                    <li><b>Fuel cells:</b> Bloom Energy, fast payback, scalable production.</li>
+                    <li><b>Solar + battery:</b> cost curves still falling.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Why power isn't the constraint</h4>
+                  <ul>
+                    <li>Each source individually does <span class="mono">tens of GW</span>. Combined: hundreds of GW.</li>
+                    <li>Half of new capacity will be <span class="mono">behind the meter</span> by end of decade.</li>
+                    <li>Data centers: 3-4% of US grid today → 10% by 2028. Grid is TW-scale.</li>
+                    <li>20% grid reserve could be unlocked with utility-scale batteries.</li>
+                    <li>Data centers can be built in <span class="mono">8 months</span> (Amazon). Fabs take 2-3 years.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout" style="border-left-color:rgba(20,184,166,.8); background:rgba(20,184,166,.10)">
+                <b>Patel's hierarchy:</b> Power and data centers are shorter lead-time, simpler supply chains. The real bottleneck is the semiconductor supply chain — fabs (2-3 year build), EUV tools (artisanal), and memory (no new fabs since 2023).
+              </div>
+            </div>
+          </details>
+
+          <!-- 5: Space vs Earth, China, 2030 -->
+          <details class="story" data-story="future">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">5</div>
+                <div class="titleBlock">
+                  <b>2030 outlook: space is premature, China catches up on long timelines, chips remain king</b>
+                  <span>Space data centers lose 6 months of deployment time. China gets DUV by 2030, EUV working but not scaled.</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Elon wants 100 GW/year in space by 2028-29. Patel's counter: in a chip-constrained world,
+                you want GPUs producing tokens the moment they're manufactured. Space adds 6 months of
+                deployment delay = 10% of a GPU's useful life. Networking between satellites is orders of
+                magnitude worse than InfiniBand. Space makes sense once chips aren't the bottleneck — not this decade.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Why space doesn't work (yet)</h4>
+                  <ul>
+                    <li>GPUs must be tested, deconstructed, launched, reassembled — <span class="mono">6+ months</span>.</li>
+                    <li><span class="mono">15%</span> of Blackwells need RMA on deployment. Can't fix in space.</li>
+                    <li>Satellite interconnects ~100 Gbps vs InfiniBand 400+ GB/s per GPU.</li>
+                    <li>Higher watts/mm² = hotter chips. Harder to cool in space.</li>
+                    <li>Energy is only 10-15% of cluster cost — free power doesn't overcome these.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>China + long timelines</h4>
+                  <ul>
+                    <li>Fast US timelines → US wins (revenue compounding, compute scaling, distillation gets harder).</li>
+                    <li>Long timelines → China catches up with indigenized supply chain.</li>
+                    <li>China: fully indigenized DUV by 2030, EUV <span class="mono">working but not scaled</span>.</li>
+                    <li>~100 DUV tools/year vs ASML's hundreds. Closing but not equal.</li>
+                    <li>Anthropic at $20B ARR needs $50B of CapEx behind it. China hasn't built this.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Patel's thesis:</b> "All that matters in a chip-constrained world is getting chips producing tokens ASAP." Space, fancy cooling, or exotic architectures don't matter until chips stop being the bottleneck. That's post-2030 at earliest.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Bottleneck cascade map</h2>
+          <small>trace the constraint stack</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="race"><span class="sw o"></span>Lab race</button>
+            <button class="btn" data-focus="euv"><span class="sw p"></span>EUV tools</button>
+            <button class="btn" data-focus="memory"><span class="sw r"></span>Memory crisis</button>
+            <button class="btn" data-focus="power"><span class="sw"></span>Power (solvable)</button>
+            <button class="btn" data-focus="future"><span class="sw b"></span>2030 outlook</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 440" width="100%" height="auto" role="img" aria-label="Bottleneck cascade">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-demand-race" d="M310,70 C220,90 180,110 160,140" />
+                <path id="l-demand-euv" d="M310,70 C400,90 440,110 460,140" />
+                <path id="l-euv-memory" d="M460,210 C440,250 380,280 310,300" />
+                <path id="l-race-memory" d="M160,210 C180,250 240,280 300,300" />
+                <path id="l-memory-power" d="M310,340 C260,360 200,370 160,375" />
+                <path id="l-memory-future" d="M310,340 C360,360 420,370 460,375" />
+                <path id="l-race-power" d="M100,210 C90,280 100,340 140,370" />
+              </g>
+
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <g class="node" id="n-demand" data-node="race">
+                  <rect x="210" y="35" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.15)" stroke="rgba(245,158,11,.35)"/>
+                  <text x="240" y="58" fill="#EAF0FF" font-weight="800" font-size="15">$1T DEMAND</text>
+                  <text x="244" y="78" fill="rgba(234,240,255,.75)" font-size="12">Big Tech + labs CapEx</text>
+                </g>
+
+                <g class="node" id="n-race" data-node="race">
+                  <rect x="40" y="130" rx="14" ry="14" width="220" height="80" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.24)"/>
+                  <text x="58" y="160" fill="#EAF0FF" font-weight="700">Lab compute race</text>
+                  <text x="58" y="180" fill="rgba(234,240,255,.75)" font-size="12">Anthropic 5 GW · OpenAI 6+ GW</text>
+                  <text x="58" y="198" fill="rgba(234,240,255,.60)" font-size="11">commitment = margin advantage</text>
+                </g>
+
+                <g class="node" id="n-euv" data-node="euv">
+                  <rect x="350" y="130" rx="14" ry="14" width="230" height="80" fill="rgba(139,92,246,.12)" stroke="rgba(139,92,246,.28)"/>
+                  <text x="368" y="160" fill="#EAF0FF" font-weight="700">EUV tools (ASML)</text>
+                  <text x="368" y="180" fill="rgba(234,240,255,.75)" font-size="12">70/yr → 100 by 2030</text>
+                  <text x="368" y="198" fill="rgba(234,240,255,.60)" font-size="11">3.5 tools = 1 GW of chips</text>
+                </g>
+
+                <g class="node" id="n-memory" data-node="memory">
+                  <rect x="180" y="275" rx="14" ry="14" width="260" height="70" fill="rgba(239,68,68,.12)" stroke="rgba(239,68,68,.28)"/>
+                  <text x="198" y="305" fill="#EAF0FF" font-weight="700">Memory crisis (HBM/DRAM)</text>
+                  <text x="198" y="327" fill="rgba(234,240,255,.75)" font-size="12">30% of CapEx · prices 3x · no fabs</text>
+                </g>
+
+                <g class="node" id="n-power" data-node="power">
+                  <rect x="40" y="360" rx="14" ry="14" width="200" height="60" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="58" y="387" fill="#EAF0FF" font-weight="700">Power (solvable)</text>
+                  <text x="58" y="407" fill="rgba(234,240,255,.70)" font-size="11">16+ vendors · hundreds of GW</text>
+                </g>
+
+                <g class="node" id="n-future" data-node="future">
+                  <rect x="380" y="360" rx="14" ry="14" width="200" height="60" fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.24)"/>
+                  <text x="398" y="387" fill="#EAF0FF" font-weight="700">2030: ~200 GW max</text>
+                  <text x="398" y="407" fill="rgba(234,240,255,.70)" font-size="11">space premature · China rising</text>
+                </g>
+
+                <!-- Bottleneck indicator -->
+                <g id="bottleneck" opacity="0.8">
+                  <rect x="270" y="230" rx="10" ry="10" width="80" height="30" fill="rgba(239,68,68,.15)" stroke="rgba(239,68,68,.4)" stroke-width="1.5"/>
+                  <text x="310" y="250" text-anchor="middle" fill="rgba(239,68,68,.9)" font-size="11" font-weight="700">CRUNCH</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>model the supply chain</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>EUV-to-gigawatt calculator</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    EUV tools produced per year: <span id="euvVal" class="mono">80</span>
+                  </label>
+                  <input id="euv" type="range" min="60" max="150" value="80" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    % allocated to AI chips: <span id="aiPctVal" class="mono">40</span>%
+                  </label>
+                  <input id="aiPct" type="range" min="10" max="80" value="40" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Tools per GW (efficiency gains): <span id="tpgVal" class="mono">3.5</span>
+                  </label>
+                  <input id="tpg" type="range" min="20" max="50" value="35" />
+                </div>
+                <div class="callout" id="euvRes" style="margin-top:10px">
+                  <b>Result:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Lab compute cost (Anthropic-style revenue → GW math)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Annual revenue ($B): <span id="revVal" class="mono">60</span>
+                  </label>
+                  <input id="rev" type="range" min="5" max="200" value="60" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Gross margin: <span id="gmVal" class="mono">45</span>%
+                  </label>
+                  <input id="gm" type="range" min="20" max="80" value="45" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Rental cost per GW ($B): <span id="rgwVal" class="mono">10</span>
+                  </label>
+                  <input id="rgw" type="range" min="5" max="20" value="10" />
+                </div>
+                <div class="callout" id="labRes" style="margin-top:10px; border-left-color:rgba(245,158,11,.9); background:rgba(245,158,11,.10)">
+                  <b>Compute needed:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Consumer pain index (how much does AI hurt your phone/PC prices?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Memory price multiplier: <span id="memMulVal" class="mono">3.0</span>x
+                  </label>
+                  <input id="memMul" type="range" min="10" max="60" value="30" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Device price tier ($): <span id="tierVal" class="mono">500</span>
+                  </label>
+                  <input id="tier" type="range" min="100" max="1500" value="500" step="50" />
+                </div>
+                <div class="callout" id="painRes" style="margin-top:10px; border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                  <b>Impact:</b> —
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              Numbers based on SemiAnalysis supply chain data. Intentionally rough — model the dynamics, not the exact outcomes.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Takeaways -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>What to do with this</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you're an AI lab or compute buyer</h4>
+              <ul>
+                <li>Sign long-term compute contracts NOW. The price of GPUs goes up over time as models improve. Early commitment = margin advantage.</li>
+                <li>Don't be "conservative" on compute — Anthropic's caution is now costing them premium rates and lower-quality providers.</li>
+                <li>Memory is the near-term crunch. Plan for <span class="mono">3x memory costs</span> in your financial models.</li>
+                <li>Power is solvable — behind-the-meter from any of 16+ vendors. Don't let power be the reason you don't build.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you're an investor or supply chain participant</h4>
+              <ul>
+                <li>The semiconductor supply chain is the <span class="mono">real bottleneck</span> through 2030. Everything else can scale.</li>
+                <li>ASML, Carl Zeiss, memory vendors — these are the true chokepoints. ASML hasn't even taken their margin yet.</li>
+                <li>Consumer electronics will get more expensive. <span class="mono">Smartphone volumes halving</span> to 500-600M.</li>
+                <li>Fast AI timelines → US wins. Long timelines → China catches up with indigenized supply chain. Bet accordingly.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>Patel's bottom line:</b> "Everyone downstream from the semiconductor supply chain thinks they need X. Nvidia is building X - 1. The rest of the supply chain is doing X ÷ 2. Because they're not AGI-pilled." The whip hasn't cracked all the way down yet.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    const nodeMap = {
+      race:   ["n-demand","n-race"],
+      euv:    ["n-euv","n-demand"],
+      memory: ["n-memory","n-euv","n-race"],
+      power:  ["n-power","n-race"],
+      future: ["n-future","n-memory","n-euv"]
+    };
+
+    const linkMap = {
+      race:   ["l-demand-race","l-race-memory","l-race-power"],
+      euv:    ["l-demand-euv","l-euv-memory"],
+      memory: ["l-euv-memory","l-race-memory","l-memory-power","l-memory-future"],
+      power:  ["l-memory-power","l-race-power"],
+      future: ["l-memory-future","l-euv-memory"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{r.style.filter="";r.style.strokeWidth="";r.style.opacity="1"});
+      $$("#links path", svg).forEach(p=>{p.style.stroke="rgba(255,255,255,.22)";p.style.strokeWidth="2";p.style.opacity="0.9"});
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+      (nodeMap[focus]||[]).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g);
+        if(rect){rect.style.opacity="1";rect.style.filter="url(#glow)";rect.style.strokeWidth="2.4"}
+      });
+      (linkMap[focus]||[]).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity="0.95";p.style.strokeWidth="3.2";
+        const col=({race:"rgba(245,158,11,.75)",euv:"rgba(139,92,246,.70)",memory:"rgba(239,68,68,.70)",power:"rgba(20,184,166,.75)",future:"rgba(59,130,246,.75)"})[focus]||"rgba(255,255,255,.35)";
+        p.style.stroke=col;
+      });
+      toast(`<b>Focus:</b> ${focus.replace(/^\w/,c=>c.toUpperCase())} — cascade highlighted.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){story.open=true;story.scrollIntoView({behavior:"smooth",block:"start"})}
+      });
+    });
+    $("#reset").addEventListener("click", ()=>{clearHighlight();toast(`<b>Reset</b> — full view.`)});
+
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor="pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        highlight(id);
+        const story = $(`details.story[data-story="${id}"]`);
+        if(story){story.open=true;story.scrollIntoView({behavior:"smooth",block:"start"})}
+      });
+    });
+
+    // --- Simulators ---
+    const euvI=$("#euv"), aiPct=$("#aiPct"), tpg=$("#tpg");
+    const euvVal=$("#euvVal"), aiPctVal=$("#aiPctVal"), tpgVal=$("#tpgVal");
+    const euvRes=$("#euvRes");
+
+    function calcEuv(){
+      const E=+euvI.value, A=+aiPct.value, T=+tpg.value/10;
+      euvVal.textContent=E; aiPctVal.textContent=A; tpgVal.textContent=T.toFixed(1);
+      const aiTools = Math.round(E * A/100);
+      const gw = (aiTools / T).toFixed(1);
+      const capex = (gw * 50).toFixed(0);
+      euvRes.innerHTML = `<b>Result:</b> ${aiTools} AI-allocated EUV tools → <span class="mono">${gw} GW</span> of AI chip capacity per year.<br><span style="color:var(--muted)">That's ~$${capex}B of data center CapEx enabled. Sam Altman's 52 GW/yr needs ${Math.round(52*T)} AI-allocated tools/yr.</span>`;
+    }
+    [euvI, aiPct, tpg].forEach(i=> i.addEventListener("input", calcEuv));
+    calcEuv();
+
+    const rev=$("#rev"), gm=$("#gm"), rgw=$("#rgw");
+    const revVal=$("#revVal"), gmVal=$("#gmVal"), rgwVal=$("#rgwVal");
+    const labRes=$("#labRes");
+
+    function calcLab(){
+      const R=+rev.value, G=+gm.value, C=+rgw.value;
+      revVal.textContent=R; gmVal.textContent=G; rgwVal.textContent=C;
+      const computeSpend = R * (1 - G/100);
+      const gwNeeded = (computeSpend / C).toFixed(1);
+      const capexBehind = (gwNeeded * 50).toFixed(0);
+      labRes.innerHTML = `<b>Compute needed:</b> $${computeSpend.toFixed(0)}B compute spend → <span class="mono">${gwNeeded} GW</span> of inference capacity.<br><span style="color:var(--muted)">That requires ~$${capexBehind}B of CapEx laid out by cloud providers. At 3.5 EUV tools/GW, that's ${Math.round(gwNeeded*3.5)} EUV tools worth of chips.</span>`;
+    }
+    [rev, gm, rgw].forEach(i=> i.addEventListener("input", calcLab));
+    calcLab();
+
+    const memMul=$("#memMul"), tier=$("#tier");
+    const memMulVal=$("#memMulVal"), tierVal=$("#tierVal");
+    const painRes=$("#painRes");
+
+    function calcPain(){
+      const M=+memMul.value/10, T=+tier.value;
+      memMulVal.textContent=M.toFixed(1); tierVal.textContent=T;
+      // Base memory cost ~10% of device price, NAND ~8%
+      const baseMem = T * 0.10;
+      const baseNand = T * 0.08;
+      const newMem = baseMem * M;
+      const newNand = baseNand * Math.max(1, M * 0.6); // NAND rises less
+      const increase = Math.round((newMem - baseMem) + (newNand - baseNand));
+      const pctIncrease = ((increase / T) * 100).toFixed(0);
+      let verdict;
+      if(pctIncrease >= 25){
+        verdict = `Brutal. A $${T} device gets ~$${increase} more expensive (${pctIncrease}% increase). Low-end devices get priced out of the market entirely.`;
+      } else if(pctIncrease >= 10){
+        verdict = `Painful. ~$${increase} increase (${pctIncrease}%). Expect volume drops in mid-range. High-end absorbs it with thinner margins.`;
+      } else {
+        verdict = `Manageable at $${increase} (${pctIncrease}%). But memory prices are still climbing — check back when the multiplier hits 4-5x.`;
+      }
+      painRes.innerHTML = `<b>Impact:</b> +$${increase} per device <span class="mono" style="opacity:.85">(${pctIncrease}% price increase)</span><br><span style="color:var(--muted)">${verdict}</span>`;
+    }
+    [memMul, tier].forEach(i=> i.addEventListener("input", calcPain));
+    calcPain();
+
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){firstOpen=false;toast(`<b>Tip:</b> Use the Focus buttons to trace the bottleneck cascade.`)}
+      });
+    });
+  </script>
+</body>
+</html>
