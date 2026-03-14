@@ -403,6 +403,71 @@
             margin-bottom: 10px;
         }
 
+        /* Deep-dive format cards */
+        .page-card--deep-dive {
+            grid-column: 1 / -1;
+            border-image: linear-gradient(135deg, rgba(102,163,255,.5), rgba(179,140,255,.5), rgba(46,229,157,.4)) 1;
+            border-width: 2px;
+            border-style: solid;
+            background: linear-gradient(135deg, rgba(102,163,255,.06), rgba(179,140,255,.04), rgba(46,229,157,.03));
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 24px;
+        }
+        .page-card--deep-dive .format-badge {
+            grid-column: 1 / -1;
+        }
+        .page-card--deep-dive h3 {
+            grid-column: 1 / -1;
+            font-size: 1.15rem;
+        }
+        .page-card--deep-dive .date {
+            grid-column: 1;
+        }
+        .page-card--deep-dive .category-badge {
+            grid-column: 2;
+            justify-self: start;
+        }
+        .page-card--deep-dive p {
+            grid-column: 1 / -1;
+        }
+        .page-card--deep-dive .search-match {
+            grid-column: 1 / -1;
+        }
+        .page-card--deep-dive .tags {
+            grid-column: 1 / -1;
+        }
+        .page-card--deep-dive:hover {
+            border-image: linear-gradient(135deg, rgba(102,163,255,.8), rgba(179,140,255,.7), rgba(46,229,157,.6)) 1;
+        }
+        @media (max-width: 600px) {
+            .page-card--deep-dive {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .format-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 6px;
+            width: fit-content;
+        }
+        .format-badge .material-symbols-rounded {
+            font-size: 0.85rem;
+        }
+        .format-deep-dive {
+            color: #7dd3fc;
+            background: linear-gradient(135deg, rgba(102,163,255,.18), rgba(179,140,255,.14));
+            border: 1px solid rgba(102,163,255,.3);
+        }
+
         /* Loading State */
         .loading {
             text-align: center;
@@ -1714,6 +1779,10 @@
             <button class="filter-btn active" data-category="all">All</button>
         </div>
 
+        <div class="filter-group" id="yearFilters">
+            <button class="filter-btn active" data-year="all">All years</button>
+        </div>
+
         <main id="content">
             <div class="loading">Loading pages...</div>
         </main>
@@ -1817,6 +1886,7 @@
         // State
         let pages = [];
         let activeCategory = "all";
+        let activeYear = "all";
         let searchQuery = "";
         let currentView = "date";
 
@@ -1897,7 +1967,8 @@
                     order,
                     textContent: extractTextContent(html),
                     created: createdDate,
-                    createdStr: dateStr || null
+                    createdStr: dateStr || null,
+                    format: extractMeta(html, 'format') || null
                 };
             } catch (e) {
                 console.error(`Failed to load ${filename}:`, e);
@@ -1962,6 +2033,56 @@
                 btn.textContent = cat;
                 container.appendChild(btn);
             });
+
+            initYearFilters();
+        }
+
+        function getYears() {
+            const years = [...new Set(pages.filter(p => p.created).map(p => p.created.getFullYear()))];
+            return years.sort((a, b) => b - a);
+        }
+
+        function getYearCounts() {
+            const counts = { all: 0 };
+            pages.forEach(p => {
+                // Apply category filter
+                if (activeCategory !== "all" && p.category !== activeCategory) return;
+                // Apply search filter
+                if (searchQuery.trim()) {
+                    const q = searchQuery.toLowerCase().trim();
+                    const searchable = [p.title, p.description, p.category, ...p.tags, p.textContent].join(" ").toLowerCase();
+                    if (!searchable.includes(q)) return;
+                }
+                counts.all++;
+                if (p.created) {
+                    const y = p.created.getFullYear();
+                    counts[y] = (counts[y] || 0) + 1;
+                }
+            });
+            return counts;
+        }
+
+        function initYearFilters() {
+            const container = document.getElementById("yearFilters");
+            container.innerHTML = '';
+
+            const counts = getYearCounts();
+
+            const allBtn = document.createElement("button");
+            allBtn.className = "filter-btn" + (activeYear === "all" ? " active" : "");
+            allBtn.dataset.year = "all";
+            allBtn.innerHTML = `All years <span class="category-count" style="margin-left:6px;display:inline-block">${counts.all}</span>`;
+            container.appendChild(allBtn);
+
+            getYears().forEach(year => {
+                const count = counts[year] || 0;
+                if (count === 0 && activeYear !== String(year)) return;
+                const btn = document.createElement("button");
+                btn.className = "filter-btn" + (activeYear === String(year) ? " active" : "");
+                btn.dataset.year = String(year);
+                btn.innerHTML = `${year} <span class="category-count" style="margin-left:6px;display:inline-block">${count}</span>`;
+                container.appendChild(btn);
+            });
         }
 
         function filterPages() {
@@ -1970,6 +2091,12 @@
             return pages.filter(page => {
                 if (activeCategory !== "all" && page.category !== activeCategory) {
                     return false;
+                }
+
+                if (activeYear !== "all") {
+                    if (!page.created || page.created.getFullYear() !== parseInt(activeYear)) {
+                        return false;
+                    }
                 }
 
                 if (query) {
@@ -2014,6 +2141,12 @@
                 ? `<span class="category-badge">${page.category}</span>`
                 : '';
 
+            const isDeepDive = page.format === 'deep-dive';
+            const formatBadgeHtml = isDeepDive
+                ? `<span class="format-badge format-deep-dive"><span class="material-symbols-rounded">menu_book</span>Deep Dive</span>`
+                : '';
+            const cardClass = isDeepDive ? 'page-card page-card--deep-dive' : 'page-card';
+
             // Generate search match snippet if searching
             let searchMatchHtml = '';
             if (searchQuery.trim()) {
@@ -2024,7 +2157,8 @@
             }
 
             return `
-                <a href="${page.href}" class="page-card">
+                <a href="${page.href}" class="${cardClass}">
+                    ${formatBadgeHtml}
                     <h3><span class="material-symbols-rounded" aria-hidden="true">${page.icon}</span> ${page.title}</h3>
                     ${dateHtml}
                     ${categoryBadgeHtml}
@@ -2939,14 +3073,27 @@
         // Event handlers
         document.getElementById("search").addEventListener("input", (e) => {
             searchQuery = e.target.value;
+            initYearFilters();
             render();
         });
 
         document.getElementById("filters").addEventListener("click", (e) => {
-            if (e.target.classList.contains("filter-btn")) {
-                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-                e.target.classList.add("active");
-                activeCategory = e.target.dataset.category;
+            if (e.target.closest(".filter-btn")) {
+                const btn = e.target.closest(".filter-btn");
+                document.querySelectorAll("#filters .filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                activeCategory = btn.dataset.category;
+                initYearFilters();
+                render();
+            }
+        });
+
+        document.getElementById("yearFilters").addEventListener("click", (e) => {
+            if (e.target.closest(".filter-btn")) {
+                const btn = e.target.closest(".filter-btn");
+                document.querySelectorAll("#yearFilters .filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                activeYear = btn.dataset.year;
                 render();
             }
         });
