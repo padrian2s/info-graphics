@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="What happens when Claude Code becomes 100x faster: from minutes to seconds, real-time pair programming, entire codebases rewritten live, and the collapse of the build-wait-review cycle." />
+  <meta name="category" content="AI Futures" />
+  <meta name="tags" content="Claude Code, Speed, Latency, Developer Experience, Agent Productivity, Future of Coding" />
+  <meta name="icon" content="⚡" />
+  <meta name="created" content="2026-03-14" />
+  <title>What If Claude Code Were 100x Faster?</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --panel2:#0B1020;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(245,158,11,.20), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(59,130,246,.14), transparent 55%),
+        linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 60px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:6px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px}
+    .kicker{
+      display:flex;gap:10px;align-items:center;color:var(--muted);
+      font-size:13px;letter-spacing:.12em;text-transform:uppercase
+    }
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--c4),var(--c5));box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    h1{
+      margin:10px 0 6px;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+    .spark{background:linear-gradient(90deg,#f59e0b,#ef4444,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sub{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+      max-width:72ch;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .chip{
+      font-size:12px;color:var(--muted);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      padding:6px 10px;border-radius:999px;
+      display:flex;gap:8px;align-items:center
+    }
+    .chip b{color:var(--text);font-weight:650}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:980px){
+      .span-7,.span-5,.span-6{grid-column:span 12}
+    }
+    .sectionTitle{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    }
+    .sectionTitle h2{margin:0;font-size:16px;letter-spacing:.01em}
+    .sectionTitle small{color:var(--faint)}
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .storyList{display:grid;gap:10px;padding:14px}
+    .story{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .storyHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .storyHeader:hover{background:rgba(255,255,255,.03)}
+    .storyHeader .left{display:flex;gap:10px;align-items:center}
+    .badge{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .titleBlock{display:flex;flex-direction:column;gap:2px}
+    .titleBlock b{font-size:14px}
+    .titleBlock span{font-size:12px;color:var(--muted)}
+    .chev{transition:transform .2s ease; color:var(--muted)}
+    .story[open] .chev{transform:rotate(180deg)}
+    details.story > summary{list-style:none}
+    details.story > summary::-webkit-details-marker{display:none}
+    .storyBody{padding:0 12px 12px}
+    .storyBody p{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .storyBody .cols{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .storyBody .cols{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+    }
+    .mini h4{margin:0 0 6px;font-size:12px;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+    .mini ul{margin:0;padding:0 0 0 18px;color:var(--muted);font-size:12.5px}
+    .mini li{margin:4px 0}
+    .callout{
+      border-left:3px solid rgba(245,158,11,.8);
+      background:rgba(245,158,11,.10);
+      padding:10px 10px 10px 12px;border-radius:12px;
+      color:var(--muted);font-size:13px;margin-top:10px
+    }
+    .viz{padding:14px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 11px;border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{color:var(--muted)}
+    .btn .sw{
+      width:10px;height:10px;border-radius:99px;background:var(--c3);
+      box-shadow:0 0 0 6px rgba(20,184,166,.12)
+    }
+    .btn .sw.p{background:var(--c2);box-shadow:0 0 0 6px rgba(139,92,246,.12)}
+    .btn .sw.o{background:var(--c4);box-shadow:0 0 0 6px rgba(245,158,11,.12)}
+    .btn .sw.r{background:var(--c5);box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    .btn .sw.b{background:var(--c1);box-shadow:0 0 0 6px rgba(59,130,246,.12)}
+    .kpiGrid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px
+    }
+    @media (max-width:760px){ .kpiGrid{grid-template-columns:1fr} }
+    .kpi{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi:before{
+      content:"";
+      position:absolute;inset:-40px -60px auto auto;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(245,158,11,.26), transparent 60%);
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .kpi small{color:var(--faint);text-transform:uppercase;letter-spacing:.12em;font-size:11px}
+    .kpi b{display:block;margin-top:6px;font-size:22px;letter-spacing:-.02em}
+    .kpi span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+    .slider{display:grid;gap:8px;margin-top:10px}
+    input[type="range"]{width:100%}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    .foot{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+    }
+    .svgBox{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      overflow:hidden;
+    }
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:12px
+    }
+    .key{display:flex;gap:8px;align-items:center}
+    .sq{width:10px;height:10px;border-radius:3px;background:var(--c1)}
+    .sq.c2{background:var(--c2)}
+    .sq.c3{background:var(--c3)}
+    .sq.c4{background:var(--c4)}
+    .sq.c5{background:var(--c5)}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(10,14,28,.92);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      box-shadow:var(--shadow);
+      display:none;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast b{color:var(--text)}
+    .speedBar{
+      display:flex;align-items:center;gap:8px;margin-top:8px;
+    }
+    .speedBar .bar{
+      flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;position:relative;
+    }
+    .speedBar .fill{
+      height:100%;border-radius:99px;
+      transition:width .4s ease;
+    }
+    .speedBar .label{font-size:11px;color:var(--faint);min-width:60px;text-align:right}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="card">
+        <div class="pad">
+          <div class="kicker"><span class="dot"></span><span>Thought experiment · March 2026 · "What changes at 100x?"</span></div>
+          <h1>What If Claude Code Were <span class="spark">100x Faster?</span></h1>
+          <p class="sub">
+            Today a complex task takes 2-5 minutes. At 100x, that's 1-3 seconds. This isn't just "faster" —
+            it's a phase transition. The build-wait-review loop collapses. Prototyping becomes conversation-speed.
+            Entire architectures get rewritten while you're still talking. Here's what breaks, what emerges, and what it means.
+          </p>
+
+          <div class="chips">
+            <div class="chip"><b>Today</b> 2-5 min per complex task · context switch while waiting</div>
+            <div class="chip"><b>At 100x</b> 1-3 seconds · real-time flow state</div>
+            <div class="chip"><b>Unlocks</b> Conversational architecture · live refactoring · instant prototypes</div>
+            <div class="chip"><b>Breaks</b> Code review, git workflow, job boundaries, billing models</div>
+          </div>
+        </div>
+        <div class="foot">
+          This is a thought experiment, not a product announcement. But the trajectory points here — and thinking ahead matters.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h2>The speed transition</h2>
+          <small>what each threshold unlocks</small>
+        </div>
+        <div class="viz">
+          <div class="kpiGrid">
+            <div class="kpi">
+              <small>Current speed</small>
+              <b>1x (minutes)</b>
+              <span>You delegate a task, switch to another tab, come back and review. Async workflow. Context switches kill flow.</span>
+            </div>
+            <div class="kpi">
+              <small>10x threshold</small>
+              <b>Seconds</b>
+              <span>Fast enough to stay in the conversation. You stop context-switching. Pair programming becomes real.</span>
+            </div>
+            <div class="kpi">
+              <small>100x threshold</small>
+              <b>Instant</b>
+              <span>Phase transition. You think it, it's done. Prototyping at the speed of speech. Architecture becomes fluid.</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="key"><span class="sq c4"></span> Speed effects</div>
+            <div class="key"><span class="sq c2"></span> Workflow changes</div>
+            <div class="key"><span class="sq c3"></span> New capabilities</div>
+            <div class="key"><span class="sq"></span> What breaks</div>
+            <div class="key"><span class="sq c5"></span> Second-order effects</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Stories -->
+      <div class="card span-7">
+        <div class="sectionTitle">
+          <h2>5 things that change at 100x</h2>
+          <div class="pill">Click to expand · think it through</div>
+        </div>
+
+        <div class="storyList">
+
+          <!-- 1: The flow state revolution -->
+          <details class="story" open data-story="flow">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.25); color:#FFD89A;">1</div>
+                <div class="titleBlock">
+                  <b>The flow state revolution: you never leave your thought</b>
+                  <span>Today's biggest cost isn't latency — it's the context switch while you wait</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Right now, you prompt Claude Code, wait 2-5 minutes, check Slack, lose your mental model,
+                come back, re-orient, review the output, and course-correct. At 100x speed, the response
+                arrives before your attention drifts. You stay in the problem. The cognitive cost of the
+                context switch — estimated at 15-25 minutes to fully re-engage — disappears entirely.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Today's hidden cost</h4>
+                  <ul>
+                    <li><span class="mono">2-5 min</span> wait → open Slack/email → lose mental model.</li>
+                    <li><span class="mono">15-25 min</span> to fully re-engage with complex problem context.</li>
+                    <li>Average developer gets <span class="mono">~2 hours</span> of deep focus per 8-hour day.</li>
+                    <li>Most "productivity" is actually recovery from interruption.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>At 100x: continuous flow</h4>
+                  <ul>
+                    <li>Response arrives in <span class="mono">1-3 seconds</span> — faster than switching tabs.</li>
+                    <li>Your mental model stays loaded. No re-orientation penalty.</li>
+                    <li>Deep focus extends from 2 hours to <span class="mono">entire sessions</span>.</li>
+                    <li>The conversation feels like pair programming, not delegation.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>The real 100x:</b> It's not that each task is 100x faster — it's that you eliminate hundreds of context switches per day. The compound effect on deep work is enormous.
+              </div>
+            </div>
+          </details>
+
+          <!-- 2: Conversational architecture -->
+          <details class="story" data-story="convo">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(139,92,246,.10); border-color:rgba(139,92,246,.25); color:#D7C7FF;">2</div>
+                <div class="titleBlock">
+                  <b>Conversational architecture: "try it three different ways" becomes instant</b>
+                  <span>Exploring design alternatives at the speed of speech, not the speed of implementation</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Today, exploring architectural alternatives is expensive. "Should we use a queue or a database trigger?"
+                means building one, evaluating, then building the other. At 100x, you say "build both, run the benchmarks"
+                and have results in seconds. Architecture becomes a conversation, not a commitment.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>What becomes possible</h4>
+                  <ul>
+                    <li>"Show me 5 different API designs for this" — see them all in <span class="mono">10 seconds</span>.</li>
+                    <li>"Refactor the entire auth system to use JWTs" — done before you finish explaining why.</li>
+                    <li>"What if we split this monolith into 3 services?" — live demo, not a whiteboard.</li>
+                    <li>A/B test architectures the way we A/B test button colors.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What this kills</h4>
+                  <ul>
+                    <li><b>Architecture meetings:</b> why discuss when you can just build and compare?</li>
+                    <li><b>Design docs for code:</b> the prototype <em>is</em> the design doc.</li>
+                    <li><b>Technical debt anxiety:</b> rewrites become trivial, not terrifying.</li>
+                    <li><b>"We can't change that now":</b> yes you can, it takes 3 seconds.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>Phase transition:</b> When exploring an alternative takes 3 seconds instead of 3 hours, you explore 100x more alternatives. The quality of architectural decisions improves dramatically — not because the AI is smarter, but because you can <em>try everything</em>.
+              </div>
+            </div>
+          </details>
+
+          <!-- 3: What breaks -->
+          <details class="story" data-story="breaks">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); color:#FFC1C1;">3</div>
+                <div class="titleBlock">
+                  <b>What breaks: code review, git workflow, billing, and job titles</b>
+                  <span>Systems designed for human-speed development can't survive 100x acceleration</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                Our entire development infrastructure assumes that writing code is slow and expensive.
+                At 100x, writing code is free and instant. Every system built on the assumption of
+                scarcity — reviews, sprints, PRDs, even git itself — faces pressure to transform or collapse.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Systems that break</h4>
+                  <ul>
+                    <li><b>Code review:</b> reviewing 300 PRs/day is humanly impossible. Review shifts to output verification.</li>
+                    <li><b>Git workflow:</b> feature branches for 3-second changes? The branching model needs rethinking.</li>
+                    <li><b>Per-token billing:</b> 100x speed at current prices = 100x cost. Pricing models must change.</li>
+                    <li><b>Sprint planning:</b> what's a 2-week sprint when you ship 500 features in an afternoon?</li>
+                    <li><b>Job titles:</b> "junior developer" disappears when the gap between novice + AI and senior + AI narrows.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What replaces them</h4>
+                  <ul>
+                    <li><b>Automated verification:</b> test suites, type checkers, and AI reviewers replace human code review.</li>
+                    <li><b>Continuous deployment:</b> every change goes live immediately with auto-rollback.</li>
+                    <li><b>Outcome-based billing:</b> pay per feature shipped, not per token generated.</li>
+                    <li><b>Intent-based planning:</b> describe the product you want, not the tasks to build it.</li>
+                    <li><b>"Builder" role:</b> one person + 100x AI = what used to be a 20-person team.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout" style="border-left-color:rgba(239,68,68,.8); background:rgba(239,68,68,.10)">
+                <b>Uncomfortable truth:</b> Most software engineering process exists because writing code is slow. Remove the slowness, and the process has no reason to exist. What remains is taste, judgment, and knowing what to build.
+              </div>
+            </div>
+          </details>
+
+          <!-- 4: New capabilities that emerge -->
+          <details class="story" data-story="emerge">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(20,184,166,.10); border-color:rgba(20,184,166,.25); color:#B2FFF2;">4</div>
+                <div class="titleBlock">
+                  <b>New capabilities: things that are impossible today become trivial</b>
+                  <span>Live migrations, real-time codebase evolution, throwaway apps, instant learning</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                100x speed doesn't just make current tasks faster — it unlocks entirely new categories
+                of work that were previously too expensive to attempt. These aren't incremental improvements;
+                they're capabilities that don't exist at any human speed.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>New capability categories</h4>
+                  <ul>
+                    <li><b>Throwaway apps:</b> build a custom tool for a single meeting, discard it after.</li>
+                    <li><b>Live refactoring:</b> change your ORM while the app runs. Swap databases mid-conversation.</li>
+                    <li><b>Parallel universe coding:</b> explore 50 approaches simultaneously, pick the best.</li>
+                    <li><b>Real-time documentation:</b> docs update as fast as code changes — always current.</li>
+                    <li><b>Instant learning:</b> "build me a toy version of Kubernetes so I can understand it."</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>What becomes possible for non-engineers</h4>
+                  <ul>
+                    <li><b>CEO builds the demo:</b> pitch deck → working prototype in the meeting.</li>
+                    <li><b>Designer ships the design:</b> no handoff, no spec, just make it real.</li>
+                    <li><b>PM answers "is this feasible?"</b> by building it in 10 seconds.</li>
+                    <li><b>Customer support fixes the bug:</b> "Claude, fix what the customer reported" → done.</li>
+                    <li><b>The end of "that's a dev task":</b> everyone becomes a builder.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout" style="border-left-color:rgba(20,184,166,.8); background:rgba(20,184,166,.10)">
+                <b>Key insight:</b> Software becomes disposable. Instead of maintaining code, you regenerate it. Instead of documenting decisions, you replay them. The codebase becomes a living, fluid thing — more like a conversation than a cathedral.
+              </div>
+            </div>
+          </details>
+
+          <!-- 5: Second-order effects -->
+          <details class="story" data-story="second">
+            <summary class="storyHeader">
+              <div class="left">
+                <div class="badge" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.25); color:#BFD6FF;">5</div>
+                <div class="titleBlock">
+                  <b>Second-order effects: what happens to the industry, education, and startups</b>
+                  <span>When building software takes seconds, the bottleneck shifts to knowing what to build</span>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+
+            <div class="storyBody">
+              <p>
+                If building is free, what becomes expensive? Taste. Domain expertise. Understanding users.
+                Knowing what problem matters. The entire value chain of software inverts: implementation
+                goes to zero, insight becomes everything.
+              </p>
+
+              <div class="cols">
+                <div class="mini">
+                  <h4>Industry shifts</h4>
+                  <ul>
+                    <li><b>Startups:</b> 1-person companies build what 50-person teams build today. Competition explodes.</li>
+                    <li><b>Enterprise:</b> custom internal tools become trivially cheap. Buy vs build flips to build-everything.</li>
+                    <li><b>SaaS collapse:</b> why pay $50/mo for a generic tool when you can build an exact-fit in 10 seconds?</li>
+                    <li><b>Open source:</b> contribution velocity explodes. Maintenance becomes regeneration.</li>
+                  </ul>
+                </div>
+                <div class="mini">
+                  <h4>Education + career shifts</h4>
+                  <ul>
+                    <li><b>CS education:</b> shifts from "how to code" to "how to think about systems."</li>
+                    <li><b>Bootcamps:</b> become domain expertise programs, not coding programs.</li>
+                    <li><b>Senior engineers:</b> valued for architectural taste, not implementation speed.</li>
+                    <li><b>New roles:</b> "software director" — someone who directs AI what to build, like a film director.</li>
+                    <li><b>Democratization:</b> billions of people who couldn't code can now build software.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout">
+                <b>The inversion:</b> For 50 years, the bottleneck was "can we build it?" At 100x, the bottleneck becomes "should we build it?" — and "for whom?" Product sense, user empathy, and domain knowledge become the scarce resources.
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Interactive Map -->
+      <div class="card span-5">
+        <div class="sectionTitle">
+          <h2>Speed cascade map</h2>
+          <small>trace the ripple effects</small>
+        </div>
+
+        <div class="viz">
+          <div class="row">
+            <button class="btn" data-focus="flow"><span class="sw o"></span>Flow state</button>
+            <button class="btn" data-focus="convo"><span class="sw p"></span>Conversational arch.</button>
+            <button class="btn" data-focus="breaks"><span class="sw r"></span>What breaks</button>
+            <button class="btn" data-focus="emerge"><span class="sw"></span>New capabilities</button>
+            <button class="btn" data-focus="second"><span class="sw b"></span>2nd-order effects</button>
+            <button class="btn secondary" id="reset"><span class="sw" style="background:#94a3b8;box-shadow:0 0 0 6px rgba(148,163,184,.10)"></span>Reset</button>
+          </div>
+
+          <div class="svgBox" style="margin-top:12px">
+            <svg id="map" viewBox="0 0 620 440" width="100%" height="auto" role="img" aria-label="Speed cascade map">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Links -->
+              <g id="links" opacity="0.9" stroke="rgba(255,255,255,.22)" stroke-width="2" fill="none">
+                <path id="l-speed-flow" d="M310,75 C220,100 180,120 160,145" />
+                <path id="l-speed-convo" d="M310,75 C400,100 440,120 460,145" />
+                <path id="l-flow-emerge" d="M160,210 C180,250 200,270 220,290" />
+                <path id="l-convo-emerge" d="M460,210 C440,250 420,270 390,290" />
+                <path id="l-flow-breaks" d="M160,210 C120,250 100,280 100,310" />
+                <path id="l-convo-breaks" d="M460,210 C500,250 520,280 520,310" />
+                <path id="l-emerge-second" d="M310,340 C310,365 310,375 310,385" />
+                <path id="l-breaks-second" d="M140,350 C200,375 250,390 290,400" />
+                <path id="l-breaks2-second" d="M480,350 C420,375 370,390 330,400" />
+              </g>
+
+              <!-- Nodes -->
+              <g id="nodes" font-family="ui-sans-serif, system-ui" font-size="14">
+                <!-- Top: Speed -->
+                <g class="node" id="n-speed" data-node="flow">
+                  <rect x="210" y="35" rx="14" ry="14" width="200" height="55" fill="rgba(245,158,11,.15)" stroke="rgba(245,158,11,.35)"/>
+                  <text x="255" y="60" fill="#EAF0FF" font-weight="800" font-size="16">100x SPEED</text>
+                  <text x="248" y="78" fill="rgba(234,240,255,.75)" font-size="12">minutes → seconds</text>
+                </g>
+
+                <!-- Level 2: Direct effects -->
+                <g class="node" id="n-flow" data-node="flow">
+                  <rect x="50" y="140" rx="14" ry="14" width="220" height="70" fill="rgba(245,158,11,.10)" stroke="rgba(245,158,11,.24)"/>
+                  <text x="68" y="170" fill="#EAF0FF" font-weight="700">Flow state revolution</text>
+                  <text x="68" y="192" fill="rgba(234,240,255,.75)" font-size="12">zero context switches</text>
+                </g>
+
+                <g class="node" id="n-convo" data-node="convo">
+                  <rect x="350" y="140" rx="14" ry="14" width="220" height="70" fill="rgba(139,92,246,.10)" stroke="rgba(139,92,246,.24)"/>
+                  <text x="368" y="170" fill="#EAF0FF" font-weight="700">Conversational arch.</text>
+                  <text x="368" y="192" fill="rgba(234,240,255,.75)" font-size="12">try everything instantly</text>
+                </g>
+
+                <!-- Level 3: Consequences -->
+                <g class="node" id="n-emerge" data-node="emerge">
+                  <rect x="180" y="280" rx="14" ry="14" width="260" height="65" fill="rgba(20,184,166,.10)" stroke="rgba(20,184,166,.24)"/>
+                  <text x="198" y="308" fill="#EAF0FF" font-weight="700">New capabilities emerge</text>
+                  <text x="198" y="328" fill="rgba(234,240,255,.75)" font-size="12">throwaway apps · live migration · instant learning</text>
+                </g>
+
+                <g class="node" id="n-breaks1" data-node="breaks">
+                  <rect x="30" y="300" rx="14" ry="14" width="160" height="60" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="48" y="326" fill="#EAF0FF" font-weight="700" font-size="13">Reviews break</text>
+                  <text x="48" y="346" fill="rgba(234,240,255,.70)" font-size="11">git · sprints · billing</text>
+                </g>
+
+                <g class="node" id="n-breaks2" data-node="breaks">
+                  <rect x="430" y="300" rx="14" ry="14" width="160" height="60" fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.24)"/>
+                  <text x="448" y="326" fill="#EAF0FF" font-weight="700" font-size="13">Jobs shift</text>
+                  <text x="448" y="346" fill="rgba(234,240,255,.70)" font-size="11">titles · roles · skills</text>
+                </g>
+
+                <!-- Level 4: Second-order -->
+                <g class="node" id="n-second" data-node="second">
+                  <rect x="170" y="380" rx="14" ry="14" width="280" height="55" fill="rgba(59,130,246,.12)" stroke="rgba(59,130,246,.28)"/>
+                  <text x="188" y="405" fill="#EAF0FF" font-weight="700">The great inversion</text>
+                  <text x="188" y="423" fill="rgba(234,240,255,.75)" font-size="12">bottleneck shifts: "can we?" → "should we?"</text>
+                </g>
+
+                <!-- Speed bolt -->
+                <g id="bolt" opacity="0.8">
+                  <polygon points="310,10 295,35 305,35 290,60 325,30 315,30 330,10" fill="rgba(245,158,11,.4)" stroke="rgba(245,158,11,.6)" stroke-width="1"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Simulators -->
+          <div class="card" style="margin-top:12px; background:rgba(255,255,255,.03); box-shadow:none">
+            <div class="sectionTitle" style="border-bottom:1px solid var(--border);">
+              <h2>Mini simulators</h2>
+              <small>model the impact</small>
+            </div>
+            <div class="viz">
+              <div class="mini">
+                <h4>Productivity multiplier at different speeds</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Speed multiplier: <span id="speedVal" class="mono" style="color:var(--c4)">100</span>x
+                  </label>
+                  <input id="speed" type="range" min="1" max="200" value="100" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Tasks per day (current): <span id="tasksVal" class="mono">15</span>
+                  </label>
+                  <input id="tasks" type="range" min="1" max="50" value="15" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Context-switch penalty (min lost per switch): <span id="csVal" class="mono">12</span>
+                  </label>
+                  <input id="cs" type="range" min="1" max="30" value="12" />
+                </div>
+                <div class="callout" id="prodRes" style="margin-top:10px">
+                  <b>Result:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>SaaS disruption risk (will custom-built replace your product?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Product complexity: <span id="compVal" class="mono">6</span>/10
+                  </label>
+                  <input id="comp" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Network effects / data moat: <span id="moatVal" class="mono">4</span>/10
+                  </label>
+                  <input id="moat" type="range" min="0" max="10" value="4" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    User's technical confidence: <span id="confVal" class="mono">5</span>/10
+                  </label>
+                  <input id="conf" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="saasRes" style="margin-top:10px; border-left-color:rgba(239,68,68,.85); background:rgba(239,68,68,.10)">
+                  <b>Disruption risk:</b> —
+                </div>
+              </div>
+
+              <div class="mini" style="margin-top:10px">
+                <h4>Your role resilience (will your job change or disappear?)</h4>
+                <div class="slider">
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Domain expertise depth: <span id="domainVal" class="mono">6</span>/10
+                  </label>
+                  <input id="domain" type="range" min="0" max="10" value="6" />
+                  <label class="mono" style="color:var(--muted);font-size:12px">
+                    Taste / judgment component: <span id="tasteVal" class="mono">5</span>/10
+                  </label>
+                  <input id="taste" type="range" min="0" max="10" value="5" />
+                </div>
+                <div class="callout" id="roleRes" style="margin-top:10px; border-left-color:rgba(20,184,166,.85); background:rgba(20,184,166,.10)">
+                  <b>Resilience:</b> —
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              These are intentionally provocative. The goal is to make you think about second-order effects before they arrive.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: Action checklist -->
+      <div class="card span-12">
+        <div class="sectionTitle">
+          <h2>How to prepare (before it arrives)</h2>
+          <small>Pick the row that matches you</small>
+        </div>
+        <div class="viz">
+          <div class="grid" style="margin-top:0">
+            <div class="mini span-6">
+              <h4>If you're a developer</h4>
+              <ul>
+                <li>Invest in <span class="mono">taste and judgment</span> — knowing what to build matters more than knowing how to build it.</li>
+                <li>Practice "directing" AI: give high-level intent, evaluate output, course-correct. This is the 100x workflow.</li>
+                <li>Learn systems thinking: architecture, trade-offs, failure modes. These don't get automated — they get amplified.</li>
+                <li>Build domain expertise. The developer who understands healthcare + AI beats the developer who only understands code.</li>
+              </ul>
+            </div>
+            <div class="mini span-6">
+              <h4>If you're building a product</h4>
+              <ul>
+                <li>Ask: "would someone rebuild this in 10 seconds with 100x Claude Code?" If yes, your moat is <span class="mono">not</span> the code.</li>
+                <li>Invest in network effects, data, community, and trust — things that can't be regenerated instantly.</li>
+                <li>Design for composability: let users customize, extend, and rebuild pieces. Don't fight the regeneration wave.</li>
+                <li>The winning products will be those that make 100x-speed builders even more productive — platforms, not apps.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <b>The question to sit with:</b> If building software becomes as fast as describing what you want, what do you uniquely bring to the table that a description alone can't capture?
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    function toast(html){
+      const t = $("#toast");
+      t.innerHTML = html;
+      t.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> t.style.display="none", 2300);
+    }
+
+    const nodeMap = {
+      flow:    ["n-speed","n-flow"],
+      convo:   ["n-speed","n-convo"],
+      breaks:  ["n-breaks1","n-breaks2","n-flow","n-convo"],
+      emerge:  ["n-emerge","n-flow","n-convo"],
+      second:  ["n-second","n-emerge","n-breaks1","n-breaks2"]
+    };
+
+    const linkMap = {
+      flow:    ["l-speed-flow"],
+      convo:   ["l-speed-convo"],
+      breaks:  ["l-flow-breaks","l-convo-breaks","l-breaks-second","l-breaks2-second"],
+      emerge:  ["l-flow-emerge","l-convo-emerge","l-emerge-second"],
+      second:  ["l-emerge-second","l-breaks-second","l-breaks2-second"]
+    };
+
+    function clearHighlight(){
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=>{
+        r.style.filter = "";
+        r.style.strokeWidth = "";
+        r.style.opacity = "1";
+      });
+      $$("#links path", svg).forEach(p=>{
+        p.style.stroke = "rgba(255,255,255,.22)";
+        p.style.strokeWidth = "2";
+        p.style.opacity = "0.9";
+      });
+    }
+
+    function highlight(focus){
+      clearHighlight();
+      const svg = $("#map");
+      $$("g.node rect", svg).forEach(r=> r.style.opacity = "0.55");
+      $$("#links path", svg).forEach(p=> p.style.opacity = "0.25");
+
+      (nodeMap[focus] || []).forEach(id=>{
+        const g = $("#"+id, svg);
+        if(!g) return;
+        const rect = $("rect", g);
+        if(rect){
+          rect.style.opacity = "1";
+          rect.style.filter = "url(#glow)";
+          rect.style.strokeWidth = "2.4";
+        }
+      });
+
+      (linkMap[focus] || []).forEach(id=>{
+        const p = $("#"+id, svg);
+        if(!p) return;
+        p.style.opacity = "0.95";
+        p.style.strokeWidth = "3.2";
+        const col = ({
+          flow:"rgba(245,158,11,.75)",
+          convo:"rgba(139,92,246,.70)",
+          breaks:"rgba(239,68,68,.70)",
+          emerge:"rgba(20,184,166,.75)",
+          second:"rgba(59,130,246,.75)"
+        })[focus] || "rgba(255,255,255,.35)";
+        p.style.stroke = col;
+      });
+
+      toast(`<b>Focus:</b> ${focus.replace(/^\w/,c=>c.toUpperCase())} — cascade highlighted.`);
+    }
+
+    $$(".btn[data-focus]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const f = b.getAttribute("data-focus");
+        highlight(f);
+        const story = $(`details.story[data-story="${f}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    $("#reset").addEventListener("click", ()=>{
+      clearHighlight();
+      toast(`<b>Reset</b> — full cascade view.`);
+    });
+
+    const svg = $("#map");
+    $$(".node", svg).forEach(n=>{
+      n.style.cursor = "pointer";
+      n.addEventListener("click", ()=>{
+        const id = n.getAttribute("data-node");
+        highlight(id);
+        const story = $(`details.story[data-story="${id}"]`);
+        if(story){ story.open = true; story.scrollIntoView({behavior:"smooth", block:"start"}); }
+      });
+    });
+
+    // --- Simulators ---
+    const speed=$("#speed"), tasks=$("#tasks"), cs=$("#cs");
+    const speedVal=$("#speedVal"), tasksVal=$("#tasksVal"), csVal=$("#csVal");
+    const prodRes=$("#prodRes");
+
+    function calcProd(){
+      const S=+speed.value, T=+tasks.value, C=+cs.value;
+      speedVal.textContent=S; tasksVal.textContent=T; csVal.textContent=C;
+
+      // At current speed: each task causes a context switch
+      const currentMinLost = T * C; // minutes lost to context switching
+      const currentEffective = Math.max(1, 480 - currentMinLost); // 8hr day minus lost time
+      // At Sx speed: context switches disappear above ~10x
+      const switchReduction = Math.min(1, 10/S); // at 10x+ speed, no more switches
+      const fastMinLost = T * C * switchReduction;
+      const fastEffective = Math.max(1, 480 - fastMinLost);
+      const multiplier = (fastEffective / currentEffective).toFixed(1);
+      const extraHours = ((fastEffective - currentEffective) / 60).toFixed(1);
+
+      let verdict;
+      if(S >= 50){
+        verdict = `At ${S}x speed, you recover ~${extraHours} hours of deep work per day. Context switches effectively disappear. Effective productivity: ${multiplier}x your current output.`;
+      } else if(S >= 10){
+        verdict = `At ${S}x speed, context switches reduce significantly. You recover ~${extraHours} hours. Real productivity gain: ${multiplier}x (not ${S}x — the task speed isn't the whole story).`;
+      } else {
+        verdict = `At ${S}x, tasks are faster but you still context-switch. Recovery: ~${extraHours} hours. The big gains start at 10x+ where flow state kicks in.`;
+      }
+      prodRes.innerHTML = `<b>Result:</b> <span class="mono" style="opacity:.85">${multiplier}x effective productivity</span><br><span style="color:var(--muted)">${verdict}</span>`;
+    }
+    [speed, tasks, cs].forEach(i=> i.addEventListener("input", calcProd));
+    calcProd();
+
+    const comp=$("#comp"), moat=$("#moat"), conf=$("#conf");
+    const compVal=$("#compVal"), moatVal=$("#moatVal"), confVal=$("#confVal");
+    const saasRes=$("#saasRes");
+
+    function calcSaas(){
+      const C=+comp.value, M=+moat.value, U=+conf.value;
+      compVal.textContent=C; moatVal.textContent=M; confVal.textContent=U;
+
+      // Low complexity + low moat + high user confidence = high disruption risk
+      const risk = Math.max(0, Math.min(100, Math.round(((10-C)*4 + (10-M)*4 + U*2))));
+      let level, action;
+      if(risk >= 65){
+        level = "High disruption risk";
+        action = "Users will rebuild your product with AI. Your moat must be data, network effects, or trust — not the software itself.";
+      } else if(risk >= 35){
+        level = "Moderate risk";
+        action = "Some users will build alternatives. Deepen integrations, lock in data, and make the switching cost higher than the building cost.";
+      } else {
+        level = "Lower risk (for now)";
+        action = "Product complexity or network effects protect you. But watch for AI making complex products simple — that's the next disruption wave.";
+      }
+      saasRes.innerHTML = `<b>Disruption risk:</b> ${level} <span class="mono" style="opacity:.85">(${risk}/100)</span><br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [comp, moat, conf].forEach(i=> i.addEventListener("input", calcSaas));
+    calcSaas();
+
+    const domain=$("#domain"), taste=$("#taste");
+    const domainVal=$("#domainVal"), tasteVal=$("#tasteVal");
+    const roleRes=$("#roleRes");
+
+    function calcRole(){
+      const D=+domain.value, T=+taste.value;
+      domainVal.textContent=D; tasteVal.textContent=T;
+
+      const score = Math.round((D*0.5 + T*0.5) * 10);
+      let level, action;
+      if(score >= 65){
+        level = "Highly resilient";
+        action = "Your domain expertise and judgment are exactly what becomes more valuable at 100x. You'll direct AI, not be replaced by it.";
+      } else if(score >= 35){
+        level = "Needs repositioning";
+        action = "Build deeper domain knowledge or develop stronger product taste. Pure implementation skill loses value at 100x speed.";
+      } else {
+        level = "Vulnerable";
+        action = "If your role is primarily implementation, 100x speed makes it nearly free. Urgently invest in domain expertise, systems thinking, or user understanding.";
+      }
+      roleRes.innerHTML = `<b>Resilience:</b> ${level} <span class="mono" style="opacity:.85">(${score}/100)</span><br><span style="color:var(--muted)">${action}</span>`;
+    }
+    [domain, taste].forEach(i=> i.addEventListener("input", calcRole));
+    calcRole();
+
+    let firstOpen = true;
+    $$(".story").forEach(d=>{
+      d.addEventListener("toggle", ()=>{
+        if(firstOpen){
+          firstOpen=false;
+          toast(`<b>Tip:</b> Use the Focus buttons to trace the speed cascade.`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
