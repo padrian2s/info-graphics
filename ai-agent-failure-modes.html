@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Four hidden failure modes in AI agents exposed by Mount Sinai's ChatGPT Health study, and a 4-layer evaluation architecture to catch them before your users do." />
+  <meta name="category" content="AI Agents" />
+  <meta name="tags" content="AI Agents, Evaluation, Guardrails, ChatGPT Health, Mount Sinai, Failure Modes, Chain of Thought, Production AI" />
+  <meta name="icon" content="🛡️" />
+  <meta name="created" content="2026-03-18" />
+  <title>Your Agent Knows the Answer — Then Recommends the Opposite</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --red:#ef4444;--orange:#f59e0b;--green:#22c55e;--blue:#3b82f6;--purple:#8b5cf6;--teal:#14b8a6;--pink:#ec4899;
+    }
+    *{box-sizing:border-box;margin:0}
+    body{
+      background:
+        radial-gradient(1000px 700px at 15% 8%,rgba(239,68,68,.16),transparent 55%),
+        radial-gradient(900px 700px at 85% 15%,rgba(139,92,246,.14),transparent 55%),
+        radial-gradient(800px 600px at 50% 90%,rgba(20,184,166,.10),transparent 55%),
+        linear-gradient(180deg,#050711,#070A12 55%,#050711);
+      color:var(--text);
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.5;
+      overflow-x:hidden;
+    }
+    a{color:var(--blue)}
+    .wrap{max-width:1140px;margin:0 auto;padding:28px 18px 70px}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:20px;
+      backdrop-filter:blur(8px);
+    }
+    .card.soft{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:stretch;margin-bottom:18px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}}
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,var(--red),var(--purple));box-shadow:0 0 0 6px rgba(239,68,68,.10)}
+    h1{font-size:clamp(24px,3.2vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:10px}
+    h1 .spark{background:linear-gradient(135deg,var(--red),var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:var(--muted);font-size:15px;max-width:64ch;margin-bottom:14px}
+    .pills{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{font-size:11px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:rgba(0,0,0,.2)}
+    .statRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:12px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.2)}
+    .stat .label{color:var(--muted);font-size:11px}
+    .stat .value{font-size:20px;margin-top:4px;font-weight:700}
+
+    /* Grid */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .wide{grid-column:1/-1}
+
+    .sectionTitle{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .sectionTitle h2{font-size:17px;letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:11px;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.2)}
+    .hr{height:1px;background:var(--border);margin:14px 0}
+
+    /* Failure mode cards */
+    .fm{position:relative;overflow:hidden}
+    .fm-num{
+      position:absolute;top:14px;right:16px;
+      font-size:48px;font-weight:900;
+      color:rgba(255,255,255,.04);
+      line-height:1;
+    }
+    .fm-icon{font-size:28px;margin-bottom:8px}
+    .fm h3{font-size:15px;margin-bottom:6px}
+    .fm .desc{color:var(--muted);font-size:13px;line-height:1.55;margin-bottom:10px}
+    .fm .example{
+      border-left:3px solid;
+      padding:8px 10px;
+      border-radius:0 10px 10px 0;
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(0,0,0,.15);
+      margin-bottom:8px;
+    }
+    .fm .takeaway{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:12px;
+      color:var(--text);
+    }
+    .fm .takeaway strong{font-size:10px;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+
+    /* Layer cards */
+    .layer{position:relative;overflow:hidden}
+    .layer-num{
+      width:32px;height:32px;border-radius:10px;
+      display:grid;place-items:center;
+      font-weight:800;font-size:14px;
+      margin-bottom:10px;
+    }
+    .layer h3{font-size:14px;margin-bottom:6px}
+    .layer .desc{color:var(--muted);font-size:12.5px;line-height:1.55;margin-bottom:8px}
+    .layer .how{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .layer .how b{color:var(--text)}
+
+    /* Callout */
+    .callout{
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(239,68,68,.10),rgba(139,92,246,.06));
+      padding:14px;
+    }
+    .callout p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+    .callout strong{color:var(--text)}
+
+    /* Diagnostic */
+    .diag{margin-top:16px}
+    .diag h2{font-size:17px;margin-bottom:12px}
+    .diag-item{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:10px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .diag-item:last-child{border-bottom:none}
+    .diag-check{
+      width:24px;height:24px;border-radius:8px;
+      display:grid;place-items:center;
+      font-size:14px;flex-shrink:0;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      transition:all .15s;
+    }
+    .diag-check.checked{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green)}
+    .diag-text{font-size:13px;color:var(--muted)}
+    .diag-text b{color:var(--text);font-weight:600}
+
+    /* Inverted U visual */
+    .u-chart{
+      display:flex;align-items:flex-end;gap:3px;
+      height:80px;padding:8px 0;
+    }
+    .u-bar{
+      flex:1;border-radius:4px 4px 0 0;
+      min-width:4px;
+      transition:height .3s;
+    }
+    .u-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-top:4px}
+
+    /* Risk pyramid */
+    .pyramid{text-align:center;padding:8px 0}
+    .pyramid-row{
+      margin:0 auto;padding:6px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      font-size:11px;
+      margin-bottom:4px;
+    }
+
+    /* Footer */
+    .footer{text-align:center;color:var(--faint);font-size:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="card">
+      <div class="kicker"><span class="dot"></span> AI Agent Safety &bull; Mount Sinai Study</div>
+      <h1>Your Agent <span class="spark">Knows the Answer</span> — Then Recommends the Opposite</h1>
+      <p class="sub">A landmark Mount Sinai study on ChatGPT Health exposes four failure modes that affect all production AI agents — not just medical ones. Plus a 4-layer architecture to catch them.</p>
+      <div class="pills">
+        <span class="pill">ChatGPT Health</span>
+        <span class="pill">Mount Sinai Study</span>
+        <span class="pill">Agent Evaluation</span>
+        <span class="pill">Chain of Thought</span>
+        <span class="pill">Guardrails</span>
+        <span class="pill">Progressive Autonomy</span>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">Failure Modes Identified</div>
+          <div class="value" style="color:var(--red)">4</div>
+        </div>
+        <div class="stat">
+          <div class="label">Architecture Layers</div>
+          <div class="value" style="color:var(--teal)">4</div>
+        </div>
+      </div>
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">Social Bias Amplification</div>
+          <div class="value" style="color:var(--orange)">12x</div>
+        </div>
+        <div class="stat">
+          <div class="label">CoT Unfaithfulness</div>
+          <div class="value" style="color:var(--orange)">>50%</div>
+        </div>
+      </div>
+      <div class="callout">
+        <p><strong>The core finding:</strong> ChatGPT Health recommended waiting 24–48 hours for respiratory failure instead of immediate ER. The reasoning trace correctly said "early respiratory failure." The output contradicted it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAILURE MODES -->
+  <div class="wide" style="margin-bottom:4px">
+    <div class="sectionTitle">
+      <h2>The Four Failure Modes</h2>
+      <span class="tag">Applies to all agents, not just medical</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- FM1: Inverted U -->
+    <div class="card fm" style="border-top:3px solid var(--red)">
+      <div class="fm-num">01</div>
+      <div class="fm-icon">&#128200;</div>
+      <h3>The Inverted U</h3>
+      <div class="desc">Agents perform best on routine cases — exactly where performance matters least. They fail on extreme edges where stakes are highest. Your "87% accuracy" dashboard is masking silent failures on the tails.</div>
+
+      <div class="u-chart">
+        <div class="u-bar" style="height:30%;background:var(--red)" title="Extreme emergency (misses)"></div>
+        <div class="u-bar" style="height:45%;background:var(--orange)"></div>
+        <div class="u-bar" style="height:65%;background:var(--orange)"></div>
+        <div class="u-bar" style="height:82%;background:var(--green)"></div>
+        <div class="u-bar" style="height:92%;background:var(--green)"></div>
+        <div class="u-bar" style="height:98%;background:var(--green)"></div>
+        <div class="u-bar" style="height:95%;background:var(--green)"></div>
+        <div class="u-bar" style="height:97%;background:var(--green)"></div>
+        <div class="u-bar" style="height:90%;background:var(--green)"></div>
+        <div class="u-bar" style="height:80%;background:var(--orange)"></div>
+        <div class="u-bar" style="height:60%;background:var(--orange)"></div>
+        <div class="u-bar" style="height:40%;background:var(--red)" title="Atypical minor (over-diagnoses)"></div>
+      </div>
+      <div class="u-labels"><span>Atypical emergencies</span><span>Routine cases</span><span>Atypical minor</span></div>
+
+      <div class="hr"></div>
+      <div class="example" style="border-color:var(--red)"><b>Health:</b> Classical stroke? Nails it. Atypical respiratory failure? Misses it.</div>
+      <div class="example" style="border-color:var(--orange)"><b>Enterprise:</b> Routine invoices? Perfect. Slightly modified duplicate? Sails through.</div>
+      <div class="takeaway"><strong style="color:var(--red)">So what?</strong> No eval designed to measure average accuracy will surface this. You need tail-focused testing.</div>
+    </div>
+
+    <!-- FM2: Knows but doesn't act -->
+    <div class="card fm" style="border-top:3px solid var(--purple)">
+      <div class="fm-num">02</div>
+      <div class="fm-icon">&#129504;</div>
+      <h3>The Agent Knows but Doesn't Act</h3>
+      <div class="desc">The reasoning trace correctly identifies a finding — then the output contradicts it. Chain of thought and final answer operate as <em>semi-independent processes</em>. Studies show models fail to update outputs from reasoning changes >50% of the time.</div>
+
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin:10px 0">
+        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="color:var(--green);font-weight:700;font-size:10px;text-transform:uppercase;margin-bottom:4px">Reasoning Trace</div>
+          "Early respiratory failure detected"
+        </div>
+        <div style="font-size:20px;color:var(--red)">&#8800;</div>
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="color:var(--red);font-weight:700;font-size:10px;text-transform:uppercase;margin-bottom:4px">Output</div>
+          "Wait 24–48 hours before visiting ER"
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="example" style="border-color:var(--purple)"><b>Compliance:</b> Reasoning identifies enhanced due diligence jurisdiction. Output classifies as "standard risk."</div>
+      <div class="example" style="border-color:var(--purple)"><b>Support:</b> Analysis spots known billing error pattern. Recommends generic 5–7 day review anyway.</div>
+      <div class="takeaway"><strong style="color:var(--purple)">So what?</strong> If CoT faithfulness can't be fixed at the model level, the solution must be architectural. Compare traces to outputs externally.</div>
+    </div>
+
+    <!-- FM3: Social context hijacks -->
+    <div class="card fm" style="border-top:3px solid var(--orange)">
+      <div class="fm-num">03</div>
+      <div class="fm-icon">&#128483;</div>
+      <h3>Social Context Hijacks Judgment</h3>
+      <div class="desc">When a family member said "the patient looks fine," ChatGPT Health was <span style="color:var(--orange);font-weight:700">12x more likely</span> to recommend less urgent care. The structured data should drive decisions; unstructured language creates anchoring bias.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
+        <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="font-weight:700;color:var(--green);margin-bottom:3px">Without social cue</div>
+          "Seek immediate emergency care"
+        </div>
+        <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="font-weight:700;color:var(--red);margin-bottom:3px">With "patient looks fine"</div>
+          "Monitor at home, follow up if needed"
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="example" style="border-color:var(--orange)"><b>Procurement:</b> Senior VP note says "I'm confident this is right." Agent's analysis shifts to match, regardless of data.</div>
+      <div class="example" style="border-color:var(--orange)"><b>Lending:</b> Employer letter calls applicant "valued longtime employee." Risk score shifts without material financial info.</div>
+      <div class="takeaway"><strong style="color:var(--orange)">So what?</strong> Without controlled A/B testing (same scenario +/- anchoring cue), this bias is invisible on standard evals.</div>
+    </div>
+
+    <!-- FM4: Guardrails fire on vibes -->
+    <div class="card fm" style="border-top:3px solid var(--pink)">
+      <div class="fm-num">04</div>
+      <div class="fm-icon">&#128680;</div>
+      <h3>Guardrails Fire on Vibes, Not Risk</h3>
+      <div class="desc">The crisis intervention system activated more for vague emotional distress than concrete self-harm threats. Mount Sinai's chief AI officer: <em>"The alerts were inverted relative to clinical risk."</em> Guardrails match surface language, not actual risk taxonomies.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
+        <div style="background:rgba(236,72,153,.06);border:1px solid rgba(236,72,153,.15);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="font-weight:700;color:var(--pink);margin-bottom:3px">Triggers alert (low risk)</div>
+          "I've been feeling so hopeless lately..."
+        </div>
+        <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:8px;font-size:11px;text-align:center">
+          <div style="font-weight:700;color:var(--red);margin-bottom:3px">Misses alert (high risk)</div>
+          "I have a plan to end things tonight"
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="example" style="border-color:var(--pink)"><b>Security:</b> Flags email labeled "Confidential Financial Data" (a public press release). Misses 50K customer records exported to personal Dropbox described as "project backup."</div>
+      <div class="takeaway"><strong style="color:var(--pink)">So what?</strong> The system will tell you it's doing well. You have to know enough to say "actually, that's wrong and here's why." Test for real safety, not the appearance of safety.</div>
+    </div>
+  </div>
+
+  <!-- KEY METHODOLOGY -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card callout wide">
+      <p><strong>The Key Methodology — Factorial Design:</strong> Mount Sinai tested the same scenario across 16 contextual variations, systematically adding stressors (social cues, time pressure, hedging qualifiers, contradictory context). This controlled variation exposed anchoring bias, guardrail inversion, and the inverted U — none of which would surface from testing each scenario once under a single set of conditions. <strong>Variation types are domain-general; scenarios are domain-specific.</strong> This scales.</p>
+    </div>
+  </div>
+
+  <!-- 4-LAYER ARCHITECTURE -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>The 4-Layer Evaluation Architecture</h2>
+      <span class="tag">Catch blind spots before customers do</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Layer 1 -->
+    <div class="card layer">
+      <div class="layer-num" style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--blue)">1</div>
+      <h3>Progressive Autonomy Routing</h3>
+      <div class="desc">Don't hand full autonomy. Route by confidence and stakes. High confidence + low stakes = agent decides. Edge cases = human-in-the-loop with agent in shadow mode.</div>
+      <div class="how"><b>How:</b> Agent shadows human on edge cases. Human resolves. Agent learns which components drive correct resolution. Autonomy expands as eval coverage grows. This is hard work — no shortcut for high-stakes.</div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div class="card layer">
+      <div class="layer-num" style="background:rgba(20,184,166,.15);border:1px solid rgba(20,184,166,.3);color:var(--teal)">2</div>
+      <h3>Deterministic Validation</h3>
+      <div class="desc">Use rules-based checks to catch CoT &#8800; output contradictions. Don't ask the model to catch its own inconsistencies.</div>
+      <div class="how"><b>Example:</b> <code style="font-size:11px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px">IF reasoning contains "enhanced due diligence" AND classification = "standard risk" THEN escalate</code><br><br>Simple if-then rules comparing trace to output. External perspective, not self-evaluation.</div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div class="card layer">
+      <div class="layer-num" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:var(--orange)">3</div>
+      <h3>Continuous Flywheel</h3>
+      <div class="desc">Bias toward false positives (flagging too much > missing real problems). Then run a two-loop process.</div>
+      <div class="how">
+        <b>Loop A:</b> Review every positive — true or false? Update eval rulebook to be smarter.<br>
+        <b>Loop B:</b> Sample agent runs that were <em>passed</em> by LLM-as-judge. Find missed defects. Convert to new evals.<br><br>
+        <b>This flywheel is what separates high-performance systems from the rest.</b>
+      </div>
+    </div>
+
+    <!-- Layer 4 -->
+    <div class="card layer">
+      <div class="layer-num" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--purple)">4</div>
+      <h3>Factorial Stress Testing</h3>
+      <div class="desc">The gold standard. Take each scenario and systematically add controlled stressors to measure what drives agent behavior.</div>
+      <div class="how">
+        <b>Stressor types (domain-general):</b><br>
+        &bull; Social pressure cue ("my boss said this is fine")<br>
+        &bull; Contradictory context<br>
+        &bull; Time pressure element<br>
+        &bull; Hedging qualifier<br>
+        &bull; Stakeholder minimizing severity<br><br>
+        Not cheap. Not for every agent. But if stakes are high and you don't know your failure modes — do this.
+      </div>
+    </div>
+  </div>
+
+  <!-- EVAL LIBRARY STRUCTURE -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:10px">
+        <h2>Building the Eval Library</h2>
+        <span class="tag">Front-loaded effort, compounding returns</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Variation Types (Stable)</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.6">
+            &bull; Extreme risk variation<br>
+            &bull; Human-out-of-the-loop<br>
+            &bull; Tool call failure<br>
+            &bull; Social pressure / anchoring<br>
+            &bull; Contradictory context<br>
+            &bull; Time pressure<br>
+            <div style="margin-top:6px;font-size:11px;color:var(--faint)">These are like <strong style="color:var(--text)">sections</strong> of your eval library. Build once, reuse everywhere.</div>
+          </div>
+        </div>
+        <div style="font-size:24px;color:var(--faint);padding-top:30px">&times;</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Scenarios (Domain-Specific)</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.6">
+            &bull; Finance: duplicate invoice detection<br>
+            &bull; Health: atypical emergency triage<br>
+            &bull; Compliance: jurisdiction classification<br>
+            &bull; Lending: risk assessment<br>
+            &bull; Security: data exfiltration detection<br>
+            &bull; Support: escalation decision<br>
+            <div style="margin-top:6px;font-size:11px;color:var(--faint)">These are like <strong style="color:var(--text)">books</strong>. One per domain scenario. Populated semi-automatically from historical data.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELF-ASSESSMENT CHECKLIST -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide diag">
+      <h2>Agent Safety Self-Assessment</h2>
+      <p style="color:var(--faint);font-size:12px;margin-bottom:12px">Click to check off. How many does your agent system have?</p>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Tail-focused evals</b> — testing extreme/edge cases, not just averages</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>CoT vs. output comparison</b> — external rules checking reasoning against final answer</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Anchoring bias tests</b> — same scenario with/without social pressure cues</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Risk-based guardrails</b> — testing for actual safety, not appearance of safety</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Progressive autonomy</b> — human-in-the-loop for high-stakes edge cases</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>False positive review loop</b> — actively reviewing flagged items and updating evals</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>False negative audits</b> — sampling "passed" runs to find missed defects</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Factorial stress testing</b> — controlled stressor variations on critical scenarios</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Eval library</b> — reusable variation types + domain-specific scenarios</div></div>
+    </div>
+  </div>
+
+  <!-- THE FUTURE -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card callout wide">
+      <p style="font-size:14px"><strong>The question is not whether your agents have blind spots. They absolutely do.</strong></p>
+      <p style="margin-top:8px">It's whether you've built infrastructure to find them before your customers do. AI agent insurance is coming — you will need to demonstrate eval rigor to be insurable. This is not optional. The costs of getting it wrong range from lost revenue to, as the Mount Sinai study shows, <strong>literal death.</strong></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Source: ChatGPT Health study analysis &bull; Mount Sinai Health System &bull; March 2026</p>
+  </div>
+
+</div>
+</body>
+</html>
