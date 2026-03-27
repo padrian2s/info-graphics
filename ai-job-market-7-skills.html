@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="The AI job market split into two: 3.2 jobs per qualified candidate, 142 days to fill roles, and the 7 specific skills employers are desperate for — mapped from hundreds of real job postings." />
+  <meta name="category" content="AI Careers" />
+  <meta name="tags" content="AI Jobs, Skills, Career, Hiring, Evaluation, Agents, Token Economics, Context Architecture" />
+  <meta name="icon" content="💼" />
+  <meta name="created" content="2026-03-27" />
+  <title>The AI Job Market Split in Two — 7 Skills That Pay $400K</title>
+  <style>
+    :root{
+      --bg:#070A12;--panel:#0D1222;--text:#EAF0FF;--muted:#A8B3D6;--faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);--shadow:0 18px 60px rgba(0,0,0,.45);--r:18px;
+      --red:#ef4444;--orange:#f59e0b;--green:#22c55e;--blue:#3b82f6;--purple:#8b5cf6;--teal:#14b8a6;--pink:#ec4899;--cyan:#06b6d4;
+    }
+    *{box-sizing:border-box;margin:0}
+    body{
+      background:
+        radial-gradient(1000px 700px at 10% 5%,rgba(59,130,246,.14),transparent 55%),
+        radial-gradient(900px 700px at 90% 12%,rgba(20,184,166,.12),transparent 55%),
+        radial-gradient(800px 600px at 50% 95%,rgba(139,92,246,.10),transparent 55%),
+        linear-gradient(180deg,#050711,#070A12 55%,#050711);
+      color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.5;overflow-x:hidden;
+    }
+    .wrap{max-width:1140px;margin:0 auto;padding:28px 18px 70px}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+      border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
+      padding:20px;backdrop-filter:blur(8px);
+    }
+    .card.soft{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:stretch;margin-bottom:18px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}}
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,var(--blue),var(--teal));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{font-size:clamp(24px,3.2vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:10px}
+    h1 .spark{background:linear-gradient(135deg,var(--blue),var(--teal),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:var(--muted);font-size:15px;max-width:64ch;margin-bottom:14px}
+    .pills{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{font-size:11px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:rgba(0,0,0,.2)}
+    .statRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:12px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.2)}
+    .stat .label{color:var(--muted);font-size:11px}
+    .stat .value{font-size:20px;margin-top:4px;font-weight:700}
+
+    /* Grid */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .wide{grid-column:1/-1}
+
+    .sectionTitle{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .sectionTitle h2{font-size:17px;letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:11px;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.2)}
+    .hr{height:1px;background:var(--border);margin:14px 0}
+
+    /* K-shape chart */
+    .k-chart{display:flex;gap:2px;align-items:center;padding:14px 0}
+    .k-left,.k-right{flex:1;display:flex;flex-direction:column;gap:4px}
+    .k-bar{height:8px;border-radius:4px;transition:width .4s}
+    .k-label{font-size:10px;color:var(--faint);margin-top:4px}
+
+    /* Skill cards */
+    .sk{position:relative;overflow:hidden;transition:transform .15s}
+    .sk:hover{transform:translateY(-2px)}
+    .sk-num{
+      position:absolute;top:12px;right:14px;
+      font-size:44px;font-weight:900;color:rgba(255,255,255,.035);line-height:1;
+    }
+    .sk-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+      padding:5px 10px;border-radius:999px;margin-bottom:10px;
+    }
+    .sk h3{font-size:15px;margin-bottom:6px}
+    .sk .desc{color:var(--muted);font-size:12.5px;line-height:1.55;margin-bottom:10px}
+    .sk .sub-skills{
+      display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;
+    }
+    .sk .sub-skill{
+      font-size:10px;padding:4px 8px;border-radius:6px;
+      border:1px solid var(--border);color:var(--muted);background:rgba(0,0,0,.15);
+    }
+    .sk .transfer{
+      background:rgba(255,255,255,.04);border:1px solid var(--border);
+      border-radius:10px;padding:8px 10px;font-size:11px;color:var(--faint);
+    }
+    .sk .transfer b{color:var(--text)}
+
+    /* Failure types */
+    .fail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    @media(max-width:700px){.fail-grid{grid-template-columns:1fr 1fr}}
+    .fail-item{
+      padding:10px;border-radius:12px;border:1px solid var(--border);
+      background:rgba(0,0,0,.15);font-size:12px;
+    }
+    .fail-item .fi-name{font-weight:700;color:var(--text);margin-bottom:3px;font-size:12px}
+    .fail-item .fi-desc{color:var(--faint);font-size:11px;line-height:1.45}
+
+    /* Callout */
+    .callout{
+      border-radius:16px;border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(59,130,246,.10),rgba(20,184,166,.06));
+      padding:14px;
+    }
+    .callout p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+    .callout strong{color:var(--text)}
+
+    /* Diagnostic */
+    .diag-item{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:10px 0;border-bottom:1px solid var(--border);
+    }
+    .diag-item:last-child{border-bottom:none}
+    .diag-check{
+      width:24px;height:24px;border-radius:8px;
+      display:grid;place-items:center;font-size:14px;flex-shrink:0;
+      border:1px solid var(--border);background:rgba(255,255,255,.03);
+      cursor:pointer;transition:all .15s;user-select:none;
+    }
+    .diag-check.checked{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green)}
+    .diag-text{font-size:13px;color:var(--muted)}
+    .diag-text b{color:var(--text);font-weight:600}
+
+    /* Demand meter */
+    .meter{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin:6px 0}
+    .meter-fill{height:100%;border-radius:3px;transition:width .5s}
+
+    .footer{text-align:center;color:var(--faint);font-size:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="card">
+      <div class="kicker"><span class="dot"></span> AI Job Market &bull; 2026</div>
+      <h1>The Market Split in Two. <span class="spark">One Side Pays $400K</span> and Can't Hire Fast Enough.</h1>
+      <p class="sub">A K-shaped labor market: traditional knowledge work is flat or falling while AI roles have 3.2 jobs per qualified candidate. Seven specific skills — mapped from hundreds of real postings — separate the two sides.</p>
+      <div class="pills">
+        <span class="pill">K-Shaped Market</span>
+        <span class="pill">7 Skills</span>
+        <span class="pill">6 Failure Types</span>
+        <span class="pill">Agent Fluency</span>
+        <span class="pill">Token Economics</span>
+        <span class="pill">Context Architecture</span>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">AI Jobs per Candidate</div>
+          <div class="value" style="color:var(--green)">3.2:1</div>
+        </div>
+        <div class="stat">
+          <div class="label">Open AI Roles</div>
+          <div class="value" style="color:var(--blue)">1.6M</div>
+        </div>
+      </div>
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">Qualified Applicants</div>
+          <div class="value" style="color:var(--orange)">~500K</div>
+        </div>
+        <div class="stat">
+          <div class="label">Days to Fill AI Role</div>
+          <div class="value" style="color:var(--red)">142</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--faint);text-align:center;padding-top:4px">Source: ManpowerGroup survey, 2026</div>
+    </div>
+  </div>
+
+  <!-- K-SHAPE VISUAL -->
+  <div class="grid" style="margin-top:0">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:8px">
+        <h2>The K-Shaped Split</h2>
+        <span class="tag">Two markets, opposite directions</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Declining Side</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7">
+            &bull; Generalist product managers<br>
+            &bull; Standard software engineers<br>
+            &bull; Conventional business analysts<br>
+            &bull; Traditional knowledge work roles
+          </div>
+          <div class="meter" style="margin-top:10px"><div class="meter-fill" style="width:35%;background:linear-gradient(90deg,var(--red),var(--orange))"></div></div>
+          <div style="font-size:10px;color:var(--faint)">Job openings flat or falling</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Surging Side</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7">
+            &bull; AI system designers & builders<br>
+            &bull; Agent operators & evaluators<br>
+            &bull; AI reliability engineers<br>
+            &bull; Context architects & AI PMs
+          </div>
+          <div class="meter" style="margin-top:10px"><div class="meter-fill" style="width:92%;background:linear-gradient(90deg,var(--teal),var(--green))"></div></div>
+          <div style="font-size:10px;color:var(--faint)">Functionally infinite demand — "hottest job family in decades"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 SKILLS -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>The 7 In-Demand Skills</h2>
+      <span class="tag">Mapped from hundreds of real AI job postings</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Skill 1 -->
+    <div class="card sk" style="border-top:3px solid var(--blue)">
+      <div class="sk-num">01</div>
+      <div class="sk-badge" style="background:rgba(59,130,246,.12);color:var(--blue)">Foundation</div>
+      <h3>Specification Precision</h3>
+      <div class="desc">Clarity of intent — talking to a machine in language it takes literally. Agents can't read between the lines. The bar in 2026 is not "improve customer support" but defining exact ticket types, escalation triggers, sentiment scoring criteria, and reason codes.</div>
+      <div class="sub-skills">
+        <span class="sub-skill">Prompt architecture</span>
+        <span class="sub-skill">Constraint definition</span>
+        <span class="sub-skill">Success criteria</span>
+        <span class="sub-skill">Edge case specification</span>
+      </div>
+      <div class="transfer"><b>Transfers from:</b> Technical writing, legal drafting, QA engineering, requirements analysis</div>
+    </div>
+
+    <!-- Skill 2 -->
+    <div class="card sk" style="border-top:3px solid var(--green)">
+      <div class="sk-num">02</div>
+      <div class="sk-badge" style="background:rgba(34,197,94,.12);color:var(--green)">#1 Most Cited</div>
+      <h3>Evaluation & Quality Judgment</h3>
+      <div class="desc">The single most frequently cited skill across all postings — engineering, ops, PM. Resisting the temptation to read AI fluency as competence. AI is <em>confidently wrong</em> with none of the tells humans show when they're uncertain.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0">
+        <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:8px;font-size:11px">
+          <div style="font-weight:700;color:var(--red);margin-bottom:3px">Semantic correctness</div>
+          It <em>sounds</em> right — has the right headers, confident tone, proper structure
+        </div>
+        <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:10px;padding:8px;font-size:11px">
+          <div style="font-weight:700;color:var(--green);margin-bottom:3px">Functional correctness</div>
+          It <em>is</em> right — the credit card recommended is actually the best fit
+        </div>
+      </div>
+      <div class="sub-skills">
+        <span class="sub-skill">Error detection</span>
+        <span class="sub-skill">Edge case spotting</span>
+        <span class="sub-skill">Eval harness design</span>
+        <span class="sub-skill">Automated testing</span>
+      </div>
+      <div class="transfer"><b>Anthropic's standard:</b> A good eval task is one where multiple engineers independently reach the same pass/fail conclusion.</div>
+    </div>
+
+    <!-- Skill 3 -->
+    <div class="card sk" style="border-top:3px solid var(--teal)">
+      <div class="sk-num">03</div>
+      <div class="sk-badge" style="background:rgba(20,184,166,.12);color:var(--teal)">Managerial</div>
+      <h3>Task Decomposition & Multi-Agent Orchestration</h3>
+      <div class="desc">Breaking work into manageable segments for agents. Agents can't handle vague assignments the way a team of six humans can. You must clearly define goals, orchestration flow, and logical delineations between work streams.</div>
+      <div class="sub-skills">
+        <span class="sub-skill">Planner-agent architecture</span>
+        <span class="sub-skill">Work sizing for harness</span>
+        <span class="sub-skill">Subtask dependency mapping</span>
+        <span class="sub-skill">Handoff design</span>
+      </div>
+      <div class="transfer"><b>Key insight:</b> Sizing work to the agentic harness — single-threaded agent = smaller tasks; planner + sub-agents = larger scope but still needs clear subtask relationships.</div>
+    </div>
+
+    <!-- Skill 4 -->
+    <div class="card sk" style="border-top:3px solid var(--red)">
+      <div class="sk-num">04</div>
+      <div class="sk-badge" style="background:rgba(239,68,68,.12);color:var(--red)">Critical</div>
+      <h3>Failure Pattern Recognition</h3>
+      <div class="desc">Diagnosing root causes when agents fail. Tested specifically in the Claude Certified Architect program (rolling out to hundreds of thousands at Accenture). Six distinct failure types to internalize.</div>
+
+      <div class="fail-grid" style="margin:10px 0">
+        <div class="fail-item" style="border-left:3px solid var(--orange)">
+          <div class="fi-name">Context Degradation</div>
+          <div class="fi-desc">Quality drops as sessions get long — polluted context window</div>
+        </div>
+        <div class="fail-item" style="border-left:3px solid var(--purple)">
+          <div class="fi-name">Specification Drift</div>
+          <div class="fi-desc">Agent forgets the spec over long tasks unless forcibly reminded</div>
+        </div>
+        <div class="fail-item" style="border-left:3px solid var(--pink)">
+          <div class="fi-name">Sycophantic Confirmation</div>
+          <div class="fi-desc">Agent confirms bad data, builds entire system around it</div>
+        </div>
+        <div class="fail-item" style="border-left:3px solid var(--cyan)">
+          <div class="fi-name">Tool Selection Errors</div>
+          <div class="fi-desc">Picks wrong tool — often from poor system prompt framing</div>
+        </div>
+        <div class="fail-item" style="border-left:3px solid var(--red)">
+          <div class="fi-name">Cascading Failure</div>
+          <div class="fi-desc">One agent's error propagates unchecked through the chain</div>
+        </div>
+        <div class="fail-item" style="border-left:3px solid var(--orange)">
+          <div class="fi-name">Silent Failure</div>
+          <div class="fi-desc">Plausible output that looks right but isn't — hardest to catch</div>
+        </div>
+      </div>
+
+      <div class="transfer"><b>Transfers from:</b> SRE, risk management, operations leadership, QA — "once you start looking for missing puzzle pieces, it's addictive"</div>
+    </div>
+
+    <!-- Skill 5 -->
+    <div class="card sk" style="border-top:3px solid var(--purple)">
+      <div class="sk-num">05</div>
+      <div class="sk-badge" style="background:rgba(139,92,246,.12);color:var(--purple)">Architectural</div>
+      <h3>Trust & Security Design</h3>
+      <div class="desc">Drawing the line between human and agent. Where to authorize, how to verify the agent stayed within bounds, and how to build guardrails that actually hold for probabilistic systems. "Just telling it in the system prompt to be good is not going to be good enough."</div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0">
+        <div style="text-align:center;padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.15)">
+          <div style="font-size:18px;margin-bottom:4px">💥</div>
+          <div style="font-size:10px;font-weight:700;color:var(--text)">Cost of Error</div>
+          <div style="font-size:10px;color:var(--faint)">Misspelled email vs. wrong drug interaction</div>
+        </div>
+        <div style="text-align:center;padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.15)">
+          <div style="font-size:18px;margin-bottom:4px">&#8634;</div>
+          <div style="font-size:10px;font-weight:700;color:var(--text)">Reversibility</div>
+          <div style="font-size:10px;color:var(--faint)">Draft review vs. sent wire transfer</div>
+        </div>
+        <div style="text-align:center;padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.15)">
+          <div style="font-size:18px;margin-bottom:4px">&#128200;</div>
+          <div style="font-size:10px;font-weight:700;color:var(--text)">Frequency</div>
+          <div style="font-size:10px;color:var(--faint)">10K/day = much larger blast radius</div>
+        </div>
+        <div style="text-align:center;padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.15)">
+          <div style="font-size:18px;margin-bottom:4px">&#9989;</div>
+          <div style="font-size:10px;font-weight:700;color:var(--text)">Verifiability</div>
+          <div style="font-size:10px;color:var(--faint)">Can you prove it's functionally correct?</div>
+        </div>
+      </div>
+
+      <div class="sub-skills">
+        <span class="sub-skill">Blast radius analysis</span>
+        <span class="sub-skill">Authorization boundaries</span>
+        <span class="sub-skill">Guardrail engineering</span>
+        <span class="sub-skill">Customer impact mapping</span>
+      </div>
+    </div>
+
+    <!-- Skill 6 -->
+    <div class="card sk" style="border-top:3px solid var(--cyan)">
+      <div class="sk-num">06</div>
+      <div class="sk-badge" style="background:rgba(6,182,212,.12);color:var(--cyan)">Highest Value</div>
+      <h3>Context Architecture</h3>
+      <div class="desc">Building systems that supply agents with the right information on demand at scale. The 2026 version of "getting the right docs into the prompt." Companies will pay <em>almost anything</em> for this — it's a massive unlock enabling dozens of agentic systems, not just one.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
+        <div style="padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.12);font-size:11px;color:var(--muted)">
+          <div style="font-weight:700;color:var(--cyan);margin-bottom:3px">Must define:</div>
+          &bull; Persistent vs. per-session context<br>
+          &bull; Data object traversability<br>
+          &bull; Clean vs. polluting data<br>
+          &bull; Pull vs. exclude rules
+        </div>
+        <div style="padding:8px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.12);font-size:11px;color:var(--muted)">
+          <div style="font-weight:700;color:var(--cyan);margin-bottom:3px">The metaphor:</div>
+          "Building the Dewey Decimal System for agents — a library an agent can easily search to pull the right book for the job."
+        </div>
+      </div>
+
+      <div class="transfer"><b>Transfers from:</b> Librarians, technical writers, information architects, data engineers — "you don't have to be an engineer to do this"</div>
+    </div>
+
+    <!-- Skill 7 -->
+    <div class="card sk" style="border-top:3px solid var(--orange)">
+      <div class="sk-num">07</div>
+      <div class="sk-badge" style="background:rgba(245,158,11,.12);color:var(--orange)">Senior-Level</div>
+      <h3>Cost & Token Economics</h3>
+      <div class="desc">Is it worth building an agent for this job? Calculating blended cost across models, proving ROI before deploying, and navigating a world where token prices change constantly but frontier models remain expensive for critical tasks.</div>
+
+      <div style="background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:12px;padding:10px;margin:10px 0;font-size:12px;color:var(--muted);font-family:ui-monospace,monospace">
+        <div style="color:var(--faint);font-size:10px;margin-bottom:6px">// The calculation every senior AI role requires</div>
+        <span style="color:var(--orange)">task_tokens</span> = estimated_per_run &times; daily_volume<br>
+        <span style="color:var(--orange)">blended_cost</span> = (frontier_% &times; frontier_rate) + (commodity_% &times; commodity_rate)<br>
+        <span style="color:var(--orange)">roi</span> = value_generated - (blended_cost + infra + human_oversight)<br>
+        <span style="color:var(--green)">// Prototype &rarr; measure tokens &rarr; model across providers &rarr; decide</span>
+      </div>
+
+      <div class="sub-skills">
+        <span class="sub-skill">Model selection</span>
+        <span class="sub-skill">Cost modeling</span>
+        <span class="sub-skill">ROI calculation</span>
+        <span class="sub-skill">Pricing arbitrage</span>
+      </div>
+      <div class="transfer"><b>Reality check:</b> "High school math, but you're getting paid like a senior architect because you're applying it in a fast-moving world."</div>
+    </div>
+  </div>
+
+  <!-- SKILL PROGRESSION -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:10px">
+        <h2>Learning Sequence</h2>
+        <span class="tag">Skills build on each other intuitively</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:4px 0">
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);font-size:11px;font-weight:700;color:var(--blue)">1. Specify</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);font-size:11px;font-weight:700;color:var(--green)">2. Evaluate</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.25);font-size:11px;font-weight:700;color:var(--teal)">3. Orchestrate</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);font-size:11px;font-weight:700;color:var(--red)">4. Diagnose</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);font-size:11px;font-weight:700;color:var(--purple)">5. Secure</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);font-size:11px;font-weight:700;color:var(--cyan)">6. Architect Context</div>
+        <div style="color:var(--faint);font-size:16px">&rarr;</div>
+        <div style="padding:8px 12px;border-radius:10px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);font-size:11px;font-weight:700;color:var(--orange)">7. Price It</div>
+      </div>
+      <p style="font-size:11px;color:var(--faint);margin-top:8px">Each skill unlocks the next. You can't evaluate what you can't specify. You can't orchestrate what you can't evaluate. You can't diagnose failures you've never orchestrated.</p>
+    </div>
+  </div>
+
+  <!-- SELF-ASSESSMENT -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:8px">
+        <h2>Skills Self-Assessment</h2>
+        <span class="tag">Click to check off skills you have</span>
+      </div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Specification precision</b> — can write machine-literal prompts with constraints, success criteria, and escalation logic</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Evaluation & quality judgment</b> — can distinguish semantic correctness from functional correctness; build eval harnesses</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Multi-agent orchestration</b> — can decompose tasks, size work to harness, define planner-agent flows</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Failure pattern recognition</b> — can identify context degradation, spec drift, sycophantic confirmation, tool errors, cascading and silent failures</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Trust & security design</b> — can map blast radius, reversibility, frequency, and verifiability for agent decisions</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Context architecture</b> — can design information systems that agents can search, traverse, and pull from at scale</div></div>
+      <div class="diag-item"><div class="diag-check" onclick="this.classList.toggle('checked')"></div><div class="diag-text"><b>Cost & token economics</b> — can model blended token costs, prove ROI, and select optimal model mix per task</div></div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card callout wide">
+      <p style="font-size:14px"><strong>The barrier to entry is lower than any previous tech revolution.</strong></p>
+      <p style="margin-top:8px">In the 1980s, learning to code cost ~$15K in today's dollars. Now, almost anyone has access to an AI subscription. AI can help you learn these skills. The gap between the declining side and the surging side of this K-shaped market is <strong>bridgeable</strong> — these are learnable skills tied to how AI actually works, not credentials that gatekeep. The question is whether you start now.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Source: Analysis of hundreds of AI job postings &bull; ManpowerGroup survey data &bull; March 2026</p>
+  </div>
+
+</div>
+</body>
+</html>
