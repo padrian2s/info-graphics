@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Skills went from personal config to cross-industry standard in 6 months. Anthropic, OpenAI, and Microsoft agreed on one file format — a markdown file that agents call hundreds of times per run. How to build, test, and tier skills for agents and teams." />
+  <meta name="category" content="AI Agents" />
+  <meta name="tags" content="Skills, Agents, Markdown, Claude, OpenAI, Microsoft, Copilot, Infrastructure, Best Practices" />
+  <meta name="icon" content="📋" />
+  <meta name="created" content="2026-03-30" />
+  <title>One File Format to Rule Them All — Agent-Readable Skills in 2026</title>
+  <style>
+    :root{
+      --bg:#070A12;--text:#EAF0FF;--muted:#A8B3D6;--faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);--shadow:0 18px 60px rgba(0,0,0,.45);--r:18px;
+      --red:#ef4444;--orange:#f59e0b;--green:#22c55e;--blue:#3b82f6;--purple:#8b5cf6;--teal:#14b8a6;--pink:#ec4899;--cyan:#06b6d4;
+    }
+    *{box-sizing:border-box;margin:0}
+    body{
+      background:
+        radial-gradient(1000px 700px at 12% 6%,rgba(139,92,246,.15),transparent 55%),
+        radial-gradient(900px 700px at 88% 14%,rgba(6,182,212,.12),transparent 55%),
+        radial-gradient(800px 600px at 50% 92%,rgba(34,197,94,.10),transparent 55%),
+        linear-gradient(180deg,#050711,#070A12 55%,#050711);
+      color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.5;overflow-x:hidden;
+    }
+    .wrap{max-width:1140px;margin:0 auto;padding:28px 18px 70px}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+      border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);
+      padding:20px;backdrop-filter:blur(8px);
+    }
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:stretch;margin-bottom:18px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}}
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,var(--purple),var(--cyan));box-shadow:0 0 0 6px rgba(139,92,246,.10)}
+    h1{font-size:clamp(24px,3.2vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:10px}
+    h1 .spark{background:linear-gradient(135deg,var(--purple),var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:var(--muted);font-size:15px;max-width:64ch;margin-bottom:14px}
+    .pills{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{font-size:11px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:rgba(0,0,0,.2)}
+    .statRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:12px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.2)}
+    .stat .label{color:var(--muted);font-size:11px}
+    .stat .value{font-size:18px;margin-top:4px;font-weight:700}
+    /* Grid */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .wide{grid-column:1/-1}
+    .sectionTitle{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .sectionTitle h2{font-size:17px;letter-spacing:-.01em}
+    .sectionTitle .tag{font-size:11px;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.2)}
+    .hr{height:1px;background:var(--border);margin:12px 0}
+    .callout{border-radius:16px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(139,92,246,.10),rgba(6,182,212,.06));padding:14px}
+    .callout p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+    .callout strong{color:var(--text)}
+    /* Code block */
+    .code{
+      background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;
+      padding:14px 16px;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;
+      line-height:1.7;color:var(--muted);overflow-x:auto;
+    }
+    .code .cm{color:var(--faint)}
+    .code .kw{color:var(--purple)}
+    .code .str{color:var(--green)}
+    .code .hl{color:var(--cyan)}
+    /* Shift cards */
+    .shift{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+    .shift:last-child{border-bottom:none}
+    .shift-num{
+      width:30px;height:30px;border-radius:10px;display:grid;place-items:center;
+      font-size:13px;font-weight:800;flex-shrink:0;border:1px solid var(--border);
+    }
+    .shift-body{flex:1}
+    .shift-body b{font-size:14px;display:block;margin-bottom:3px}
+    .shift-body p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.5}
+    /* Tiers */
+    .tier{border-radius:14px;padding:14px;border:1px solid var(--border);margin-bottom:8px}
+    .tier h4{font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .tier p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+    /* Do/don't */
+    .dd{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+    @media(max-width:600px){.dd{grid-template-columns:1fr}}
+    .dd-col{border-radius:12px;padding:10px;font-size:12px;line-height:1.6}
+    .dd-col b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+    /* Footer */
+    .footer{text-align:center;color:var(--faint);font-size:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="card">
+      <div class="kicker"><span class="dot"></span> Agent Infrastructure &bull; 2026</div>
+      <h1>One File Format. <span class="spark">Three Giants Agreed.</span> Everything Changed.</h1>
+      <p class="sub">Anthropic, OpenAI, and Microsoft converged on agent-readable skills — a markdown file that went from personal config to organizational infrastructure in 6 months. Now agents call skills hundreds of times per run, and the ecosystem is compounding.</p>
+      <div class="pills">
+        <span class="pill">skill.md</span>
+        <span class="pill">Cross-Platform Standard</span>
+        <span class="pill">Agent-First Design</span>
+        <span class="pill">Composability</span>
+        <span class="pill">3 Tiers</span>
+        <span class="pill">Community Repo</span>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">Required Files</div>
+          <div class="value" style="color:var(--green)">1</div>
+        </div>
+        <div class="stat">
+          <div class="label">Format</div>
+          <div class="value" style="color:var(--purple);font-size:16px">.md</div>
+        </div>
+      </div>
+      <div class="statRow" style="flex:1">
+        <div class="stat">
+          <div class="label">Platforms</div>
+          <div class="value" style="color:var(--cyan);font-size:15px">Claude, GPT, Copilot</div>
+        </div>
+        <div class="stat">
+          <div class="label">Max Skill Length</div>
+          <div class="value" style="color:var(--orange)">~100–150 lines</div>
+        </div>
+      </div>
+      <div class="callout">
+        <p><strong>The primitive:</strong> A folder with a <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:12px">skill.md</code> file. Metadata at top, methodology below. Plain English instructions that give an LLM context to do something useful, predictably, with specific inputs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT CHANGED -->
+  <div class="grid" style="margin-top:0">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:4px">
+        <h2>What Changed in 6 Months</h2>
+        <span class="tag">October 2025 → March 2026</span>
+      </div>
+
+      <div class="shift">
+        <div class="shift-num" style="background:rgba(139,92,246,.12);color:var(--purple)">1</div>
+        <div class="shift-body">
+          <b>Personal Config → Organizational Infrastructure</b>
+          <p>Skills went from "something you built for yourself" to enterprise-wide rollouts. Version controlled, available in sidebars, callable inside Excel, PowerPoint, Claude, Copilot. Your org's methodology is no longer in individuals' heads.</p>
+        </div>
+      </div>
+      <div class="shift">
+        <div class="shift-num" style="background:rgba(6,182,212,.12);color:var(--cyan)">2</div>
+        <div class="shift-body">
+          <b>Human-Called → Agent-Called</b>
+          <p>Agents now make hundreds of skill calls in a single run. Humans called a few per conversation. <strong>The math doesn't math for humans.</strong> Skills must be agent-first.</p>
+        </div>
+      </div>
+      <div class="shift">
+        <div class="shift-num" style="background:rgba(34,197,94,.12);color:var(--green)">3</div>
+        <div class="shift-body">
+          <b>Developer Tool → Universal Primitive</b>
+          <p>Not just for terminals or code execution. Skills cover the rest of your business and personal life — operations, onboarding, brand voice, deal memos, meeting synthesis. Big companies agree: skills are now an open standard.</p>
+        </div>
+      </div>
+      <div class="shift">
+        <div class="shift-num" style="background:rgba(245,158,11,.12);color:var(--orange)">4</div>
+        <div class="shift-body">
+          <b>Closed Alpha → Open Trading</b>
+          <p>People are trading skills like baseball cards. Best practices are <em>discoverable, not known</em> — we learn the instruction book collectively, not from a CDROM manual. Open-sourcing skills functions as a resume for talent.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILL ANATOMY -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>Anatomy of a Skill</h2>
+      <span class="tag">What works, what breaks</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:10px">The File Structure</h3>
+      <div class="code">
+        <span class="cm"># skill.md — the only required file</span><br><br>
+        <span class="kw">---</span><br>
+        <span class="hl">name:</span> <span class="str">Competitive Analysis</span><br>
+        <span class="hl">description:</span> <span class="str">Generates a structured competitive landscape report when user says "analyze our competitors" or "who are the players in [market]". Produces a markdown table with positioning, strengths, weaknesses, and strategic gaps.</span><br>
+        <span class="kw">---</span><br><br>
+        <span class="cm"># Methodology</span><br>
+        <span class="cm">## Reasoning & Frameworks</span><br>
+        <span class="str">When analyzing competitors, evaluate on...</span><br><br>
+        <span class="cm">## Output Format</span><br>
+        <span class="str">Produce a markdown table with columns...</span><br><br>
+        <span class="cm">## Edge Cases</span><br>
+        <span class="str">If fewer than 3 competitors found...</span><br><br>
+        <span class="cm">## Example</span><br>
+        <span class="str">[See examples/sample-output.md]</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:10px">The 80/20 Rule for Skills</h3>
+
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <div style="flex:4;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--purple),var(--cyan))" title="80% on description"></div>
+        <div style="flex:1;height:10px;border-radius:5px;background:var(--green)" title="20% on methodology"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-bottom:14px">
+        <span>80% — Description (triggers correctly)</span>
+        <span>20% — Methodology (reasons correctly)</span>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">The methodology body needs 5 things:</div>
+      <div style="display:grid;gap:6px">
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px"><span style="color:var(--purple);font-weight:700">1.</span><span><strong style="color:var(--text)">Reasoning, not just steps</strong> — frameworks, quality criteria, decision principles</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px"><span style="color:var(--purple);font-weight:700">2.</span><span><strong style="color:var(--text)">Specified output format</strong> — markdown? Excel? Exact fields/sections?</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px"><span style="color:var(--purple);font-weight:700">3.</span><span><strong style="color:var(--text)">Explicit edge cases</strong> — everything a human handles via "common sense"</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px"><span style="color:var(--purple);font-weight:700">4.</span><span><strong style="color:var(--text)">Example output</strong> — so the LLM knows what "good" looks like</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px"><span style="color:var(--purple);font-weight:700">5.</span><span><strong style="color:var(--text)">Keep it lean</strong> — under 100–150 lines. Short + reliable > long + conflicting</span></div>
+      </div>
+
+      <div class="hr"></div>
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:8px 10px;font-size:11px;color:var(--muted)">
+        <strong style="color:var(--red)">Critical gotcha:</strong> The description MUST stay on a single line. If a code formatter breaks it across lines, Claude won't read past line 1. Skills will silently fail to trigger.
+      </div>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION DO/DON'T -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide">
+      <h3 style="font-size:15px;margin-bottom:10px">The Description Is Where Skills Go to Die</h3>
+      <div class="dd">
+        <div class="dd-col" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.12)">
+          <b style="color:var(--red)">Bad — Vague, Passive</b>
+          <div style="color:var(--muted)">
+            "Helps with competitive analysis"<br>
+            "Useful for financial work"<br>
+            "Assists with writing tasks"<br><br>
+            <span style="color:var(--faint);font-size:11px">Too diffuse to match. Triggers on everything tangential. Tells the LLM nothing useful.</span>
+          </div>
+        </div>
+        <div class="dd-col" style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.12)">
+          <b style="color:var(--green)">Good — Specific, Pushy</b>
+          <div style="color:var(--muted)">
+            "Generates a structured competitive landscape report when user says 'analyze our competitors' or 'who are the players in [market]'. Produces markdown table with positioning, strengths, weaknesses, and strategic gaps."<br><br>
+            <span style="color:var(--faint);font-size:11px">Names artifact types, includes trigger phrases, states output format. Anthropic says: make skills pushy so the LLM is confident to use them.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT-FIRST DESIGN -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>Agent-First Skill Design</h2>
+      <span class="tag">The primary caller is now an agent, not a human</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">&#128268;</div>
+      <h3 style="font-size:14px;margin-bottom:6px">Description = Routing Signal</h3>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.55">Not a label — a routing signal. Wording must match the outcome the agent has been given to look for in its goal. The agent reads the description to decide: "Is this the right skill for what I'm trying to accomplish?"</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">&#128220;</div>
+      <h3 style="font-size:14px;margin-bottom:6px">Output = Contract</h3>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.55">Frame like an API contract: what this skill gives you, what it doesn't, controllable fields, and what it enables. A declarative agreement the agent can confidently discover and act on.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">&#128279;</div>
+      <h3 style="font-size:14px;margin-bottom:6px">Composability First</h3>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.55">Don't design skills as endpoints. Design outputs that hand off cleanly to the next agent or sub-agent in the chain. Think end-to-end — if the output breaks the handoff, the whole pipeline breaks.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">&#9881;</div>
+      <h3 style="font-size:14px;margin-bottom:6px">Hardwire When Needed</h3>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.55">Skills are plain English — agents will <em>often</em> follow them, not <em>always</em>. If you need guaranteed behavior, use deterministic scripts. Knowing when to go deterministic is a sign of AI fluency, not weakness.</p>
+    </div>
+  </div>
+
+  <!-- AGENT TESTING -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card callout wide">
+      <p><strong>Agent-callable skills demand quantitative testing.</strong> In the past, humans could correct drift mid-conversation. Now, an agent uses the skill with no recovery loop — failure can be very expensive. You need a test suite: run a basket of tests, change the skill (like a version number), re-test. Skills trigger unpredictable parts of the transformer's latent space — you may need 3–4 wordings of "beautiful" to match your company's aesthetic, even with examples. <strong>Take the time. If you're producing 100 PowerPoints a week, getting it right saves everything.</strong></p>
+    </div>
+  </div>
+
+  <!-- THREE TIERS -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>The Three Tiers</h2>
+      <span class="tag">How high-performing teams organize skills</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card wide">
+      <div class="tier" style="background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)">
+        <h4><span style="background:rgba(59,130,246,.2);color:var(--blue);padding:3px 8px;border-radius:6px;font-size:10px">TIER 1</span> <span style="color:var(--blue)">Standard Skills</span></h4>
+        <p>Consistent across the org. Brand voice, formatting rules, approved templates. Enterprise admins provision these widely. <strong style="color:var(--text)">"Our brand voice is this. Everyone use it."</strong></p>
+      </div>
+      <div class="tier" style="background:rgba(139,92,246,.06);border-color:rgba(139,92,246,.2)">
+        <h4><span style="background:rgba(139,92,246,.2);color:var(--purple);padding:3px 8px;border-radius:6px;font-size:10px">TIER 2</span> <span style="color:var(--purple)">Methodology Skills</span></h4>
+        <p>How your team performs high-value work predictably. Senior practitioners' craft — what takes a new hire months to learn. Client deliverable structure, deal memo format, analysis frameworks. <strong style="color:var(--text)">This is where the alpha lives.</strong> Enterprise admins can't roll these out — they live in practitioners' heads and need to be extracted.</p>
+      </div>
+      <div class="tier" style="background:rgba(20,184,166,.06);border-color:rgba(20,184,166,.2)">
+        <h4><span style="background:rgba(20,184,166,.2);color:var(--teal);padding:3px 8px;border-radius:6px;font-size:10px">TIER 3</span> <span style="color:var(--teal)">Personal Workflow Skills</span></h4>
+        <p>Under-the-desk tools for your day-to-day. <strong style="color:var(--text)">Don't keep these just on your laptop.</strong> When you're on vacation or sick, someone needs to run your process. Think systemically — actions and processes that skills can capture reliably.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTION PATTERNS -->
+  <div style="margin-top:24px">
+    <div class="sectionTitle">
+      <h2>Production Patterns</h2>
+      <span class="tag">How people are actually using skills</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:8px">The Specialist Stack</h3>
+      <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Most common pattern. Drop a folder of skills into a project. Each handles one phase:</p>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <div style="padding:5px 8px;border-radius:8px;border:1px solid rgba(139,92,246,.2);background:rgba(139,92,246,.06);font-size:10px;color:var(--purple)">Vague intent → PRD</div>
+        <div style="font-size:14px;color:var(--faint)">→</div>
+        <div style="padding:5px 8px;border-radius:8px;border:1px solid rgba(6,182,212,.2);background:rgba(6,182,212,.06);font-size:10px;color:var(--cyan)">PRD → GitHub Issues</div>
+        <div style="font-size:14px;color:var(--faint)">→</div>
+        <div style="padding:5px 8px;border-radius:8px;border:1px solid rgba(34,197,94,.2);background:rgba(34,197,94,.06);font-size:10px;color:var(--green)">Issues → Tests</div>
+        <div style="font-size:14px;color:var(--faint)">→</div>
+        <div style="padding:5px 8px;border-radius:8px;border:1px solid rgba(59,130,246,.2);background:rgba(59,130,246,.06);font-size:10px;color:var(--blue)">Tests → Code</div>
+      </div>
+      <p style="font-size:11px;color:var(--faint);margin-top:8px">Agent doesn't need specialist direction — the specialist direction is in the file.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:8px">The Orchestrator Pattern</h3>
+      <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">A master skill analyzes incoming requests and spawns sub-agents based on skill routing:</p>
+      <div style="text-align:center;padding:8px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.12)">
+        <div style="padding:6px 12px;border-radius:8px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);display:inline-block;font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px">Orchestrator Skill</div>
+        <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+          <div style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-size:10px;background:rgba(0,0,0,.15)">Research Agent</div>
+          <div style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-size:10px;background:rgba(0,0,0,.15)">Coding Agent</div>
+          <div style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-size:10px;background:rgba(0,0,0,.15)">UI Agent</div>
+          <div style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-size:10px;background:rgba(0,0,0,.15)">Docs Agent</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card wide">
+      <h3 style="font-size:14px;margin-bottom:8px">Real-World: 50K Lines of Operational Skills</h3>
+      <p style="font-size:12.5px;color:var(--muted)">A real estate GP built 50+ repositories of skills covering rent roll standardization, comps analysis, cash flow handling, and team handoff protocols. The agent runs operations — but the skills also serve as onboarding docs for new hires. <strong style="color:var(--text)">The methodology doesn't live in someone's mind anymore. It lives in a repository.</strong></p>
+    </div>
+  </div>
+
+  <!-- SKILLS COMPOUND -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card callout wide">
+      <p style="font-size:14px"><strong>Skills compound. Prompts don't.</strong></p>
+      <p style="margin-top:8px">People who've been building skills for 6 months have been refining and compounding — each iteration makes the output more predictable. People who've been prompting are still copy-pasting. Prompts are the basic 4x4 Lego block. Skills are the specialized pieces that build the castle. <strong>Prompts evaporate when the conversation ends. Skills are what persists.</strong></p>
+    </div>
+  </div>
+
+  <!-- GETTING STARTED -->
+  <div class="grid" style="margin-top:16px">
+    <div class="card wide">
+      <div class="sectionTitle" style="margin-bottom:10px">
+        <h2>Getting Started — By Level</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="padding:14px;border-radius:14px;border:1px solid rgba(34,197,94,.2);background:rgba(34,197,94,.04)">
+          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Beginner</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">
+            Find something you do 2–3x/week. Ask your AI to help you make a <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 4px;border-radius:3px">skill.md</code> from your best conversations. Feed it what went well and what didn't. Iterate.
+          </div>
+        </div>
+        <div style="padding:14px;border-radius:14px;border:1px solid rgba(139,92,246,.2);background:rgba(139,92,246,.04)">
+          <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Intermediate</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">
+            Think agent-readable. Are your handoffs clean? Are outputs structured as contracts? Is the description a routing signal? Test with a basket of scenarios.
+          </div>
+        </div>
+        <div style="padding:14px;border-radius:14px;border:1px solid rgba(6,182,212,.2);background:rgba(6,182,212,.04)">
+          <div style="font-size:11px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Team / Enterprise</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">
+            Tier your skills. Extract Tier 2 methodology from senior practitioners' heads. Version control everything. Build quantitative test suites for agent-callable skills.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Source: Agent-readable skills analysis &bull; Community patterns &bull; March 2026</p>
+    <p style="margin-top:4px">Simon Willison, Oct 2025: "Skills may be a bigger deal than MCP."</p>
+  </div>
+
+</div>
+</body>
+</html>
