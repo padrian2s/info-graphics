@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Line-by-line commentary analysis of Reiner Pope (MatX, ex-Google TPU) on the Dwarkesh Podcast — how GPT-5, Claude, and Gemini are actually trained and served. Includes interactive simulators and diagrams." />
+  <meta name="category" content="AI Infrastructure" />
+  <meta name="tags" content="Commentary, Analysis, Reiner Pope, MatX, Dwarkesh, Roofline, Batch Size, KV Cache, MoE, Pipelining, Scale-up, Chinchilla" />
+  <meta name="icon" content="🎙️" />
+  <meta name="format" content="deep-dive" />
+  <meta name="created" content="2026-04-30" />
+  <title>Commentary: How GPT-5, Claude &amp; Gemini Are Actually Trained &amp; Served</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0D1222;
+      --text:#EAF0FF;
+      --muted:#A8B3D6;
+      --faint:#6F7AA6;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
+      --c1:#3b82f6;
+      --c2:#8b5cf6;
+      --c3:#14b8a6;
+      --c4:#f59e0b;
+      --c5:#ef4444;
+      --c6:#ec4899;
+      --c7:#06b6d4;
+      --quote-bg:rgba(255,255,255,.03);
+      --comment-bg:rgba(59,130,246,.06);
+    }
+    *{box-sizing:border-box;margin:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:
+        radial-gradient(1200px 800px at 12% 10%, rgba(59,130,246,.18), transparent 60%),
+        radial-gradient(900px 700px at 86% 20%, rgba(139,92,246,.14), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(20,184,166,.10), transparent 55%),
+        linear-gradient(180deg, #050711, #070A12 55%, #050711);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height:1.5;
+      overflow-x:hidden;
+    }
+    a{color:var(--c1);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 80px}
+
+    /* Hero */
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:28px 24px;
+      margin-bottom:24px;
+    }
+    .kicker{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 0 0 6px rgba(59,130,246,.10)}
+    h1{font-size:clamp(24px,3.2vw,38px);line-height:1.1;letter-spacing:-.02em;margin-bottom:10px}
+    h1 .spark{background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:var(--muted);font-size:15px;max-width:72ch;margin-bottom:16px}
+    .meta-row{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{font-size:11px;color:var(--muted);border:1px solid var(--border);background:rgba(255,255,255,.03);padding:5px 10px;border-radius:999px}
+    .chip b{color:var(--text);font-weight:650}
+
+    /* TOC */
+    .toc{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:18px 20px;
+      margin-bottom:24px;
+    }
+    .toc h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+    .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px}
+    @media(max-width:600px){.toc-grid{grid-template-columns:1fr}}
+    .toc-item{
+      display:flex;align-items:center;gap:8px;
+      padding:6px 8px;border-radius:10px;
+      font-size:13px;color:var(--muted);
+      cursor:pointer;transition:background .15s;
+    }
+    .toc-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+    .toc-num{
+      width:24px;height:24px;border-radius:8px;
+      display:grid;place-items:center;
+      font-size:11px;font-weight:700;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      flex-shrink:0;
+    }
+
+    /* Section headers */
+    .section{margin-bottom:28px}
+    .section-header{
+      display:flex;align-items:center;gap:12px;
+      padding:14px 0;
+      border-bottom:1px solid var(--border);
+      margin-bottom:14px;
+    }
+    .section-num{
+      width:36px;height:36px;border-radius:12px;
+      display:grid;place-items:center;
+      font-size:15px;font-weight:800;
+      flex-shrink:0;
+    }
+    .section-header h2{font-size:18px;letter-spacing:-.01em}
+    .section-header .lines{font-size:12px;color:var(--faint);margin-left:auto;white-space:nowrap}
+
+    /* Diagram cards */
+    .diagram{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      margin-bottom:14px;
+    }
+    .diagram h3{font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+    .diagram h3 .ico{font-size:16px}
+    .diagram .desc{color:var(--faint);font-size:11.5px;margin-bottom:14px}
+    .diagram svg{width:100%;height:auto;display:block;font-family:ui-sans-serif,system-ui,sans-serif}
+    .diagram .lgd{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--muted)}
+    .diagram .lgd-item{display:flex;align-items:center;gap:6px}
+    .lgd-dot{width:10px;height:10px;border-radius:3px}
+
+    /* Entry cards */
+    .entry{
+      border:1px solid var(--border);
+      border-radius:16px;
+      overflow:hidden;
+      margin-bottom:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      transition:border-color .2s;
+    }
+    .entry:hover{border-color:rgba(255,255,255,.14)}
+    .entry-header{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 14px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .entry-header:hover{background:rgba(255,255,255,.02)}
+    .entry-badge{
+      width:30px;height:30px;border-radius:10px;
+      display:grid;place-items:center;
+      font-size:12px;font-weight:800;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      flex-shrink:0;
+    }
+    .entry-title{flex:1}
+    .entry-title b{font-size:14px;display:block}
+    .entry-title span{font-size:11px;color:var(--faint)}
+    .chev{
+      transition:transform .2s ease;
+      color:var(--faint);
+      flex-shrink:0;
+    }
+    details.entry[open] .chev{transform:rotate(180deg)}
+    details.entry > summary{list-style:none}
+    details.entry > summary::-webkit-details-marker{display:none}
+
+    .entry-body{padding:0 14px 14px}
+
+    .quote-block{
+      border-left:3px solid rgba(139,92,246,.5);
+      background:var(--quote-bg);
+      padding:10px 12px;
+      border-radius:0 10px 10px 0;
+      margin-bottom:10px;
+      font-size:13px;
+      color:var(--muted);
+      font-style:italic;
+      line-height:1.55;
+    }
+    .quote-block::before{content:'"';font-size:24px;color:rgba(139,92,246,.4);font-style:normal;margin-right:4px;vertical-align:-4px}
+
+    .commentary{
+      background:var(--comment-bg);
+      border:1px solid rgba(59,130,246,.12);
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:13.5px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .commentary strong{color:var(--text)}
+    .commentary-label{
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:10px;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;
+      color:var(--c1);
+      margin-bottom:6px;
+    }
+
+    /* Controls */
+    .controls{
+      display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:8px 14px;
+      border-radius:10px;
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;gap:6px;align-items:center;
+      transition:background .15s;
+    }
+    .btn:hover{background:rgba(255,255,255,.08)}
+
+    /* Simulators */
+    .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:800px){.sim-grid{grid-template-columns:1fr}}
+    .sim{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+    }
+    .sim h3{font-size:13.5px;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+    .sim h3 .ico{font-size:16px}
+    .sim .sim-desc{color:var(--faint);font-size:11.5px;margin-bottom:14px;line-height:1.5}
+    .sim-row{margin-bottom:10px}
+    .sim-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+    .sim-label span{color:var(--muted);font-size:12px}
+    .sim-label .sim-val{color:var(--text);font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums}
+    input[type=range]{
+      -webkit-appearance:none;appearance:none;
+      width:100%;height:5px;
+      background:rgba(255,255,255,.1);
+      border-radius:4px;outline:none;
+      cursor:pointer;
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;appearance:none;
+      width:16px;height:16px;border-radius:50%;
+      background:linear-gradient(135deg,var(--c1),var(--c2));
+      border:2px solid rgba(255,255,255,.2);
+      cursor:pointer;
+    }
+    input[type=range]::-moz-range-thumb{
+      width:14px;height:14px;border-radius:50%;
+      background:linear-gradient(135deg,var(--c1),var(--c2));
+      border:2px solid rgba(255,255,255,.2);
+      cursor:pointer;
+    }
+    .sim-out{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px 12px;
+      margin-top:10px;
+    }
+    .sim-out-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px}
+    .sim-out-row span:first-child{color:var(--muted)}
+    .sim-out-row span:last-child{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+    .sim-out-row.highlight span:last-child{color:var(--c3);font-size:13.5px}
+    .sim-out-row.warn span:last-child{color:var(--c4)}
+    .sim-out-row.bad span:last-child{color:var(--c5)}
+    .sim-divider{height:1px;background:var(--border);margin:6px 0}
+    .sim-wide{grid-column:1/-1}
+    .sim-bar-track{height:8px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;margin-top:6px}
+    .sim-bar{height:100%;border-radius:5px;transition:width .3s ease;min-width:2px}
+    .sim-tip{font-size:11px;color:var(--faint);margin-top:6px;line-height:1.4}
+
+    /* Footer */
+    .footer{
+      text-align:center;
+      color:var(--faint);
+      font-size:12px;
+      margin-top:40px;
+      padding-top:20px;
+      border-top:1px solid var(--border);
+    }
+
+    /* Color coding */
+    .sc1{color:var(--c1)}.bg1{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25)}
+    .sc2{color:var(--c2)}.bg2{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.25)}
+    .sc3{color:var(--c3)}.bg3{background:rgba(20,184,166,.12);border-color:rgba(20,184,166,.25)}
+    .sc4{color:var(--c4)}.bg4{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25)}
+    .sc5{color:var(--c5)}.bg5{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25)}
+    .sc6{color:var(--c6)}.bg6{background:rgba(236,72,153,.12);border-color:rgba(236,72,153,.25)}
+    .sc7{color:var(--c7)}.bg7{background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.25)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker"><span class="dot"></span> Line-by-Line Commentary &middot; Blackboard Lecture</div>
+    <h1>How GPT-5, Claude &amp; Gemini Are <span class="spark">Actually Trained &amp; Served</span></h1>
+    <p class="sub">An annotated deep-dive into Reiner Pope's blackboard lecture with Dwarkesh Patel — every roofline, equation, and inflection point explained with diagrams, simulators, and analytical commentary on what each claim implies.</p>
+    <div class="meta-row">
+      <span class="chip"><b>Reiner Pope</b> CEO MatX, ex-Google TPU</span>
+      <span class="chip"><b>Dwarkesh Patel</b> Interviewer</span>
+      <span class="chip"><b>~40</b> Annotated Segments</span>
+      <span class="chip"><b>6</b> Diagrams</span>
+      <span class="chip"><b>7</b> Simulators</span>
+      <span class="chip">April 2026</span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Sections</h2>
+    <div class="toc-grid">
+      <a class="toc-item" href="#s1"><span class="toc-num sc1">I</span> The Roofline Model</a>
+      <a class="toc-item" href="#s2"><span class="toc-num sc2">II</span> Latency &amp; Cost Curves</a>
+      <a class="toc-item" href="#s3"><span class="toc-num sc3">III</span> The Balance Point &amp; Train Schedule</a>
+      <a class="toc-item" href="#s4"><span class="toc-num sc4">IV</span> MoE Layout &amp; Scale-up Domains</a>
+      <a class="toc-item" href="#s5"><span class="toc-num sc5">V</span> Pipelining &amp; Memory Capacity</a>
+      <a class="toc-item" href="#s6"><span class="toc-num sc6">VI</span> Chinchilla &amp; Over-training</a>
+      <a class="toc-item" href="#s7"><span class="toc-num sc7">VII</span> API Pricing &amp; Memory Tiers</a>
+      <a class="toc-item" href="#sims"><span class="toc-num" style="background:rgba(20,184,166,.12);color:var(--c3)">⚙</span> Interactive Simulators (7)</a>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn" onclick="document.querySelectorAll('details.entry').forEach(d=>d.open=true)">▼ Expand All</button>
+    <button class="btn" onclick="document.querySelectorAll('details.entry').forEach(d=>d.open=false)">▲ Collapse All</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION I: The Roofline Model -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num bg1 sc1">I</div>
+      <h2>The Roofline Model — Memory vs Compute</h2>
+      <span class="lines">Lines 1–40</span>
+    </div>
+
+    <!-- DIAGRAM 1: The Two Roofs -->
+    <div class="diagram">
+      <h3><span class="ico">📐</span> Diagram: The Roofline — Memory Time vs Compute Time</h3>
+      <div class="desc">Inference time is approximately <code>max(memory_time, compute_time)</code>. Memory has a fixed floor (must read all weights). Compute scales linearly with batch size.</div>
+      <svg viewBox="0 0 700 280">
+        <defs>
+          <linearGradient id="memGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".4"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></linearGradient>
+          <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14b8a6" stop-opacity=".4"/><stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/></linearGradient>
+        </defs>
+        <!-- Axes -->
+        <line x1="60" y1="240" x2="660" y2="240" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <line x1="60" y1="20" x2="60" y2="240" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <text x="360" y="265" fill="#A8B3D6" font-size="11" text-anchor="middle">Batch Size →</text>
+        <text x="20" y="130" fill="#A8B3D6" font-size="11" transform="rotate(-90,20,130)" text-anchor="middle">Time per pass</text>
+        <!-- Memory time: starts at fixed weight-fetch floor, slight slope from KV cache -->
+        <path d="M 60,140 L 660,110" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+        <text x="380" y="105" fill="#3b82f6" font-size="11">memory time (weights + KV)</text>
+        <!-- Compute time: linear from origin -->
+        <line x1="60" y1="240" x2="660" y2="40" stroke="#14b8a6" stroke-width="2.5"/>
+        <text x="500" y="60" fill="#14b8a6" font-size="11">compute time (linear in batch)</text>
+        <!-- Crossover marker -->
+        <circle cx="395" cy="125" r="6" fill="#f59e0b"/>
+        <line x1="395" y1="125" x2="395" y2="240" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="400" y="260" fill="#f59e0b" font-size="11" text-anchor="middle">Balance point</text>
+        <text x="400" y="115" fill="#f59e0b" font-size="10" text-anchor="start">≈ 300 × sparsity</text>
+        <!-- Effective time max envelope shaded -->
+        <path d="M 60,140 L 395,125 L 660,40 L 660,240 L 60,240 Z" fill="rgba(245,158,11,.06)"/>
+        <text x="160" y="200" fill="#A8B3D6" font-size="11">memory bound</text>
+        <text x="510" y="200" fill="#A8B3D6" font-size="11">compute bound</text>
+      </svg>
+      <div class="lgd">
+        <div class="lgd-item"><span class="lgd-dot" style="background:#3b82f6"></span>Memory time (weights + KV cache)</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#14b8a6"></span>Compute time (linear in batch)</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#f59e0b"></span>Balance point (optimal batch)</div>
+      </div>
+    </div>
+
+    <div id="entries-s1"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION II: Latency & Cost Curves -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num bg2 sc2">II</div>
+      <h2>Latency Floor &amp; Cost Curve — Why Slow Mode Doesn't Save Money</h2>
+      <span class="lines">Lines 40–105</span>
+    </div>
+
+    <!-- DIAGRAM 2: Cost vs Batch -->
+    <div class="diagram">
+      <h3><span class="ico">💲</span> Diagram: Cost per Token vs Batch Size</h3>
+      <div class="desc">Cost = time / batch. Weights amortize as 1/B (parabola), KV and compute become flat. There's a floor — Claude Code Slow can't get below it.</div>
+      <svg viewBox="0 0 700 280">
+        <line x1="60" y1="240" x2="660" y2="240" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <line x1="60" y1="20" x2="60" y2="240" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <text x="360" y="265" fill="#A8B3D6" font-size="11" text-anchor="middle">Batch Size →</text>
+        <text x="20" y="130" fill="#A8B3D6" font-size="11" transform="rotate(-90,20,130)" text-anchor="middle">Cost per token</text>
+        <!-- Hyperbolic decay (weights/B) -->
+        <path d="M 70,30 Q 130,90 220,140 T 660,160" fill="none" stroke="#8b5cf6" stroke-width="2.5"/>
+        <text x="120" y="55" fill="#8b5cf6" font-size="11">weights/B (hyperbolic)</text>
+        <!-- Compute floor (constant) -->
+        <line x1="60" y1="160" x2="660" y2="160" stroke="#14b8a6" stroke-width="2.5" stroke-dasharray="5,3"/>
+        <text x="500" y="155" fill="#14b8a6" font-size="11">compute floor (constant)</text>
+        <!-- Floor highlight -->
+        <line x1="60" y1="160" x2="660" y2="160" stroke="#22c55e" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="80" y="175" fill="#22c55e" font-size="10">Cost floor — Claude Code Slow lives here</text>
+      </svg>
+      <div class="lgd">
+        <div class="lgd-item"><span class="lgd-dot" style="background:#8b5cf6"></span>Total cost/token</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#14b8a6"></span>Compute floor (un-amortizable)</div>
+      </div>
+    </div>
+
+    <div id="entries-s2"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION III: Balance Point & Train Schedule -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num bg3 sc3">III</div>
+      <h2>The Balance Point &amp; the 20ms Train</h2>
+      <span class="lines">Lines 75–145</span>
+    </div>
+
+    <!-- DIAGRAM 3: 20ms Train -->
+    <div class="diagram">
+      <h3><span class="ico">🚂</span> Diagram: The Train Departs Every 20ms</h3>
+      <div class="desc">A new batch starts every ~20ms regardless of fill level. Worst-case queue latency = 20ms wait + 20ms run = 40ms.</div>
+      <svg viewBox="0 0 700 220">
+        <!-- Time axis -->
+        <line x1="40" y1="180" x2="680" y2="180" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <text x="360" y="205" fill="#A8B3D6" font-size="11" text-anchor="middle">time →</text>
+        <!-- Trains (each 20ms slot) -->
+        <g>
+          <rect x="60" y="100" width="100" height="60" rx="6" fill="rgba(20,184,166,.18)" stroke="#14b8a6"/>
+          <text x="110" y="135" fill="#EAF0FF" font-size="11" text-anchor="middle">Batch 0</text>
+          <text x="110" y="150" fill="#A8B3D6" font-size="9" text-anchor="middle">20ms</text>
+          <line x1="60" y1="100" x2="60" y2="180" stroke="#14b8a6" stroke-dasharray="2,2"/>
+          <line x1="160" y1="100" x2="160" y2="180" stroke="#14b8a6" stroke-dasharray="2,2"/>
+
+          <rect x="160" y="100" width="100" height="60" rx="6" fill="rgba(59,130,246,.18)" stroke="#3b82f6"/>
+          <text x="210" y="135" fill="#EAF0FF" font-size="11" text-anchor="middle">Batch 1</text>
+          <text x="210" y="150" fill="#A8B3D6" font-size="9" text-anchor="middle">20ms</text>
+
+          <rect x="260" y="100" width="100" height="60" rx="6" fill="rgba(139,92,246,.18)" stroke="#8b5cf6"/>
+          <text x="310" y="135" fill="#EAF0FF" font-size="11" text-anchor="middle">Batch 2</text>
+
+          <rect x="360" y="100" width="100" height="60" rx="6" fill="rgba(20,184,166,.18)" stroke="#14b8a6"/>
+          <text x="410" y="135" fill="#EAF0FF" font-size="11" text-anchor="middle">Batch 3</text>
+
+          <rect x="460" y="100" width="100" height="60" rx="6" fill="rgba(59,130,246,.18)" stroke="#3b82f6"/>
+          <text x="510" y="135" fill="#EAF0FF" font-size="11" text-anchor="middle">Batch 4</text>
+        </g>
+        <!-- Worst-case arrival -->
+        <line x1="165" y1="40" x2="165" y2="100" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="170" y="35" fill="#ef4444" font-size="10">request arrives just-missed</text>
+        <line x1="165" y1="40" x2="260" y2="40" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="210" y="32" fill="#ef4444" font-size="9" text-anchor="middle">wait 20ms</text>
+        <line x1="260" y1="40" x2="360" y2="40" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="310" y="32" fill="#f59e0b" font-size="9" text-anchor="middle">run 20ms</text>
+        <text x="380" y="42" fill="#A8B3D6" font-size="10">→ worst case 40ms</text>
+      </svg>
+      <div class="lgd">
+        <div class="lgd-item"><span class="lgd-dot" style="background:#14b8a6"></span>Each train = batch ≈ 300 × sparsity tokens</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#ef4444"></span>Worst-case queue arrival</div>
+      </div>
+      <div class="sim-tip">Why 20ms? It's HBM_capacity / HBM_bandwidth — the time to read all of HBM once. Reading it twice would be wasteful (weights and KVs are read-only).</div>
+    </div>
+
+    <div id="entries-s3"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION IV: MoE Layout & Scale-up -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num bg4 sc4">IV</div>
+      <h2>MoE Layout, Scale-up Domains &amp; All-to-All</h2>
+      <span class="lines">Lines 145–260</span>
+    </div>
+
+    <!-- DIAGRAM 4: MoE Routing & Rack -->
+    <div class="diagram">
+      <h3><span class="ico">🔀</span> Diagram: MoE Expert Parallelism &amp; All-to-All on a Rack</h3>
+      <div class="desc">DeepSeek-style: 256 experts, 4 per GPU on a 64-GPU rack. Router on every GPU sends tokens all-to-all to the GPUs holding the chosen experts. Cross-rack = 8x slower.</div>
+      <svg viewBox="0 0 700 320">
+        <!-- Rack 1 -->
+        <rect x="20" y="20" width="320" height="280" rx="10" fill="rgba(20,184,166,.05)" stroke="rgba(20,184,166,.4)"/>
+        <text x="180" y="40" fill="#14b8a6" font-size="12" text-anchor="middle" font-weight="700">Rack 1 — Scale-up (NVLink, fast)</text>
+
+        <!-- 8 GPUs in rack 1 -->
+        <g>
+          <rect x="40" y="60" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="70" y="85" fill="#fff" font-size="10" text-anchor="middle">GPU 0</text>
+          <text x="70" y="98" fill="#A8B3D6" font-size="8" text-anchor="middle">E0–3</text>
+
+          <rect x="110" y="60" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="140" y="85" fill="#fff" font-size="10" text-anchor="middle">GPU 1</text>
+          <text x="140" y="98" fill="#A8B3D6" font-size="8" text-anchor="middle">E4–7</text>
+
+          <rect x="180" y="60" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="210" y="85" fill="#fff" font-size="10" text-anchor="middle">GPU 2</text>
+
+          <rect x="250" y="60" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="280" y="85" fill="#fff" font-size="10" text-anchor="middle">GPU 3</text>
+
+          <rect x="40" y="240" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="70" y="265" fill="#fff" font-size="10" text-anchor="middle">GPU 60</text>
+
+          <rect x="110" y="240" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="140" y="265" fill="#fff" font-size="10" text-anchor="middle">GPU 61</text>
+
+          <rect x="180" y="240" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="210" y="265" fill="#fff" font-size="10" text-anchor="middle">GPU 62</text>
+
+          <rect x="250" y="240" width="60" height="40" rx="4" fill="rgba(59,130,246,.2)" stroke="#3b82f6"/>
+          <text x="280" y="265" fill="#fff" font-size="10" text-anchor="middle">GPU 63</text>
+        </g>
+
+        <!-- NV switch in middle -->
+        <rect x="135" y="155" width="90" height="36" rx="6" fill="rgba(245,158,11,.2)" stroke="#f59e0b"/>
+        <text x="180" y="178" fill="#f59e0b" font-size="11" text-anchor="middle" font-weight="700">NVSwitch</text>
+
+        <!-- All-to-all lines (a sample) -->
+        <line x1="70" y1="100" x2="180" y2="155" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="140" y1="100" x2="180" y2="155" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="210" y1="100" x2="180" y2="155" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="280" y1="100" x2="180" y2="155" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="70" y1="240" x2="180" y2="190" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="140" y1="240" x2="180" y2="190" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="210" y1="240" x2="180" y2="190" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+        <line x1="280" y1="240" x2="180" y2="190" stroke="rgba(20,184,166,.5)" stroke-width="1"/>
+
+        <!-- Rack 2 (faded) -->
+        <rect x="380" y="20" width="300" height="280" rx="10" fill="rgba(239,68,68,.04)" stroke="rgba(239,68,68,.3)"/>
+        <text x="530" y="40" fill="#ef4444" font-size="12" text-anchor="middle" font-weight="700">Rack 2 — Scale-out (8× slower)</text>
+        <text x="530" y="170" fill="#A8B3D6" font-size="11" text-anchor="middle">Cross-rack all-to-all</text>
+        <text x="530" y="190" fill="#A8B3D6" font-size="11" text-anchor="middle">becomes the bottleneck</text>
+        <text x="530" y="210" fill="#ef4444" font-size="11" text-anchor="middle" font-weight="700">→ MoE expert layer</text>
+        <text x="530" y="225" fill="#ef4444" font-size="11" text-anchor="middle" font-weight="700">should fit in 1 rack</text>
+
+        <!-- Slow scale-out line -->
+        <line x1="340" y1="160" x2="380" y2="160" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="360" y="155" fill="#ef4444" font-size="9" text-anchor="middle">8x slower</text>
+      </svg>
+      <div class="lgd">
+        <div class="lgd-item"><span class="lgd-dot" style="background:#14b8a6"></span>Scale-up (NVLink within rack)</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#ef4444"></span>Scale-out (data-center fabric)</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:#f59e0b"></span>NVSwitch (2-hop all-to-all)</div>
+      </div>
+    </div>
+
+    <div id="entries-s4"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION V: Pipelining & Memory Capacity -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num bg5 sc5">V</div>
+      <h2>Pipelining, Bubbles &amp; the Memory-Wall Paradox</h2>
+      <span class="lines">Lines 260–420</span>
+    </div>
+
+    <!-- DIAGRAM 5: Pipeline schedule -->
+    <div class="diagram">
+      <h3><span class="ico">🪜</span> Diagram: Pipeline Parallelism &amp; the Bubble</h3>
+      <div class="desc">Inference: pipelining is "free" — micro-batches just fill in. Training: hard stop for backward pass creates the bubble. Smaller batch = better ML, worse systems.</div>
+      <svg viewBox="0 0 700 300">
+        <text x="20" y="40" fill="#EAF0FF" font-size="12" font-weight="700">Inference (no bubble)</text>
+        <line x1="100" y1="50" x2="660" y2="50" stroke="rgba(255,255,255,.2)"/>
+        <text x="660" y="45" fill="#A8B3D6" font-size="9" text-anchor="end">time →</text>
+        <!-- 4 racks -->
+        <g>
+          <text x="20" y="65" fill="#A8B3D6" font-size="10">Rack 0</text>
+          <rect x="100" y="55" width="60" height="18" fill="rgba(20,184,166,.5)" stroke="#14b8a6"/>
+          <text x="130" y="68" fill="#fff" font-size="9" text-anchor="middle">B0</text>
+          <rect x="160" y="55" width="60" height="18" fill="rgba(59,130,246,.5)" stroke="#3b82f6"/>
+          <text x="190" y="68" fill="#fff" font-size="9" text-anchor="middle">B1</text>
+          <rect x="220" y="55" width="60" height="18" fill="rgba(139,92,246,.5)" stroke="#8b5cf6"/>
+          <rect x="280" y="55" width="60" height="18" fill="rgba(245,158,11,.5)" stroke="#f59e0b"/>
+          <rect x="340" y="55" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <rect x="400" y="55" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+
+          <text x="20" y="85" fill="#A8B3D6" font-size="10">Rack 1</text>
+          <rect x="160" y="75" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <text x="190" y="88" fill="#fff" font-size="9" text-anchor="middle">B0</text>
+          <rect x="220" y="75" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+          <rect x="280" y="75" width="60" height="18" fill="rgba(139,92,246,.5)"/>
+          <rect x="340" y="75" width="60" height="18" fill="rgba(245,158,11,.5)"/>
+          <rect x="400" y="75" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <rect x="460" y="75" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+
+          <text x="20" y="105" fill="#A8B3D6" font-size="10">Rack 2</text>
+          <rect x="220" y="95" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <text x="250" y="108" fill="#fff" font-size="9" text-anchor="middle">B0</text>
+          <rect x="280" y="95" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+          <rect x="340" y="95" width="60" height="18" fill="rgba(139,92,246,.5)"/>
+          <rect x="400" y="95" width="60" height="18" fill="rgba(245,158,11,.5)"/>
+          <rect x="460" y="95" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <rect x="520" y="95" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+
+          <text x="20" y="125" fill="#A8B3D6" font-size="10">Rack 3</text>
+          <rect x="280" y="115" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <text x="310" y="128" fill="#fff" font-size="9" text-anchor="middle">B0</text>
+          <rect x="340" y="115" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+          <rect x="400" y="115" width="60" height="18" fill="rgba(139,92,246,.5)"/>
+          <rect x="460" y="115" width="60" height="18" fill="rgba(245,158,11,.5)"/>
+          <rect x="520" y="115" width="60" height="18" fill="rgba(20,184,166,.5)"/>
+          <rect x="580" y="115" width="60" height="18" fill="rgba(59,130,246,.5)"/>
+        </g>
+
+        <!-- Training -->
+        <text x="20" y="170" fill="#EAF0FF" font-size="12" font-weight="700">Training (the bubble)</text>
+        <line x1="100" y1="180" x2="660" y2="180" stroke="rgba(255,255,255,.2)"/>
+        <g>
+          <text x="20" y="195" fill="#A8B3D6" font-size="10">Rack 0</text>
+          <rect x="100" y="185" width="50" height="16" fill="rgba(20,184,166,.5)"/>
+          <rect x="150" y="185" width="50" height="16" fill="rgba(59,130,246,.5)"/>
+          <rect x="200" y="185" width="50" height="16" fill="rgba(139,92,246,.5)"/>
+          <rect x="250" y="185" width="50" height="16" fill="rgba(245,158,11,.5)"/>
+          <!-- bubble -->
+          <rect x="300" y="185" width="150" height="16" fill="rgba(239,68,68,.15)" stroke="#ef4444" stroke-dasharray="3,3"/>
+          <text x="375" y="197" fill="#ef4444" font-size="9" text-anchor="middle">BUBBLE (idle)</text>
+          <!-- backward starts -->
+          <rect x="450" y="185" width="50" height="16" fill="rgba(245,158,11,.7)"/>
+          <text x="475" y="197" fill="#fff" font-size="8" text-anchor="middle">B3 bw</text>
+          <rect x="500" y="185" width="50" height="16" fill="rgba(139,92,246,.7)"/>
+          <rect x="550" y="185" width="50" height="16" fill="rgba(59,130,246,.7)"/>
+          <rect x="600" y="185" width="50" height="16" fill="rgba(20,184,166,.7)"/>
+
+          <text x="20" y="215" fill="#A8B3D6" font-size="10">Rack 1</text>
+          <rect x="150" y="205" width="50" height="16" fill="rgba(20,184,166,.5)"/>
+          <rect x="200" y="205" width="50" height="16" fill="rgba(59,130,246,.5)"/>
+          <rect x="250" y="205" width="50" height="16" fill="rgba(139,92,246,.5)"/>
+          <rect x="300" y="205" width="50" height="16" fill="rgba(245,158,11,.5)"/>
+          <rect x="350" y="205" width="100" height="16" fill="rgba(239,68,68,.15)" stroke="#ef4444" stroke-dasharray="3,3"/>
+          <rect x="450" y="205" width="50" height="16" fill="rgba(245,158,11,.7)"/>
+
+          <text x="20" y="235" fill="#A8B3D6" font-size="10">Rack 2</text>
+          <rect x="200" y="225" width="50" height="16" fill="rgba(20,184,166,.5)"/>
+          <rect x="250" y="225" width="50" height="16" fill="rgba(59,130,246,.5)"/>
+          <rect x="300" y="225" width="50" height="16" fill="rgba(139,92,246,.5)"/>
+          <rect x="350" y="225" width="50" height="16" fill="rgba(245,158,11,.5)"/>
+          <rect x="400" y="225" width="50" height="16" fill="rgba(239,68,68,.15)" stroke="#ef4444" stroke-dasharray="3,3"/>
+
+          <text x="20" y="255" fill="#A8B3D6" font-size="10">Rack 3</text>
+          <rect x="250" y="245" width="50" height="16" fill="rgba(20,184,166,.5)"/>
+          <rect x="300" y="245" width="50" height="16" fill="rgba(59,130,246,.5)"/>
+          <rect x="350" y="245" width="50" height="16" fill="rgba(139,92,246,.5)"/>
+          <rect x="400" y="245" width="50" height="16" fill="rgba(245,158,11,.5)"/>
+        </g>
+        <line x1="450" y1="178" x2="450" y2="265" stroke="#fbbf24" stroke-width="2"/>
+        <text x="455" y="278" fill="#fbbf24" font-size="10">forward → backward</text>
+      </svg>
+      <div class="lgd">
+        <div class="lgd-item"><span class="lgd-dot" style="background:rgba(20,184,166,.5)"></span>Forward pass</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:rgba(245,158,11,.7)"></span>Backward pass</div>
+        <div class="lgd-item"><span class="lgd-dot" style="background:rgba(239,68,68,.15);border:1px dashed #ef4444"></span>Bubble (idle)</div>
+      </div>
+    </div>
+
+    <div id="entries-s5"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION VI: Chinchilla & Over-training -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num bg6 sc6">VI</div>
+      <h2>Chinchilla, Over-training &amp; the Three-Way Equality</h2>
+      <span class="lines">Lines 415–495</span>
+    </div>
+
+    <!-- DIAGRAM 6: Three-way cost equality -->
+    <div class="diagram">
+      <h3><span class="ico">⚖</span> Diagram: Equalize Pre-training, RL &amp; Inference Cost</h3>
+      <div class="desc">Heuristic: minimum total cost ≈ where the three are equal. Solving with α≈1/10 (RL inefficiency) gives D_pre ≈ D_RL ≈ D_inf. Today's models are ~100× over-trained vs. Chinchilla.</div>
+      <svg viewBox="0 0 700 240">
+        <!-- Three circles -->
+        <circle cx="200" cy="120" r="70" fill="rgba(59,130,246,.18)" stroke="#3b82f6" stroke-width="2"/>
+        <text x="200" y="115" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">Pre-training</text>
+        <text x="200" y="135" fill="#A8B3D6" font-size="11" text-anchor="middle">6 × N × D_pre</text>
+
+        <circle cx="350" cy="120" r="70" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="350" y="115" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">RL</text>
+        <text x="350" y="135" fill="#A8B3D6" font-size="11" text-anchor="middle">α × 6 × N × D_RL</text>
+
+        <circle cx="500" cy="120" r="70" fill="rgba(20,184,166,.18)" stroke="#14b8a6" stroke-width="2"/>
+        <text x="500" y="115" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">Inference</text>
+        <text x="500" y="135" fill="#A8B3D6" font-size="11" text-anchor="middle">2 × N × D_inf</text>
+
+        <text x="275" y="125" fill="#f59e0b" font-size="20" text-anchor="middle">≈</text>
+        <text x="425" y="125" fill="#f59e0b" font-size="20" text-anchor="middle">≈</text>
+
+        <text x="350" y="220" fill="#A8B3D6" font-size="12" text-anchor="middle">N cancels → solve for D &nbsp;⇒&nbsp; D_pre ≈ D_RL ≈ D_inf</text>
+        <text x="350" y="40" fill="#fbbf24" font-size="13" text-anchor="middle" font-weight="700">~150T pre-training tokens ≈ ~200T inference tokens (2 months)</text>
+        <text x="350" y="60" fill="#A8B3D6" font-size="11" text-anchor="middle">vs Chinchilla optimal (~2T) → ~100× over-trained</text>
+      </svg>
+    </div>
+
+    <div id="entries-s6"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION VII: API Pricing & Memory Tiers -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num bg7 sc7">VII</div>
+      <h2>API Pricing as Forensics — What Prices Reveal About Architecture</h2>
+      <span class="lines">Lines 495–660</span>
+    </div>
+
+    <!-- DIAGRAM 7: Memory tiers -->
+    <div class="diagram">
+      <h3><span class="ico">🗄</span> Diagram: Memory Tiers &amp; Drain Times</h3>
+      <div class="desc">The cache hold-duration in API pricing tells you which tier is being used: 5-min hold ≈ flash, 1-hour hold ≈ spinning disk. Drain time = capacity / bandwidth.</div>
+      <svg viewBox="0 0 700 240">
+        <g>
+          <rect x="40" y="30" width="140" height="50" rx="6" fill="rgba(20,184,166,.18)" stroke="#14b8a6"/>
+          <text x="110" y="50" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">HBM</text>
+          <text x="110" y="68" fill="#A8B3D6" font-size="10" text-anchor="middle">drain ~20 ms</text>
+          <text x="110" y="80" fill="#A8B3D6" font-size="9" text-anchor="middle">$ very high</text>
+
+          <rect x="190" y="30" width="140" height="50" rx="6" fill="rgba(59,130,246,.18)" stroke="#3b82f6"/>
+          <text x="260" y="50" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">DDR</text>
+          <text x="260" y="68" fill="#A8B3D6" font-size="10" text-anchor="middle">drain ~1–10 s</text>
+
+          <rect x="340" y="30" width="140" height="50" rx="6" fill="rgba(139,92,246,.18)" stroke="#8b5cf6"/>
+          <text x="410" y="50" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">Flash (SSD)</text>
+          <text x="410" y="68" fill="#A8B3D6" font-size="10" text-anchor="middle">drain ~1 min</text>
+          <text x="410" y="80" fill="#fbbf24" font-size="9" text-anchor="middle">↑ matches "5 min" cache tier</text>
+
+          <rect x="490" y="30" width="170" height="50" rx="6" fill="rgba(245,158,11,.18)" stroke="#f59e0b"/>
+          <text x="575" y="50" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">Spinning disk</text>
+          <text x="575" y="68" fill="#A8B3D6" font-size="10" text-anchor="middle">drain ~1 hour</text>
+          <text x="575" y="80" fill="#fbbf24" font-size="9" text-anchor="middle">↑ matches "1 hour" cache tier</text>
+        </g>
+        <!-- Arrow gradient -->
+        <line x1="40" y1="120" x2="660" y2="120" stroke="url(#tierGrad)" stroke-width="3"/>
+        <defs>
+          <linearGradient id="tierGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#14b8a6"/>
+            <stop offset="33%" stop-color="#3b82f6"/>
+            <stop offset="66%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#f59e0b"/>
+          </linearGradient>
+        </defs>
+        <text x="40" y="145" fill="#A8B3D6" font-size="11">faster, smaller, $$$</text>
+        <text x="660" y="145" fill="#A8B3D6" font-size="11" text-anchor="end">slower, larger, $</text>
+        <text x="350" y="180" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">API cache pricing leaks the storage tier</text>
+        <text x="350" y="200" fill="#A8B3D6" font-size="11" text-anchor="middle">Optimal tier choice: retrieval_time = hold_time × capacity_fraction</text>
+        <text x="350" y="218" fill="#A8B3D6" font-size="11" text-anchor="middle">Reiner's surprise: spinning disk is <em>still</em> in production</text>
+      </svg>
+    </div>
+
+    <div id="entries-s7"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SIMULATORS -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="sims">
+    <div class="section-header">
+      <div class="section-num" style="background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(20,184,166,.2));border:1px solid rgba(59,130,246,.3);color:var(--c3)">⚙</div>
+      <h2>Interactive Simulators</h2>
+      <span class="lines">Play with the math</span>
+    </div>
+
+    <div class="sim-grid">
+
+      <!-- SIM 1: Roofline -->
+      <div class="sim sim-wide" id="simRoof">
+        <h3><span class="ico">📐</span> Roofline — Memory vs Compute Time</h3>
+        <div class="sim-desc">Set model and hardware. See where the balance point lands and which regime you're in.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div class="sim-row">
+            <div class="sim-label"><span>Active params (B)</span><span class="sim-val"><span id="rfActive">37</span></span></div>
+            <input type="range" min="5" max="500" step="1" value="37" id="rfActiveSlider" oninput="calcRoof()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>Total params (B)</span><span class="sim-val"><span id="rfTotal">700</span></span></div>
+            <input type="range" min="50" max="5000" step="50" value="700" id="rfTotalSlider" oninput="calcRoof()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>FLOPs / Bandwidth ratio</span><span class="sim-val"><span id="rfRatio">300</span></span></div>
+            <input type="range" min="100" max="600" step="10" value="300" id="rfRatioSlider" oninput="calcRoof()">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="sim-row">
+            <div class="sim-label"><span>Batch size</span><span class="sim-val"><span id="rfBatch">2400</span></span></div>
+            <input type="range" min="32" max="10000" step="32" value="2400" id="rfBatchSlider" oninput="calcRoof()">
+          </div>
+          <div class="sim-row">
+            <div class="sim-label"><span>Sparsity multiple (active/total ratio)</span><span class="sim-val">1 / <span id="rfSparsity">19</span></span></div>
+            <input type="range" min="1" max="64" step="1" value="19" id="rfSparsitySlider" oninput="calcRoof()" disabled>
+          </div>
+        </div>
+        <div class="sim-out" id="rfOut"></div>
+      </div>
+
+      <!-- SIM 2: Latency floor -->
+      <div class="sim" id="simLat">
+        <h3><span class="ico">🚂</span> Latency Floor &amp; the 20ms Train</h3>
+        <div class="sim-desc">HBM capacity / HBM bandwidth = the train interval. Worst-case queue = 2×.</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>HBM capacity (GB)</span><span class="sim-val"><span id="ltCap">288</span></span></div>
+          <input type="range" min="80" max="1024" step="8" value="288" id="ltCapSlider" oninput="calcLat()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>HBM bandwidth (TB/s)</span><span class="sim-val"><span id="ltBw">20</span></span></div>
+          <input type="range" min="2" max="40" step="0.5" value="20" id="ltBwSlider" oninput="calcLat()">
+        </div>
+        <div class="sim-out" id="ltOut"></div>
+      </div>
+
+      <!-- SIM 3: Cost vs batch -->
+      <div class="sim" id="simCost">
+        <h3><span class="ico">💲</span> Cost per Token vs Batch</h3>
+        <div class="sim-desc">Why "Slow Mode" is mostly a no-op past a certain batch — weights amortize away.</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>GPU rental ($/hr per GPU)</span><span class="sim-val">$<span id="cstRent">2.40</span></span></div>
+          <input type="range" min="0.50" max="6" step="0.05" value="2.40" id="cstRentSlider" oninput="calcCost()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Tokens / GPU / sec at this batch</span><span class="sim-val"><span id="cstTps">2000</span></span></div>
+          <input type="range" min="100" max="20000" step="100" value="2000" id="cstTpsSlider" oninput="calcCost()">
+        </div>
+        <div class="sim-out" id="cstOut"></div>
+      </div>
+
+      <!-- SIM 4: MoE expert layout -->
+      <div class="sim" id="simMoe">
+        <h3><span class="ico">🔀</span> MoE Layout on a Rack</h3>
+        <div class="sim-desc">How many experts per GPU, and is your layer too big for one rack?</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Total experts</span><span class="sim-val"><span id="moExperts">256</span></span></div>
+          <input type="range" min="32" max="2048" step="32" value="256" id="moExpertsSlider" oninput="calcMoe()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>GPUs per rack</span><span class="sim-val"><span id="moGpus">64</span></span></div>
+          <input type="range" min="8" max="576" step="8" value="64" id="moGpusSlider" oninput="calcMoe()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Activated experts per token</span><span class="sim-val"><span id="moAct">8</span></span></div>
+          <input type="range" min="1" max="32" step="1" value="8" id="moActSlider" oninput="calcMoe()">
+        </div>
+        <div class="sim-out" id="moOut"></div>
+      </div>
+
+      <!-- SIM 5: Pipeline scale-up vs scale-out -->
+      <div class="sim" id="simPipe">
+        <h3><span class="ico">🪜</span> Pipeline Communication Bottleneck</h3>
+        <div class="sim-desc">When does cross-rack pipelining become the bottleneck? Need (activated × layers × 2) > 8.</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Activated experts</span><span class="sim-val"><span id="pAct">8</span></span></div>
+          <input type="range" min="1" max="32" value="8" id="pActSlider" oninput="calcPipe()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Layers per pipeline stage</span><span class="sim-val"><span id="pLay">4</span></span></div>
+          <input type="range" min="1" max="32" value="4" id="pLaySlider" oninput="calcPipe()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Scale-up : scale-out ratio</span><span class="sim-val"><span id="pRatio">8</span>x</span></div>
+          <input type="range" min="2" max="20" value="8" id="pRatioSlider" oninput="calcPipe()">
+        </div>
+        <div class="sim-out" id="pOut"></div>
+      </div>
+
+      <!-- SIM 6: Chinchilla over-training -->
+      <div class="sim" id="simChin">
+        <h3><span class="ico">⚖</span> Chinchilla Over-training Ratio</h3>
+        <div class="sim-desc">How over-trained is GPT-5? Compare actual pre-training tokens to Chinchilla optimal (20× active params).</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Active params (B)</span><span class="sim-val"><span id="chN">100</span></span></div>
+          <input type="range" min="10" max="500" step="5" value="100" id="chNSlider" oninput="calcChin()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Inference TPS (M tokens/sec)</span><span class="sim-val"><span id="chTps">50</span></span></div>
+          <input type="range" min="5" max="500" step="5" value="50" id="chTpsSlider" oninput="calcChin()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Months in production</span><span class="sim-val"><span id="chMon">2</span></span></div>
+          <input type="range" min="1" max="12" value="2" id="chMonSlider" oninput="calcChin()">
+        </div>
+        <div class="sim-out" id="chOut"></div>
+      </div>
+
+      <!-- SIM 7: KV bytes per token -->
+      <div class="sim" id="simKv">
+        <h3><span class="ico">🗄</span> KV Cache Bytes / Token (from API price tier)</h3>
+        <div class="sim-desc">Reverse-engineer KV size from the long-context price inflection. bytes/token = active_params / (FLOPs:BW × context).</div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Active params (B)</span><span class="sim-val"><span id="kvN">100</span></span></div>
+          <input type="range" min="20" max="500" step="5" value="100" id="kvNSlider" oninput="calcKv()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>Price-tier context (K tokens)</span><span class="sim-val"><span id="kvCtx">200</span></span></div>
+          <input type="range" min="50" max="2000" step="50" value="200" id="kvCtxSlider" oninput="calcKv()">
+        </div>
+        <div class="sim-row">
+          <div class="sim-label"><span>FLOPs : BW ratio</span><span class="sim-val"><span id="kvR">300</span></span></div>
+          <input type="range" min="100" max="600" step="10" value="300" id="kvRSlider" oninput="calcKv()">
+        </div>
+        <div class="sim-out" id="kvOut"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Source: Dwarkesh Podcast — Reiner Pope (MatX, ex-Google TPU) &middot; Blackboard lecture &middot; April 2026</p>
+    <p style="margin-top:6px">~40 annotated segments &middot; 7 diagrams &middot; 7 interactive simulators &middot; ~720 lines analyzed</p>
+  </div>
+
+</div>
+
+<script>
+/* ═══ Helpers ═══ */
+const fmt=n=>{
+  if(!isFinite(n)) return '∞';
+  if(Math.abs(n)>=1e12) return (n/1e12).toFixed(2)+'T';
+  if(Math.abs(n)>=1e9) return (n/1e9).toFixed(2)+'B';
+  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(2)+'M';
+  if(Math.abs(n)>=1e3) return (n/1e3).toFixed(2)+'K';
+  return n.toFixed(Math.abs(n)<10?2:0);
+};
+const pct=n=>n.toFixed(1)+'%';
+const bar=(val,max,color)=>`<div class="sim-bar-track"><div class="sim-bar" style="width:${Math.min(100,Math.max(0,val/max*100))}%;background:${color}"></div></div>`;
+
+/* ═══ Roofline ═══ */
+function calcRoof(){
+  const N_active=+document.getElementById('rfActiveSlider').value*1e9;
+  const N_total=+document.getElementById('rfTotalSlider').value*1e9;
+  const ratio=+document.getElementById('rfRatioSlider').value;
+  const B=+document.getElementById('rfBatchSlider').value;
+  document.getElementById('rfActive').textContent=(N_active/1e9).toFixed(0);
+  document.getElementById('rfTotal').textContent=(N_total/1e9).toFixed(0);
+  document.getElementById('rfRatio').textContent=ratio;
+  document.getElementById('rfBatch').textContent=B;
+  const sparsity=Math.round(N_total/N_active);
+  document.getElementById('rfSparsity').textContent=sparsity;
+
+  // t_compute proportional to B*N_active; t_mem proportional to N_total (weights only here)
+  // In dimensionless form, balance is at: B*N_active = ratio*N_total  =>  B = ratio*sparsity
+  const balanceB=ratio*(N_total/N_active);
+  const regime=B>=balanceB?'Compute-bound':'Memory-bound';
+  const utilization=B>=balanceB?(balanceB/B*100):(B/balanceB*100);
+  // Tokens/sec at 20ms train interval
+  const tokensPerSec=B*50;
+  document.getElementById('rfOut').innerHTML=`
+    <div class="sim-out-row"><span>Sparsity (total/active)</span><span>${sparsity}×</span></div>
+    <div class="sim-out-row highlight"><span>Optimal batch (balance point)</span><span>${fmt(balanceB)}</span></div>
+    <div class="sim-out-row"><span>Current regime</span><span style="color:${regime==='Compute-bound'?'var(--c3)':'var(--c4)'}">${regime}</span></div>
+    <div class="sim-out-row"><span>Bottleneck utilization</span><span>${pct(utilization)}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Tokens/sec @ 20ms train</span><span>${fmt(tokensPerSec)}</span></div>
+    <div class="sim-out-row"><span>vs Gemini's ~500M tps</span><span>${pct(tokensPerSec/5e8*100)}</span></div>
+    ${bar(utilization,100,utilization>80?'var(--c3)':utilization>50?'var(--c4)':'var(--c5)')}
+  `;
+}
+
+/* ═══ Latency ═══ */
+function calcLat(){
+  const cap=+document.getElementById('ltCapSlider').value;
+  const bw=+document.getElementById('ltBwSlider').value;
+  document.getElementById('ltCap').textContent=cap;
+  document.getElementById('ltBw').textContent=bw;
+  const drainMs=cap/bw; // GB / (TB/s) = ms
+  const worstQueue=2*drainMs;
+  document.getElementById('ltOut').innerHTML=`
+    <div class="sim-out-row highlight"><span>HBM drain time (1 read)</span><span>${drainMs.toFixed(1)} ms</span></div>
+    <div class="sim-out-row"><span>"Train interval"</span><span>${drainMs.toFixed(1)} ms</span></div>
+    <div class="sim-out-row warn"><span>Worst-case queue + run</span><span>${worstQueue.toFixed(1)} ms</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Trains/sec</span><span>${(1000/drainMs).toFixed(1)}</span></div>
+    <div class="sim-tip">Below ~15ms: you can't read all weights even once. Above ~30ms: you're reading HBM more than once per pass — wasteful.</div>
+  `;
+}
+
+/* ═══ Cost vs batch ═══ */
+function calcCost(){
+  const rent=+document.getElementById('cstRentSlider').value;
+  const tps=+document.getElementById('cstTpsSlider').value;
+  document.getElementById('cstRent').textContent=rent.toFixed(2);
+  document.getElementById('cstTps').textContent=tps;
+  // $/hr / (tokens/sec * 3600) = $/token
+  const pricePerToken=rent/(tps*3600);
+  const pricePerMillion=pricePerToken*1e6;
+  document.getElementById('cstOut').innerHTML=`
+    <div class="sim-out-row"><span>$ per token</span><span>$${pricePerToken.toExponential(2)}</span></div>
+    <div class="sim-out-row highlight"><span>$ per million tokens (input)</span><span>$${pricePerMillion.toFixed(3)}</span></div>
+    <div class="sim-out-row"><span>$ per million tokens @ 5× decode markup</span><span>$${(pricePerMillion*5).toFixed(2)}</span></div>
+    <div class="sim-tip">Compare: Gemini 3.1 base ~$5/M input tokens. Your number above is the wholesale; markups cover infra, R&D, margin.</div>
+  `;
+}
+
+/* ═══ MoE layout ═══ */
+function calcMoe(){
+  const E=+document.getElementById('moExpertsSlider').value;
+  const G=+document.getElementById('moGpusSlider').value;
+  const A=+document.getElementById('moActSlider').value;
+  document.getElementById('moExperts').textContent=E;
+  document.getElementById('moGpus').textContent=G;
+  document.getElementById('moAct').textContent=A;
+  const expertsPerGpu=E/G;
+  const fitsRack=expertsPerGpu>=1;
+  const sparsity=E/A;
+  document.getElementById('moOut').innerHTML=`
+    <div class="sim-out-row"><span>Experts per GPU</span><span>${expertsPerGpu.toFixed(2)}</span></div>
+    <div class="sim-out-row"><span>Sparsity ratio</span><span>${sparsity.toFixed(0)}×</span></div>
+    <div class="sim-out-row ${fitsRack?'highlight':'bad'}"><span>Fits in 1 rack?</span><span>${fitsRack?'Yes ✓':'No — cross-rack penalty'}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Recommended batch (300 × sparsity)</span><span>${fmt(300*sparsity)}</span></div>
+    <div class="sim-tip">${fitsRack?'All-to-all stays inside the NVLink domain. ✓':'Half your tokens cross to the slow scale-out network. Re-shard or shrink experts.'}</div>
+  `;
+}
+
+/* ═══ Pipeline ═══ */
+function calcPipe(){
+  const A=+document.getElementById('pActSlider').value;
+  const L=+document.getElementById('pLaySlider').value;
+  const R=+document.getElementById('pRatioSlider').value;
+  document.getElementById('pAct').textContent=A;
+  document.getElementById('pLay').textContent=L;
+  document.getElementById('pRatio').textContent=R;
+  // We need (A * L * 2) >= R for pipelining to not be scale-out-bottlenecked
+  const expansion=A*L*2;
+  const ok=expansion>=R;
+  const headroom=expansion/R;
+  document.getElementById('pOut').innerHTML=`
+    <div class="sim-out-row"><span>Communication expansion (A × L × 2)</span><span>${expansion}</span></div>
+    <div class="sim-out-row"><span>Required (≥ scale-up:scale-out ratio)</span><span>${R}</span></div>
+    <div class="sim-out-row ${ok?'highlight':'bad'}"><span>Pipelining feasible?</span><span>${ok?'Yes ✓':'No — comm-bound'}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Headroom factor</span><span>${headroom.toFixed(2)}×</span></div>
+    ${bar(headroom,3,headroom>=1.5?'var(--c3)':headroom>=1?'var(--c4)':'var(--c5)')}
+  `;
+}
+
+/* ═══ Chinchilla ═══ */
+function calcChin(){
+  const N=+document.getElementById('chNSlider').value*1e9;
+  const tps=+document.getElementById('chTpsSlider').value*1e6;
+  const months=+document.getElementById('chMonSlider').value;
+  document.getElementById('chN').textContent=(N/1e9).toFixed(0);
+  document.getElementById('chTps').textContent=(tps/1e6).toFixed(0);
+  document.getElementById('chMon').textContent=months;
+  // Inference tokens per single model
+  const seconds=months*30*24*3600;
+  const D_inf=tps*seconds;
+  const D_chin=20*N; // Chinchilla optimal
+  const overTrain=D_inf/D_chin;
+  document.getElementById('chOut').innerHTML=`
+    <div class="sim-out-row"><span>Inference tokens (= D_pre by equality)</span><span>${fmt(D_inf)}</span></div>
+    <div class="sim-out-row"><span>Chinchilla optimal D (20 × N)</span><span>${fmt(D_chin)}</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row highlight"><span>Over-training factor</span><span>${overTrain.toFixed(0)}×</span></div>
+    <div class="sim-tip">${overTrain>50?'Heavily over-trained — typical of frontier models with massive deployment.':overTrain>10?'Modest over-training, balanced tradeoff.':'Close to compute-optimal pre-training.'}</div>
+  `;
+}
+
+/* ═══ KV bytes ═══ */
+function calcKv(){
+  const N=+document.getElementById('kvNSlider').value*1e9;
+  const ctx=+document.getElementById('kvCtxSlider').value*1e3;
+  const R=+document.getElementById('kvRSlider').value;
+  document.getElementById('kvN').textContent=(N/1e9).toFixed(0);
+  document.getElementById('kvCtx').textContent=(ctx/1e3).toFixed(0);
+  document.getElementById('kvR').textContent=R;
+  // bytes_per_token = N_active / (R × context_length)
+  const bytes=N/(R*ctx);
+  const totalKv=bytes*ctx;
+  document.getElementById('kvOut').innerHTML=`
+    <div class="sim-out-row highlight"><span>Bytes per token (KV cache)</span><span>${bytes.toFixed(0)} B</span></div>
+    <div class="sim-out-row"><span>Total KV per sequence</span><span>${fmt(totalKv)} B</span></div>
+    <div class="sim-divider"></div>
+    <div class="sim-out-row"><span>Sequences in 1 TB HBM</span><span>${fmt(1e12/totalKv)}</span></div>
+    <div class="sim-tip">~2 KB/token is consistent with Character-AI-style cross-layer sharing or DeepSeek-style sparse attention. Big drop from older dense-attention models (often 10-100×).</div>
+  `;
+}
+
+/* Initialize simulators */
+calcRoof();calcLat();calcCost();calcMoe();calcPipe();calcChin();calcKv();
+
+/* ═══ Commentary entries ═══ */
+const ENTRIES={
+  s1:[
+    {id:1,n:1,lines:"1-15",label:"The Roofline Frame",quote:"approximate time = max(memory time, compute time)",c:"Roofline analysis is the unsung workhorse of ML systems engineering — it reduces a billion-dollar question (how do I serve this model?) to a max() over two linear functions. The fact that Reiner opens here, rather than with architecture or algorithms, signals the thesis: <strong>in 2026, model serving is a memory-bandwidth game with compute as a secondary constraint.</strong> Anyone reasoning about inference economics without this frame is essentially flying blind."},
+    {id:2,n:2,lines:"15-40",label:"Two Tensors, Two Bottlenecks",quote:"time_compute = (batch × active_params) / FLOPs … memory = params/bw + (batch × context × bytes)/bw",c:"Notice the asymmetry: <strong>weights are a fixed cost paid once per forward pass regardless of batch, while KV cache scales linearly with both batch and context length.</strong> This is why long-context inference is brutal — doubling context doesn't just double work, it shifts the entire memory equation. It also explains why frontier labs are obsessed with KV compression, MLA (DeepSeek), and sliding-window attention: the KV term is the only one architects can actually attack."},
+    {id:3,n:3,lines:"40-75",label:"The Latency Floor",quote:"there's a lower bound on latency: you must read all params from memory",c:"This is the single most important physical constraint in LLM serving and almost no one outside systems teams internalizes it. Even with infinite compute, your model's per-token latency is bounded below by <code>total_params / HBM_bandwidth</code>. For a trillion-param dense model on Blackwell, that's ~125ms minimum per token — <strong>explaining why every frontier lab pivoted to MoE.</strong> Sparsity isn't just a quality play; it's the only way to break the latency floor."},
+    {id:4,n:4,lines:"40-75",label:"Cost Asymptotes at Batch=1",quote:"at batch=1, cost is near infinity",c:"This is why on-device LLMs and single-user dedicated inference are economically miserable — you pay the full HBM-read tax for every token without amortizing it. <strong>Any business model premised on \"private, dedicated\" inference is structurally 100–1000× more expensive than shared inference.</strong> It also explains why even local inference frameworks like llama.cpp implement speculative decoding: they're trying to fake a higher effective batch size."},
+    {id:5,n:5,lines:"75-100",label:"The Magic Number 300",quote:"batch_size > ~300 × sparsity",c:"This 300 is the FLOPs-to-bandwidth ratio of modern accelerators in dimensionless form — and it's been remarkably stable from A100 (~200) through H100 (~295) to B100 (~300+). <strong>Hardware vendors have been scaling FLOPs and HBM bandwidth in lockstep, which is not an accident.</strong> NVIDIA knows that breaking this ratio breaks the workload. It's a tacit contract between hardware and model architects."},
+    {id:6,n:6,lines:"75-100",label:"DeepSeek's Batch Math",quote:"DeepSeek (32/256 experts = 8 sparsity), batch ≈ 2,400",c:"The 8× sparsity factor (8 active out of 256 experts) directly drives the required batch size to 2,400+. This is the hidden cost of MoE: <strong>you need massive concurrent traffic to make the architecture economical.</strong> It's why DeepSeek's open-weight release was strategically devastating — only hyperscalers and DeepSeek itself can serve it efficiently. The model is technically open but operationally captured by scale."},
+    {id:7,n:7,lines:"100-130",label:"The 20ms Train Schedule",quote:"a new train departs every 20ms regardless of fill level",c:"This metaphor is brilliant because it reframes inference from a request-response model to a conveyor belt with fixed cadence. <strong>The 20ms isn't a tuning parameter — it's the physical time to drain HBM once.</strong> You literally cannot make decisions faster than the time it takes electrons to traverse the memory hierarchy. Worst-case 40ms queue latency means user-facing P99 latencies are bounded by physics, not software."},
+    {id:8,n:8,lines:"100-130",label:"HBM as the Real Clock",quote:"288GB / 20TB/s on Rubin = ~15ms",c:"Rubin's 15ms tick rate (vs Blackwell's ~20ms) reveals that <strong>HBM bandwidth scaling is the real generational improvement, not FLOPs.</strong> Each new accelerator generation effectively raises the metronome speed of the entire AI economy. This is also why HBM supply (SK Hynix, Micron, Samsung) has become a geopolitical chokepoint — controlling HBM means controlling inference cadence globally."},
+    {id:9,n:9,lines:"130-160",label:"One Cluster = 1/1000th of Gemini",quote:"2000 × 64 = 128K tokens/sec … one cluster = 1/1000th of Gemini",c:"Stunning back-of-envelope: <strong>Google is running ~1000 NVL72-equivalent racks just to serve Gemini.</strong> At ~$3–4M per rack, that's $3–4B in serving capex — making the \"AI capex bubble\" arguments look conservative rather than alarmist. It also explains why only 3–4 companies can credibly serve frontier models: the minimum viable inference fleet is in the billions."},
+    {id:10,n:10,lines:"130-160",label:"Sparsity's Diminishing Returns",quote:"64x params for 4x active gives 1.3B-equivalent quality",c:"The Unified Scaling Laws result is the dirty secret of MoE: <strong>extreme sparsity gives surprisingly modest quality wins.</strong> 64× parameter count for ~30% effective compute gain is a brutal trade if you're paying for memory. This is why labs cluster around 8–32× sparsity rather than going further — beyond that, the serving cost doesn't pencil out. There's a sparsity sweet spot, not a sparsity gradient."},
+    {id:11,n:11,lines:"160-200",label:"MoE as a Communication Problem",quote:"router → experts → sum back",c:"MoE is often described as a sparsity technique, but operationally it's a routing/communication architecture. The all-to-all step is the defining bottleneck — <strong>which is why MoE's viability is a function of NVLink bandwidth, not just FLOPs or HBM.</strong> Every MoE paper should really be titled \"What we did with our interconnect budget.\""},
+    {id:12,n:12,lines:"160-200",label:"NVL72 Was Designed for DeepSeek",quote:"DeepSeek 256 experts on Blackwell 64 GPU rack = 4 experts/GPU",c:"The fit is suspiciously perfect: 256 ÷ 64 = 4 experts each, with all-to-all confined inside one NVLink domain. NVIDIA didn't design NVL72 \"for\" DeepSeek, but they did design it knowing where MoE math was heading — and DeepSeek-V3 read the same hardware tea leaves. <strong>This is co-evolution: the model size is dictated by the box, not the other way around.</strong>"},
+    {id:13,n:13,lines:"160-200",label:"The Two-Rack Cliff",quote:"Cross-rack all-to-all becomes the bottleneck",c:"The moment your model exceeds one NVL72 domain, your effective throughput collapses because all-to-all over InfiniBand is ~10× slower than NVLink. <strong>It creates a discrete capacity ceiling per model.</strong> Frontier labs design models to fit exactly within a rack-scale domain rather than scaling smoothly. The model size is dictated by the box."},
+    {id:14,n:14,lines:"1-200",label:"Meta: Physics, Not Algorithms",quote:"(synthesis across the section)",c:"Almost nothing in this section depends on which model you're training — the constraints come from HBM bandwidth, FLOPs ratios, NVLink topology, and rack boundaries. The ML research community talks about \"architectures\" and \"scaling laws\" as if they're free design choices, but Reiner is showing they're <strong>heavily over-determined by silicon.</strong> The interesting frontier isn't \"what model should we build\" but \"what shape does the hardware permit this quarter.\""}
+  ],
+  s2:[
+    {id:1,n:1,lines:"40-55",label:"The Cost Curve as Hyperbola",quote:"weights become amortized, compute drives the cost",c:"Cost = time/batch transforms the linear roofline into a hyperbolic decay. At batch=1 cost is asymptotic; as batch grows, weights divide out and you hit a floor set by per-token compute. <strong>This shape is why API providers can charge ~$1–10/M tokens — they're operating near the asymptote where weights are essentially free.</strong>"},
+    {id:2,n:2,lines:"55-75",label:"Why Slow Mode Doesn't Save Money",quote:"Claude Code Slow lives on this line",c:"The genius of this insight: <strong>slowing down inference past the balance point gives you exactly zero cost benefit</strong> because compute time is unique per token and KV is unique per batch. Anyone marketing a \"slow mode\" cheaper than \"fast mode\" is either (a) running smaller batch sizes that increase cost, or (b) doing capacity arbitrage during off-peak hours. There's no physics-based slow discount available."},
+    {id:3,n:3,lines:"55-75",label:"Fast Mode Premium = Smaller Batch",quote:"6× the price for 2.5× the speed",c:"The 6:2.5 ratio implies labs are running fast-mode at smaller batches and eating the per-token cost increase. Effectively they're <strong>buying back queue latency by paying for under-utilized GPUs.</strong> It's a real, physical premium — not a margin grab. This is why fast modes can never be much cheaper: the cost is fundamentally amortization-shaped."}
+  ],
+  s3:[
+    {id:1,n:1,lines:"75-100",label:"Solving the Balance Equation",quote:"FLOPs / bandwidth = batch × active / total",c:"The balance equation collapses model and hardware into a single dimensionless number. The left side is hardware (~300 across all modern GPUs); the right is the model. <strong>This means you can predict optimal batch size for any (model, GPU) pair with one calculation — no profiling needed.</strong> Frontier labs use this exact formula for capacity planning."},
+    {id:2,n:2,lines:"100-115",label:"The Train Departs Anyway",quote:"the train departs every 20ms regardless",c:"Discrete batch scheduling is why frontier inference uses continuous batching with fixed time slices, not request-driven runs. The implication for product design: <strong>variable response times users see come from queue position, not model speed.</strong> Latency budgets must account for the train interval, not just compute time."},
+    {id:3,n:3,lines:"115-135",label:"The 20ms Comes From Physics",quote:"capacity / bandwidth = ~20ms across many HBM generations",c:"This number is suspiciously stable across generations because <strong>HBM capacity and bandwidth scale together by design.</strong> Vendors keep the drain time roughly fixed because the workload requires it. If HBM3e at 8TB/s shipped with 4TB capacity, the drain time would be 500ms — useless for inference. The 20ms is a system-level invariant, not a coincidence."},
+    {id:4,n:4,lines:"135-160",label:"Tokens/sec at Cluster Scale",quote:"128K tokens/sec per cluster",c:"This single number lets you reverse-engineer fleet size from any provider's announcements. <strong>If Anthropic claims X tokens/sec served, divide by 128K to estimate rack count.</strong> Multiplying by ~$3M/rack gives infrastructure capex. Public capacity claims become directly translatable to dollar commitments."},
+    {id:5,n:5,lines:"145-160",label:"Sparsity Quality vs Compute",quote:"64-expert 370M activated = dense 1.3B",c:"The empirical ratio is brutal: 64× total params for 4× equivalent dense quality means you're paying massively in memory for a small intelligence gain. <strong>This is why pure sparsity scaling stalled around DeepSeek-V3's ratios</strong> — beyond that, the HBM bill outpaces the quality return on every accelerator generation."}
+  ],
+  s4:[
+    {id:1,n:1,lines:"165-185",label:"Expert Parallelism Choreography",quote:"different experts go on different GPUs",c:"Expert parallelism is the only sharding scheme where the natural model partition matches the hardware partition. <strong>Tensor parallelism splits matrices artificially; pipeline parallelism splits layers somewhat naturally; expert parallelism is the only one where the partition is built into the model.</strong> This is why MoE feels like \"the right answer\" architecturally — the cuts pre-exist."},
+    {id:2,n:2,lines:"185-205",label:"All-to-All Inside, Slow Outside",quote:"any GPU can be sending to any other GPU",c:"The router on every GPU producing all-to-all traffic is precisely the pattern Blackwell NVL72's switch fabric is engineered for. <strong>Cross-rack all-to-all (over scale-out) destroys throughput because the fabric isn't designed for arbitrary traffic.</strong> Two-rack MoE serving is roughly half the throughput of one-rack — not 1.8×, not 1.5×, but ~1.0× because the bottleneck is cross-rack bandwidth."},
+    {id:3,n:3,lines:"200-220",label:"Rack Topology: NVLink Switches Inside",quote:"GPUs around the outside, switches in the middle, all-to-all in 2 hops",c:"The geometry is dictated by signal integrity, not aesthetics — copper cables degrade quickly at NVLink speeds, so the switches must sit at the geometric centroid. <strong>This 2-hop all-to-all topology is what makes NVL72 functionally a 'single accelerator' rather than 72 networked chips.</strong>"},
+    {id:4,n:4,lines:"210-220",label:"Cabling, Not Silicon",quote:"bend radius, weight, power, cooling all compete",c:"The unglamorous truth: <strong>the limiting factor for scale-up domain size isn't transistor budgets or NVLink SerDes — it's how many copper cables you can physically route through a chassis.</strong> Rubin's ~500-GPU domain demands optical interconnect or a complete topological rethink because copper is exhausted."},
+    {id:5,n:5,lines:"220-235",label:"Hopper→Blackwell Was Free; Rubin Is Not",quote:"Hopper to Blackwell was a product decision; Rubin is a new physical design",c:"The 9× scale-up jump from H100 to GB200 was essentially a SKU repackaging exercise. <strong>Rubin's 500-GPU domain is where Nvidia actually has to invent something</strong> — likely co-packaged optics or radical new switch hierarchy. This implies real risk of slippage on Rubin's roadmap that the trivial Blackwell transition obscured."},
+    {id:6,n:6,lines:"235-260",label:"Why GPT-4 Took 3 Years to Reproduce",quote:"Hopper had 640GB scale-up — not enough for a 5T model",c:"The 3-year gap between GPT-4 (2023) and competitors reaching parity (2026) wasn't algorithmic — it was a memory-domain problem. <strong>You literally could not fit a frontier MoE inside Hopper's 640GB envelope.</strong> Blackwell's 10–20TB unlocked the current generation, and explains why Google — whose TPU pods always had massive scale-up — was the only Western lab consistently shipping trillion-param models."},
+    {id:7,n:7,lines:"255-265",label:"Google's TPU Edge Was Memory Domain",quote:"Google's TPU pods always had large scale-up",c:"Reiner — himself an ex-TPU architect — concedes that <strong>TPU's killer feature was never matmul throughput per chip but pod-scale memory coherence.</strong> Gemini Ultra's pre-training feasibility wasn't about algorithms; it was about TPUv4/v5p giving Google a scale-up domain GPUs wouldn't match until 2024–2025. The AI race is primarily an interconnect race."}
+  ],
+  s5:[
+    {id:1,n:1,lines:"260-300",label:"Pipeline's 8× Expansion Requirement",quote:"need (activated × layers × 2) > 8",c:"A clean systems constraint that maps the 8× bandwidth ratio between scale-up and scale-out directly onto model architecture. <strong>If you have 8 active experts and 2 layers per stage, you've earned 32× compute-to-comm — comfortably above 8×.</strong> This is why MoE configurations with ~8 active experts became standard — it's a systems decision masquerading as an ML one."},
+    {id:2,n:2,lines:"295-310",label:"Cuts Match Architecture",quote:"experts to GPUs, layers to racks",c:"High-bandwidth scale-up handles expert-parallel all-to-all; pipeline parallelism — only needing to ship activations between contiguous stages — gets relegated to slower scale-out. <strong>This isn't an accident of ML; it's the inevitable equilibrium between communication cost gradients and parallelism dimensions.</strong> Anyone hand-tuning with random partitioning leaves 5–10× on the floor."},
+    {id:3,n:3,lines:"300-320",label:"Inference Pipelining is Free",quote:"Inference: trivial because no full-batch backward",c:"The asymmetry is structural. <strong>In inference, pipeline bubbles fill themselves with the next request — pipeline depth is pure latency overhead but causes no idle silicon.</strong> In training, the backward pass enforces a global barrier, so any pipeline imbalance translates directly to GPU idle cycles. This is why micro-batching tricks (1F1B, interleaved schedules) are critical for training but irrelevant for serving."},
+    {id:4,n:4,lines:"320-340",label:"Blackwell Has Too Much HBM",quote:"already plenty of memory in Blackwell rack — pipelining rarely needed",c:"Contrarian and interesting: <strong>the rack-scale memory budget is so generous that pipeline parallelism — historically a memory-saving necessity — has become an optional optimization.</strong> Nvidia is over-shipping HBM relative to what frontier inference needs. From a MatX perspective: there's slack in the HBM bill of materials that a more targeted accelerator could trim."},
+    {id:5,n:5,lines:"340-380",label:"Pipelining Helps Weights, Not KV",quote:"weights divide by E×P, but activations only by E (P cancels)",c:"Subtle algebra most engineers miss. Pipeline shards weights across stages (per-GPU weight memory drops by P), but each stage still holds activations for all P micro-batches in flight. <strong>For long-context inference where KV dominates, pipelining buys you nothing on the binding constraint.</strong> DeepSeek's recipe of \"expert parallelism up to scale-up size, minimal pipelining\" is the rigorous consequence."},
+    {id:6,n:6,lines:"380-420",label:"The Memory Wall Paradox",quote:"50% of CapEx on memory but we have 'too much' memory",c:"The core market inefficiency: <strong>hyperscaler P&L shows memory dominating CapEx, but at the system level capacity is over-provisioned.</strong> The reconciliation: bandwidth — not capacity — is the binding constraint, and bandwidth scales with scale-up domain × per-GPU BW. Buying HBM gets you both, but you're paying for capacity you don't need to access the bandwidth you do. This is the structural arbitrage opportunity for purpose-built inference silicon."},
+    {id:7,n:7,lines:"395-420",label:"Bandwidth = Domain × Per-GPU BW",quote:"scale-up size × per-GPU bandwidth",c:"Going from 8-GPU to 72-GPU scale-up gave 9× aggregate bandwidth even before HBM3e gains. <strong>A hypothetical Rubin-500 system would deliver another 7× bandwidth jump</strong> — the cheapest path to making attention-bound workloads faster without inventing new memory technology."}
+  ],
+  s6:[
+    {id:1,n:1,lines:"420-450",label:"Cost Equalization Heuristic",quote:"minimum is when pre-training, RL, and inference costs are equalized",c:"A beautifully simple economic principle dressed up in compiler heuristics. Setting <code>6ND_pre = α·6ND_RL = 2ND_inf</code> and solving collapses to all three token counts being roughly equal. <strong>This is the back-of-envelope discipline that should govern frontier lab planning meetings — and probably doesn't, because the inference token count is a forecast, not a knob.</strong>"},
+    {id:2,n:2,lines:"430-450",label:"RL is 2-6× Per Pass",quote:"forward only = 2N, forward + backward = 6N",c:"The α factor (RL inefficiency) sits between 2 and 6 depending on what fraction of rollouts get backward passes. <strong>If you only train on 1/3 of trajectories and decode runs at lower MFU, α effectively becomes ~1/10.</strong> This is why the equalized RL token count comes out lower than pre-training — RL is more expensive per token, so fewer tokens balance the budget."},
+    {id:3,n:3,lines:"450-475",label:"GPT-5 is ~100× Over-trained",quote:"200T inference vs ~2T Chinchilla optimal",c:"<strong>Chinchilla optimality only holds if you're training a model to never serve it.</strong> Once you amortize over 50M tokens/sec × 2 months inference, the math forces you to over-train by ~2 orders of magnitude — pushing past the loss-minimal compute frontier to extract a smaller, cheaper-to-serve model. This is why every frontier lab has quietly abandoned Chinchilla scaling laws as a planning tool."},
+    {id:4,n:4,lines:"475-495",label:"Inference Tokens Determine Training Budget",quote:"data in pre-training ≈ data in inference",c:"The cleanest takeaway: if you can forecast a model's lifetime inference token count, you've forecast its pre-training token count. <strong>An OpenAI executive saying \"GPT-5 will be deployed for 6 months\" is implicitly committing to a specific pre-training token budget.</strong> This is also why labs are paranoid about model deprecation timing — premature deprecation makes the over-training a sunk cost."}
+  ],
+  s7:[
+    {id:1,n:1,lines:"495-510",label:"Pricing as Architecture X-Ray",quote:"Gemini 3.1 charges 50% more above 200K tokens",c:"Treat the pricing page as a leaked architecture spec. <strong>Two-tier pricing only makes economic sense if cost structure changes at the boundary</strong> — and the only thing changing with context length is the memory-bound term. Reiner is essentially doing reverse Kremlinology on a Stripe checkout."},
+    {id:2,n:2,lines:"510-535",label:"Solving for Bytes/Token",quote:"~1700 bytes/token at 200K context",c:"Once you know hardware, you can solve algebra for the model. Landing at ~1.7KB/token isn't a guess; it's a constraint that forces a specific KV-cache footprint. <strong>This implicitly assumes labs price near marginal cost, which is itself a non-trivial claim about competitive dynamics</strong> — and a sign that AI inference is now commoditized enough that price ≈ cost."},
+    {id:3,n:3,lines:"515-535",label:"Two Roads to 2KB/Token",quote:"8 KV heads × 128 d_head × N_layers shared",c:"Two architectural paths converge on ~2KB: aggressive cross-layer KV sharing (Character AI / Gemma style) or sparse attention (DeepSeek). <strong>Both converge because the budget is dictated by HBM bandwidth, not aesthetic preference.</strong> The architecture isn't chosen — it's compelled."},
+    {id:4,n:4,lines:"535-560",label:"5× Input/Output Asymmetry",quote:"input is 5× cheaper than output",c:"Pricing asymmetry is often dismissed as a business decision, but it's physics: <strong>prefill amortizes memory cost across the full sequence in parallel, while decode pays the full HBM bill per single token.</strong> The 5× ratio is a direct empirical readout of how memory-bound decode is. If labs were compute-bound, prices would converge."},
+    {id:5,n:5,lines:"560-585",label:"Decode is Memory, Not Math",quote:"5× more expensive in decode = 5× memory-bandwidth bottlenecked",c:"GPUs aren't running out of FLOPs during generation, they're running out of <strong>bandwidth to even feed the FLOPs.</strong> Every architectural choice downstream — MoE routing, speculative decoding, KV compression — is a reaction to this single bottleneck. It's also why MatX (Reiner's company) exists; if you're not memory-bound, you're not optimizing for the actual workload."},
+    {id:6,n:6,lines:"585-610",label:"Cache Pricing as Tier Tell",quote:"10× cheaper for cache hits",c:"A 10× price differential is suspiciously close to the cost ratio between HBM and flash, not HBM and DDR. <strong>The very existence of cache pricing implies that storing KV state somewhere is cheaper than recomputing it</strong> — only true if storage is dramatically below HBM cost. The pricing structure is a covert announcement of the storage hierarchy."},
+    {id:7,n:7,lines:"610-635",label:"Four-Tier Memory Hierarchy",quote:"HBM 20ms, DDR 1-10s, flash 1min, disk 1hr drain",c:"Drain times are the right unit of analysis for serving, not raw bandwidth. Each tier is roughly an order of magnitude slower and cheaper. <strong>The fact that production systems span four tiers is itself remarkable — most software doesn't think past two.</strong> Inference clusters now look more like tiered storage systems than ML clusters."},
+    {id:8,n:8,lines:"635-660",label:"Optimal Tier Selection",quote:"retrieval_time = hold_time × capacity_fraction",c:"Store on the tier whose drain time matches your expected reuse window scaled by how much of the cache you'll actually hit. <strong>The 5-min and 1-hour pricing tiers map cleanly to flash and spinning disk respectively.</strong> Spinning disk is still in production AI infrastructure in 2026 — a remarkable fact that nobody talks about."},
+    {id:9,n:9,lines:"660-685",label:"Why No Million-Token Context",quote:"it's not the quadratic compute — it's memory bandwidth",c:"<strong>The popular narrative blames O(n²) attention compute for context limits. Reiner kills that myth.</strong> The quadratic term has such a low coefficient it doesn't bite until tens of millions of tokens. The actual wall is linear memory bandwidth on KV reads during decode. Solving the wrong bottleneck is why so many \"long context\" papers fail to translate to production."},
+    {id:10,n:10,lines:"685-700",label:"Sparse Attention's Square-Root Tax",quote:"sparse attention buys √n, but quality cliffs",c:"Sparse attention is a √n improvement that pays for itself only in a narrow regime before quality collapses. <strong>This explains why frontier labs settled on 100–200K context as a stable plateau since GPT-4</strong> — it's the Pareto frontier of what dense-ish attention can deliver before sparsity costs exceed gains. The market has implicitly voted that 200K is \"enough\"."},
+    {id:11,n:11,lines:"700-720",label:"Continual Learning vs Context Stuffing",quote:"a month-long employee needs ~100M token context",c:"The most important admission: <strong>in-context learning, the dominant paradigm since GPT-3, may have a hard ceiling that prevents agentic \"colleague\" use cases.</strong> If you can't fit a month of work into context and can't currently do continual learning at scale, then long-horizon agents are blocked on a research problem, not an engineering one."},
+    {id:12,n:12,lines:"720-740",label:"Cipher/Network Duality",quote:"ciphers want avalanche; networks want gradient continuity",c:"<strong>Cryptographic functions and neural networks are literally the same mathematical machinery pointed in opposite directions.</strong> Differential cryptanalysis attacks the former; gradient descent exploits the latter. This is a deep observation about the structure of mixing operations — both fields are studying the same primitive from inverse goals."},
+    {id:13,n:13,lines:"740-760",label:"Feistel → RevNets",quote:"Feistel networks gave us RevNets in 2017",c:"Crypto borrowing is concrete, not metaphorical: <strong>Feistel structure (DES) is mathematically invertible, and that invertibility was directly imported into neural nets as RevNets.</strong> The payoff: rematerialize activations during backprop instead of storing them. A rare case of cryptography paying intellectual dividends to ML rather than the reverse."},
+    {id:14,n:14,lines:"760-780",label:"Memory↔Compute Symmetry",quote:"KV cache trades memory for compute; RevNets trade compute for memory",c:"The unifying insight: <strong>every interesting systems trick in modern ML is a knob along the memory-compute axis.</strong> KV caching spends memory to skip recomputation; RevNets spend recomputation to skip memory. Both directions are useful in different regimes — there's no canonical \"right\" answer. The optimum depends on which side of the FLOP/byte ratio you're stuck on."}
+  ]
+};
+
+const SECTION_COLORS={s1:1,s2:2,s3:3,s4:4,s5:5,s6:6,s7:7};
+
+function renderEntries(){
+  Object.keys(ENTRIES).forEach(sid=>{
+    const c=SECTION_COLORS[sid];
+    const container=document.getElementById('entries-'+sid);
+    if(!container) return;
+    container.innerHTML=ENTRIES[sid].map((e,i)=>`
+      <details class="entry"${i===0?' open':''}>
+        <summary class="entry-header">
+          <div class="entry-badge bg${c} sc${c}">${e.n}</div>
+          <div class="entry-title"><b>${e.label}</b><span>Lines ${e.lines}</span></div>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="entry-body">
+          <div class="quote-block">${e.quote}</div>
+          <div class="commentary">
+            <div class="commentary-label">🔍 Analysis</div>
+            ${e.c}
+          </div>
+        </div>
+      </details>
+    `).join('');
+  });
+}
+renderEntries();
+</script>
+
+</body>
+</html>
